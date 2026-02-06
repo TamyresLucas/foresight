@@ -44,6 +44,7 @@ foresight/
 ## 🔧 Configuração Técnica
 
 O arquivo `.gemini/mcp_config.json` contém:
+
 - URL do servidor remoto: `https://mcp.notion.com/mcp`
 - Tipo: Streamable HTTP
 - Autenticação: OAuth via Notion
