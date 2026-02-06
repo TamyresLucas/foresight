@@ -1,0 +1,379 @@
+{
+  "name": "Foresight Design System Workspace",
+  "version": "1.0.0",
+  "description": "Regras automáticas para desenvolvimento do Foresight Design System",
+  "rules": [
+    {
+      "id": "auto-scaffold-ui",
+      "name": "Auto-Scaffold Componente UI Básico",
+      "category": "Criação de Componentes",
+      "priority": "critical",
+      "trigger": "Quando usuário solicita criar componente UI básico",
+      "conditions": [
+        "Componente baseado em shadcn/ui ou Radix UI",
+        "Não é componente custom Survey Builder",
+        "Usuário fornece nome do componente"
+      ],
+      "actions": [
+        "Criar estrutura de arquivos (componente.tsx, stories.tsx, index.ts)",
+        "Gerar código base com forwardRef, CVA, tokens CSS",
+        "Gerar story básica com CSF3",
+        "Atualizar exports em index.ts",
+        "Criar checklist de validação"
+      ],
+      "output": "Componente criado com estrutura completa e documentação"
+    },
+    {
+      "id": "auto-scaffold-survey",
+      "name": "Auto-Scaffold Componente Custom Survey Builder",
+      "category": "Criação de Componentes",
+      "priority": "critical",
+      "trigger": "Quando usuário solicita componente custom Survey Builder",
+      "conditions": [
+        "Componente é específico do Survey Builder",
+        "Usuário fornece tipo (Canvas, Editor, Logic, etc.)",
+        "Usuário fornece nome do componente"
+      ],
+      "actions": [
+        "Identificar categoria e padrões específicos",
+        "Criar estrutura completa (componente, hooks, types, stories)",
+        "Gerar código com integrações (DND Kit, React Flow, etc.)",
+        "Implementar state management (Zustand)",
+        "Gerar story interativa",
+        "Atualizar exports e CHANGELOG"
+      ],
+      "output": "Componente custom criado com padrões específicos e integrações"
+    },
+    {
+      "id": "auto-validate-skills",
+      "name": "Auto-Validar Aderência às Skills",
+      "category": "Validação e Qualidade",
+      "priority": "critical",
+      "trigger": "Após criar/modificar componente ou quando solicitado",
+      "conditions": [
+        "Componente existe",
+        "Skills estão instaladas no workspace"
+      ],
+      "actions": [
+        "Verificar estrutura (react-typescript.md)",
+        "Verificar styling (tailwind-css.md, css-variables-theming.md)",
+        "Verificar integração (radix-ui-integration.md)",
+        "Verificar acessibilidade (accessibility-a11y.md)",
+        "Verificar documentação (storybook-patterns.md)",
+        "Gerar relatório detalhado com score"
+      ],
+      "output": "Relatório de validação com score de aderência e ações necessárias"
+    },
+    {
+      "id": "auto-update-exports",
+      "name": "Auto-Atualizar Exports",
+      "category": "Manutenção",
+      "priority": "critical",
+      "trigger": "Quando componente é criado, renomeado ou removido",
+      "conditions": ["Componente está em src/components/", "index.ts existe"],
+      "actions": [
+        "Identificar mudança (novo, renomeado, removido)",
+        "Atualizar src/components/{category}/index.ts",
+        "Atualizar src/index.ts (public API)",
+        "Verificar exports duplicados",
+        "Validar tree-shaking"
+      ],
+      "output": "Exports atualizados automaticamente sem conflitos"
+    },
+    {
+      "id": "auto-update-changelog",
+      "name": "Auto-Atualizar CHANGELOG",
+      "category": "Manutenção",
+      "priority": "critical",
+      "trigger": "Quando componente é criado, modificado ou removido",
+      "conditions": ["CHANGELOG.md existe", "Mudança é significativa"],
+      "actions": [
+        "Identificar tipo de mudança (Added, Changed, Fixed, etc.)",
+        "Gerar entrada formatada no CHANGELOG",
+        "Adicionar detalhes técnicos",
+        "Atualizar version se release"
+      ],
+      "output": "CHANGELOG atualizado automaticamente com mudança"
+    },
+    {
+      "id": "auto-generate-variants",
+      "name": "Auto-Gerar Variants CVA",
+      "category": "Criação de Componentes",
+      "priority": "important",
+      "trigger": "Quando usuário solicita adicionar/modificar variantes",
+      "conditions": [
+        "Componente já existe",
+        "Usuário especifica variantes desejadas"
+      ],
+      "actions": [
+        "Analisar componente e CVA existente",
+        "Gerar código CVA com tokens CSS",
+        "Atualizar TypeScript types",
+        "Atualizar story com exemplos",
+        "Validar acessibilidade"
+      ],
+      "output": "Variantes implementadas com documentação completa"
+    },
+    {
+      "id": "auto-test-accessibility",
+      "name": "Auto-Testar Acessibilidade",
+      "category": "Validação e Qualidade",
+      "priority": "important",
+      "trigger": "Quando solicitado ou antes de criar PR",
+      "conditions": [
+        "Componente tem story no Storybook",
+        "Storybook a11y addon configurado"
+      ],
+      "actions": [
+        "Executar testes axe-core",
+        "Verificar contraste, keyboard navigation, ARIA",
+        "Testar casos específicos (focus trap, screen reader)",
+        "Gerar relatório detalhado com score",
+        "Sugerir melhorias"
+      ],
+      "output": "Relatório completo de acessibilidade com sugestões"
+    },
+    {
+      "id": "auto-validate-survey-custom",
+      "name": "Auto-Validar Componentes Custom Survey Builder",
+      "category": "Validação e Qualidade",
+      "priority": "important",
+      "trigger": "Quando usuário solicita validar componente custom",
+      "conditions": [
+        "Componente é do Survey Builder",
+        "Skills específicas instaladas"
+      ],
+      "actions": [
+        "Identificar tipo de componente (Canvas, Editor, Logic, etc.)",
+        "Validar padrões específicos da categoria",
+        "Verificar integrações (DND Kit, React Flow, RHF)",
+        "Gerar relatório específico com score",
+        "Listar ações necessárias"
+      ],
+      "output": "Validação específica do tipo de componente com score"
+    },
+    {
+      "id": "auto-generate-docs-props",
+      "name": "Auto-Gerar Documentação de Props",
+      "category": "Documentação",
+      "priority": "important",
+      "trigger": "Quando componente é criado ou props modificadas",
+      "conditions": ["Componente tem TypeScript interface", "Story existe"],
+      "actions": [
+        "Extrair props do TypeScript",
+        "Gerar JSDoc comments",
+        "Atualizar story com ArgTypes",
+        "Gerar tabela de props em README"
+      ],
+      "output": "Documentação de props atualizada automaticamente"
+    },
+    {
+      "id": "auto-implement-dark-mode",
+      "name": "Auto-Implementar Dark Mode",
+      "category": "Criação de Componentes",
+      "priority": "medium",
+      "trigger": "Quando usuário solicita adicionar dark mode",
+      "conditions": [
+        "Componente usa cores hardcoded",
+        "Sistema de tokens CSS disponível"
+      ],
+      "actions": [
+        "Analisar uso de cores hardcoded",
+        "Substituir por tokens CSS (HSL, OKLAB)",
+        "Adicionar classes dark mode",
+        "Atualizar story com toggle",
+        "Validar acessibilidade em ambos modos"
+      ],
+      "output": "Dark mode implementado com validação de acessibilidade"
+    },
+    {
+      "id": "auto-create-compound",
+      "name": "Auto-Criar Componente Composto",
+      "category": "Criação de Componentes",
+      "priority": "medium",
+      "trigger": "Quando usuário solicita componente composto",
+      "conditions": [
+        "Componente segue padrão compound",
+        "Baseado em Radix UI primitives"
+      ],
+      "actions": [
+        "Identificar subcomponentes necessários",
+        "Criar estrutura de arquivos completa",
+        "Implementar Context para compartilhar estado",
+        "Criar exports nomeados",
+        "Gerar story com múltiplos exemplos"
+      ],
+      "output": "Componente composto com exports nomeados e exemplos"
+    },
+    {
+      "id": "auto-check-performance",
+      "name": "Auto-Verificar Performance",
+      "category": "Validação e Qualidade",
+      "priority": "medium",
+      "trigger": "Quando solicitado ou antes de release",
+      "conditions": ["Componente existe", "Build do design system disponível"],
+      "actions": [
+        "Analisar bundle size",
+        "Verificar re-renders desnecessários",
+        "Testar com React DevTools Profiler",
+        "Gerar relatório de performance",
+        "Sugerir otimizações"
+      ],
+      "output": "Relatório de performance com sugestões de otimização"
+    },
+    {
+      "id": "auto-create-migration",
+      "name": "Auto-Criar Migration Guide",
+      "category": "Documentação",
+      "priority": "medium",
+      "trigger": "Quando há breaking change em componente",
+      "conditions": [
+        "Mudança remove ou renomeia props",
+        "Mudança altera comportamento padrão"
+      ],
+      "actions": [
+        "Identificar breaking changes",
+        "Gerar migration guide detalhado",
+        "Criar codemod se possível",
+        "Adicionar ao CHANGELOG",
+        "Documentar mudanças"
+      ],
+      "output": "Migration guide com codemod e documentação"
+    },
+    {
+      "id": "auto-sync-dependencies",
+      "name": "Auto-Sincronizar Dependências",
+      "category": "Manutenção",
+      "priority": "medium",
+      "trigger": "Quando nova dependência é adicionada ou atualizada",
+      "conditions": [
+        "package.json modificado",
+        "Dependência relevante para design system"
+      ],
+      "actions": [
+        "Verificar compatibilidade e conflitos",
+        "Atualizar documentação",
+        "Verificar impacto em componentes",
+        "Gerar relatório de compatibilidade",
+        "Atualizar CHANGELOG"
+      ],
+      "output": "Dependência sincronizada com documentação atualizada"
+    },
+    {
+      "id": "auto-generate-release",
+      "name": "Auto-Gerar Release Notes",
+      "category": "Manutenção",
+      "priority": "low",
+      "trigger": "Quando usuário solicita criar release ou tag é criada",
+      "conditions": [
+        "CHANGELOG.md tem seção [Unreleased]",
+        "Há mudanças desde última release"
+      ],
+      "actions": [
+        "Analisar mudanças desde última release",
+        "Determinar versão (Semantic Versioning)",
+        "Gerar release notes completas",
+        "Atualizar CHANGELOG",
+        "Criar GitHub Release"
+      ],
+      "output": "Release notes completas com versão e CHANGELOG atualizado"
+    }
+  ],
+  "processes": [
+    {
+      "id": "processo-1-aderencia",
+      "name": "Processo 1: Verificação de Aderência às Skills",
+      "description": "Garantir que o código gerado segue os padrões documentados nas skills",
+      "frequency": "A cada componente criado ou modificado",
+      "checklist": [
+        "Verificação de Estrutura (react-typescript.md)",
+        "Verificação de Styling (tailwind-css.md, css-variables-theming.md)",
+        "Verificação de Integração (radix-ui-integration.md)",
+        "Verificação de Acessibilidade (accessibility-a11y.md)",
+        "Verificação de Documentação (storybook-patterns.md)"
+      ],
+      "automation": "auto-validate-skills"
+    },
+    {
+      "id": "processo-2-code-review",
+      "name": "Processo 2: Code Review Checklist",
+      "description": "Garantir qualidade e consistência do código antes de merge",
+      "frequency": "A cada Pull Request",
+      "checklist": [
+        "Arquitetura (categoria correta, tokens, exports)",
+        "Código (TypeScript, ESLint, Prettier)",
+        "Styling (tokens CSS, Tailwind, CVA, dark mode)",
+        "Testes (Story, casos de uso, acessibilidade)",
+        "Documentação (JSDoc, README, CHANGELOG)"
+      ],
+      "automation": "auto-validate-skills, auto-test-accessibility"
+    },
+    {
+      "id": "processo-3-validacao-custom",
+      "name": "Processo 3: Validação de Componentes Custom",
+      "description": "Garantir que componentes custom do Survey Builder seguem padrões específicos",
+      "frequency": "A cada componente custom criado ou modificado",
+      "checklist": [
+        "Canvas Components (DND Kit, Zoom & Pan, Selection)",
+        "Editor Components (RHF, Auto-save, Dirty state)",
+        "Logic Components (Condition builder, Validation)",
+        "Diagram Components (React Flow, Custom nodes)",
+        "Sidebar Components (Collapsible, Search)",
+        "Preview Components (Responsive frames)"
+      ],
+      "automation": "auto-validate-survey-custom"
+    }
+  ],
+  "implementation": {
+    "fase1": {
+      "name": "Regras Críticas (Semana 1)",
+      "rules": [
+        "auto-scaffold-ui",
+        "auto-validate-skills",
+        "auto-update-exports",
+        "auto-update-changelog"
+      ],
+      "impact": "70% dos benefícios"
+    },
+    "fase2": {
+      "name": "Regras Importantes (Semana 2)",
+      "rules": [
+        "auto-scaffold-survey",
+        "auto-generate-variants",
+        "auto-test-accessibility",
+        "auto-generate-docs-props",
+        "auto-validate-survey-custom"
+      ],
+      "impact": "20% dos benefícios"
+    },
+    "fase3": {
+      "name": "Regras Complementares (Semana 3)",
+      "rules": [
+        "auto-implement-dark-mode",
+        "auto-create-compound",
+        "auto-check-performance",
+        "auto-create-migration",
+        "auto-sync-dependencies",
+        "auto-generate-release"
+      ],
+      "impact": "10% dos benefícios"
+    }
+  },
+  "metrics": {
+    "eficiencia": {
+      "reduction_scaffolding": "60-80%",
+      "reduction_documentation": "50%",
+      "reduction_errors": "70%"
+    },
+    "qualidade": {
+      "aderencia_padroes": "100%",
+      "cobertura_documentacao": "100%",
+      "score_acessibilidade": "95%+"
+    },
+    "consistencia": {
+      "estrutura": "100%",
+      "exports": "100%",
+      "documentacao": "100%"
+    }
+  }
+}

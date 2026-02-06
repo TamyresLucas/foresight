@@ -1,0 +1,35 @@
+{
+  "name": "foresight",
+  "version": "1.0.0",
+  "description": "Foresight Design System - Monorepo Workspace",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
+    "clean": "turbo run clean",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server-sequential-thinking": "^2025.12.18",
+    "@notionhq/notion-mcp-server": "^2.1.0",
+    "@upstash/context7-mcp": "^2.1.1",
+    "color": "^5.0.3",
+    "mcp-server": "^0.0.9",
+    "react-dropzone": "^14.4.0",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@types/color": "^4.2.0",
+    "turbo": "^1.11.0",
+    "prettier": "^3.0.0"
+  },
+  "packageManager": "npm@9.6.7"
+}

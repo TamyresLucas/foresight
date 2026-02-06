@@ -1,0 +1,36 @@
+{
+  "mcpServers": {
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "disabled": false,
+      "description": "Sequential thinking for better problem analysis and multiple solution proposals"
+    },
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {
+        "CONTEXT7_API_KEY": "ctx7sk-6e5ce6d3-61bb-45a7-960f-8c28bba6ff8c"
+      },
+      "enabled": true,
+      "description": "Context management and documentation server with real-time library docs"
+    },
+    "notion": {
+      "command": "npx",
+      "args": [
+        "@notionhq/notion-mcp-server",
+        "--transport",
+        "stdio"
+      ],
+      "disabled": false,
+      "description": "Notion API integration (already working)"
+    }
+  },
+  "mcpSettings": {
+    "defaultTimeout": 30000,
+    "maxRetries": 3,
+    "autoRestart": true
+  }
+}
