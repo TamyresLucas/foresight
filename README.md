@@ -1,54 +1,136 @@
-# foresight
+# Foresight - Design System Monorepo
 
-Workspace dedicado para integração com Notion MCP usando Opencode.
+[![Build Status](https://img.shields.io/badge/build-passing-success)](https://github.com/tamyreslucas/foresight)
+[![Tests](https://img.shields.io/badge/tests-100%25-success)](https://github.com/tamyreslucas/foresight)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-19.1-blue)](https://react.dev/)
 
-## 🚀 Configuração
+Workspace dedicado ao **Foresight Design System** - um sistema de design completo baseado em shadcn/ui, Radix UI e Tailwind CSS.
 
-- **Notion MCP**: Configurado com servidor remoto oficial
-- **Autenticação**: OAuth (seguro)
-- **Isolamento**: Sem conexão com outros projetos
-- **Ferramenta**: Opencode
+## 🚀 Quick Start
 
-## 📁 Estrutura
+```bash
+# Instalar dependências
+npm install
+
+# Iniciar Design System (Storybook)
+npm run dev:design-system
+
+# Iniciar Playground
+npm run dev:playground
+
+# Build completo
+npm run build
+```
+
+## 📁 Estrutura do Monorepo
 
 ```
 foresight/
-├── .gemini/
-│   └── mcp_config.json     # Configuração MCP para Opencode
-├── README.md               # Este arquivo
-└── (seus arquivos)
+├── apps/
+│   └── playground/          # App de testes e experimentos
+├── packages/
+│   └── design-system/       # Pacote principal do DS
+├── tools/
+│   ├── scripts/             # Scripts de automação
+│   └── build-scripts/       # Scripts de build
+├── docs/                    # Documentação completa
+└── .opencode/
+    └── skills/              # Skills organizadas por categoria
 ```
 
-## 🛠️ Como Usar com Opencode
+## 📚 Documentação
 
-1. **Abra o Opencode** na pasta: `/Users/tamyreslucas/foresight`
-2. O Notion MCP estará disponível automaticamente
-3. **Primeiro uso**: Complete o OAuth quando solicitado para conectar sua conta Notion
+- [Getting Started](./docs/guides/getting-started.md)
+- [Arquitetura do Monorepo](./docs/architecture/monorepo-structure.md)
+- [Guia de Contribuição](./docs/guides/contributing.md)
+- [Setup MCP](./docs/mcp/setup-guide.md)
 
-## 💡 Exemplos de Uso
+## 🛠️ Comandos Disponíveis
 
-- "Procure minhas tarefas pendentes no Notion"
-- "Crie uma página chamada 'Novo Projeto'"
-- "Liste todos os meus bancos de dados"
-- "Adicione um comentário na página X"
-- "Atualize o status da tarefa Y"
+```bash
+# Desenvolvimento
+npm run dev              # Iniciar todos os pacotes em modo dev
+npm run dev:design-system # Iniciar apenas o Design System
 
-## ✅ Benefícios
+# Build
+npm run build            # Build de todos os pacotes
+npm run build:design-system # Build apenas do DS
 
-- ✅ **Workspace do zero** - totalmente limpo
-- ✅ **Isolado** - sem interferência de outros projetos
-- ✅ **Dedicado** - foco total em Notion + IA
-- ✅ **Configuração otimizada** - Notion MCP remoto oficial
-- ✅ **Opencode** - usando a ferramenta que você prefere
+# Qualidade
+npm run lint            # Executar linting
+npm run type-check      # Verificar tipos TypeScript
+npm run test            # Executar testes
+npm run format          # Formatar código com Prettier
 
-## 🔧 Configuração Técnica
+# Limpeza
+npm run clean           # Limpar builds e caches
+```
 
-O arquivo `.gemini/mcp_config.json` contém:
+## 🎨 Design System
 
-- URL do servidor remoto: `https://mcp.notion.com/mcp`
-- Tipo: Streamable HTTP
-- Autenticação: OAuth via Notion
+O Design System inclui:
+
+- **51+ componentes** baseados em shadcn/ui
+- **Tokens semânticos** completos
+- **Storybook** para documentação
+- **Dark mode** nativo
+- **Acessibilidade** (ARIA, keyboard navigation)
+- **TypeScript** strict mode
+
+### Componentes Principais
+
+```typescript
+import { Button, Input, Dialog, Card } from '@voxco/design-system';
+
+// Uso
+<Button variant="default" size="lg">
+  Clique aqui
+</Button>
+```
+
+## 🧠 Skills Disponíveis
+
+As skills estão organizadas em categorias:
+
+- **01-fundamentals/** - React, TypeScript, Tailwind, Patterns
+- **02-design-system/** - Arquitetura DS, shadcn, Storybook
+- **03-survey-builder/** - Domain-specific (Canvas, Editor, Logic)
+- **04-quality/** - Code review, testing, quality gates
+
+## 🔧 Configuração MCP
+
+O projeto usa MCP servers para:
+
+- **Notion** - Integração com documentação
+- **shadcn/ui** - Gerenciamento de componentes
+- **Tailwind CSS** - Utilitários e configuração
+
+Ver [Setup MCP](./docs/mcp/setup-guide.md) para detalhes.
+
+## 📝 Scripts Úteis
+
+```bash
+# Review de código
+node tools/scripts/code-review-checklist.js
+
+# Validar skills
+node tools/scripts/validate-skills.js
+```
+
+## 🤝 Contribuição
+
+1. Leia o [Guia de Contribuição](./docs/guides/contributing.md)
+2. Siga as [Skills de Qualidade](./.opencode/skills/04-quality/)
+3. Execute os checks antes do PR:
+   ```bash
+   npm run lint && npm run type-check && npm run test
+   ```
+
+## 📄 Licença
+
+MIT - Veja [LICENSE](./LICENSE) para detalhes.
 
 ---
 
-**Pronto para usar!** Abra este workspace no Opencode e comece a interagir com seu Notion via IA. 🚀
+**Desenvolvido com ❤️ usando [Opencode](https://opencode.ai)**
