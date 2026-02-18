@@ -45,11 +45,7 @@ const SurfaceCard = ({
   </div>
 );
 
-// Simple Contrast Badge using color-utils (assuming hex inputs for now or manual override)
-// Note: In a real app, we'd need to getComputedStyle. For this stress test,
-// we are validating the *implementation* of the classes, so we visualize them.
-// We can't easily compute contrast in SSR/Static storybook without a browser hook.
-// So we will simulate the check based on known hexes for the "Compliance" section.
+// NOTE: This stress test is self-contained and does not rely on external color utility suites.
 
 const ComplianceRow = ({
   label,

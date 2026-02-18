@@ -148,7 +148,7 @@ const CarouselWithIndicators = () => {
               "h-2 w-2 rounded-full transition-colors",
               current === index + 1
                 ? "bg-primary"
-                : "bg-[color-mix(in_oklab,hsl(var(--primary)),hsl(var(--background))_80%)]",
+                : "bg-[hsl(var(--secondary))]",
             )}
             onClick={() => api?.scrollTo(index)}
             aria-label={`Go to slide ${index + 1}`}
