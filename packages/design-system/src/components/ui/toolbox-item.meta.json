@@ -1,0 +1,11 @@
+{
+  "componentId": "toolbox-item",
+  "description": "Draggable toolbox item component for survey builder panels, displaying an icon and label with drag handle (GripVertical). Supports enabled/disabled, dragging, and non-draggable (click-only) states.",
+  "useCases": [
+    "Question type item in survey builder toolbox (drag to canvas)",
+    "Logic block item in workflow builder palette",
+    "Widget item in dashboard builder sidebar",
+    "Non-draggable action item in a toolbox panel (click to insert)"
+  ],
+  "keywords": ["toolbox-item", "drag-drop", "survey-builder", "palette", "draggable", "toolbox"]
+}
