@@ -1,0 +1,11 @@
+{
+  "componentId": "calendar",
+  "description": "Interactive month-view calendar for single or range date selection, built on react-day-picker. Supports navigation between months, outside day display, and custom caption layout.",
+  "useCases": [
+    "Date picker popover for survey scheduling and launch dates",
+    "Date range selection for filtering analytics by time period",
+    "Deadline and expiry date inputs in survey settings",
+    "Standalone date display in reporting dashboards"
+  ],
+  "keywords": ["calendar", "date", "picker", "month", "datepicker", "range"]
+}

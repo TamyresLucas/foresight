@@ -1,0 +1,11 @@
+{
+  "componentId": "checkbox",
+  "description": "Accessible checkbox input built on Radix UI CheckboxPrimitive, supporting checked, unchecked, and indeterminate states. Typically paired with a Label for form usage.",
+  "useCases": [
+    "Multi-select answer options in survey questions",
+    "Bulk selection of rows in response data tables",
+    "Permission and feature flag toggles in settings panels",
+    "Terms of service and consent acceptance in survey intros"
+  ],
+  "keywords": ["checkbox", "input", "form", "selection", "toggle", "boolean"]
+}

@@ -1,0 +1,11 @@
+{
+  "componentId": "badge",
+  "description": "Small inline label for displaying status, category, or count information. Supports semantic variants (default, secondary, destructive, success, warning, info, outline) via class-variance-authority.",
+  "useCases": [
+    "Survey status labels (Draft, Active, Closed, Archived)",
+    "Question type tags in survey builders",
+    "Notification counts and unread indicators",
+    "Feature flags and environment labels in admin panels"
+  ],
+  "keywords": ["badge", "label", "tag", "status", "chip", "variant"]
+}

@@ -1,0 +1,11 @@
+{
+  "componentId": "breadcrumb",
+  "description": "Hierarchical navigation trail showing the user's current location within the application. Supports custom separators, collapsed paths with ellipsis, home icon, and badge annotations on path segments.",
+  "useCases": [
+    "Survey builder navigation showing Project > Survey > Section > Question",
+    "Analytics drill-down paths from dashboard to individual response",
+    "Settings hierarchy navigation (Workspace > Team > Permissions)",
+    "Multi-step form progress indication with named steps"
+  ],
+  "keywords": ["breadcrumb", "navigation", "hierarchy", "path", "trail", "wayfinding"]
+}

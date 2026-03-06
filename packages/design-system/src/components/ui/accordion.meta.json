@@ -1,0 +1,11 @@
+{
+  "componentId": "accordion",
+  "description": "Vertically stacked set of interactive headings that expand or collapse their associated content panels. Supports single or multiple open items, animated transitions, and accessible WAI-ARIA patterns.",
+  "useCases": [
+    "FAQ sections with expandable question-answer pairs",
+    "Settings panels with collapsible sections",
+    "Survey section navigation with expandable question groups",
+    "Progressive disclosure of detailed content in dashboards"
+  ],
+  "keywords": ["accordion", "collapse", "expand", "disclosure", "faq", "panel"]
+}
