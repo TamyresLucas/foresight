@@ -1,0 +1,11 @@
+{
+  "componentId": "toaster",
+  "description": "Application-level toast provider component that renders the ToastViewport and manages the display of all active toasts from the useToast hook. Must be placed once at the root layout.",
+  "useCases": [
+    "Root layout toast container for displaying all application notifications",
+    "Global feedback system for async operations (save, delete, publish)",
+    "Single-instance provider enabling useToast hook across the entire app",
+    "Toast queue manager with configurable position and limit"
+  ],
+  "keywords": ["toaster", "toast-provider", "notification-system", "root-layout", "use-toast", "global"]
+}

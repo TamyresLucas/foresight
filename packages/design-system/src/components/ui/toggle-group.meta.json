@@ -1,0 +1,11 @@
+{
+  "componentId": "toggle-group",
+  "description": "Group of toggle buttons built on Radix UI ToggleGroup, supporting single or multiple selection modes with shared variant and size context. Includes survey view toggle and theme switcher patterns.",
+  "useCases": [
+    "Survey view mode switcher (Desktop / Tablet / Mobile preview)",
+    "Text alignment selector (left, center, right, justify) in editor toolbar",
+    "Theme toggle group (Light / Dark / System) in settings",
+    "Multi-select filter tags with toggle-on/off behavior"
+  ],
+  "keywords": ["toggle-group", "button-group", "segmented-control", "radix", "toolbar", "multi-select"]
+}

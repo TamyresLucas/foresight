@@ -1,0 +1,11 @@
+{
+  "componentId": "table-row-actions",
+  "description": "Composite table row action component that renders a single ghost button for one action, or a dropdown menu (DropdownMenu) for multiple actions. Supports icon, label, variant (including destructive), disabled state, and separator between items.",
+  "useCases": [
+    "Table row with Edit and Delete actions collapsed into a kebab menu",
+    "Survey list row with a single primary action button (e.g., Open)",
+    "User management table with role-specific contextual actions per row",
+    "Data table with destructive delete action separated by a divider"
+  ],
+  "keywords": ["table-row-actions", "row-actions", "kebab-menu", "context-menu", "table", "dropdown", "composite"]
+}

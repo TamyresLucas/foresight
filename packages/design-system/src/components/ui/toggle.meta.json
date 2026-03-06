@@ -1,0 +1,11 @@
+{
+  "componentId": "toggle",
+  "description": "Single pressable toggle button built on Radix UI Toggle, supporting default and outline variants with three sizes. Uses secondary token for active (pressed) state background.",
+  "useCases": [
+    "Text formatting button (bold, italic, underline) in a rich text editor",
+    "Single filter toggle for active/inactive state in a toolbar",
+    "View mode toggle (list vs. grid) as a standalone button",
+    "Mute/unmute or pin/unpin action button with visual pressed state"
+  ],
+  "keywords": ["toggle", "button", "pressed", "radix", "toolbar", "form"]
+}

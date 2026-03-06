@@ -1,0 +1,11 @@
+{
+  "componentId": "switch",
+  "description": "Accessible toggle switch built on Radix UI Switch, supporting checked, unchecked, and disabled states with smooth animated thumb transition. Uses secondary token for active state styling.",
+  "useCases": [
+    "Feature enable/disable toggle in settings panels",
+    "Survey question required/optional toggle",
+    "Notification preferences on/off control",
+    "Dark mode or theme toggle in application header"
+  ],
+  "keywords": ["switch", "toggle", "boolean", "on-off", "radix", "form", "a11y"]
+}
