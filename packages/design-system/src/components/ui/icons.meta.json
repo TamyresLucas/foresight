@@ -1,0 +1,11 @@
+{
+  "componentId": "icons",
+  "description": "Named icon export library that maps Lucide-compatible icon names to Google Material Symbols via the Icon primitive. Provides 60+ named exports (X, Check, ChevronDown, Search, Trash, Plus, etc.) as drop-in replacements, enabling migration from Lucide to Material Symbols without changing import names.",
+  "useCases": [
+    "Importing named icons (e.g., Check, Trash, Plus) throughout the design system and application",
+    "Replacing Lucide icon imports with Material Symbols equivalents without refactoring call sites",
+    "Providing a consistent icon vocabulary across all DS components",
+    "Extending the icon set by adding new createIcon entries to this file"
+  ],
+  "keywords": ["icons", "lucide", "material-symbols", "shim", "exports", "library"]
+}

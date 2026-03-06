@@ -1,0 +1,11 @@
+{
+  "componentId": "dialog",
+  "description": "Accessible modal dialog built on Radix UI DialogPrimitive. Composed of Dialog, DialogTrigger, DialogPortal, DialogOverlay, DialogContent, DialogHeader, DialogFooter, DialogTitle, and DialogDescription for flexible layout.",
+  "useCases": [
+    "Survey creation and editing forms presented in a focused modal context",
+    "Detailed view of a response or result without leaving the current page",
+    "Configuration panels for survey settings, sharing options, or integrations",
+    "Confirmation prompts and informational overlays requiring user acknowledgment"
+  ],
+  "keywords": ["dialog", "modal", "overlay", "popup", "radix"]
+}

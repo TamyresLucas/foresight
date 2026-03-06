@@ -1,0 +1,11 @@
+{
+  "componentId": "label",
+  "description": "Accessible form label built on Radix UI LabelPrimitive with class-variance-authority variants. Automatically applies disabled peer styling when associated with a disabled input via the peer-disabled CSS pattern.",
+  "useCases": [
+    "Field labels in survey settings and configuration forms",
+    "Accessible labels paired with Input, Checkbox, Select, and RadioGroup components",
+    "Required field indicators in form layouts",
+    "Descriptive labels for toggle switches and sliders in settings panels"
+  ],
+  "keywords": ["label", "form", "accessibility", "radix", "field-label", "a11y"]
+}

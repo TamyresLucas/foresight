@@ -1,0 +1,11 @@
+{
+  "componentId": "form",
+  "description": "Form composition layer built on React Hook Form and Radix UI LabelPrimitive. Provides Form, FormField, FormItem, FormControl, FormLabel, FormDescription, and FormMessage components that wire validation state, accessibility attributes, and error messaging automatically.",
+  "useCases": [
+    "Survey creation and settings forms with field-level validation",
+    "User profile and account settings forms with Zod schema validation",
+    "Login, registration, and password reset flows",
+    "Multi-field configuration panels with inline error feedback"
+  ],
+  "keywords": ["form", "validation", "react-hook-form", "zod", "input", "field"]
+}

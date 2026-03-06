@@ -1,0 +1,11 @@
+{
+  "componentId": "hover-card",
+  "description": "Non-modal floating card that appears on hover, built on Radix UI HoverCardPrimitive. Composed of HoverCard, HoverCardTrigger, and HoverCardContent for displaying rich preview information without interrupting the user flow.",
+  "useCases": [
+    "User profile preview cards on hover over avatar or username in activity feeds",
+    "Survey or question metadata previews when hovering over list items",
+    "Respondent detail cards in analytics tables",
+    "Tooltip-like rich content panels with images, dates, and descriptions"
+  ],
+  "keywords": ["hover-card", "preview", "tooltip", "popover", "radix", "floating"]
+}

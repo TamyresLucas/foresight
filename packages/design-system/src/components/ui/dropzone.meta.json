@@ -1,0 +1,11 @@
+{
+  "componentId": "dropzone",
+  "description": "Drag-and-drop file upload area built on react-dropzone. Supports file and image modes, multiple file selection, file preview with removal, and a customizable drop message. Manages internal file state and exposes onChange for controlled usage.",
+  "useCases": [
+    "File attachment upload in survey questions (file-upload question type)",
+    "Image upload for survey branding, logos, and background customization",
+    "Bulk import of respondent lists or CSV data files",
+    "Media attachment inputs in form builders"
+  ],
+  "keywords": ["dropzone", "upload", "file", "drag-drop", "react-dropzone", "image"]
+}
