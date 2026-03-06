@@ -1,0 +1,11 @@
+{
+  "componentId": "skeleton",
+  "description": "Animated placeholder element that mimics content layout during loading states using a pulsing muted background. Composable into any shape by applying width, height, and border-radius classes.",
+  "useCases": [
+    "Survey list loading state with card-shaped skeletons",
+    "Table row placeholders while data is being fetched",
+    "Form field loading state before options are available",
+    "Stats card shimmer effect during dashboard data load"
+  ],
+  "keywords": ["skeleton", "loading", "placeholder", "shimmer", "pulse", "content-loader"]
+}

@@ -1,0 +1,11 @@
+{
+  "componentId": "radio-group",
+  "description": "Accessible radio button group built on Radix UI RadioGroup, allowing single selection from a list of options. Supports keyboard navigation and custom indicator styling.",
+  "useCases": [
+    "Single-choice question type in survey forms",
+    "Settings panel option selector (e.g., layout mode, theme)",
+    "Filter panel with mutually exclusive options",
+    "Onboarding preference selection with labeled radio items"
+  ],
+  "keywords": ["radio", "radio-group", "single-select", "form", "radix", "a11y"]
+}

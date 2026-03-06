@@ -1,0 +1,11 @@
+{
+  "componentId": "sheet",
+  "description": "Slide-in panel overlay built on Radix UI Dialog, supporting entry from all four screen edges (top, right, bottom, left). Used for contextual side panels and settings drawers.",
+  "useCases": [
+    "Survey settings panel sliding in from the right",
+    "Question editor panel opening from the side",
+    "Mobile navigation drawer sliding from the left",
+    "Contextual detail view for a selected list item"
+  ],
+  "keywords": ["sheet", "side-panel", "drawer", "overlay", "radix", "slide-in", "modal"]
+}

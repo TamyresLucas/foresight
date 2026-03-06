@@ -1,0 +1,11 @@
+{
+  "componentId": "separator",
+  "description": "Thin visual divider line built on Radix UI Separator, supporting horizontal and vertical orientations. Can be decorative or semantic for accessibility.",
+  "useCases": [
+    "Dividing sections within a settings panel or form",
+    "Separating menu items in a dropdown or sidebar",
+    "Visual break between content blocks in a layout",
+    "Vertical divider between toolbar button groups"
+  ],
+  "keywords": ["separator", "divider", "hr", "radix", "layout", "visual-break"]
+}

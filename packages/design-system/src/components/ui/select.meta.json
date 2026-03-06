@@ -1,0 +1,11 @@
+{
+  "componentId": "select",
+  "description": "Accessible dropdown select built on Radix UI Select, supporting grouped options, icons, avatars, and status indicators. Includes validation state styling via aria-invalid.",
+  "useCases": [
+    "Question type selector in survey builder toolbar",
+    "Device or language selector in settings panels",
+    "Form field for selecting from a predefined list of options",
+    "Scrollable option list with grouped categories and icons"
+  ],
+  "keywords": ["select", "dropdown", "form", "radix", "single-select", "options", "a11y"]
+}

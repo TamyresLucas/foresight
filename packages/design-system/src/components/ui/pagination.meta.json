@@ -1,0 +1,11 @@
+{
+  "componentId": "pagination",
+  "description": "Pagination control component providing Previous, Next, and numbered page links with an ellipsis for large page ranges. Renders as accessible navigation landmarks.",
+  "useCases": [
+    "Survey list pagination with page number controls",
+    "Data table navigation between result pages",
+    "Search results pagination with ellipsis for large ranges",
+    "Any list or grid view requiring page-by-page navigation"
+  ],
+  "keywords": ["pagination", "paging", "navigation", "page-controls", "list"]
+}

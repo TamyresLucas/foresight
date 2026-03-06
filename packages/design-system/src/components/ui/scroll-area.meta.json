@@ -1,0 +1,11 @@
+{
+  "componentId": "scroll-area",
+  "description": "Custom-styled scrollable container built on Radix UI ScrollArea, providing consistent cross-browser scrollbar appearance with vertical and horizontal scroll support.",
+  "useCases": [
+    "Sidebar with a long list of navigation items requiring scroll",
+    "Question list panel in survey editor with overflow content",
+    "Dropdown or combobox list with many options",
+    "Chat or activity feed with scrollable message history"
+  ],
+  "keywords": ["scroll", "scroll-area", "overflow", "radix", "scrollbar", "container"]
+}

@@ -1,0 +1,11 @@
+{
+  "componentId": "popover",
+  "description": "Floating content panel anchored to a trigger element, built on Radix UI Popover. Supports configurable alignment and offset, with enter/exit animations.",
+  "useCases": [
+    "Contextual help or info panels anchored to a button or icon",
+    "Inline date picker or color picker trigger container",
+    "Filter or settings panel attached to a toolbar button",
+    "Rich tooltip replacement requiring interactive content"
+  ],
+  "keywords": ["popover", "floating", "overlay", "radix", "anchor", "popup"]
+}
