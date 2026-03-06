@@ -1,0 +1,11 @@
+{
+  "componentId": "command",
+  "description": "Keyboard-driven command palette and search interface built on cmdk. Composed of Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandSeparator, CommandShortcut, and CommandDialog for modal usage.",
+  "useCases": [
+    "Global search across surveys, questions, and responses",
+    "Quick-action launcher for survey builder operations",
+    "Keyboard shortcut palette for power users",
+    "Filtered navigation menu with grouped sections"
+  ],
+  "keywords": ["command", "search", "palette", "keyboard", "cmdk", "spotlight", "actions"]
+}

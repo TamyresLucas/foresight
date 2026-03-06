@@ -1,0 +1,11 @@
+{
+  "componentId": "color-picker",
+  "description": "Interactive color selection component with drag-based hue/saturation picker, EyeDropper API support, and multi-format output (HEX, RGB, HSL, CSS). Built on react-colorful and the Color library, presented inside a Popover trigger.",
+  "useCases": [
+    "Theme color customization in survey branding settings",
+    "Custom color selection for chart series and data visualization",
+    "Background and accent color pickers in report builders",
+    "Design token override panels in white-label configuration"
+  ],
+  "keywords": ["color", "picker", "hex", "rgb", "hsl", "colorpicker", "eyedropper", "theme"]
+}

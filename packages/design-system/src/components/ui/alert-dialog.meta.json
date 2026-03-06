@@ -1,0 +1,11 @@
+{
+  "componentId": "alert-dialog",
+  "description": "Modal dialog that interrupts the user flow to request confirmation before executing a destructive or irreversible action. Composed of AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, and AlertDialogCancel.",
+  "useCases": [
+    "Confirming permanent deletion of surveys, responses, or user data",
+    "Warning before publishing or archiving a survey",
+    "Requesting explicit consent before overwriting existing data",
+    "Blocking navigation away from unsaved changes"
+  ],
+  "keywords": ["dialog", "modal", "confirm", "destructive", "alert", "overlay"]
+}

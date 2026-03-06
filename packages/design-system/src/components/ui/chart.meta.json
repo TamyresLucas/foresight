@@ -1,0 +1,11 @@
+{
+  "componentId": "chart",
+  "description": "Recharts-based data visualization components including BarChart, LineChart, AreaChart, PieChart, and DonutChart. Provides CHART_COLORS and SEMANTIC_CHART_COLORS palettes aligned with the design token system, plus ChartContainer and ChartTooltip utilities.",
+  "useCases": [
+    "Survey response distribution visualization (bar/pie charts)",
+    "Trend analysis of response rates over time (line/area charts)",
+    "NPS score breakdowns and satisfaction metric dashboards",
+    "Comparative analytics across survey segments or cohorts"
+  ],
+  "keywords": ["chart", "graph", "visualization", "recharts", "bar", "line", "pie", "area", "donut", "analytics"]
+}

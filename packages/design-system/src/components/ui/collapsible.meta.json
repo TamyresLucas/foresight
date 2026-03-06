@@ -1,0 +1,11 @@
+{
+  "componentId": "collapsible",
+  "description": "Primitive expand/collapse container built on Radix UI CollapsiblePrimitive. Composed of Collapsible (root), CollapsibleTrigger, and CollapsibleContent for controlled or uncontrolled open state.",
+  "useCases": [
+    "Expandable sidebar sections for navigation grouping",
+    "Show/hide advanced options in survey configuration panels",
+    "Collapsible metadata panels in question editors",
+    "Inline detail expansion in list and table rows"
+  ],
+  "keywords": ["collapsible", "expand", "collapse", "toggle", "disclosure", "primitive"]
+}
