@@ -1,0 +1,11 @@
+{
+  "componentId": "resizable",
+  "description": "Resizable panel layout system built on react-resizable-panels, providing draggable dividers between horizontal or vertical panel groups. Supports persistence of panel sizes.",
+  "useCases": [
+    "Split-pane editor layout with resizable left sidebar and main content",
+    "Survey builder with resizable question list and preview panels",
+    "Dashboard with adjustable widget panels",
+    "Code editor or data viewer with resizable output panel"
+  ],
+  "keywords": ["resizable", "split-pane", "panel", "drag", "layout", "react-resizable-panels"]
+}

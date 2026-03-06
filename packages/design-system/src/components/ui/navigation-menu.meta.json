@@ -1,0 +1,11 @@
+{
+  "componentId": "navigation-menu",
+  "description": "Accessible horizontal navigation menu built on Radix UI NavigationMenu, supporting multi-level dropdowns with animated content panels. Designed for top-level site or app navigation with keyboard support.",
+  "useCases": [
+    "Top-level application navigation bar with dropdown sub-menus",
+    "Multi-section site header with animated panel content",
+    "Accessible keyboard-navigable menu for complex navigation hierarchies",
+    "Navigation with icon + label combinations and descriptive sub-items"
+  ],
+  "keywords": ["navigation", "menu", "nav", "radix", "dropdown", "header", "a11y"]
+}

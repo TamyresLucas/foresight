@@ -1,0 +1,11 @@
+{
+  "componentId": "slider",
+  "description": "Range input slider built on Radix UI Slider, supporting single value, range (dual thumb), stepped increments, and disabled states. Uses primary and secondary tokens for track and thumb styling.",
+  "useCases": [
+    "Survey rating scale question (e.g., 1–10 NPS slider)",
+    "Volume or intensity control in media or settings panels",
+    "Price range filter with dual-thumb range selection",
+    "Multi-slider comparison input for survey question types"
+  ],
+  "keywords": ["slider", "range", "input", "radix", "nps", "rating", "form"]
+}

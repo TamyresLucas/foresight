@@ -1,0 +1,11 @@
+{
+  "componentId": "progress",
+  "description": "Horizontal progress bar built on Radix UI Progress, displaying a determinate completion percentage with smooth CSS transition. Supports semantic color variants via token-based classes.",
+  "useCases": [
+    "Survey completion progress indicator",
+    "File upload or processing progress bar",
+    "Onboarding step completion tracker",
+    "Dashboard metric showing percentage of a goal reached"
+  ],
+  "keywords": ["progress", "progress-bar", "loading", "completion", "radix", "indicator"]
+}
