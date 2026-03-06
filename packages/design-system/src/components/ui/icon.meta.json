@@ -1,0 +1,11 @@
+{
+  "componentId": "icon",
+  "description": "Base icon primitive that renders Google Material Symbols via a span element with the material-symbols-outlined font class. Accepts a name prop (Material Symbols identifier), optional size (number or Tailwind h-* class), and fill boolean for filled vs. outlined style.",
+  "useCases": [
+    "Rendering any Google Material Symbol icon by name in UI components",
+    "Base primitive consumed by the icons.tsx shim layer for named icon exports",
+    "Inline icon rendering with size control in buttons, labels, and list items",
+    "Icon-only buttons and icon badges with accessible aria-label"
+  ],
+  "keywords": ["icon", "material-symbols", "google", "primitive", "svg", "glyph"]
+}

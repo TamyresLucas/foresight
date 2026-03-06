@@ -1,0 +1,11 @@
+{
+  "componentId": "dropdown-menu",
+  "description": "Contextual dropdown menu built on Radix UI DropdownMenuPrimitive. Supports items, checkbox items, radio groups, sub-menus, separators, labels, and keyboard shortcuts via a rich set of sub-components.",
+  "useCases": [
+    "Row-level action menus in survey and response data tables",
+    "User account menu in navigation headers (Profile, Settings, Logout)",
+    "Contextual options for survey cards (Edit, Duplicate, Archive, Delete)",
+    "Column visibility toggles and sort options in data tables"
+  ],
+  "keywords": ["dropdown", "menu", "context", "actions", "radix", "popover"]
+}

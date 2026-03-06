@@ -1,0 +1,11 @@
+{
+  "componentId": "drawer",
+  "description": "Bottom-sheet drawer component built on Vaul. Slides up from the bottom of the screen and supports drag-to-close gestures. Composed of Drawer, DrawerTrigger, DrawerPortal, DrawerOverlay, DrawerContent, DrawerHeader, DrawerFooter, DrawerTitle, DrawerDescription, and DrawerClose.",
+  "useCases": [
+    "Mobile-friendly survey action sheets for editing, sharing, or deleting",
+    "Step-by-step configuration panels that slide up from the bottom on smaller screens",
+    "Quick-access filter and sort panels in analytics dashboards",
+    "Goal or value input panels with numeric controls (e.g., daily activity targets)"
+  ],
+  "keywords": ["drawer", "bottom-sheet", "vaul", "mobile", "slide", "overlay"]
+}
