@@ -13,6 +13,12 @@ import { cn } from "@/lib/utils"
 export interface TableRowAction {
     label: string
     onClick: () => void
+    /**
+     * Material Symbol icon name (string ligature).
+     * Passed directly to `<Icon name={icon} />` which renders via Material Symbols Rounded font.
+     * @example 'edit' | 'delete' | 'open_in_new' | 'content_copy' | 'archive'
+     * @see https://fonts.google.com/icons
+     */
     icon?: string
     /**
      * Action variant. Use 'destructive' for delete actions.
