@@ -1,0 +1,11 @@
+{
+  "componentId": "table",
+  "description": "Semantic HTML table component with styled sub-components (Header, Body, Footer, Row, Head, Cell, Caption) for displaying structured tabular data. Supports sortable columns and row selection patterns.",
+  "useCases": [
+    "Survey list with columns for name, status, responses, and last modified",
+    "Data export preview table with sortable column headers",
+    "User management table with row selection and bulk actions",
+    "Analytics results table with numeric data and status badges"
+  ],
+  "keywords": ["table", "data-table", "grid", "rows", "columns", "sortable", "tabular"]
+}

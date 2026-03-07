@@ -1,0 +1,11 @@
+{
+  "componentId": "tabs",
+  "description": "Accessible tab navigation component built on Radix UI Tabs, supporting default, underline, and badge variants with horizontal and vertical orientations. Enables keyboard navigation between content panels.",
+  "useCases": [
+    "Survey editor sections (Build, Logic, Settings, Preview) as tab panels",
+    "Settings page with tabs for General, Notifications, and Security",
+    "Dashboard with tabs for Overview, Analytics, and Reports",
+    "Question type selector using icon + label tab items"
+  ],
+  "keywords": ["tabs", "tab-navigation", "panels", "radix", "a11y", "navigation"]
+}

@@ -1,0 +1,11 @@
+{
+  "componentId": "input-otp",
+  "description": "One-time password (OTP) input built on the input-otp library. Composed of InputOTP (root), InputOTPGroup, InputOTPSlot, and InputOTPSeparator for rendering segmented digit inputs with a dot separator variant.",
+  "useCases": [
+    "Two-factor authentication (2FA) code entry in login and verification flows",
+    "Email or SMS verification code input during account setup",
+    "PIN entry fields for survey access control or respondent verification",
+    "Numeric code confirmation dialogs"
+  ],
+  "keywords": ["otp", "pin", "verification", "2fa", "code", "input-otp"]
+}

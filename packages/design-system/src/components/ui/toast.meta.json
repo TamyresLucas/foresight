@@ -1,0 +1,11 @@
+{
+  "componentId": "toast",
+  "description": "Individual toast notification component built on Radix UI Toast, supporting success, warning, info, destructive, and default variants with optional title, description, and action button. Animated entry and exit transitions included.",
+  "useCases": [
+    "Survey saved confirmation toast (success variant)",
+    "Validation error notification (destructive variant)",
+    "Background process completion notification with undo action",
+    "Network connectivity warning (warning variant)"
+  ],
+  "keywords": ["toast", "notification", "feedback", "radix", "alert", "snackbar"]
+}

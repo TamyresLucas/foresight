@@ -1,0 +1,11 @@
+{
+  "componentId": "tooltip",
+  "description": "Accessible floating tooltip built on Radix UI Tooltip, displaying short contextual text on hover or focus. Requires TooltipProvider at the root and supports configurable side offset and animation.",
+  "useCases": [
+    "Icon button label tooltip in toolbar (e.g., Save, Delete, Preview)",
+    "Truncated text full-value tooltip in table cells",
+    "Keyboard shortcut hint tooltip on hover over action buttons",
+    "Disabled button explanation tooltip for unavailable actions"
+  ],
+  "keywords": ["tooltip", "hint", "hover", "radix", "a11y", "floating", "contextual"]
+}

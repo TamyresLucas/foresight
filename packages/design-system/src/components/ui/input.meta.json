@@ -1,0 +1,11 @@
+{
+  "componentId": "input",
+  "description": "Standard HTML text input component with Tailwind-based styling. Supports all native input types, disabled state, error state (via border-destructive class), and icon prefix/suffix patterns. Designed to be used within FormItem for accessible form integration.",
+  "useCases": [
+    "Text, email, password, and number fields in survey settings and user forms",
+    "Search inputs in survey lists, question banks, and analytics filters",
+    "Inline editing fields for survey titles, question text, and labels",
+    "Form fields with validation error states and icon affordances"
+  ],
+  "keywords": ["input", "text-field", "form", "search", "field", "native"]
+}

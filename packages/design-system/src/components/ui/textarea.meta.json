@@ -1,0 +1,11 @@
+{
+  "componentId": "textarea",
+  "description": "Multi-line text input component with consistent border, focus ring, and disabled state styling. Supports auto-resize and placeholder text for open-ended text entry.",
+  "useCases": [
+    "Open-ended survey question response field",
+    "Survey description or introduction text editor",
+    "Comment or feedback input in forms",
+    "Message composition field in notification or email panels"
+  ],
+  "keywords": ["textarea", "multiline", "text-input", "form", "open-ended", "input"]
+}

@@ -1,0 +1,11 @@
+{
+  "componentId": "card",
+  "description": "Container component for grouping related content with optional header, footer, title, description, and content sections. Supports semantic color variants (default, destructive, success, warning, info).",
+  "useCases": [
+    "Grouping related form fields or settings",
+    "Displaying data summaries with title and description",
+    "Status cards with semantic color feedback",
+    "Content panels in dashboards and detail views"
+  ],
+  "keywords": ["card", "container", "panel", "layout", "variant", "content"]
+}

@@ -1,0 +1,74 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+.out/
+.next/
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage/
+.nyc_output/
+
+# Turbo
+.turbo/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Backup files
+*.backup
+*~
+
+# Opencode
+.opencode/node_modules/
+
+# Claude Desktop
+.claude_desktop_config.json
+.claude_desktop_config.json.backup
+
+# MCP
+mcp-config.md
+mcp-config-complete.md
+MCP-SETUP-COMPLETO.md
+
+# Implementation docs
+IMPLEMENTACAO-REGRAS-CONCLUIDA.md
+IMPLEMENTATION-SUCCESS.md
+context7-explicado.md
+skills.md
+
+# Scripts temporários
+mcp-manager.sh
+
+# Local Netlify folder
+.netlify

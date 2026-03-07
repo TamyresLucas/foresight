@@ -13,6 +13,7 @@
     "test": "turbo run test",
     "lint": "turbo run lint",
     "type-check": "turbo run type-check",
+    "type-check:colorpalette": "tsc -p packages/design-system/colorcheck/tsconfig.json --noEmit",
     "clean": "turbo run clean",
     "format": "prettier --write .",
     "format:check": "prettier --check ."

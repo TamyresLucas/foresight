@@ -1,0 +1,11 @@
+{
+  "componentId": "alert",
+  "description": "Contextual feedback banner with semantic variants (default, destructive, success, warning, info). Composed of Alert, AlertTitle, and AlertDescription sub-components.",
+  "useCases": [
+    "Survey validation error messages",
+    "Success confirmation banners after form submission",
+    "Warning notices for destructive or irreversible actions",
+    "Informational tips and contextual guidance"
+  ],
+  "keywords": ["alert", "feedback", "notification", "banner", "variant", "semantic"]
+}

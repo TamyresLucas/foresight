@@ -1,0 +1,11 @@
+{
+  "componentId": "button",
+  "description": "Interactive button element with multiple visual variants (default, destructive, success, outline, secondary, ghost, link) and size options (sm, default, lg, icon). Supports loading and disabled states.",
+  "useCases": [
+    "Primary and secondary call-to-action triggers",
+    "Form submission and confirmation actions",
+    "Destructive or success feedback actions",
+    "Icon-only compact actions in toolbars"
+  ],
+  "keywords": ["button", "action", "cta", "interactive", "variant", "loading"]
+}

@@ -1,0 +1,11 @@
+{
+  "componentId": "carousel",
+  "description": "Horizontal or vertical scrolling container for displaying a sequence of items with previous/next navigation controls, built on Embla Carousel. Supports looping, multiple visible items, and custom indicators.",
+  "useCases": [
+    "Survey question type selector showing available question formats",
+    "Image gallery or media attachment previews in survey responses",
+    "Onboarding step-by-step walkthroughs",
+    "Testimonial or feature highlight sliders in marketing pages"
+  ],
+  "keywords": ["carousel", "slider", "scroll", "gallery", "swipe", "embla"]
+}

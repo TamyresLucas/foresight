@@ -1,0 +1,11 @@
+{
+  "componentId": "time-picker",
+  "description": "Time input component with separate hour, minute, and optional second fields, supporting 12h/24h formats and keyboard navigation between segments. Integrates with date-fns for time manipulation.",
+  "useCases": [
+    "Survey scheduled send time configuration",
+    "Appointment or event time selection in forms",
+    "Time-based question type with hour and minute inputs",
+    "Multiple time picker instances for start/end time range selection"
+  ],
+  "keywords": ["time-picker", "time-input", "hour", "minute", "date-fns", "form", "clock"]
+}

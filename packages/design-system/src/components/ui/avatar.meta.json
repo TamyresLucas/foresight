@@ -1,0 +1,11 @@
+{
+  "componentId": "avatar",
+  "description": "Circular image component for displaying user profile pictures with an automatic text-based fallback when the image fails to load. Composed of Avatar, AvatarImage, and AvatarFallback.",
+  "useCases": [
+    "User profile pictures in navigation headers and sidebars",
+    "Respondent or collaborator identification in survey dashboards",
+    "Comment threads and activity feeds with user attribution",
+    "Team member listings with initials fallback"
+  ],
+  "keywords": ["avatar", "profile", "image", "user", "fallback", "initials"]
+}

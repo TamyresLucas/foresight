@@ -1,0 +1,11 @@
+{
+  "componentId": "menubar",
+  "description": "Horizontal application menu bar built on Radix UI MenubarPrimitive. Supports nested sub-menus, checkbox items, radio groups, keyboard shortcuts, and separators. Includes a SurveyBuilderMenubar story demonstrating Survey, Edit, View, and Help menus.",
+  "useCases": [
+    "Top-level application menu bar in the survey builder editor (Survey, Edit, View, Help)",
+    "Desktop-style menu navigation for complex multi-section applications",
+    "Keyboard-accessible command menus with shortcut annotations",
+    "Context-specific action bars for document or workspace management"
+  ],
+  "keywords": ["menubar", "menu", "navigation", "radix", "keyboard", "application-menu"]
+}
