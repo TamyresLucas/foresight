@@ -32,5 +32,8 @@
     "turbo": "^1.11.0",
     "prettier": "^3.0.0"
   },
-  "packageManager": "npm@9.6.7"
+  "packageManager": "npm@9.6.7",
+  "overrides": {
+    "rollup": "^4.20.0"
+  }
 }
