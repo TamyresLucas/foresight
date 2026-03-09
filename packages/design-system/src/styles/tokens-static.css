@@ -1,9 +1,30 @@
 /* Static Design Tokens (Light) */
+/* SYNCED FROM NOTION — Default (Template) — Light — 2026-03-09 */
+/* Source: https://www.notion.so/29e0a268c6384d43a73b8a9b675253d2 */
 :root {
   --background: 0 0% 100%;
   --foreground: 222.2 84% 4.9%;
-  --primary: 220 100% 50%;
-  --primary-foreground: 210 40% 98%;
+
+  /* Primary — Voxco brand periwinkle (#5568F2) */
+  --primary: 233 86% 64%;
+  --primary-foreground: 0 0% 100%;
+
+  /* Destructive — Voxco brand coral-dark (#CF455C) */
+  --destructive: 349 54% 54%;
+  --destructive-foreground: 0 0% 100%;
+
+  /* Success — Voxco brand green-dark (#008563) */
+  --success: 161 100% 26%;
+  --success-foreground: 0 0% 100%;
+
+  /* Warning — Voxco brand tangerine (#F59E0B) */
+  --warning: 38 92% 50%;
+  --warning-foreground: 222.2 47.4% 11.2%;
+
+  /* Info — Voxco brand periwinkle (#3B82F6) */
+  --info: 217 91% 60%;
+  --info-foreground: 0 0% 100%;
+
   --secondary: 220 5% 97.5%;
   --secondary-hover: 220 15% 92.5%;
   --secondary-foreground: 222.2 47.4% 11.2%;
@@ -12,14 +33,13 @@
   --disabled-foreground: 220 40% 70%;
   --accent: 220 10% 95%;
   --accent-foreground: 222.2 47.4% 11.2%;
-  --background-destructive: 0 8% 96%;
-  --border-destructive: 0 42% 80%;
-  --background-success: 142 8% 96%;
-  --border-success: 142 38% 68%;
+  --background-destructive: 349 8% 96%;
+  --border-destructive: 349 42% 80%;
+  --background-success: 161 8% 96%;
+  --border-success: 161 38% 68%;
   --background-warning: 38 9% 95%;
   --border-warning: 38 46% 75%;
-  --info: 220 70% 50%;
-  --border-info: 220 35% 75%;
+  --border-info: 217 35% 75%;
   --border: 220 13% 85%;
   --input: 220 13% 85%;
   --lng1771-row-selected: 220 40% 90%;
@@ -39,8 +59,16 @@
 .dark {
   --background: 210 40% 6%;
   --foreground: 210 40% 98%;
-  --primary: 210 40% 98%;
+  --primary: 235 100% 86%;
   --primary-foreground: 222.2 47.4% 11.2%;
+  --destructive: 352 84% 64%;
+  --destructive-foreground: 0 0% 100%;
+  --success: 161 100% 26%;
+  --success-foreground: 0 0% 100%;
+  --warning: 35 93% 67%;
+  --warning-foreground: 222.2 47.4% 11.2%;
+  --info: 239 84% 67%;
+  --info-foreground: 0 0% 100%;
   --secondary: 222 8% 9.5%;
   --secondary-hover: 222 12% 19%;
   --secondary-foreground: 210 40% 98%;
