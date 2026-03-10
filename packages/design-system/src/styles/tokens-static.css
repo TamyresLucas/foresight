@@ -21,7 +21,7 @@
   --warning: 38 92% 50%;
   --warning-foreground: 222.2 47.4% 11.2%;
 
-  /* Info — Voxco brand periwinkle (#3B82F6) */
+  /* Info — (#3B82F6) */
   --info: 217 91% 60%;
   --info-foreground: 0 0% 100%;
 
@@ -46,7 +46,6 @@
   --lng1771-gray-20: 220 40% 90%;
   --lng1771-row-bg: 220 20% 95%;
   --radius: 0.5rem;
-  /* Tokens adicionais para atingir >= 30 variáveis */
   --surface-1: 210 50% 95%;
   --surface-2: 210 60% 94%;
   --surface-3: 210 40% 92%;
@@ -55,7 +54,7 @@
   --surface-6: 210 40% 88%;
 }
 
-/* Dark Mode (Theme único) */
+/* Dark Mode */
 .dark {
   --background: 210 40% 6%;
   --foreground: 210 40% 98%;
@@ -83,8 +82,7 @@
   --border-success: 142 36% 35%;
   --background-warning: 38 9% 14%;
   --border-warning: 38 46% 35%;
-  --info: 210 40% 98%;
-  --border-info: 210 40% 98%;
+  --border-info: 217 35% 35%;
   --border: 220 13% 18%;
   --input: 220 13% 18%;
   --lng1771-row-selected: 220 70% 23%;

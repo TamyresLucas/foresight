@@ -5,7 +5,8 @@ export interface StaticTokenValue {
   originalFormula?: string;
 }
 
-// 16 static token representations derived from 15 dynamic tokens + two extra entries (border, input)
+// Static token representations — SYNCED FROM NOTION 2026-03-09
+// Source: Default (Template) — Light — https://www.notion.so/29e0a268c6384d43a73b8a9b675253d2
 export const STATIC_TOKENS: Record<string, StaticTokenValue> = {
   secondary: {
     variable: "--secondary",
@@ -51,28 +52,28 @@ export const STATIC_TOKENS: Record<string, StaticTokenValue> = {
   },
   "background-destructive": {
     variable: "--background-destructive",
-    light: "0 8% 96%",
+    light: "349 8% 96%",
     dark: "0 6% 14%",
     originalFormula:
       "color-mix(in oklab, hsl(var(--destructive)) 10%, hsl(var(--background)))",
   },
   "border-destructive": {
     variable: "--border-destructive",
-    light: "0 42% 80%",
+    light: "349 42% 80%",
     dark: "0 31% 35%",
     originalFormula:
       "color-mix(in oklab, hsl(var(--destructive)) 50%, hsl(var(--background)))",
   },
   "background-success": {
     variable: "--background-success",
-    light: "142 8% 96%",
+    light: "161 8% 96%",
     dark: "142 7% 14%",
     originalFormula:
       "color-mix(in oklab, hsl(var(--success)) 10%, hsl(var(--background)))",
   },
   "border-success": {
     variable: "--border-success",
-    light: "142 38% 68%",
+    light: "161 38% 68%",
     dark: "142 36% 35%",
     originalFormula:
       "color-mix(in oklab, hsl(var(--success)) 50%, hsl(var(--background)))",
@@ -93,15 +94,15 @@ export const STATIC_TOKENS: Record<string, StaticTokenValue> = {
   },
   info: {
     variable: "--info",
-    light: "220 70% 50%",
-    dark: "210 40% 98%",
+    light: "217 91% 60%",
+    dark: "239 84% 67%",
     originalFormula:
       "color-mix(in oklab, hsl(var(--info)) 10%, hsl(var(--background)))",
   },
   "border-info": {
     variable: "--border-info",
-    light: "220 35% 75%",
-    dark: "220 35% 35%",
+    light: "217 35% 75%",
+    dark: "217 35% 35%",
     originalFormula:
       "color-mix(in oklab, hsl(var(--info)) 50%, hsl(var(--background)))",
   },
@@ -119,7 +120,6 @@ export const STATIC_TOKENS: Record<string, StaticTokenValue> = {
     originalFormula:
       "color-mix(in oklab, hsl(var(--primary)) 20%, hsl(var(--background)))",
   },
-  // Lytenyte Grid static tokens derived from color-mix usages
   "lng1771-row-selected": {
     variable: "--lng1771-row-selected",
     light: "220 40% 90%",
