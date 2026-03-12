@@ -18,7 +18,7 @@ const buttonVariants = cva(
         outline:
           "border border-primary/40 bg-transparent hover:bg-primary/10 disabled:[&:not([data-loading=true])]:bg-background disabled:[&:not([data-loading=true])]:text-primary/40 disabled:[&:not([data-loading=true])]:border-muted-foreground/20",
         secondary:
-          "bg-[hsl(var(--secondary))] text-secondary-foreground hover:bg-[hsl(var(--secondary))] disabled:[&:not([data-loading=true])]:bg-transparent disabled:[&:not([data-loading=true])]:text-primary/40",
+          "bg-[hsl(var(--secondary))] text-secondary-foreground hover:bg-[hsl(var(--secondary-hover))] disabled:[&:not([data-loading=true])]:bg-transparent disabled:[&:not([data-loading=true])]:text-primary/40",
         ghost:
           "hover:text-primary disabled:[&:not([data-loading=true])]:text-primary/40",
         "ghost-destructive":

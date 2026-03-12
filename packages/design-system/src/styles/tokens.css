@@ -1,15 +1,17 @@
-/*
- * LEGACY DESIGN TOKENS (Voxco Design System)
- *
- * These tokens are used by older components and should NOT be modified
- * without updating all dependent components.
- *
- * New components should use Shadcn/Tailwind tokens from index.css:
+/* 
+ * ⚠️ DEPRECATED ⚠️
+ * 
+ * This file (tokens.css) is DEPRECATED and will be removed in a future release.
+ * New components MUST NOT use tokens from this file.
+ * 
+ * New Design Tokens:
+ * Use Shadcn/Tailwind standard tokens from tokens-static.css:
  * - --primary, --secondary, --accent, --muted
  * - --background, --foreground
  * - --border, --input, --ring
- *
- * This file will be deprecated once all components migrate to Shadcn tokens.
+ * 
+ * If you are building a new component, DO NOT use var(--foundation-*) or 
+ * var(--semantic-*) tokens from this file.
  */
 
 :root {
