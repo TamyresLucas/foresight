@@ -12,15 +12,15 @@ const buttonVariants = cva(
         default:
           "bg-primary text-primary-foreground hover:bg-primary/90 disabled:[&:not([data-loading=true])]:bg-[hsl(var(--secondary))] disabled:[&:not([data-loading=true])]:text-primary/40",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90 disabled:[&:not([data-loading=true])]:bg-[hsl(var(--destructive))] disabled:[&:not([data-loading=true])]:text-primary/40",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 disabled:[&:not([data-loading=true])]:bg-[hsl(var(--secondary))] disabled:[&:not([data-loading=true])]:text-primary/40",
         success:
           "bg-success text-success-foreground hover:bg-success/90 disabled:[&:not([data-loading=true])]:bg-[hsl(var(--secondary))] disabled:[&:not([data-loading=true])]:text-primary/40",
         outline:
           "border border-primary/40 bg-transparent hover:bg-primary/10 disabled:[&:not([data-loading=true])]:bg-background disabled:[&:not([data-loading=true])]:text-primary/40 disabled:[&:not([data-loading=true])]:border-muted-foreground/20",
         secondary:
-          "bg-[hsl(var(--secondary))] text-secondary-foreground hover:bg-[hsl(var(--secondary-hover))] disabled:[&:not([data-loading=true])]:bg-transparent disabled:[&:not([data-loading=true])]:text-primary/40",
+          "bg-[hsl(var(--secondary))] text-secondary-foreground hover:bg-[hsl(var(--secondary-hover))] disabled:[&:not([data-loading=true])]:bg-[hsl(var(--secondary))] disabled:[&:not([data-loading=true])]:text-primary/40",
         ghost:
-          "hover:text-primary disabled:[&:not([data-loading=true])]:text-primary/40",
+          "hover:bg-primary/10 hover:text-primary disabled:[&:not([data-loading=true])]:bg-transparent disabled:[&:not([data-loading=true])]:text-primary/40",
         "ghost-destructive":
           "text-destructive hover:bg-destructive/10 hover:text-destructive disabled:[&:not([data-loading=true])]:text-primary/40",
         "ghost-success":

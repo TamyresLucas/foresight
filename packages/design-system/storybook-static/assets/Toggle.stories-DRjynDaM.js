@@ -1,0 +1,5 @@
+import{j as o}from"./jsx-runtime-BYYWji4R.js";import{T as m}from"./toggle-B2tKR7FD.js";import{t as l}from"./icons-BrjYTXf4.js";import"./index-ClcD9ViR.js";import"./_commonjsHelpers-Cpj98o6Y.js";import"./index-DW48STyt.js";import"./index-B0ATiKj9.js";import"./index-CafsI6Qv.js";import"./index-C59fdHCL.js";import"./index-Drr-0Uuw.js";import"./index-CyBucMil.js";import"./index-Bew1Yeam.js";import"./index-C2vczdB5.js";import"./utils-CDN07tui.js";const w={title:"Components/Form Elements/Toggle",component:m,parameters:{layout:"centered"}},r={render:s=>o.jsx(m,{"aria-label":"Toggle bold",...s,children:o.jsx(l,{className:"h-4 w-4"})})};var e,t,a;r.parameters={...r.parameters,docs:{...(e=r.parameters)==null?void 0:e.docs,source:{originalSource:`{
+  render: args => <Toggle aria-label="Toggle bold" {...args}>
+            <Bold className="h-4 w-4" />
+        </Toggle>
+}`,...(a=(t=r.parameters)==null?void 0:t.docs)==null?void 0:a.source}}};const B=["Default"];export{r as Default,B as __namedExportsOrder,w as default};
