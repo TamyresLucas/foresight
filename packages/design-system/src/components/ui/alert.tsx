@@ -11,12 +11,12 @@ const alertVariants = cva(
         default:
           "border-primary/40 text-foreground [&>svg]:text-primary [&>.material-symbols-rounded]:text-primary bg-[hsl(var(--secondary))]",
         destructive:
-          "border-destructive/40 text-foreground dark:border-destructive [&>svg]:text-destructive [&>.material-symbols-rounded]:text-destructive bg-[hsl(var(--destructive))]",
+          "border-destructive/40 text-foreground dark:border-destructive [&>svg]:text-destructive [&>.material-symbols-rounded]:text-destructive bg-destructive/10",
         success:
-          "border-success/40 text-foreground dark:border-success [&>svg]:text-success [&>.material-symbols-rounded]:text-success bg-[hsl(var(--success))]",
+          "border-success/40 text-foreground dark:border-success [&>svg]:text-success [&>.material-symbols-rounded]:text-success bg-success/10",
         warning:
-          "border-warning/40 text-foreground dark:border-warning [&>svg]:text-warning [&>.material-symbols-rounded]:text-warning bg-[hsl(var(--warning))]",
-        info: "border-primary/40 text-foreground dark:border-info [&>svg]:text-info [&>.material-symbols-rounded]:text-info bg-[hsl(var(--info))]",
+          "border-warning/40 text-foreground dark:border-warning [&>svg]:text-warning [&>.material-symbols-rounded]:text-warning bg-warning/10",
+        info: "border-primary/40 text-foreground dark:border-info [&>svg]:text-info [&>.material-symbols-rounded]:text-info bg-info/10",
       },
     },
     defaultVariants: {

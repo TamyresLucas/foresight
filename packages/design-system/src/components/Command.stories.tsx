@@ -253,7 +253,7 @@ export const SurveyActions: Story = {
         </CommandGroup>
         <CommandSeparator />
         <CommandGroup heading="Manage">
-          <CommandItem className="text-destructive">
+          <CommandItem variant="destructive">
             <Trash className="mr-2 h-4 w-4" />
             <span>Delete Survey</span>
           </CommandItem>

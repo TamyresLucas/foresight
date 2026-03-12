@@ -26,7 +26,7 @@ const buttonVariants = cva(
         "ghost-success":
           "text-success hover:bg-success/10 hover:text-success disabled:[&:not([data-loading=true])]:text-primary/40",
         "ghost-primary":
-          "text-primary hover:bg-primary hover:text-primary-foreground disabled:[&:not([data-loading=true])]:text-primary/40",
+          "text-primary hover:bg-primary/10 hover:text-primary disabled:[&:not([data-loading=true])]:text-primary/40",
         link: "text-primary underline-offset-4 hover:underline disabled:[&:not([data-loading=true])]:text-primary/40",
       },
       size: {
