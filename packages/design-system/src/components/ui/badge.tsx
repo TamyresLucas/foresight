@@ -12,13 +12,13 @@ const badgeVariants = cva(
           "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
         outline: "text-foreground border-primary/40 font-normal",
         destructive:
-          "border-destructive/40 bg-[hsl(var(--destructive))] text-foreground [&>svg]:text-destructive [&>.material-symbols-rounded]:text-destructive hover:bg-destructive/20 font-normal",
+          "border-destructive/40 bg-white dark:bg-transparent relative after:absolute after:inset-0 after:bg-destructive/10 text-foreground [&>svg]:text-destructive [&>.material-symbols-rounded]:text-destructive hover:after:bg-destructive/20 font-normal overflow-hidden",
         success:
-          "border-success/40 bg-[hsl(var(--success))] text-foreground [&>svg]:text-success [&>.material-symbols-rounded]:text-success hover:bg-success/20 font-normal",
+          "border-success/40 bg-white dark:bg-transparent relative after:absolute after:inset-0 after:bg-success/10 text-foreground [&>svg]:text-success [&>.material-symbols-rounded]:text-success hover:after:bg-success/20 font-normal overflow-hidden",
         warning:
-          "border-warning/40 bg-[hsl(var(--warning))] text-foreground [&>svg]:text-warning [&>.material-symbols-rounded]:text-warning hover:bg-warning/20 font-normal",
+          "border-warning/40 bg-white dark:bg-transparent relative after:absolute after:inset-0 after:bg-warning/10 text-foreground [&>svg]:text-warning [&>.material-symbols-rounded]:text-warning hover:after:bg-warning/20 font-normal overflow-hidden",
         secondary:
-          "border-primary/40 bg-[hsl(var(--info))] text-foreground [&>svg]:text-info [&>.material-symbols-rounded]:text-info hover:bg-info/20 font-normal",
+          "border-primary/40 bg-white dark:bg-transparent relative after:absolute after:inset-0 after:bg-primary/10 text-foreground [&>svg]:text-primary [&>.material-symbols-rounded]:text-primary hover:after:bg-primary/20 font-normal overflow-hidden",
       },
     },
     defaultVariants: {
@@ -32,9 +32,13 @@ export interface BadgeProps
     React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof badgeVariants> {}
 
-function Badge({ className, variant, ...props }: BadgeProps) {
+function Badge({ className, variant, children, ...props }: BadgeProps) {
   return (
-    <div className={cn(badgeVariants({ variant }), className)} {...props} />
+    <div className={cn(badgeVariants({ variant }), className)} {...props}>
+      <span className="relative z-10 flex items-center gap-1">
+        {children}
+      </span>
+    </div>
   );
 }
 

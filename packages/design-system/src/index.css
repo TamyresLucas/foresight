@@ -79,14 +79,14 @@
 
   .table-body-row {
     border-bottom-width: 1px;
-    border-color: hsl(var(--lng1771-row-selected));
+    border-color: hsl(var(--primary) / 0.4);
     transition-property: color, background-color;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
   }
 
   .table-body-row:hover {
-    background-color: hsl(var(--lng1771-row-bg));
+    background-color: hsl(var(--primary) / 0.1);
     color: hsl(var(--foreground));
   }
 

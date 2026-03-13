@@ -7,7 +7,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 const cardVariants = cva("rounded-lg border border-primary/20", {
   variants: {
     variant: {
-      default: "bg-card text-card-foreground shadow-sm",
+      default: "bg-card text-card-foreground shadow-md",
       destructive:
         "border-destructive/40 text-foreground [&>svg]:text-destructive [&>.material-symbols-rounded]:text-destructive bg-[hsl(var(--destructive))]",
       success:
