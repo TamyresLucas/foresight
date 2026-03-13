@@ -1,5 +1,6 @@
 {
-  "mcpServers": {
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
     "notion": {
       "type": "remote",
       "url": "https://mcp.notion.com/mcp",

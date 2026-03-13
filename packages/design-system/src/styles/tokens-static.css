@@ -41,6 +41,8 @@
   --border-warning: 38 46% 75%;
   --border-info: 217 35% 75%;
   --border: 220 13% 85%;
+  --border-subtle: 233 86% 64% / 0.2; /* 20% - for containers (cards, dialogs) */
+  --border-default: 233 86% 64% / 0.4; /* 40% - for interactive elements (inputs, buttons) */
   --input: 220 13% 85%;
   --ring: 233 86% 64%;
   --lng1771-row-selected: 220 40% 90%;
@@ -61,7 +63,7 @@
   --popover-foreground: 0 0% 14%;
   --background-info: 233 20% 96%;
   --placeholder-foreground: 0 0% 40%;
-  
+
   /* Brand Charts */
   --chart-1: 12 76% 61%;
   --chart-2: 173 58% 39%;
@@ -104,6 +106,8 @@
   --border-warning: 38 46% 35%;
   --border-info: 217 35% 35%;
   --border: 220 13% 18%;
+  --border-subtle: 235 100% 86% / 0.2; /* 20% - for containers (cards, dialogs) */
+  --border-default: 235 100% 86% / 0.4; /* 40% - for interactive elements (inputs, buttons) */
   --input: 220 13% 18%;
   --ring: 235 100% 86%;
   --lng1771-row-selected: 220 70% 23%;

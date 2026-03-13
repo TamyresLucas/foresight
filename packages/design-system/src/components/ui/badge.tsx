@@ -10,7 +10,7 @@ const badgeVariants = cva(
       variant: {
         default:
           "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
-        outline: "text-foreground border-primary/40 font-normal",
+        outline: "text-foreground border-border-default font-normal",
         destructive:
           "border-destructive/40 bg-white dark:bg-transparent relative after:absolute after:inset-0 after:bg-destructive/10 text-foreground [&>svg]:text-destructive [&>.material-symbols-rounded]:text-destructive hover:after:bg-destructive/20 font-normal overflow-hidden",
         success:
@@ -35,9 +35,7 @@ export interface BadgeProps
 function Badge({ className, variant, children, ...props }: BadgeProps) {
   return (
     <div className={cn(badgeVariants({ variant }), className)} {...props}>
-      <span className="relative z-10 flex items-center gap-1">
-        {children}
-      </span>
+      <span className="relative z-10 flex items-center gap-1">{children}</span>
     </div>
   );
 }
