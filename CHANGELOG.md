@@ -3,7 +3,12 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Added
+- Restored custom `paper` MCP server configuration in `opencode.jsonc` that was overwritten during reformatting.
+- Created "Red Core" design artboard in Paper Design Tool, featuring a vibrant red-to-dark gradient background, modern typography (Outfit), and a centered login experience with glassmorphism effects and primary action buttons.
 ### Fixed
+- Fixed syntax error (extra closing brace) in `opencode.jsonc` configuration file preventing MCP server initialization.
+- Fixed a ghost syntax error (Expected comma at EOF) in `opencode.jsonc` by re-formatting the JSON to enforce a trailing newline.
 - Fixed the `Calendar` component in `@foresight/design-system` not displaying day numbers. The custom `CalendarDayButton` component has been refactored to correctly implement the `useDayRender` hook from `react-day-picker` v8, ensuring that day numbers are rendered and properly styled with all required modifiers (e.g. `selected`, `disabled`, `range_start`).
 ### Changed
 - Updated `ghost-primary` button variant hover state to match the standard `ghost` variant hover styles (primary background with 10% opacity and primary text color).
