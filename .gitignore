@@ -75,3 +75,4 @@ load-secrets.sh
 
 # Local Netlify folder
 .netlify
+packages/design-system/storybook-static
