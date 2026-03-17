@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "test -d packages/design-system && cd packages/design-system; storybook build",
+  "buildCommand": "if [ -d packages/design-system ]; then cd packages/design-system && storybook build -o ../../storybook-static; else storybook build -o ./storybook-static; fi",
   "installCommand": "npm ci --legacy-peer-deps",
   "outputDirectory": "storybook-static"
 }
