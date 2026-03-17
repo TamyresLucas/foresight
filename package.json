@@ -16,7 +16,8 @@
     "type-check:colorpalette": "tsc -p packages/design-system/colorcheck/tsconfig.json --noEmit",
     "clean": "turbo run clean",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "build-storybook": "cd packages/design-system && npm run build-storybook"
   },
   "dependencies": {
     "@modelcontextprotocol/server-sequential-thinking": "^2025.12.18",

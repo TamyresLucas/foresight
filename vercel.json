@@ -1,7 +1,10 @@
 {
   "version": 2,
-  "buildCommand": "cd packages/design-system && npm run build-storybook",
-  "installCommand": "npm install",
+  "buildCommand": "npm run build-storybook",
+  "installCommand": "npm ci --legacy-peer-deps",
   "outputDirectory": "packages/design-system/storybook-static",
-  "framework": "storybook"
+  "framework": "storybook",
+  "ignoreCommand": "echo 'Ignoring non-storybook builds'",
+  "functions": {},
+  "regions": ["iad1"]
 }
