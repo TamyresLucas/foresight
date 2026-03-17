@@ -1,7 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npm run build-storybook",
+  "buildCommand": "cd packages/design-system && npm run build-storybook",
   "installCommand": "npm ci --legacy-peer-deps",
-  "outputDirectory": "packages/design-system/storybook-static",
-  "framework": "storybook"
+  "outputDirectory": "packages/design-system/storybook-static"
 }
