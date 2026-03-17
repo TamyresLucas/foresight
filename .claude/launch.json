@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Storybook",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "storybook", "--workspace=packages/design-system"],
+      "port": 6007
+    },
+    {
+      "name": "Vite Dev (design-system)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--workspace=packages/design-system"],
+      "port": 5173
+    },
+    {
+      "name": "Notion Watcher",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--workspace=packages/notion"],
+      "port": null
+    }
+  ]
+}

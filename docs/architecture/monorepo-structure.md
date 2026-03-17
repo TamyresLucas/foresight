@@ -1,46 +1,46 @@
-# Estrutura do Monorepo
+# Monorepo Structure
 
-Arquitetura e organização do Foresight Design System.
+Architecture and organization of Foresight Design System.
 
-## 🏗️ Visão Geral
+## 🏗️ Overview
 
-O Foresight usa um monorepo gerenciado por:
+Foresight uses a monorepo managed by:
 
-- **npm workspaces** - Gerenciamento de dependências
-- **Turbo** - Build system e caching
-- **TypeScript** - Type checking em todos os pacotes
+- **npm workspaces** - Dependency management
+- **Turbo** - Build system and caching
+- **TypeScript** - Type checking across all packages
 
-## 📁 Organização das Pastas
+## 📁 Folder Organization
 
 ```
 foresight/
 │
-├── 📁 apps/                    # Aplicações
-│   └── playground/            # App de testes e exemplos
+├── 📁 apps/                    # Applications
+│   └── playground/            # Testing and examples app
 │
-├── 📁 packages/               # Pacotes publicáveis
-│   └── design-system/         # Componentes do DS
+├── 📁 packages/               # Publishable packages
+│   └── design-system/         # DS components
 │       ├── src/
-│       │   ├── components/    # Componentes UI
-│       │   ├── hooks/         # Hooks reutilizáveis
-│       │   ├── lib/           # Utilitários
-│       │   └── styles/        # CSS e tokens
-│       ├── .storybook/        # Config Storybook
+│       │   ├── components/    # UI components
+│       │   ├── hooks/         # Reusable hooks
+│       │   ├── lib/           # Utilities
+│       │   └── styles/        # CSS and tokens
+│       ├── .storybook/        # Storybook config
 │       └── package.json
 │
-├── 📁 tools/                  # Ferramentas e scripts
-│   ├── scripts/               # Scripts de automação
+├── 📁 tools/                  # Tools and scripts
+│   ├── scripts/               # Automation scripts
 │   │   ├── code-review-checklist.js
 │   │   └── validate-skills.js
-│   └── build-scripts/         # Scripts de build
+│   └── build-scripts/         # Build scripts
 │
-├── 📁 docs/                   # Documentação
-│   ├── architecture/          # ADRs e decisões
-│   ├── guides/                # Tutoriais
-│   └── mcp/                   # Docs MCP
+├── 📁 docs/                   # Documentation
+│   ├── architecture/          # ADRs and decisions
+│   ├── guides/                # Tutorials
+│   └── mcp/                   # MCP docs
 │
-├── 📁 .opencode/              # Config Opencode
-│   └── skills/                # Skills organizadas
+├── 📁 .opencode/              # Opencode config
+│   └── skills/                # Organized skills
 │       ├── 01-fundamentals/
 │       ├── 02-design-system/
 │       ├── 03-survey-builder/
@@ -50,19 +50,19 @@ foresight/
     └── workflows/
 ```
 
-## 🔄 Fluxo de Trabalho
+## 🔄 Workflow
 
-### Desenvolvimento
+### Development
 
-1. **Edite** o código em `packages/design-system/`
-2. **Teste** no Storybook: `npm run dev:design-system`
-3. **Valide** no Playground: `npm run dev:playground`
+1. **Edit** code in `packages/design-system/`
+2. **Test** in Storybook: `npm run dev:design-system`
+3. **Validate** in Playground: `npm run dev:playground`
 4. **Build**: `npm run build`
-5. **Commit**: Seguindo conventional commits
+5. **Commit**: Following conventional commits
 
-### Dependências
+### Dependencies
 
-**Entre pacotes:**
+**Between packages:**
 
 ```json
 // packages/design-system/package.json
@@ -80,10 +80,10 @@ foresight/
 }
 ```
 
-**Na raiz (compartilhadas):**
+**At root (shared):**
 
 ```json
-// package.json (raiz)
+// package.json (root)
 {
   "devDependencies": {
     "turbo": "^1.11.0",
@@ -111,25 +111,25 @@ foresight/
 }
 ```
 
-**Como funciona:**
+**How it works:**
 
-- `build` só executa depois que dependências fizeram build
-- `test` só roda depois do build
-- `dev` não usa cache (sempre atualizado)
+- `build` only executes after dependencies have built
+- `test` only runs after build
+- `dev` doesn't use cache (always updated)
 
-## 🎯 Convenções
+## 🎯 Conventions
 
-### Nomenclatura
+### Naming
 
-- **Pastas**: `kebab-case` (design-system, build-scripts)
-- **Componentes**: `PascalCase` (Button.tsx, Card.tsx)
-- **Hooks**: `camelCase` com prefixo `use` (use-toast.ts)
+- **Folders**: `kebab-case` (design-system, build-scripts)
+- **Components**: `PascalCase` (Button.tsx, Card.tsx)
+- **Hooks**: `camelCase` with `use` prefix (use-toast.ts)
 - **Utils**: `kebab-case` (cn.ts, format-date.ts)
 
 ### Imports
 
 ```typescript
-// ✅ BOM: Imports organizados
+// ✅ GOOD: Organized imports
 import * as React from "react";
 import { useState } from "react";
 
@@ -140,12 +140,12 @@ import { formatDate } from "@/lib/utils";
 
 import { MeuComponente } from "./MeuComponente";
 
-// ❌ RUIM: Imports bagunçados
+// ❌ BAD: Messy imports
 import { Button } from "@voxco/design-system";
 import { useState } from "react";
 ```
 
-### Estrutura de Componentes
+### Component Structure
 
 ```typescript
 // 1. Imports
@@ -153,7 +153,7 @@ import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
-// 2. Variantes (CVA)
+// 2. Variants (CVA)
 const buttonVariants = cva(
   'base-classes',
   {
@@ -172,7 +172,7 @@ interface ButtonProps
   asChild?: boolean;
 }
 
-// 4. Componente
+// 4. Component
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, ...props }, ref) => {
     return (
@@ -191,52 +191,52 @@ export { Button, buttonVariants };
 export type { ButtonProps };
 ```
 
-## 📦 Versionamento
+## 📦 Versioning
 
-### Pacotes
+### Packages
 
-Cada pacote em `packages/` tem seu próprio versionamento:
+Each package in `packages/` has its own versioning:
 
 ```
 packages/design-system/
 ├── package.json    # v0.1.0
-├── CHANGELOG.md    # Histórico de mudanças
-└── README.md       # Documentação específica
+├── CHANGELOG.md    # History of changes
+└── README.md       # Specific documentation
 ```
 
-### Estratégia
+### Strategy
 
 - **Patch** (0.0.x): Bug fixes
-- **Minor** (0.x.0): Novos componentes
+- **Minor** (0.x.0): New components
 - **Major** (x.0.0): Breaking changes
 
-## 🔒 Isolamento
+## 🔒 Isolation
 
-### Por que monorepo?
+### Why monorepo?
 
-✅ **Código compartilhado** - Components reutilizáveis
-✅ **Consistência** - Mesmas configs em todo lugar
-✅ **Refatoração fácil** - Mudanças em múltiplos apps
-✅ **CI/CD unificado** - Um pipeline para tudo
+✅ **Shared code** - Reusable components
+✅ **Consistency** - Same configs everywhere
+✅ **Easy refactoring** - Changes across multiple apps
+✅ **Unified CI/CD** - One pipeline for everything
 
-### Mas atenção:
+### But be careful:
 
-⚠️ **Não acople demais** - Mantenha pacotes independentes
-⚠️ **Evite dependências circulares** - packages/A → packages/B ❌
-⚠️ **Teste isoladamente** - Cada pacote deve funcionar sozinho
+⚠️ **Don't couple too much** - Keep packages independent
+⚠️ **Avoid circular dependencies** - packages/A → packages/B ❌
+⚠️ **Test in isolation** - Each package should work alone
 
-## 🚀 Build e Deploy
+## 🚀 Build and Deploy
 
-### Build local
+### Local build
 
 ```bash
-# Build tudo
+# Build everything
 npm run build
 
-# Build apenas DS
+# Build only DS
 npm run build --filter=@voxco/design-system
 
-# Build apenas Playground
+# Build only Playground
 npm run build --filter=playground
 ```
 
@@ -245,26 +245,26 @@ npm run build --filter=playground
 ```bash
 # Design System (Storybook)
 npm run build:design-system
-# Deploy dist/ para GitHub Pages/Vercel
+# Deploy dist/ to GitHub Pages/Vercel
 
 # Playground
 npm run build:playground
 # Deploy apps/playground/dist/
 ```
 
-## 📝 Checklist de Novo Pacote
+## 📝 New Package Checklist
 
-- [ ] Criar pasta em `packages/` ou `apps/`
-- [ ] Adicionar `package.json` com nome e version
-- [ ] Configurar `tsconfig.json`
-- [ ] Adicionar scripts: build, dev, test, lint
-- [ ] Atualizar `turbo.json` se necessário
-- [ ] Adicionar ao pipeline de CI/CD
-- [ ] Documentar em `docs/`
+- [ ] Create folder in `packages/` or `apps/`
+- [ ] Add `package.json` with name and version
+- [ ] Configure `tsconfig.json`
+- [ ] Add scripts: build, dev, test, lint
+- [ ] Update `turbo.json` if necessary
+- [ ] Add to CI/CD pipeline
+- [ ] Document in `docs/`
 
 ---
 
-**Leia também:**
+**Also read:**
 
 - [Getting Started](../guides/getting-started.md)
 - [Design System Architecture](../../.opencode/skills/02-design-system/design-system-architecture.md)

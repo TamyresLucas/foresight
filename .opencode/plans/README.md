@@ -1,207 +1,207 @@
-# Índice de PRDs - Remoção da Paleta Dinâmica
+# PRD Index - Dynamic Palette Removal
 
-## 📋 Sumário Executivo
+## 📋 Executive Summary
 
-Este diretório contém 11 PRDs (Product Requirement Documents) detalhando a remoção completa da feature de paleta dinâmica do design system.
+This directory contains 11 PRDs (Product Requirement Documents) detailing the complete removal of the dynamic palette feature from the design system.
 
-**Objetivo**: Converter tokens dinâmicos (`color-mix`) para estáticos, remover perfis de produto (Voxco/Ascribe/Discuss), e manter apenas um tema unificado com suporte a dark mode.
-
----
-
-## 📚 Documentação Relacionada
-
-- **[PRDs](README.md)** (você está aqui) - Requisitos e planejamento
-- **[SPECs](SPECS-INDEX.md)** - Especificações técnicas de implementação
-- **Relação**: Cada PRD tem um SPEC correspondente com detalhes técnicos
+**Objective**: Convert dynamic tokens (`color-mix`) to static, remove product profiles (Voxco/Ascribe/Discuss), and keep only a unified theme with dark mode support.
 
 ---
 
-## 🗂️ Estrutura dos PRDs
+## 📚 Related Documentation
 
-### **Fase 1: Preparação** (2 PRDs)
-
-#### [PRD 1.1](PRD-1.1-converter-tokens-dinamicos.md) - Converter Tokens Dinâmicos para Estáticos
-
-- **Status**: PENDENTE
-- **Arquivo**: Novo `src/styles/tokens-reference.ts`
-- **Entrega**: 15 tokens dinâmicos mapeados com valores HSL light/dark calculados
-- **Próximo**: PRD 1.2
-
-#### [PRD 1.2](PRD-1.2-analisar-lytenyte-grid.md) - Analisar lytenyte-grid.css
-
-- **Status**: PENDENTE
-- **Arquivo**: `src/components/lytenyte-grid/lytenyte-grid.css`
-- **Entrega**: 7 ocorrências de color-mix documentadas e calculadas
-- **Próximo**: PRD 2.1
+- **[PRDs](README.md)** (you are here) - Requirements and planning
+- **[SPECs](SPECS-INDEX.md)** - Technical implementation specifications
+- **Relationship**: Each PRD has a corresponding SPEC with technical details
 
 ---
 
-### **Fase 2: Implementação de CSS Estático** (3 PRDs)
+## 🗂️ PRD Structure
 
-#### [PRD 2.1](PRD-2.1-criar-css-estatico.md) - Criar CSS Estático Unificado
+### **Phase 1: Preparation** (2 PRDs)
 
-- **Status**: PENDENTE
-- **Arquivo**: Novo `src/styles/tokens-static.css`
-- **Entrega**: CSS com todas as variáveis em :root e .dark
-- **Próximo**: PRD 2.2
+#### [PRD 1.1](PRD-1.1-converter-tokens-dinamicos.md) - Convert Dynamic Tokens to Static
 
-#### [PRD 2.2](PRD-2.2-atualizar-index-css.md) - Atualizar index.css
+- **Status**: PENDING
+- **File**: New `src/styles/tokens-reference.ts`
+- **Deliverable**: 15 dynamic tokens mapped with calculated HSL light/dark values
+- **Next**: PRD 1.2
 
-- **Status**: PENDENTE
-- **Arquivo**: `src/index.css`
-- **Entrega**: CSS usando valores estáticos, sem color-mix
-- **Próximo**: PRD 2.3
+#### [PRD 1.2](PRD-1.2-analisar-lytenyte-grid.md) - Analyze lytenyte-grid.css
 
-#### [PRD 2.3](PRD-2.3-atualizar-lytenyte-grid.md) - Atualizar lytenyte-grid.css
-
-- **Status**: PENDENTE
-- **Arquivo**: `src/components/lytenyte-grid/lytenyte-grid.css`
-- **Entrega**: 7 substituições de color-mix para variáveis estáticas
-- **Próximo**: PRD 3.1
+- **Status**: PENDING
+- **File**: `src/components/lytenyte-grid/lytenyte-grid.css`
+- **Deliverable**: 7 color-mix occurrences documented and calculated
+- **Next**: PRD 2.1
 
 ---
 
-### **Fase 3: Remoção de Funcionalidade Dinâmica** (2 PRDs)
+### **Phase 2: Static CSS Implementation** (3 PRDs)
 
-#### [PRD 3.1](PRD-3.1-desativar-editor.md) - Desativar Editor de Paleta
+#### [PRD 2.1](PRD-2.1-criar-css-estatico.md) - Create Unified Static CSS
 
-- **Status**: PENDENTE
-- **Arquivo**: `src/stories/ColorPaletteEditor.tsx`
-- **Entrega**: Editor como display-only (sem injeção de estilos)
-- **Próximo**: PRD 3.2
+- **Status**: PENDING
+- **File**: New `src/styles/tokens-static.css`
+- **Deliverable**: CSS with all variables in :root and .dark
+- **Next**: PRD 2.2
 
-#### [PRD 3.2](PRD-3.2-remover-persistencia-perfis.md) - Remover Persistência de Perfis
+#### [PRD 2.2](PRD-2.2-atualizar-index-css.md) - Update index.css
 
-- **Status**: PENDENTE
-- **Arquivo**: `src/stories/ColorPaletteEditor.tsx`
-- **Entrega**: localStorage limpo, apenas um tema padrão
-- **Próximo**: PRD 4.1
+- **Status**: PENDING
+- **File**: `src/index.css`
+- **Deliverable**: CSS using static values, no color-mix
+- **Next**: PRD 2.3
+
+#### [PRD 2.3](PRD-2.3-atualizar-lytenyte-grid.md) - Update lytenyte-grid.css
+
+- **Status**: PENDING
+- **File**: `src/components/lytenyte-grid/lytenyte-grid.css`
+- **Deliverable**: 7 substitutions of color-mix for static variables
+- **Next**: PRD 3.1
 
 ---
 
-### **Fase 4: Limpeza de Stories** (5 subtarefas em 1 PRD)
+### **Phase 3: Dynamic Feature Removal** (2 PRDs)
 
-#### [PRD 4](PRD-4-limpeza-stories.md) - Limpeza de Stories
+#### [PRD 3.1](PRD-3.1-desativar-editor.md) - Disable Palette Editor
 
-- **Status**: PENDENTE
-- **Arquivos**:
+- **Status**: PENDING
+- **File**: `src/stories/ColorPaletteEditor.tsx`
+- **Deliverable**: Editor as display-only (no style injection)
+- **Next**: PRD 3.2
+
+#### [PRD 3.2](PRD-3.2-remover-persistencia-perfis.md) - Remove Profile Persistence
+
+- **Status**: PENDING
+- **File**: `src/stories/ColorPaletteEditor.tsx`
+- **Deliverable**: Clean localStorage, only one default theme
+- **Next**: PRD 4.1
+
+---
+
+### **Phase 4: Stories Cleanup** (5 subtasks in 1 PRD)
+
+#### [PRD 4](PRD-4-limpeza-stories.md) - Stories Cleanup
+
+- **Status**: PENDING
+- **Files**:
   - 4.1: `ColorExportButton.tsx`
   - 4.2: `TokenUsageTable.tsx`
   - 4.3: `DynamicColorPalette.tsx`
-  - 4.4: `ColorPaletteEditor.tsx` (simplificado)
+  - 4.4: `ColorPaletteEditor.tsx` (simplified)
   - 4.5: `ColorPalette.stories.tsx`
-- **Entrega**: Stories desnecessários removidos
-- **Próximo**: PRD 5.1
+- **Deliverable**: Unnecessary stories removed
+- **Next**: PRD 5.1
 
 ---
 
-### **Fase 5: Remoção Core** (3 subtarefas em 1 PRD)
+### **Phase 5: Core Removal** (3 subtasks in 1 PRD)
 
-#### [PRD 5](PRD-5-remocao-core.md) - Remoção Core
+#### [PRD 5](PRD-5-remocao-core.md) - Core Removal
 
-- **Status**: PENDENTE
-- **Arquivos**:
-  - 5.1: `src/index.ts` (remover export)
-  - 5.2: `src/tokens/` (deletar pasta)
-  - 5.3: `src/lib/color-utils.ts` (deletar)
-- **Entrega**: Código core removido, builds passando
-- **Próximo**: PRD 6.1
-
----
-
-### **Fase 6: Validação Final** (4 subtarefas em 1 PRD)
-
-#### [PRD 6](PRD-6-validacao-final.md) - Validação Final
-
-- **Status**: PENDENTE
-- **Entregas**:
-  - 6.1: Dark mode funcional
-  - 6.2: Regressão visual validada
-  - 6.3: localStorage documentado
-  - 6.4: Breaking changes documentados
-- **Próximo**: 🎉 PROJETO COMPLETO
+- **Status**: PENDING
+- **Files**:
+  - 5.1: `src/index.ts` (remove export)
+  - 5.2: `src/tokens/` (delete folder)
+  - 5.3: `src/lib/color-utils.ts` (delete)
+- **Deliverable**: Core code removed, builds passing
+- **Next**: PRD 6.1
 
 ---
 
-## 🚀 Fluxo de Execução
+### **Phase 6: Final Validation** (4 subtasks in 1 PRD)
+
+#### [PRD 6](PRD-6-validacao-final.md) - Final Validation
+
+- **Status**: PENDING
+- **Deliverables**:
+  - 6.1: Dark mode functional
+  - 6.2: Visual regression validated
+  - 6.3: localStorage documented
+  - 6.4: Breaking changes documented
+- **Next**: 🎉 PROJECT COMPLETE
+
+---
+
+## 🚀 Execution Flow
 
 ```
 PRD 1.1 → PRD 1.2 → PRD 2.1 → PRD 2.2 → PRD 2.3 →
 PRD 3.1 → PRD 3.2 → PRD 4.x → PRD 5.x → PRD 6.x → ✅
 ```
 
-**Regras Importantes**:
+**Important Rules**:
 
-1. **Executar em ordem**: Cada PRD deve ser completado antes do próximo
-2. **Testar antes de prosseguir**: Cada PRD tem checklist de validação
-3. **Build entre passos**: Sempre rodar `npm run build` após cada PRD
-4. **Commits**: Fazer commit após cada PRD bem-sucedido
-
----
-
-## 📊 Checklist Mestre
-
-### Progresso
-
-- [ ] Fase 1: Preparação (0/2)
-- [ ] Fase 2: CSS Estático (0/3)
-- [ ] Fase 3: Remoção Dinâmica (0/2)
-- [ ] Fase 4: Limpeza Stories (0/5)
-- [ ] Fase 5: Remoção Core (0/3)
-- [ ] Fase 6: Validação (0/4)
-
-**Progresso Total**: 0/19 subtarefas
+1. **Execute in order**: Each PRD must be completed before the next
+2. **Test before proceeding**: Each PRD has a validation checklist
+3. **Build between steps**: Always run `npm run build` after each PRD
+4. **Commits**: Commit after each successful PRD
 
 ---
 
-## 🎯 Critérios de Sucesso do Projeto
+## 📊 Master Checklist
 
-Ao final de todos os PRDs:
+### Progress
 
-- ✅ Zero ocorrências de `color-mix` no codebase
-- ✅ Todos os tokens são estáticos (valores HSL fixos)
-- ✅ Dark mode funciona perfeitamente
-- ✅ Apenas um tema (sem Voxco/Ascribe/Discuss)
-- ✅ `src/tokens/` removido completamente
-- ✅ `src/lib/color-utils.ts` removido
-- ✅ Builds passando (npm run build)
-- ✅ Storybook funcional
-- ✅ Documentação de breaking changes completa
+- [ ] Phase 1: Preparation (0/2)
+- [ ] Phase 2: Static CSS (0/3)
+- [ ] Phase 3: Dynamic Removal (0/2)
+- [ ] Phase 4: Stories Cleanup (0/5)
+- [ ] Phase 5: Core Removal (0/3)
+- [ ] Phase 6: Validation (0/4)
+
+**Total Progress**: 0/19 subtasks
+
+---
+
+## 🎯 Project Success Criteria
+
+At the end of all PRDs:
+
+- ✅ Zero occurrences of `color-mix` in codebase
+- ✅ All tokens are static (fixed HSL values)
+- ✅ Dark mode works perfectly
+- ✅ Only one theme (no Voxco/Ascribe/Discuss)
+- ✅ `src/tokens/` completely removed
+- ✅ `src/lib/color-utils.ts` removed
+- ✅ Builds passing (`npm run build`)
+- ✅ Storybook functional
+- ✅ Breaking changes documentation complete
 
 ---
 
 ## 🆘 Troubleshooting
 
-### Se um build falhar:
+### If a build fails:
 
-1. Verificar qual foi o último PRD completado
-2. Revisar o checklist desse PRD
-3. Verificar se há imports quebrados: `grep -r "from.*tokens" src/`
-4. Restaurar do backup se necessário
+1. Check which was the last completed PRD
+2. Review that PRD's checklist
+3. Check for broken imports: `grep -r "from.*tokens" src/`
+4. Restore from backup if necessary
 
-### Se o dark mode parar de funcionar:
+### If dark mode stops working:
 
-1. Verificar `tokens-static.css` tem seção `.dark`
-2. Verificar `index.css` está importando CSS correto
-3. Verificar classe `.dark` está sendo aplicada no HTML
+1. Check `tokens-static.css` has `.dark` section
+2. Check `index.css` is importing correct CSS
+3. Check `.dark` class is being applied to HTML
 
-### Se Storybook não iniciar:
+### If Storybook doesn't start:
 
-1. Verificar se todos os imports em stories estão válidos
-2. Verificar se arquivos deletados não têm imports restantes
-3. Limpar cache: `rm -rf node_modules/.cache`
-
----
-
-## 📞 Contato
-
-Para dúvidas ou problemas durante a execução:
-
-- Revisar o PRD específico com atenção
-- Verificar exemplos de código nos PRDs
-- Consultar o arquivo original antes de modificações
+1. Check if all imports in stories are valid
+2. Check if deleted files have remaining imports
+3. Clean cache: `rm -rf node_modules/.cache`
 
 ---
 
-**Última atualização**: 2026-02-18
-**Versão**: 1.0
+## 📞 Contact
+
+For questions or issues during execution:
+
+- Review the specific PRD carefully
+- Check code examples in PRDs
+- Consult the original file before modifications
+
+---
+
+**Last updated**: 2026-02-18
+**Version**: 1.0

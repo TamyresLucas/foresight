@@ -1,29 +1,29 @@
-# Setup MCP
+# MCP Setup
 
-Configuração dos Model Context Protocol servers para o Foresight.
+Configuration of Model Context Protocol servers for Foresight.
 
-## 🎯 O que é MCP?
+## 🎯 What is MCP?
 
-MCP (Model Context Protocol) é um protocolo da Anthropic que permite conectar AI assistants a ferramentas externas como:
+MCP (Model Context Protocol) is an Anthropic protocol that allows connecting AI assistants to external tools such as:
 
-- Bancos de dados
+- Databases
 - APIs
-- Servidores de componentes
-- Ferramentas de desenvolvimento
+- Component servers
+- Development tools
 
-## 🔧 MCPs Disponíveis
+## 🔧 Available MCPs
 
 ### 1. Notion MCP
 
-**Uso:** Integração com documentação do Notion
+**Usage:** Integration with Notion documentation
 
-**Instalação:**
+**Installation:**
 
 ```bash
-# Já configurado em .gemini/mcp_config.json
+# Already configured in .gemini/mcp_config.json
 ```
 
-**Configuração:**
+**Configuration:**
 
 ```json
 {
@@ -35,86 +35,86 @@ MCP (Model Context Protocol) é um protocolo da Anthropic que permite conectar A
 }
 ```
 
-**Como usar:**
+**How to use:**
 
 ```bash
-# O Notion MCP é automaticamente disponível no Opencode
-# quando você usa o workspace foresight
+# Notion MCP is automatically available in Opencode
+# when you use the foresight workspace
 ```
 
 ### 2. shadcn/ui MCP
 
-**Uso:** Gerenciamento de componentes shadcn
+**Usage:** shadcn component management
 
-**Instalação:**
+**Installation:**
 
 ```bash
 npm install -g @sherifbutt/shadcn-ui-mcp-server
 ```
 
-**Uso direto:**
+**Direct usage:**
 
 ```bash
-# Listar componentes
+# List components
 npx @sherifbutt/shadcn-ui-mcp-server
 
-# Ou executar servidor
+# Or run server
 shadcn-ui-mcp-server
 ```
 
-**Funcionalidades:**
+**Features:**
 
-- Listar todos os componentes shadcn/ui
-- Obter código fonte TypeScript
-- Gerar exemplos de uso
-- Instalar componentes via CLI
-- Acessar blocks (dashboards, formulários)
+- List all shadcn/ui components
+- Get TypeScript source code
+- Generate usage examples
+- Install components via CLI
+- Access blocks (dashboards, forms)
 
 ### 3. Tailwind CSS MCP
 
-**Uso:** Utilitários e documentação Tailwind
+**Usage:** Tailwind utilities and documentation
 
-**Instalação:**
+**Installation:**
 
 ```bash
 npm install -g tailwindcss-mcp-server
 ```
 
-**Uso direto:**
+**Direct usage:**
 
 ```bash
-# Buscar utilitários
+# Search utilities
 npx tailwindcss-mcp-server get-tailwind-utilities layout
 
-# Ver cores
+# View colors
 npx tailwindcss-mcp-server get-tailwind-colors
 
-# Converter CSS para Tailwind
+# Convert CSS to Tailwind
 npx tailwindcss-mcp-server convert-css-to-tailwind ".button { background: blue; }"
 ```
 
 ### 4. Storybook MCP
 
-**Uso:** Acesso a componentes e stories
+**Usage:** Access to components and stories
 
-**Instalação:**
+**Installation:**
 
 ```bash
 npm install -g storybook-mcp-server
 ```
 
-**Uso direto:**
+**Direct usage:**
 
 ```bash
-# Com Storybook rodando
+# With Storybook running
 STORYBOOK_URL=http://localhost:6006 npx storybook-mcp-server list-components
 ```
 
-## 🚀 Configuração no Claude Desktop
+## 🚀 Configuration in Claude Desktop
 
-Para usar MCPs no Claude Desktop, adicione ao arquivo de configuração:
+To use MCPs in Claude Desktop, add to the configuration file:
 
-**Arquivo:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+**File:** `~/Library/Application Support/Claude/claude_desktop_config.json`
 
 ```json
 {
@@ -146,9 +146,9 @@ Para usar MCPs no Claude Desktop, adicione ao arquivo de configuração:
 }
 ```
 
-## 📝 Configuração no Opencode
+## 📝 Configuration in Opencode
 
-No Opencode, usamos os MCPs via terminal:
+In Opencode, we use MCPs via terminal:
 
 ```bash
 # shadcn/ui
@@ -157,80 +157,80 @@ npx @sherifbutt/shadcn-ui-mcp-server list-components 2>/dev/null | head -20
 # Tailwind
 npx tailwindcss-mcp-server get-tailwind-colors 2>/dev/null | head -30
 
-# Storybook (com servidor rodando)
+# Storybook (with server running)
 STORYBOOK_URL=http://localhost:6006 npx storybook-mcp-server list-components 2>/dev/null
 ```
 
-## 🎨 Exemplos de Uso
+## 🎨 Usage Examples
 
-### Adicionar Componente shadcn
+### Add shadcn Component
 
 ```bash
-# Listar disponíveis
+# List available
 npx @sherifbutt/shadcn-ui-mcp-server list-components
 
-# Ver código do Button
+# View Button code
 npx @sherifbutt/shadcn-ui-mcp-server get-component button
 
-# Instalar no projeto
+# Install in project
 cd packages/design-system
 npx shadcn add button
 ```
 
-### Buscar Classes Tailwind
+### Search Tailwind Classes
 
 ```bash
-# Classes de layout
+# Layout classes
 npx tailwindcss-mcp-server get-tailwind-utilities layout
 
-# Paleta de cores
+# Color palette
 npx tailwindcss-mcp-server get-tailwind-colors
 
-# Configuração
+# Configuration
 npx tailwindcss-mcp-server get-tailwind-config-guide react
 ```
 
-### Acessar Stories
+### Access Stories
 
 ```bash
-# Com Storybook rodando em http://localhost:6006
+# With Storybook running at http://localhost:6006
 STORYBOOK_URL=http://localhost:6006 npx storybook-mcp-server list-components
 ```
 
 ## 🔧 Troubleshooting
 
-### Erro: "command not found"
+### Error: "command not found"
 
-**Solução:**
+**Solution:**
 
 ```bash
-# Reinstale globalmente
+# Reinstall globally
 npm install -g @sherifbutt/shadcn-ui-mcp-server
 npm install -g tailwindcss-mcp-server
 npm install -g storybook-mcp-server
 ```
 
-### Erro: "Connection refused"
+### Error: "Connection refused"
 
 **Storybook:**
 
-- Certifique-se de que o Storybook está rodando: `npm run dev:design-system`
-- Verifique a URL em `STORYBOOK_URL`
+- Make sure Storybook is running: `npm run dev:design-system`
+- Check the URL in `STORYBOOK_URL`
 
-### Erro: "Module not found"
+### Error: "Module not found"
 
-**Solução:**
+**Solution:**
 
 ```bash
-# Limpar cache
+# Clean cache
 npm cache clean --force
 
-# Reinstalar
+# Reinstall
 rm -rf node_modules
 npm install
 ```
 
-## 📚 Recursos
+## 📚 Resources
 
 - [MCP Documentation](https://modelcontextprotocol.io/)
 - [shadcn/ui MCP](https://github.com/Jpisnice/shadcn-ui-mcp-server)
@@ -239,4 +239,4 @@ npm install
 
 ---
 
-**MCPs configurados e prontos para uso!** 🚀
+**MCPs configured and ready to use!** 🚀

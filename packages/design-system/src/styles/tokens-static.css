@@ -41,8 +41,20 @@
   --border-warning: 38 46% 75%;
   --border-info: 217 35% 75%;
   --border: 220 13% 85%;
-  --border-subtle: 233 86% 64% / 0.2; /* 20% - for containers (cards, dialogs) */
-  --border-default: 233 86% 64% / 0.4; /* 40% - for interactive elements (inputs, buttons) */
+  /* ─── Border scale ───────────────────────────────────────────────────────────
+     Use --border-decorative for non-interactive containers (cards, dialogs,
+     dividers, tooltips). Non-text contrast ≈ 1.3:1 — decorative only.
+
+     Use --border-ui for interactive components (inputs, selects, buttons).
+     Low contrast by default (~1.3:1) — same pattern as shadcn/ui.
+     Accessibility compensated via focus-visible:border-ring on each component.
+  ─────────────────────────────────────────────────────────────────────────── */
+  --border-decorative: 233 86% 64% / 0.2;   /* ~1.3:1 — decorative containers (non-interactive) */
+  --border-ui: 233 86% 64% / 0.2;           /* ~1.3:1 — interactive default; focus-visible:border-ring compensates */
+
+  /* Backward-compat aliases — prefer the named tokens above */
+  --border-subtle: var(--border-decorative);
+  --border-default: var(--border-ui);
   --input: 220 13% 85%;
   --ring: 233 86% 64%;
   --lng1771-row-selected: 220 40% 90%;
@@ -64,12 +76,15 @@
   --background-info: 233 20% 96%;
   --placeholder-foreground: 0 0% 40%;
 
-  /* Brand Charts */
-  --chart-1: 12 76% 61%;
-  --chart-2: 173 58% 39%;
-  --chart-3: 197 37% 24%;
-  --chart-4: 43 74% 66%;
-  --chart-5: 27 87% 67%;
+  /* Brand Charts - 8 colors complementing periwinkle */
+  --chart-1: 233 86% 64%; /* blueberry (primary) */
+  --chart-2: 177 100% 38%; /* mint */
+  --chart-3: 14 86% 58%; /* peach */
+  --chart-4: 283 62% 53%; /* grape */
+  --chart-5: 97 52% 39%; /* lime */
+  --chart-6: 331 75% 58%; /* watermelon */
+  --chart-7: 243 73% 51%; /* blackberry */
+  --chart-8: 214 13% 53%; /* grey */
 
   /* Font Tokens */
   --font-sans: "Inter", system-ui, sans-serif;
@@ -106,8 +121,12 @@
   --border-warning: 38 46% 35%;
   --border-info: 217 35% 35%;
   --border: 220 13% 18%;
-  --border-subtle: 235 100% 86% / 0.2; /* 20% - for containers (cards, dialogs) */
-  --border-default: 235 100% 86% / 0.4; /* 40% - for interactive elements (inputs, buttons) */
+  --border-decorative: 235 100% 86% / 0.2;  /* ~1.3:1  — decorative containers (non-interactive) */
+  --border-ui: 235 100% 86% / 0.2;          /* ~1.3:1 — interactive default; focus-visible:border-ring compensates */
+
+  /* Backward-compat aliases */
+  --border-subtle: var(--border-decorative);
+  --border-default: var(--border-ui);
   --input: 220 13% 18%;
   --ring: 235 100% 86%;
   --lng1771-row-selected: 220 70% 23%;
@@ -122,10 +141,13 @@
   --background-info: 239 15% 15%;
   --placeholder-foreground: 0 0% 60%;
 
-  /* Chart Colors (Dark) */
-  --chart-1: 220 70% 50%;
-  --chart-2: 160 60% 45%;
-  --chart-3: 30 80% 55%;
-  --chart-4: 280 65% 60%;
-  --chart-5: 340 75% 55%;
+  /* Chart Colors (Dark) - 8 colors */
+  --chart-1: 235 100% 86%; /* blueberry */
+  --chart-2: 173 100% 42%; /* mint */
+  --chart-3: 14 86% 58%; /* peach */
+  --chart-4: 283 65% 58%; /* grape */
+  --chart-5: 97 55% 49%; /* lime */
+  --chart-6: 331 75% 58%; /* watermelon */
+  --chart-7: 252 65% 53%; /* blackberry */
+  --chart-8: 214 13% 53%; /* grey */
 }

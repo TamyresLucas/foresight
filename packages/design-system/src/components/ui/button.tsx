@@ -16,7 +16,7 @@ const buttonVariants = cva(
         success:
           "bg-success text-success-foreground hover:bg-success/90 disabled:[&:not([data-loading=true])]:bg-[hsl(var(--secondary))] disabled:[&:not([data-loading=true])]:text-primary/40",
         outline:
-          "border border-border-default bg-transparent hover:bg-primary/10 disabled:[&:not([data-loading=true])]:bg-background disabled:[&:not([data-loading=true])]:text-primary/40 disabled:[&:not([data-loading=true])]:border-muted-foreground/20",
+          "border border-border-ui bg-transparent hover:bg-primary/10 focus-visible:border-ring disabled:[&:not([data-loading=true])]:bg-background disabled:[&:not([data-loading=true])]:text-primary/40 disabled:[&:not([data-loading=true])]:border-muted-foreground/20",
         secondary:
           "bg-[hsl(var(--secondary))] text-secondary-foreground hover:bg-[hsl(var(--secondary-hover))] disabled:[&:not([data-loading=true])]:bg-[hsl(var(--secondary))] disabled:[&:not([data-loading=true])]:text-primary/40",
         ghost:

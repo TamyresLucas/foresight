@@ -6,6 +6,10 @@ export default {
     extend: {
       colors: {
         border: "hsl(var(--border))",
+        /* Named scale — prefer these */
+        "border-decorative": "hsl(var(--border-decorative))", /* ~1.3:1  non-interactive only */
+        "border-ui": "hsl(var(--border-ui))",                 /* ~4.97:1 interactive elements  */
+        /* Backward-compat aliases */
         "border-subtle": "hsl(var(--border-subtle))",
         "border-default": "hsl(var(--border-default))",
         input: "hsl(var(--input))",

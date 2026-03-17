@@ -1,29 +1,29 @@
 # Storybook Patterns
 
-## Descrição
-Padrões para criação de stories no Storybook para documentação e teste de componentes do Foresight Design System.
+## Description
+Patterns for creating stories in Storybook for documentation and testing of Foresight Design System components.
 
-## Regras Obrigatórias
+## Mandatory Rules
 
 ### DO
-- ✅ Usar estrutura padrão: Meta e StoryObj
-- ✅ Definir args para todos os casos comuns
-- ✅ Usar argTypes para controlar props nos controls
-- ✅ Criar stories para todas as variantes do componente
-- ✅ Documentar componentes com JSDoc
-- ✅ Usar decorators quando necessário
-- ✅ Adicionar testes de interação
+- ✅ Use standard structure: Meta and StoryObj
+- ✅ Define args for all common cases
+- ✅ Use argTypes to control props in controls
+- ✅ Create stories for all component variants
+- ✅ Document components with JSDoc
+- ✅ Use decorators when necessary
+- ✅ Add interaction tests
 
 ### DON'T
-- ❌ Criar stories sem tipagem TypeScript
-- ❌ Deixar props sem controle nos controls
-- ❌ Duplicar código entre stories
-- ❌ Ignorar casos de erro/loading
-- ❌ Criar stories sem contexto realista
+- ❌ Create stories without TypeScript typing
+- ❌ Leave props without control in controls
+- ❌ Duplicate code between stories
+- ❌ Ignore error/loading cases
+- ❌ Create stories without realistic context
 
-## Exemplos de Código
+## Code Examples
 
-### Estrutura Básica de Story
+### Basic Story Structure
 ```tsx
 // Button.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react';
@@ -139,7 +139,7 @@ export const Disabled: Story = {
 };
 ```
 
-### Componente com JSDoc
+### Component with JSDoc
 ```tsx
 // Card.tsx
 import * as React from 'react';
@@ -174,31 +174,31 @@ export interface CardProps {
 
 /**
  * Card component for displaying content in a contained format.
- * 
+ *
  * ## Usage
  * ```tsx
  * <Card title="My Card" description="Card description">
  *   Card content goes here
  * </Card>
  * ```
- * 
+ *
  * ## Accessibility
  * - When onClick is provided, card is keyboard accessible
  * - Title is rendered as h3 for proper heading hierarchy
  */
-export function Card({ 
-  title, 
-  description, 
-  children, 
+export function Card({
+  title,
+  description,
+  children,
   variant = 'default',
   className,
-  onClick 
+  onClick
 }: CardProps) {
   // ... implementation
 }
 ```
 
-### Usando Decorators
+### Using Decorators
 ```tsx
 // SurveyCard.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react';
@@ -251,7 +251,7 @@ export const WithCanvasDecorator: Story = {
 };
 ```
 
-### Testes de Interação
+### Interaction Tests
 ```tsx
 // Button.stories.tsx
 import { within, userEvent, waitFor } from '@storybook/testing-library';
@@ -264,13 +264,13 @@ export const ClickInteraction: Story = {
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
     const button = canvas.getByRole('button', { name: /click me/i });
-    
+
     // Test click interaction
     await userEvent.click(button);
-    
+
     // Verify button is still in document
     await expect(button).toBeInTheDocument();
-    
+
     // Test focus state
     await userEvent.tab();
     await expect(button).toHaveFocus();
@@ -286,9 +286,9 @@ export const FormSubmit: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const submitButton = canvas.getByRole('button', { name: /submit/i });
-    
+
     await userEvent.click(submitButton);
-    
+
     // Wait for alert (or mock submission handler)
     await waitFor(() => {
       // Assertions here
@@ -297,7 +297,7 @@ export const FormSubmit: Story = {
 };
 ```
 
-### Story com Dados Complexos
+### Story with Complex Data
 ```tsx
 // SurveyBuilder.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react';
@@ -360,18 +360,18 @@ export const Loading: Story = {
 };
 ```
 
-## Checklist de Verificação
-- [ ] Meta e StoryObj estão tipados corretamente
-- [ ] Todos os args possuem valores default
-- [ ] argTypes controlam todas as props interativas
-- [ ] Stories cobrem todas as variantes
-- [ ] Componente possui JSDoc completo
-- [ ] Decorators são usados para contexto visual
-- [ ] Testes de interação são incluídos quando apropriado
-- [ ] Stories incluem casos de loading/error
-- [ ] Organização segue hierarquia: UI/Survey/etc.
+## Verification Checklist
+- [ ] Meta and StoryObj are correctly typed
+- [ ] All args have default values
+- [ ] argTypes control all interactive props
+- [ ] Stories cover all variants
+- [ ] Component has complete JSDoc
+- [ ] Decorators are used for visual context
+- [ ] Interaction tests are included when appropriate
+- [ ] Stories include loading/error cases
+- [ ] Organization follows hierarchy: UI/Survey/etc.
 
-## Referências Úteis
+## Useful References
 - [Storybook for React](https://storybook.js.org/docs/react/get-started/introduction)
 - [Writing Stories](https://storybook.js.org/docs/react/writing-stories/introduction)
 - [Args](https://storybook.js.org/docs/react/writing-stories/args)

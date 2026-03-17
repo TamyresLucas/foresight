@@ -1,84 +1,84 @@
 # Getting Started
 
-Guia rápido para começar a trabalhar no Foresight Design System.
+Quick guide to get started working on Foresight Design System.
 
-## 📋 Pré-requisitos
+## 📋 Prerequisites
 
 - Node.js 18+
 - npm 9+
 - Git
 
-## 🚀 Instalação
+## 🚀 Installation
 
-### 1. Clone o repositório
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/tamyreslucas/foresight.git
 cd foresight
 ```
 
-### 2. Instale as dependências
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
-Isso instalará todas as dependências do monorepo usando workspaces.
+This will install all monorepo dependencies using workspaces.
 
-### 3. Configure o ambiente
+### 3. Configure environment
 
 ```bash
-# Copie o arquivo de exemplo (se houver)
+# Copy the example file (if available)
 cp .env.example .env.local
 ```
 
-## 🏃 Primeiros Passos
+## 🏃 Getting Started
 
-### Iniciar o Design System (Storybook)
+### Start Design System (Storybook)
 
 ```bash
 npm run dev:design-system
 ```
 
-Acesse: http://localhost:6006
+Access: http://localhost:6006
 
-### Iniciar o Playground
+### Start Playground
 
 ```bash
 npm run dev:playground
 ```
 
-Acesse: http://localhost:5173
+Access: http://localhost:5173
 
-## 📁 Estrutura de Pastas
+## 📁 Folder Structure
 
 ```
 foresight/
 ├── apps/
-│   └── playground/          # App para testar componentes
+│   └── playground/          # App to test components
 ├── packages/
-│   └── design-system/       # Componentes reutilizáveis
+│   └── design-system/       # Reusable components
 ├── tools/
-│   ├── scripts/             # Automação
-│   └── build-scripts/       # Builds customizados
-└── docs/                    # Documentação
+│   ├── scripts/             # Automation
+│   └── build-scripts/       # Custom builds
+└── docs/                    # Documentation
 ```
 
-## 🧪 Testando suas Mudanças
+## 🧪 Testing Your Changes
 
-### 1. Verificar tipos
+### 1. Check types
 
 ```bash
 npm run type-check
 ```
 
-### 2. Executar lint
+### 2. Run lint
 
 ```bash
 npm run lint
 ```
 
-### 3. Testes
+### 3. Tests
 
 ```bash
 npm run test
@@ -90,67 +90,67 @@ npm run test
 npm run build
 ```
 
-## 🎨 Usando o Design System
+## 🎨 Using the Design System
 
-### Importar componentes
+### Import components
 
 ```typescript
 import { Button, Input, Card } from '@voxco/design-system';
 
-function MeuComponente() {
+function MyComponent() {
   return (
     <Card>
-      <Input placeholder="Digite algo..." />
-      <Button variant="default">Enviar</Button>
+      <Input placeholder="Type something..." />
+      <Button variant="default">Submit</Button>
     </Card>
   );
 }
 ```
 
-### Usar tokens
+### Use tokens
 
 ```css
-.meu-componente {
+.my-component {
   background-color: var(--semantic-pri);
   color: var(--text-txt-on-primary);
 }
 ```
 
-## 🔧 Configurações Úteis
+## 🔧 Useful Settings
 
 ### VS Code
 
-Instale as extensões recomendadas:
+Install recommended extensions:
 
 - ESLint
 - Prettier
 - Tailwind CSS IntelliSense
 - TypeScript Importer
 
-### Atalhos
+### Shortcuts
 
 ```bash
-# Lint automático ao salvar
-# Configurado em .vscode/settings.json
+# Auto lint on save
+# Configured in .vscode/settings.json
 
 # Format on save
-# Prettier será executado automaticamente
+# Prettier will run automatically
 ```
 
 ## 🐛 Troubleshooting
 
-### Problema: Erro de módulo não encontrado
+### Problem: Module not found error
 
-**Solução:**
+**Solution:**
 
 ```bash
 npm run clean
 npm install
 ```
 
-### Problema: Storybook não inicia
+### Problem: Storybook doesn't start
 
-**Solução:**
+**Solution:**
 
 ```bash
 cd packages/design-system
@@ -159,29 +159,29 @@ npm install
 npm run storybook
 ```
 
-### Problema: Type errors
+### Problem: Type errors
 
-**Solução:**
+**Solution:**
 
 ```bash
 npm run type-check
-# Corrija os erros apontados
+# Fix the pointed errors
 ```
 
-## 📚 Próximos Passos
+## 📚 Next Steps
 
-- Leia [Arquitetura do Monorepo](../architecture/monorepo-structure.md)
-- Explore as [Skills](../../.opencode/skills/) disponíveis
-- Veja o [Guia de Contribuição](./contributing.md)
+- Read [Monorepo Architecture](../architecture/monorepo-structure.md)
+- Explore available [Skills](../../.opencode/skills/)
+- See the [Contributing Guide](./contributing.md)
 
-## 💡 Dicas
+## 💡 Tips
 
-1. **Sempre use o TypeScript strict** - Ajuda a pegar erros cedo
-2. **Teste no Storybook** - Antes de integrar no app
-3. **Siga as skills** - Elas guiam as melhores práticas
-4. **Use os tokens** - Nunca hardcode cores
-5. **Faça code review** - Use o checklist disponível
+1. **Always use strict TypeScript** - Helps catch errors early
+2. **Test in Storybook** - Before integrating in the app
+3. **Follow skills** - They guide best practices
+4. **Use tokens** - Never hardcode colors
+5. **Do code review** - Use the available checklist
 
 ---
 
-**Dúvidas?** Abra uma issue ou consulte as skills em `.opencode/skills/`
+**Questions?** Open an issue or consult skills in `.opencode/skills/`

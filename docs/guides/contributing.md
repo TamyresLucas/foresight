@@ -1,44 +1,44 @@
-# Guia de Contribuição
+# Contributing Guide
 
-Como contribuir para o Foresight Design System.
+How to contribute to Foresight Design System.
 
-## 🎯 Antes de Começar
+## 🎯 Before Starting
 
-1. **Leia as Skills** - Confira `.opencode/skills/` para entender os padrões
-2. **Configure o ambiente** - Veja [Getting Started](../guides/getting-started.md)
-3. **Entenda a arquitetura** - Leia sobre a [estrutura do monorepo](../architecture/monorepo-structure.md)
+1. **Read Skills** - Check `.opencode/skills/` to understand patterns
+2. **Setup environment** - See [Getting Started](../guides/getting-started.md)
+3. **Understand architecture** - Read about [monorepo structure](../architecture/monorepo-structure.md)
 
-## 🔄 Fluxo de Trabalho
+## 🔄 Workflow
 
-### 1. Crie uma Branch
+### 1. Create a Branch
 
 ```bash
-git checkout -b feat/nome-da-feature
-# ou
-git checkout -b fix/nome-do-bug
+git checkout -b feat/feature-name
+# or
+git checkout -b fix/bug-name
 ```
 
-**Prefixos:**
+**Prefixes:**
 
-- `feat/` - Nova funcionalidade
-- `fix/` - Correção de bug
-- `docs/` - Documentação
-- `refactor/` - Refatoração
-- `test/` - Testes
+- `feat/` - New feature
+- `fix/` - Bug fix
+- `docs/` - Documentation
+- `refactor/` - Refactoring
+- `test/` - Tests
 
-### 2. Faça suas Mudanças
+### 2. Make your Changes
 
 ```bash
-# Edite os arquivos
+# Edit files
 # ...
 
-# Verifique os tipos
+# Check types
 npm run type-check
 
-# Execute lint
+# Run lint
 npm run lint
 
-# Rode os testes
+# Run tests
 npm run test
 
 # Build
@@ -50,13 +50,13 @@ npm run build
 Use [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```bash
-# Novo componente
+# New component
 git commit -m "feat: add AlertDialog component"
 
 # Bug fix
 git commit -m "fix: resolve focus trap in Modal"
 
-# Documentação
+# Documentation
 git commit -m "docs: update Button usage examples"
 
 # Breaking change
@@ -66,29 +66,29 @@ git commit -m "feat!: remove deprecated prop 'variant'"
 ### 4. Code Review
 
 ```bash
-# Execute o checklist de review
+# Run review checklist
 node tools/scripts/code-review-checklist.js
 ```
 
-### 5. Push e PR
+### 5. Push and PR
 
 ```bash
-git push origin feat/nome-da-feature
+git push origin feat/feature-name
 ```
 
-Abra um Pull Request com:
+Open a Pull Request with:
 
-- Título descritivo
-- Descrição das mudanças
-- Screenshots (se UI)
-- Checklist completado
+- Descriptive title
+- Description of changes
+- Screenshots (if UI)
+- Completed checklist
 
-## 🎨 Padrões de Código
+## 🎨 Code Patterns
 
-### Componentes
+### Components
 
 ```typescript
-// ✅ BOM
+// ✅ GOOD
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 
@@ -104,24 +104,24 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 Button.displayName = 'Button';
 
-// ❌ RUIM
+// ❌ BAD
 const Button = (props) => <button {...props} />;
 ```
 
-### Estilos
+### Styles
 
 ```typescript
-// ✅ Usar tokens
+// ✅ Use tokens
 className = "bg-primary text-primary-foreground";
 
-// ❌ Nunca hardcode
+// ❌ Never hardcode
 className = "bg-blue-500 text-white";
 ```
 
-### Testes
+### Tests
 
 ```typescript
-// ✅ Testar comportamento
+// ✅ Test behavior
 import { render, screen, fireEvent } from '@testing-library/react';
 
 test('button calls onClick when clicked', () => {
@@ -132,35 +132,35 @@ test('button calls onClick when clicked', () => {
 });
 ```
 
-## 📝 Documentação
+## 📝 Documentation
 
-### Componentes
+### Components
 
-Todo componente deve ter:
+Every component must have:
 
-1. **JSDoc** descrevendo o propósito
-2. **Storybook** com todas as variantes
-3. **README** (se complexo)
-4. **CHANGELOG** (se breaking change)
+1. **JSDoc** describing purpose
+2. **Storybook** with all variants
+3. **README** (if complex)
+4. **CHANGELOG** (if breaking change)
 
-````typescript
+```typescript
 /**
- * Button - Componente de botão interativo
+ * Button - Interactive button component
  *
  * @example
  * ```tsx
  * <Button variant="default" size="lg" onClick={handleClick}>
- *   Clique aqui
+ *   Click here
  * </Button>
  * ```
  */
 export interface ButtonProps {
-  /** Variante visual do botão */
+  /** Visual variant of the button */
   variant?: "default" | "destructive" | "outline";
-  /** Tamanho do botão */
+  /** Size of the button */
   size?: "sm" | "md" | "lg";
 }
-````
+```
 
 ### Stories
 
@@ -189,105 +189,105 @@ export const AllVariants: Story = {
 };
 ```
 
-## 🧪 Testando
+## 🧪 Testing
 
 ### Local
 
 ```bash
-# Testes unitários
+# Unit tests
 npm run test
 
-# Testes no Storybook
+# Storybook tests
 npm run test:storybook
 
-# Testes e2e
+# e2e tests
 npm run test:e2e
 ```
 
 ### CI/CD
 
-Todos os PRs rodam:
+All PRs run:
 
 1. Type checking
 2. Linting
-3. Testes
+3. Tests
 4. Build
 
-## 🐛 Reportando Bugs
+## 🐛 Reporting Bugs
 
 ### Issues
 
-Use o template:
+Use the template:
 
 ```markdown
-**Descrição**
-Breve descrição do bug
+**Description**
+Brief description of the bug
 
-**Reprodução**
+**Reproduction**
 
-1. Vá para '...'
-2. Clique em '...'
-3. Veja o erro
+1. Go to '...'
+2. Click on '...'
+3. See error
 
-**Comportamento Esperado**
-O que deveria acontecer
+**Expected Behavior**
+What should happen
 
 **Screenshots**
-Se aplicável
+If applicable
 
-**Ambiente**
+**Environment**
 
 - OS: [e.g. macOS]
 - Browser: [e.g. Chrome]
-- Versão: [e.g. 0.1.0]
+- Version: [e.g. 0.1.0]
 ```
 
 ## 🎨 Design System
 
-### Adicionando Componentes
+### Adding Components
 
-1. Criar em `packages/design-system/src/components/ui/`
-2. Seguir o padrão existente
-3. Exportar em `packages/design-system/src/index.ts`
-4. Criar stories
-5. Documentar em Storybook
+1. Create in `packages/design-system/src/components/ui/`
+2. Follow existing pattern
+3. Export in `packages/design-system/src/index.ts`
+4. Create stories
+5. Document in Storybook
 
 ### Tokens
 
-Para adicionar novos tokens:
+To add new tokens:
 
-1. Editar `packages/design-system/src/styles/tokens.css`
-2. Atualizar `packages/design-system/tailwind.config.js`
-3. Documentar no Storybook
+1. Edit `packages/design-system/src/styles/tokens.css`
+2. Update `packages/design-system/tailwind.config.js`
+3. Document in Storybook
 
-## ✅ Checklist de PR
+## ✅ PR Checklist
 
-Antes de submeter:
+Before submitting:
 
-- [ ] Código passa em `npm run lint`
-- [ ] Tipos passam em `npm run type-check`
-- [ ] Testes passam em `npm run test`
-- [ ] Build passa em `npm run build`
-- [ ] Stories criadas/atualizadas
-- [ ] Documentação atualizada
-- [ ] Sem console.logs
-- [ ] Sem código comentado
-- [ ] Commits seguem conventional commits
-- [ ] PR tem descrição clara
+- [ ] Code passes `npm run lint`
+- [ ] Types pass `npm run type-check`
+- [ ] Tests pass `npm run test`
+- [ ] Build passes `npm run build`
+- [ ] Stories created/updated
+- [ ] Documentation updated
+- [ ] No console.logs
+- [ ] No commented code
+- [ ] Commits follow conventional commits
+- [ ] PR has clear description
 
-## 🤝 Código de Conduta
+## 🤝 Code of Conduct
 
-- Seja respeitoso
-- Aceite feedback construtivo
-- Foque no que é melhor para a comunidade
-- Ajude outros contribuidores
+- Be respectful
+- Accept constructive feedback
+- Focus on what's best for the community
+- Help other contributors
 
-## 📞 Dúvidas?
+## 📞 Questions?
 
-- Abra uma issue
-- Consulte as skills em `.opencode/skills/`
-- Veja os exemplos existentes
+- Open an issue
+- Consult skills in `.opencode/skills/`
+- See existing examples
 
 ---
 
-**Obrigado por contribuir!** 🎉
+**Thanks for contributing!** 🎉

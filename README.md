@@ -5,132 +5,132 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19.1-blue)](https://react.dev/)
 
-Workspace dedicado ao **Foresight Design System** - um sistema de design completo baseado em shadcn/ui, Radix UI e Tailwind CSS.
+Workspace dedicated to **Foresight Design System** - a complete design system based on shadcn/ui, Radix UI and Tailwind CSS.
 
 ## 🚀 Quick Start
 
 ```bash
-# Instalar dependências
+# Install dependencies
 npm install
 
-# Iniciar Design System (Storybook)
+# Start Design System (Storybook)
 npm run dev:design-system
 
-# Iniciar Playground
+# Start Playground
 npm run dev:playground
 
-# Build completo
+# Full build
 npm run build
 ```
 
-## 📁 Estrutura do Monorepo
+## 📁 Monorepo Structure
 
 ```
 foresight/
 ├── apps/
-│   └── playground/          # App de testes e experimentos
+│   └── playground/          # Testing and experiments app
 ├── packages/
-│   └── design-system/       # Pacote principal do DS
+│   └── design-system/       # Main DS package
 ├── tools/
-│   ├── scripts/             # Scripts de automação
-│   └── build-scripts/       # Scripts de build
-├── docs/                    # Documentação completa
+│   ├── scripts/             # Automation scripts
+│   └── build-scripts/       # Build scripts
+├── docs/                    # Complete documentation
 └── .opencode/
-    └── skills/              # Skills organizadas por categoria
+    └── skills/              # Skills organized by category
 ```
 
-## 📚 Documentação
+## 📚 Documentation
 
 - [Getting Started](./docs/guides/getting-started.md)
-- [Arquitetura do Monorepo](./docs/architecture/monorepo-structure.md)
-- [Guia de Contribuição](./docs/guides/contributing.md)
-- [Setup MCP](./docs/mcp/setup-guide.md)
+- [Monorepo Architecture](./docs/architecture/monorepo-structure.md)
+- [Contributing Guide](./docs/guides/contributing.md)
+- [MCP Setup](./docs/mcp/setup-guide.md)
 
-## 🛠️ Comandos Disponíveis
+## 🛠️ Available Commands
 
 ```bash
-# Desenvolvimento
-npm run dev              # Iniciar todos os pacotes em modo dev
-npm run dev:design-system # Iniciar apenas o Design System
+# Development
+npm run dev              # Start all packages in dev mode
+npm run dev:design-system # Start only Design System
 
 # Build
-npm run build            # Build de todos os pacotes
-npm run build:design-system # Build apenas do DS
+npm run build            # Build all packages
+npm run build:design-system # Build only DS
 
-# Qualidade
-npm run lint            # Executar linting
-npm run type-check      # Verificar tipos TypeScript
-npm run test            # Executar testes
-npm run format          # Formatar código com Prettier
+# Quality
+npm run lint            # Run linting
+npm run type-check      # Check TypeScript types
+npm run test            # Run tests
+npm run format          # Format code with Prettier
 
-# Limpeza
-npm run clean           # Limpar builds e caches
+# Cleanup
+npm run clean           # Clean builds and caches
 ```
 
 ## 🎨 Design System
 
-O Design System inclui:
+The Design System includes:
 
-- **51+ componentes** baseados em shadcn/ui
-- **Tokens semânticos** completos
-- **Storybook** para documentação
-- **Dark mode** nativo
-- **Acessibilidade** (ARIA, keyboard navigation)
+- **51+ components** based on shadcn/ui
+- **Complete semantic tokens**
+- **Storybook** for documentation
+- **Native dark mode**
+- **Accessibility** (ARIA, keyboard navigation)
 - **TypeScript** strict mode
 
-### Componentes Principais
+### Main Components
 
 ```typescript
 import { Button, Input, Dialog, Card } from '@voxco/design-system';
 
-// Uso
+// Usage
 <Button variant="default" size="lg">
-  Clique aqui
+  Click here
 </Button>
 ```
 
-## 🧠 Skills Disponíveis
+## 🧠 Available Skills
 
-As skills estão organizadas em categorias:
+Skills are organized into categories:
 
 - **01-fundamentals/** - React, TypeScript, Tailwind, Patterns
-- **02-design-system/** - Arquitetura DS, shadcn, Storybook
+- **02-design-system/** - DS Architecture, shadcn, Storybook
 - **03-survey-builder/** - Domain-specific (Canvas, Editor, Logic)
 - **04-quality/** - Code review, testing, quality gates
 
-## 🔧 Configuração MCP
+## 🔧 MCP Configuration
 
-O projeto usa MCP servers para:
+The project uses MCP servers for:
 
-- **Notion** - Integração com documentação
-- **shadcn/ui** - Gerenciamento de componentes
-- **Tailwind CSS** - Utilitários e configuração
+- **Notion** - Documentation integration
+- **shadcn/ui** - Component management
+- **Tailwind CSS** - Utilities and configuration
 
-Ver [Setup MCP](./docs/mcp/setup-guide.md) para detalhes.
+See [MCP Setup](./docs/mcp/setup-guide.md) for details.
 
-## 📝 Scripts Úteis
+## 📝 Useful Scripts
 
 ```bash
-# Review de código
+# Code review
 node tools/scripts/code-review-checklist.js
 
-# Validar skills
+# Validate skills
 node tools/scripts/validate-skills.js
 ```
 
-## 🤝 Contribuição
+## 🤝 Contribution
 
-1. Leia o [Guia de Contribuição](./docs/guides/contributing.md)
-2. Siga as [Skills de Qualidade](./.opencode/skills/04-quality/)
-3. Execute os checks antes do PR:
+1. Read the [Contributing Guide](./docs/guides/contributing.md)
+2. Follow the [Quality Skills](./.opencode/skills/04-quality/)
+3. Run checks before PR:
    ```bash
    npm run lint && npm run type-check && npm run test
    ```
 
-## 📄 Licença
+## 📄 License
 
-MIT - Veja [LICENSE](./LICENSE) para detalhes.
+MIT - See [LICENSE](./LICENSE) for details.
 
 ---
 
-**Desenvolvido com ❤️ usando [Opencode](https://opencode.ai)**
+**Developed with ❤️ using [Opencode](https://opencode.ai)**

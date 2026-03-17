@@ -22,5 +22,10 @@
       "url": "http://127.0.0.1:29979/mcp",
       "enabled": true,
     },
+    "shadcn-ui": {
+      "type": "local",
+      "command": ["npx", "-y", "shadcn-ui-mcp-server"],
+      "enabled": true,
+    },
   },
 }

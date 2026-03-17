@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50",
   {
     variants: {
       variant: {
@@ -35,7 +35,20 @@ export interface BadgeProps
 function Badge({ className, variant, children, ...props }: BadgeProps) {
   return (
     <div className={cn(badgeVariants({ variant }), className)} {...props}>
-      <span className="relative z-10 flex items-center gap-1">{children}</span>
+      <span className="relative z-10 flex items-center gap-1">
+        {variant && variant !== "default"
+          ? React.Children.map(children, (child) =>
+              React.isValidElement(child)
+                ? React.cloneElement(child as React.ReactElement<any>, {
+                    className: cn(
+                      "w-3.5 h-3.5 shrink-0",
+                      (child as React.ReactElement<any>).props.className,
+                    ),
+                  })
+                : child,
+            )
+          : children}
+      </span>
     </div>
   );
 }

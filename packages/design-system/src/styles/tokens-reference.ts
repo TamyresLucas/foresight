@@ -141,4 +141,54 @@ export const STATIC_TOKENS: Record<string, StaticTokenValue> = {
     originalFormula:
       "color-mix(in oklab, hsl(var(--primary)) 10%, hsl(var(--background)))",
   },
+
+  // Chart Colors (8 colors complementing periwinkle)
+  "chart-1": {
+    variable: "--chart-1",
+    light: "233 86% 64%",
+    dark: "235 100% 86%",
+    originalFormula: "blueberry (primary)",
+  },
+  "chart-2": {
+    variable: "--chart-2",
+    light: "177 100% 38%",
+    dark: "173 100% 42%",
+    originalFormula: "mint",
+  },
+  "chart-3": {
+    variable: "--chart-3",
+    light: "14 86% 58%",
+    dark: "14 86% 58%",
+    originalFormula: "peach",
+  },
+  "chart-4": {
+    variable: "--chart-4",
+    light: "283 62% 53%",
+    dark: "283 65% 58%",
+    originalFormula: "grape",
+  },
+  "chart-5": {
+    variable: "--chart-5",
+    light: "97 52% 39%",
+    dark: "97 55% 49%",
+    originalFormula: "lime",
+  },
+  "chart-6": {
+    variable: "--chart-6",
+    light: "331 75% 58%",
+    dark: "331 75% 58%",
+    originalFormula: "watermelon",
+  },
+  "chart-7": {
+    variable: "--chart-7",
+    light: "243 73% 51%",
+    dark: "252 65% 53%",
+    originalFormula: "blackberry",
+  },
+  "chart-8": {
+    variable: "--chart-8",
+    light: "214 13% 53%",
+    dark: "214 13% 53%",
+    originalFormula: "grey",
+  },
 };
