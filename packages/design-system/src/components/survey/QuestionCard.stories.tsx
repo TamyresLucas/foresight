@@ -43,7 +43,7 @@ const CardShell = ({ children, isSelected, hasError, isDashed, className }: Card
             isSelected && hasError && 'border-destructive shadow-md',
             isSelected && !hasError && 'border-primary shadow-md',
             !isSelected && isDashed && 'border-dashed border-primary/50',
-            !isSelected && !isDashed && 'border-border-ui hover:border-primary/40 hover:shadow-sm',
+            !isSelected && !isDashed && 'border-border-ui hover:shadow-sm',
             className
         )}
     >

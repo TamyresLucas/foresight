@@ -40,7 +40,7 @@ const QuestionCardShell = ({ children, isSelected, hasError }: QuestionCardShell
             'p-4 rounded-lg border transition-all group relative grid items-start gap-x-4 bg-card grid-cols-[auto_1fr]',
             isSelected && hasError && 'border-destructive shadow-md',
             isSelected && !hasError && 'border-primary shadow-md',
-            !isSelected && 'border-border-ui hover:border-primary/40 hover:shadow-sm',
+            !isSelected && 'border-border-ui hover:shadow-sm',
         )}
     >
         {children}
@@ -96,7 +96,7 @@ const BlockCard = ({
                 'bg-card border rounded-lg transition-all',
                 isDragging && 'opacity-50',
                 isSelected && 'border-2 border-primary shadow-md',
-                !isSelected && isHovered && 'border-primary/50 shadow-sm',
+                !isSelected && isHovered && 'border-border-ui shadow-sm',
                 !isSelected && !isHovered && 'border-border-ui',
                 isDashed && 'border-dashed',
             )}
