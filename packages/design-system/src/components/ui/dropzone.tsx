@@ -106,7 +106,7 @@ export function Dropzone({
                 {...getRootProps()}
                 className={cn(
                     "border-2 border-dashed rounded-lg p-6 cursor-pointer transition-colors text-center focus-visible:outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50",
-                    isDragActive ? "border-primary bg-primary/10" : "border-border-ui hover:border-primary/50 hover:bg-primary/10",
+                    isDragActive ? "border-primary bg-primary/10" : "border-border-ui hover:bg-primary/10",
                     className
                 )}
             >

@@ -183,15 +183,15 @@ export const LogicSet: React.FC<LogicSetProps> = ({
 
             <div
                 style={transparentBackground ? { backgroundColor: 'transparent' } : undefined}
-                className={`p-3 border rounded-md relative transition-colors ${setIssues.length > 0 ? 'border-error bg-error-container/5' :
-                    transparentBackground ? 'border-outline-variant bg-transparent' :
-                        logicSet.isConfirmed ? 'border-outline-variant bg-surface-container' : 'border-primary bg-surface-container-high shadow-sm'
+                className={`p-3 border rounded-md relative transition-colors ${setIssues.length > 0 ? 'border-destructive/40' :
+                    transparentBackground ? 'border-border-subtle bg-transparent' :
+                        logicSet.isConfirmed ? 'border-border-subtle bg-muted/50' : 'border-primary bg-muted shadow-sm'
                     }`}>
 
                 {setIssues.length > 0 && (
-                    <div className="absolute -top-2 -right-2 text-error z-10 group/issues">
-                        <WarningIcon className="text-xl bg-surface rounded-full" />
-                        <div className="absolute bottom-full right-0 mb-2 w-64 bg-surface-container-highest text-on-surface text-xs rounded-md p-2 shadow-lg opacity-0 group-hover/issues:opacity-100 transition-opacity pointer-events-none border border-error z-20">
+                    <div className="absolute -top-2 -right-2 text-destructive z-10 group/issues">
+                        <WarningIcon className="text-xl bg-background rounded-full" />
+                        <div className="absolute bottom-full right-0 mb-2 w-64 bg-popover text-foreground text-xs rounded-md p-2 shadow-lg opacity-0 group-hover/issues:opacity-100 transition-opacity pointer-events-none border border-destructive z-20">
                             <ul className="list-disc list-inside">
                                 {Array.from(new Set(setIssues.map(i => i.message))).map((msg, idx) => (
                                     <li key={idx}>{msg}</li>
@@ -207,9 +207,9 @@ export const LogicSet: React.FC<LogicSetProps> = ({
                             <div className="flex-grow">{headerContent}</div>
                         ) : (
                             <>
-                                <span className="text-xs font-medium text-on-surface-variant uppercase tracking-wider">Logic Set</span>
+                                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Logic Set</span>
                                 {!hasMultipleConditions && !showRowIfLabel && (
-                                    <span className="text-sm font-medium text-on-surface flex-shrink-0 ml-2">if</span>
+                                    <span className="text-sm font-medium text-foreground flex-shrink-0 ml-2">if</span>
                                 )}
                             </>
                         )}
@@ -220,8 +220,8 @@ export const LogicSet: React.FC<LogicSetProps> = ({
                 {hasMultipleConditions && (
                     <div className="flex items-center gap-2 mb-3 px-2">
                         <div className="flex gap-1">
-                            <button onClick={() => handleSetOperator('AND')} className={`px-2 py-0.5 text-[10px] font-button-operator rounded-full transition-colors ${logicSet.operator === 'AND' ? 'bg-primary text-on-primary' : 'bg-surface border border-outline text-on-surface-variant'}`}>AND</button>
-                            <button onClick={() => handleSetOperator('OR')} className={`px-2 py-0.5 text-[10px] font-button-operator rounded-full transition-colors ${logicSet.operator === 'OR' ? 'bg-primary text-on-primary' : 'bg-surface border border-outline text-on-surface-variant'}`}>OR</button>
+                            <button onClick={() => handleSetOperator('AND')} className={`px-2 py-0.5 text-[10px] font-button-operator rounded-full transition-colors ${logicSet.operator === 'AND' ? 'bg-primary text-primary-foreground' : 'bg-background border border-border-ui text-muted-foreground'}`}>AND</button>
+                            <button onClick={() => handleSetOperator('OR')} className={`px-2 py-0.5 text-[10px] font-button-operator rounded-full transition-colors ${logicSet.operator === 'OR' ? 'bg-primary text-primary-foreground' : 'bg-background border border-border-ui text-muted-foreground'}`}>OR</button>
                         </div>
                     </div>
                 )}
@@ -261,7 +261,7 @@ export const LogicSet: React.FC<LogicSetProps> = ({
 
                     <div className="flex items-center gap-2">
                         <Button
-                            variant={logicSet.isConfirmed ? 'danger' : 'tertiary'}
+                            variant={logicSet.isConfirmed ? 'destructive' : 'tertiary'}
                             size="large"
                             onClick={logicSet.isConfirmed ? onRemove : handleCancel}
                         >

@@ -78,12 +78,12 @@ function ConditionRow({
     return (
         <div className="flex items-center gap-2">
             {showIndex && (
-                <span className="text-xs font-medium text-[var(--on-surface-variant)] w-4 text-center shrink-0">
+                <span className="text-xs font-medium text-muted-foreground w-4 text-center shrink-0">
                     {index + 1}.
                 </span>
             )}
             {showIfLabel && (
-                <span className="text-sm font-medium text-[var(--on-surface)] w-6 text-center shrink-0">
+                <span className="text-sm font-medium text-foreground w-6 text-center shrink-0">
                     if
                 </span>
             )}
@@ -240,12 +240,12 @@ function LogicSetDisplay({
     const containerClass = [
         'p-3 border rounded-md relative transition-colors',
         transparentBackground
-            ? 'border-[var(--outline-variant)] bg-transparent'
+            ? 'border-border-subtle bg-transparent'
             : validationErrors.size > 0
-                ? 'border-destructive bg-[var(--surface-container-high)] shadow-sm'
+                ? 'border-destructive/40 shadow-sm'
                 : logicSet.isConfirmed
-                    ? 'border-border-ui bg-[var(--surface-container)]'
-                    : 'border-primary bg-[var(--surface-container-high)] shadow-sm',
+                    ? 'border-border-ui bg-muted/50'
+                    : 'border-primary bg-muted shadow-sm',
     ].join(' ');
 
     const handleChange = (id: string, field: keyof Condition, value: string) => {
@@ -321,22 +321,6 @@ function LogicSetDisplay({
 
     return (
         <div className="w-full">
-            {/* Action bar — rendered when actionValue prop is provided */}
-            {initialActionValue !== undefined && (
-                <div className="flex items-center gap-2 mb-2 w-full">
-                    <Select value={actionValue} onValueChange={v => setActionValue(v as 'show' | 'hide')}>
-                        <SelectTrigger className="w-24 h-8 text-sm shrink-0">
-                            <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="show">Show</SelectItem>
-                            <SelectItem value="hide">Hide</SelectItem>
-                        </SelectContent>
-                    </Select>
-                    {headerContent}
-                </div>
-            )}
-
             <div
                 className={containerClass}
                 style={transparentBackground ? { backgroundColor: 'transparent' } : undefined}
@@ -344,16 +328,29 @@ function LogicSetDisplay({
                 {/* Header */}
                 <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2 w-full">
-                        {headerContent && initialActionValue === undefined ? (
+                        {initialActionValue !== undefined ? (
+                            <>
+                                <Select value={actionValue} onValueChange={v => setActionValue(v as 'show' | 'hide')}>
+                                    <SelectTrigger className="w-24 h-8 text-sm shrink-0">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="show">Show</SelectItem>
+                                        <SelectItem value="hide">Hide</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                {headerContent && <div className="flex-grow">{headerContent}</div>}
+                            </>
+                        ) : headerContent ? (
                             <div className="flex-grow">{headerContent}</div>
                         ) : (
                             <>
-                                <span className="text-xs font-medium text-[var(--on-surface-variant)] uppercase tracking-wider">
+                                <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                     Logic Set
                                 </span>
                                 {!hasMultiple && !showRowIfLabel && (
                                     <div className="flex items-center gap-1 ml-2">
-                                        <span className="text-sm font-medium text-[var(--on-surface)] shrink-0">
+                                        <span className="text-sm font-medium text-foreground shrink-0">
                                             if
                                         </span>
                                         {validationErrors.size > 0 && (
@@ -465,6 +462,77 @@ const multiSeed: LogicSetData = {
     isConfirmed: false,
 };
 
+// ─── Shared header ────────────────────────────────────────────────────────────
+
+function BranchHeaderSelect() {
+    const [blockId, setBlockId] = useState('BL1');
+    return (
+        <div className="flex items-center gap-2">
+            <span className="text-sm text-foreground shrink-0">Branch to</span>
+            <Select value={blockId} onValueChange={setBlockId}>
+                <SelectTrigger className="w-24 h-8 text-sm shrink-0">
+                    <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="BL1">BL1</SelectItem>
+                    <SelectItem value="BL2">BL2</SelectItem>
+                    <SelectItem value="BL3">BL3</SelectItem>
+                </SelectContent>
+            </Select>
+            <span className="text-sm text-foreground shrink-0">if</span>
+        </div>
+    );
+}
+
+function SkipHeaderSelect() {
+    const [questionId, setQuestionId] = useState('Q1');
+    return (
+        <div className="flex items-center gap-2">
+            <span className="text-sm text-foreground shrink-0">Skip to</span>
+            <Select value={questionId} onValueChange={setQuestionId}>
+                <SelectTrigger className="w-24 h-8 text-sm shrink-0">
+                    <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="Q1">Q1</SelectItem>
+                    <SelectItem value="Q2">Q2</SelectItem>
+                    <SelectItem value="Q3">Q3</SelectItem>
+                    <SelectItem value="end">End of survey</SelectItem>
+                </SelectContent>
+            </Select>
+            <span className="text-sm text-foreground shrink-0">if</span>
+        </div>
+    );
+}
+
+function ChoiceHeaderSelect() {
+    const [choiceId, setChoiceId] = useState('Q3_1');
+    return (
+        <div className="flex items-center gap-2 flex-grow">
+            <Select value={choiceId} onValueChange={setChoiceId}>
+                <SelectTrigger className="w-24 h-8 text-sm shrink-0">
+                    <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="Q3_1">Q3_1</SelectItem>
+                    <SelectItem value="Q3_2">Q3_2</SelectItem>
+                    <SelectItem value="Q3_3">Q3_3</SelectItem>
+                </SelectContent>
+            </Select>
+            <span className="text-sm text-foreground shrink-0">if</span>
+        </div>
+    );
+}
+
+const Q3Header = (
+    <div className="flex items-center gap-2">
+        <span className="text-sm font-semibold text-foreground">Q3</span>
+        <span className="text-sm text-foreground">if</span>
+    </div>
+);
+
+const sharedActionArgs = { actionValue: 'show' as const, headerContent: Q3Header };
+
 // ─── Stories ──────────────────────────────────────────────────────────────────
 
 /** Empty state — no logic set added yet. Shows only the "+ Add logic set" ghost-primary button. Clicking it transitions to Unconfirmed. */
@@ -474,24 +542,22 @@ export const Empty: Story = {
 
 /** Initial editing state when a new rule is created. Primary border, surface-container-high background, Cancel + Apply buttons. */
 export const Unconfirmed: Story = {
-    args: { initialData: unconfirmedSeed },
+    args: { initialData: unconfirmedSeed, ...sharedActionArgs },
 };
 
 /** Saved and confirmed rule. Outline-variant border, surface-container background, Delete button only. */
 export const Confirmed: Story = {
-    args: { initialData: confirmedSeed },
+    args: { initialData: confirmedSeed, ...sharedActionArgs },
 };
 
 /** Two or more conditions — AND/OR toggle and row numbering appear. */
 export const MultipleConditions: Story = {
-    args: { initialData: multiSeed },
+    args: { initialData: multiSeed, ...sharedActionArgs },
 };
 
 /** Multiple conditions with OR operator active. */
 export const MultipleConditionsOR: Story = {
-    args: {
-        initialData: { ...multiSeed, id: 'set-4', operator: 'OR' },
-    },
+    args: { initialData: { ...multiSeed, id: 'set-4', operator: 'OR' }, ...sharedActionArgs },
 };
 
 /** Error state — triggered when the user clicks Apply with empty selects. Unconfirmed border, destructive styling on empty selects, warning icon next to "if". */
@@ -504,78 +570,99 @@ export const WithError: Story = {
             isConfirmed: false,
         },
         initialValidationErrorIds: ['cond-err-1'],
+        ...sharedActionArgs,
     },
 };
 
-/** With Show/Hide action bar and custom header — pattern used by DisplayLogicSet. */
-export const WithActionBar: Story = {
-    args: {
-        initialData: unconfirmedSeed,
-        actionValue: 'show',
-        headerContent: (
-            <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-[var(--on-surface)]">Question 3</span>
-                <span className="text-sm font-bold text-primary">IF</span>
-            </div>
-        ),
-    },
+/** Show/Hide select + question ID + if in the header — pattern used by DisplayLogicSet. */
+export const DisplayQuestionLogicSet: Story = {
+    name: 'Display question logic set',
+    args: { initialData: unconfirmedSeed, ...sharedActionArgs },
 };
 
-/** Transparent background — used when the LogicSet is nested inside another container. */
-export const TransparentBackground: Story = {
-    args: {
-        initialData: unconfirmedSeed,
-        transparentBackground: true,
-    },
+/** "Branch to" text + block selector + if in the header. */
+export const BranchingLogicSet: Story = {
+    name: 'Branching logic set',
+    render: () => (
+        <LogicSetDisplay
+            initialData={unconfirmedSeed}
+            headerContent={<BranchHeaderSelect />}
+        />
+    ),
 };
 
-/** Inline "if" label per row — pattern used by SkipLogicSet. */
-export const WithRowIfLabel: Story = {
-    args: {
-        initialData: {
-            id: 'set-6',
-            operator: 'AND',
-            conditions: [{ id: 'cond-1', questionId: 'Q1', operator: 'equals', value: '18–34' }],
-            isConfirmed: false,
-        },
-        showRowIfLabel: true,
-    },
+/** "Skip to" text + question select + if in the header — pattern used by SkipLogicSet. */
+export const SkipLogicSet: Story = {
+    name: 'Skip logic set',
+    render: () => (
+        <LogicSetDisplay
+            initialData={unconfirmedSeed}
+            headerContent={<SkipHeaderSelect />}
+        />
+    ),
 };
+
+/** Show/Hide select + choice ID select + if in the header — pattern used by DisplayChoiceLogicSet. */
+export const DisplayChoiceLogicSet: Story = {
+    name: 'Display choice logic set',
+    render: () => (
+        <LogicSetDisplay
+            initialData={unconfirmedSeed}
+            actionValue="show"
+            headerContent={<ChoiceHeaderSelect />}
+        />
+    ),
+};
+
 
 /** Overview of all states stacked. */
 export const AllStates: Story = {
     render: () => (
         <div className="flex flex-col gap-6 w-[480px]">
             <div>
-                <p className="text-xs text-[var(--on-surface-variant)] uppercase tracking-wider mb-2">Unconfirmed</p>
-                <LogicSetDisplay initialData={unconfirmedSeed} />
+                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Unconfirmed</p>
+                <LogicSetDisplay initialData={unconfirmedSeed} {...sharedActionArgs} />
             </div>
             <div>
-                <p className="text-xs text-[var(--on-surface-variant)] uppercase tracking-wider mb-2">Confirmed</p>
-                <LogicSetDisplay initialData={confirmedSeed} />
+                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Confirmed</p>
+                <LogicSetDisplay initialData={confirmedSeed} {...sharedActionArgs} />
             </div>
             <div>
-                <p className="text-xs text-[var(--on-surface-variant)] uppercase tracking-wider mb-2">Multiple Conditions (AND)</p>
-                <LogicSetDisplay initialData={multiSeed} />
+                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Multiple Conditions (AND)</p>
+                <LogicSetDisplay initialData={multiSeed} {...sharedActionArgs} />
             </div>
             <div>
-                <p className="text-xs text-[var(--on-surface-variant)] uppercase tracking-wider mb-2">With Error</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">With Error</p>
                 <LogicSetDisplay
                     initialData={{ ...confirmedSeed, id: 'set-err' }}
                     issues={['Referenced question was deleted.']}
+                    {...sharedActionArgs}
                 />
             </div>
             <div>
-                <p className="text-xs text-[var(--on-surface-variant)] uppercase tracking-wider mb-2">With Action Bar</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Display question logic set</p>
+                <LogicSetDisplay initialData={unconfirmedSeed} {...sharedActionArgs} />
+            </div>
+            <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Display choice logic set</p>
                 <LogicSetDisplay
-                    initialData={unconfirmedSeed}
+                    initialData={{ ...unconfirmedSeed, id: 'set-choice' }}
                     actionValue="show"
-                    headerContent={
-                        <div className="flex items-center gap-2">
-                            <span className="text-sm font-semibold text-[var(--on-surface)]">Question 3</span>
-                            <span className="text-sm font-bold text-primary">IF</span>
-                        </div>
-                    }
+                    headerContent={<ChoiceHeaderSelect />}
+                />
+            </div>
+            <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Skip logic set</p>
+                <LogicSetDisplay
+                    initialData={{ ...unconfirmedSeed, id: 'set-skip' }}
+                    headerContent={<SkipHeaderSelect />}
+                />
+            </div>
+            <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Branching logic set</p>
+                <LogicSetDisplay
+                    initialData={{ ...unconfirmedSeed, id: 'set-branch' }}
+                    headerContent={<BranchHeaderSelect />}
                 />
             </div>
         </div>
