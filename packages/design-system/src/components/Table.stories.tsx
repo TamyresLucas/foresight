@@ -17,7 +17,7 @@ import { Checkbox } from "./ui/checkbox";
 import { TableRowActions } from "./ui/table-row-actions";
 
 const meta = {
-  title: "Components/Data Display/Table",
+  title: "ShadCn/Data Display/Table",
   component: Table,
   parameters: {
     layout: "centered",

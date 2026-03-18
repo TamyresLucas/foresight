@@ -8,7 +8,7 @@ import {
 import { Button } from './ui/button';
 
 const meta = {
-    title: 'Components/Overlay/Tooltip',
+    title: 'ShadCn/Overlay/Tooltip',
     component: Tooltip,
     parameters: {
         layout: 'centered',

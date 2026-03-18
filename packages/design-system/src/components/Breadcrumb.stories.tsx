@@ -18,7 +18,7 @@ import { ChevronRight, Home, Slash } from "./ui/icons";
 import { Badge } from "./ui/badge";
 
 const meta = {
-  title: "Components/Navigation/Breadcrumb",
+  title: "ShadCn/Navigation/Breadcrumb",
   component: Breadcrumb,
   parameters: {
     layout: "centered",

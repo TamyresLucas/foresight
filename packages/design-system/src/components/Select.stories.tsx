@@ -22,7 +22,7 @@ import {
 } from "./ui/icons";
 
 const meta: Meta<typeof Select> = {
-  title: "Components/Form Elements/Select",
+  title: "ShadCn/Form Elements/Select",
   component: Select,
   parameters: {
     layout: "centered",

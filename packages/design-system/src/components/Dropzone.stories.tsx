@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Dropzone } from './ui/dropzone';
 
 const meta = {
-    title: 'Components/Form Elements/Dropzone',
+    title: 'ShadCn/Form Elements/Dropzone',
     component: Dropzone,
     parameters: {
         layout: 'centered',

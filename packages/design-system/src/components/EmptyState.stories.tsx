@@ -139,7 +139,7 @@ const InboxIcon = () => (
 );
 
 const meta = {
-  title: "Components/Feedback/EmptyState",
+  title: "ShadCn/Feedback/EmptyState",
   component: EmptyState,
   parameters: {
     layout: "centered",

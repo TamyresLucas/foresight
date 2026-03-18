@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 const meta: Meta<typeof ConfirmDialog> = {
-    title: "Blocks/Dashboard UI/Confirm Dialogs",
+    title: "ShadCn/Overlay/Confirm Dialogs",
     component: ConfirmDialog,
     parameters: {
         layout: "centered",

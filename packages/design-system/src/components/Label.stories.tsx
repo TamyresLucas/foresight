@@ -5,7 +5,7 @@ import { Input } from './ui/input';
 import { Checkbox } from './ui/checkbox';
 
 const meta = {
-    title: 'Components/Form Elements/Label',
+    title: 'ShadCn/Form Elements/Label',
     component: Label,
     parameters: {
         layout: 'centered',

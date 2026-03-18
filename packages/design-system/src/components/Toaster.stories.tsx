@@ -27,7 +27,7 @@ const ToasterDemo = ({ variant }: { variant?: 'default' | 'success' | 'warning' 
 };
 
 const meta = {
-    title: 'Components/Feedback/Toaster',
+    title: 'ShadCn/Feedback/Toaster',
     component: ToasterDemo,
     parameters: {
         layout: 'centered',

@@ -85,7 +85,7 @@ const SurveySettingsCard = () => {
 };
 
 const meta = {
-    title: "Patterns/SettingsCard",
+    title: "ShadCn/Patterns/SettingsCard",
     component: SurveySettingsCard,
     parameters: {
         layout: "centered",

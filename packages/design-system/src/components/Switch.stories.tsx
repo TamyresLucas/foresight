@@ -4,7 +4,7 @@ import { Switch } from './ui/switch';
 import { Label } from './ui/label';
 
 const meta: Meta<typeof Switch> = {
-    title: 'Components/Form Elements/Switch',
+    title: 'ShadCn/Form Elements/Switch',
     component: Switch,
     parameters: {
         layout: 'centered',

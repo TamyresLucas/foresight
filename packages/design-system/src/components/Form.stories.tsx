@@ -17,7 +17,7 @@ import { toast } from '@/hooks/use-toast';
 import { Toaster } from './ui/toaster';
 
 const meta: Meta<typeof Form> = {
-    title: 'Components/Form Elements/Form',
+    title: 'ShadCn/Form Elements/Form',
     component: Form,
     parameters: {
         layout: 'centered',

@@ -4,7 +4,7 @@ import { DiagramCanvas } from './DiagramCanvas';
 import type { Node, Edge } from '@xyflow/react';
 
 const meta: Meta<typeof DiagramCanvas> = {
-    title: 'Components/DiagramCanvas',
+    title: 'Survey Builder/Logic/DiagramCanvas',
     component: DiagramCanvas,
     parameters: {
         layout: 'fullscreen',

@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { CalendarDays } from './ui/icons';
 
 const meta = {
-    title: 'Components/Overlay/HoverCard',
+    title: 'ShadCn/Dashboard UI/Cards/HoverCard',
     component: HoverCard,
     parameters: {
         layout: 'centered',

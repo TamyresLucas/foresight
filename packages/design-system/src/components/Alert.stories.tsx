@@ -13,7 +13,7 @@ import {
 import { Button } from './ui/button';
 
 const meta = {
-    title: 'Components/Feedback/Alert',
+    title: 'ShadCn/Feedback/Alert',
     component: Alert,
     parameters: {
         layout: 'centered',

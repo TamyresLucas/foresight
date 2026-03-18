@@ -3,7 +3,7 @@ import React from 'react';
 import { TableRowActions } from './ui/table-row-actions';
 
 const meta = {
-    title: 'Components/Data Display/TableRowActions',
+    title: 'ShadCn/Data Display/TableRowActions',
     component: TableRowActions,
     parameters: {
         layout: 'centered',

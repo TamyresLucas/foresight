@@ -44,7 +44,7 @@ const SidebarContainer = ({
 );
 
 const meta = {
-  title: "Patterns/Sidebar",
+  title: "ShadCn/Navigation/Sidebar",
   component: SidebarContainer,
   parameters: {
     layout: "centered",

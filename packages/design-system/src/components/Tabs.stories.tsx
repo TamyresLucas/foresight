@@ -14,7 +14,7 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 
 const meta = {
-  title: "Components/Navigation/Tabs",
+  title: "ShadCn/Navigation/Tabs",
   component: Tabs,
   parameters: {
     layout: "centered",

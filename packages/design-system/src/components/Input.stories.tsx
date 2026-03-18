@@ -3,7 +3,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 
 const meta = {
-    title: 'Components/Form Elements/Input',
+    title: 'ShadCn/Form Elements/Input',
     component: Input,
     parameters: {
         layout: 'centered',

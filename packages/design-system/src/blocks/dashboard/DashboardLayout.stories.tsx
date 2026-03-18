@@ -27,7 +27,7 @@ import {
 import { cn } from "@/lib/utils"
 
 const meta: Meta<typeof DashboardLayout> = {
-    title: "Blocks/Dashboard UI/Page Layouts",
+    title: "ShadCn/Dashboard UI/Dashboard Layouts",
     component: DashboardLayout,
     parameters: {
         layout: "fullscreen",

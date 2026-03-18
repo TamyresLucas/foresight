@@ -121,7 +121,7 @@ const CheckCircleIcon = () => (
 );
 
 const meta = {
-  title: "Components/Data Display/StatsCard",
+  title: "ShadCn/Dashboard UI/Cards/StatsCard",
   component: StatsCard,
   parameters: {
     layout: "centered",

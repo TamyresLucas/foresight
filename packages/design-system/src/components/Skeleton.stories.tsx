@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Skeleton } from "./ui/skeleton";
 
 const meta = {
-  title: "Components/Feedback/Skeleton",
+  title: "ShadCn/Feedback/Skeleton",
   component: Skeleton,
   parameters: {
     layout: "centered",

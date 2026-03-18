@@ -3,7 +3,7 @@ import { ScrollArea } from './ui/scroll-area';
 import { Separator } from './ui/separator';
 
 const meta = {
-    title: 'Components/Layout/ScrollArea',
+    title: 'ShadCn/Layout/ScrollArea',
     component: ScrollArea,
     parameters: {
         layout: 'centered',

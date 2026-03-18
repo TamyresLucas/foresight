@@ -18,7 +18,7 @@ import { Button } from './ui/button';
 import * as React from 'react';
 
 const meta = {
-    title: 'Components/Overlay/DropdownMenu',
+    title: 'ShadCn/Overlay/DropdownMenu',
     component: DropdownMenu,
     parameters: {
         layout: 'centered',

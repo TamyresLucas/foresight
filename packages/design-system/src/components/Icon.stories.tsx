@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Icon } from './ui/icon';
 
 const meta = {
-    title: 'Components/Data Display/Icon',
+    title: 'ShadCn/Data Display/Icon',
     component: Icon,
     parameters: {
         layout: 'centered',

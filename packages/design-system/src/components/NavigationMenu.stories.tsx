@@ -12,7 +12,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 
 const meta = {
-    title: 'Components/Navigation/NavigationMenu',
+    title: 'ShadCn/Navigation/NavigationMenu',
     component: NavigationMenu,
     parameters: {
         layout: 'centered',

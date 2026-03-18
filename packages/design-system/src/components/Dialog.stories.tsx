@@ -24,7 +24,7 @@ import {
 } from './ui/select';
 
 const meta = {
-    title: 'Components/Overlay/Dialog',
+    title: 'ShadCn/Overlay/Dialog',
     component: Dialog,
     parameters: {
         layout: 'centered',

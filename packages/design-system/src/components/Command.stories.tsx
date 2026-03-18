@@ -30,7 +30,7 @@ import {
 import { Button } from "./ui/button";
 
 const meta: Meta<typeof Command> = {
-  title: "Components/Actions/Command",
+  title: "ShadCn/Actions/Command",
   component: Command,
   parameters: {
     layout: "centered",

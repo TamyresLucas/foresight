@@ -17,7 +17,7 @@ import {
 } from './ui/menubar';
 
 const meta = {
-    title: 'Components/Overlay/Menubar',
+    title: 'ShadCn/Overlay/Menubar',
     component: Menubar,
     parameters: {
         layout: 'centered',

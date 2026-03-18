@@ -9,7 +9,7 @@ import { Label } from './ui/label';
 import { Input } from './ui/input';
 
 const meta = {
-    title: 'Components/Overlay/Popover',
+    title: 'ShadCn/Overlay/Popover',
     component: Popover,
     parameters: {
         layout: 'centered',

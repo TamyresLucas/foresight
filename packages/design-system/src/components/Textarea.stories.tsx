@@ -5,7 +5,7 @@ import { Label } from './ui/label';
 import { Button } from './ui/button';
 
 const meta: Meta<typeof Textarea> = {
-    title: 'Components/Form Elements/Textarea',
+    title: 'ShadCn/Form Elements/Textarea',
     component: Textarea,
     parameters: {
         layout: 'centered',

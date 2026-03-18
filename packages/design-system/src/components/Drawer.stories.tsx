@@ -12,7 +12,7 @@ import {
 import { Button } from './ui/button';
 
 const meta = {
-    title: 'Survey Rendering/Drawer',
+    title: 'ShadCn/Overlay/Drawer',
     component: Drawer,
     parameters: {
         layout: 'centered',

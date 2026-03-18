@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { LyteNyteGrid, type Column } from "./LyteNyteGrid";
 
 const meta: Meta<typeof LyteNyteGrid> = {
-  title: "Components/DataGrid",
+  title: "ShadCn/Data Display/DataGrid",
   component: LyteNyteGrid,
   parameters: {
     layout: "padded",

@@ -19,7 +19,7 @@ import {
 } from "./ui/icons";
 
 const meta = {
-  title: "Components/Form Elements/ToggleGroup",
+  title: "ShadCn/Form Elements/ToggleGroup",
   component: ToggleGroup,
   parameters: {
     layout: "centered",

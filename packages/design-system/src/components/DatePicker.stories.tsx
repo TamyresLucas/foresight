@@ -41,7 +41,7 @@ const DatePickerDemo = () => {
 }
 
 const meta: Meta<typeof DatePickerDemo> = {
-    title: 'Components/Form Elements/DatePicker',
+    title: 'ShadCn/Form Elements/DatePicker',
     component: DatePickerDemo,
     parameters: {
         layout: 'centered',

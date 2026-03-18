@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { Label } from './ui/label';
 
 const meta: Meta<typeof Slider> = {
-    title: 'Components/Form Elements/Slider',
+    title: 'ShadCn/Form Elements/Slider',
     component: Slider,
     parameters: {
         layout: 'centered',

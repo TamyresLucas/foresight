@@ -4,7 +4,7 @@ import { Label } from './ui/label';
 import { useState } from 'react';
 
 const meta: Meta<typeof TimePicker> = {
-    title: 'Components/Form Elements/TimePicker',
+    title: 'ShadCn/Form Elements/TimePicker',
     id: 'specific-timepicker', // Preserve legacy ID for backward compatibility
     component: TimePicker,
     tags: ['autodocs'],

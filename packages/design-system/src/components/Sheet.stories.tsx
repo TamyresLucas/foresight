@@ -15,7 +15,7 @@ import { Label } from './ui/label';
 import { Separator } from './ui/separator';
 
 const meta = {
-    title: 'Components/Overlay/Sheet',
+    title: 'ShadCn/Overlay/Sheet',
     component: Sheet,
     parameters: {
         layout: 'centered',

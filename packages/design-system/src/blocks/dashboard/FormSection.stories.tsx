@@ -14,7 +14,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox"
 
 const meta: Meta<typeof FormSection> = {
-    title: "Blocks/Dashboard UI/Form Layouts",
+    title: "ShadCn/Form Elements/Form Layouts",
     component: FormSection,
     parameters: {
         layout: "padded",

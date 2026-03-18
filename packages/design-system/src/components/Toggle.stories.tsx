@@ -3,7 +3,7 @@ import { Toggle } from './ui/toggle';
 import { Bold } from './ui/icons';
 
 const meta: Meta<typeof Toggle> = {
-    title: 'Components/Form Elements/Toggle',
+    title: 'ShadCn/Form Elements/Toggle',
     component: Toggle,
     parameters: {
         layout: 'centered',

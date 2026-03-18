@@ -40,7 +40,7 @@ const sampleMessages: Message[] = [
 // ============================================
 
 const sidebarMeta: Meta<typeof AssistantSidebar> = {
-    title: 'Components/AssistantSidebar',
+    title: 'ShadCn/AI/AssistantSidebar',
     component: AssistantSidebar,
     parameters: {
         layout: 'fullscreen',

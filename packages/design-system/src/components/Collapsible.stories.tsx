@@ -9,7 +9,7 @@ import { ChevronsUpDown } from './ui/icons';
 import { useState } from 'react';
 
 const meta: Meta<typeof Collapsible> = {
-    title: 'Components/Data Display/Collapsible',
+    title: 'ShadCn/Data Display/Collapsible',
     component: Collapsible,
     parameters: {
         layout: 'centered',

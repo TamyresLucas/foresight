@@ -92,7 +92,7 @@ const ComboboxDemo = () => {
 }
 
 const meta: Meta<typeof ComboboxDemo> = {
-    title: 'Components/Form Elements/Combobox',
+    title: 'ShadCn/Form Elements/Combobox',
     component: ComboboxDemo,
     parameters: {
         layout: 'centered',

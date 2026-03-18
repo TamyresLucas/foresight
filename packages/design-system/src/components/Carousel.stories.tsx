@@ -11,7 +11,7 @@ import { Card, CardContent } from "./ui/card";
 import { cn } from "../lib/utils";
 
 const meta = {
-  title: "Components/Data Display/Carousel",
+  title: "ShadCn/Data Display/Carousel",
   component: Carousel,
   parameters: {
     layout: "centered",

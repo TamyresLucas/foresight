@@ -13,7 +13,7 @@ import {
 import { Button } from './ui/button';
 
 const meta = {
-    title: 'Components/Overlay/AlertDialog',
+    title: 'ShadCn/Overlay/AlertDialog',
     component: AlertDialog,
     parameters: {
         layout: 'centered',

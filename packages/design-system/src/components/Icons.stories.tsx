@@ -18,7 +18,7 @@ const IconCatalog = ({ size = 24 }: { size?: number }) => {
 };
 
 const meta = {
-    title: 'Components/Data Display/Icons',
+    title: 'ShadCn/Data Display/Icons',
     component: IconCatalog,
     parameters: {
         layout: 'fullscreen',

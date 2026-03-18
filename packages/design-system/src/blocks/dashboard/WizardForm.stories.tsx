@@ -16,7 +16,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 const meta: Meta<typeof WizardForm> = {
-    title: "Blocks/Dashboard UI/Wizard Form",
+    title: "ShadCn/Form Elements/Wizard Form",
     component: WizardForm,
     parameters: {
         layout: "padded",

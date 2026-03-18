@@ -4,7 +4,7 @@ import { Progress } from "./ui/progress";
 import { cn } from "../lib/utils";
 
 const meta = {
-  title: "Components/Feedback/Progress",
+  title: "ShadCn/Feedback/Progress",
   component: Progress,
   parameters: {
     layout: "centered",

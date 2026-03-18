@@ -4,7 +4,7 @@ import { Label } from './ui/label';
 import { useState } from 'react';
 
 const meta: Meta<typeof ColorPicker> = {
-    title: 'Components/Form Elements/ColorPicker',
+    title: 'ShadCn/Form Elements/ColorPicker',
     id: 'specific-colorpicker',
     component: ColorPicker,
     // tags: ['autodocs'],

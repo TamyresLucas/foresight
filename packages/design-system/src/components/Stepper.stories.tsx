@@ -254,7 +254,7 @@ const WizardDemo = () => {
 };
 
 const meta = {
-    title: 'Components/Navigation/Stepper',
+    title: 'ShadCn/Navigation/Stepper',
     component: WizardDemo,
     parameters: {
         layout: 'centered',
