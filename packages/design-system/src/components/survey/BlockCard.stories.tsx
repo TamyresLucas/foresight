@@ -40,7 +40,7 @@ const QuestionCardShell = ({ children, isSelected, hasError }: QuestionCardShell
             'p-4 rounded-lg border transition-all group relative grid items-start gap-x-4 bg-card grid-cols-[auto_1fr]',
             isSelected && hasError && 'border-destructive shadow-md',
             isSelected && !hasError && 'border-primary shadow-md',
-            !isSelected && 'border-border-ui hover:shadow-sm',
+            !isSelected && 'border-border-ui hover:shadow-md',
         )}
     >
         {children}
@@ -49,11 +49,45 @@ const QuestionCardShell = ({ children, isSelected, hasError }: QuestionCardShell
 
 const ChoiceRow = ({ label, type = 'radio' }: { label: string; type?: 'radio' | 'checkbox' }) => (
     <div className="flex items-center gap-2 py-1">
-        <div className={cn('w-4 h-4 border border-border-ui flex-shrink-0', type === 'radio' ? 'rounded-full' : 'rounded-sm')} />
+        <div className={cn('w-4 h-4 border border-foreground flex-shrink-0', type === 'radio' ? 'rounded-full' : 'rounded-sm')} />
         <span className="text-sm text-foreground">{label}</span>
     </div>
 );
 
+// ---------------------------------------------------------------------------
+// Between-question logic alerts (outside question cards, before the target)
+// ---------------------------------------------------------------------------
+
+/** Default/info state — branching rule is valid, or default survey flow */
+const FlowLogicAlert = ({ message }: { message: string }) => (
+    <Alert className="py-2">
+        <span className="material-symbols-rounded text-sm leading-none">account_tree</span>
+        <AlertDescription className="text-xs">{message}</AlertDescription>
+    </Alert>
+);
+
+/** Error state — branching rule references a deleted or invalid target */
+const FlowLogicErrorAlert = ({ message }: { message: string }) => (
+    <Alert variant="destructive" className="py-2">
+        <span className="material-symbols-rounded text-sm leading-none">error</span>
+        <AlertTitle className="text-xs font-semibold">Logic Error</AlertTitle>
+        <AlertDescription className="text-xs">{message}</AlertDescription>
+    </Alert>
+);
+
+// ---------------------------------------------------------------------------
+// Inside-question logic alerts (used when question card itself has logic)
+// ---------------------------------------------------------------------------
+
+/** Default/info state — question has a valid logic rule configured */
+const LogicAlert = ({ message }: { message: string }) => (
+    <Alert className="mt-3 py-2.5">
+        <span className="material-symbols-rounded text-base">account_tree</span>
+        <AlertDescription className="text-xs">{message}</AlertDescription>
+    </Alert>
+);
+
+/** Error state — question's logic rule is broken */
 const LogicErrorAlert = ({ message }: { message: string }) => (
     <Alert variant="destructive" className="mt-3 py-2.5">
         <span className="material-symbols-rounded text-base">error</span>
@@ -73,7 +107,6 @@ interface BlockCardProps {
     questionCount?: number;
     isSelected?: boolean;
     isHovered?: boolean;
-    isDashed?: boolean;
     isCollapsed?: boolean;
     isDragging?: boolean;
 }
@@ -85,7 +118,6 @@ const BlockCard = ({
     questionCount,
     isSelected,
     isHovered,
-    isDashed,
     isCollapsed,
     isDragging,
 }: BlockCardProps) => {
@@ -98,7 +130,6 @@ const BlockCard = ({
                 isSelected && 'border-2 border-primary shadow-md',
                 !isSelected && isHovered && 'border-border-ui shadow-sm',
                 !isSelected && !isHovered && 'border-border-ui',
-                isDashed && 'border-dashed',
             )}
         >
             {/* Header */}
@@ -149,14 +180,24 @@ const meta: Meta = {
 
 | State | Border | Shadow |
 |-------|--------|--------|
-| Default | \`border-border\` | none |
-| Hovered | \`border-primary/50\` | sm |
+| Default | \`border-border-ui\` | none |
+| Hovered | \`border-border-ui\` | sm |
 | Selected | \`border-2 border-primary\` | md |
-| Display Logic (dashed) | \`border-dashed\` | — |
 | Dragging | normal border + \`opacity-50\` | — |
 | Collapsed | header only, body hidden | — |
 
-The block header shows an editable title, question count, collapse toggle, and an overflow actions menu (visible on hover).
+### Branching logic alerts (block-level, outside question cards)
+
+Logic alerts appear at the **edges** of the block body — never between questions.
+
+| Position | Direction | When |
+|----------|-----------|------|
+| **Before** all questions | Incoming ("de") | This block is the destination of a branch from a previous block |
+| **After** all questions | Outgoing ("para") | This block sends respondents to another block based on answers |
+
+Each position supports two states: default (valid rule) and error (broken rule).
+
+Question cards themselves may also carry logic alerts (inside) with the same two states.
 `,
             },
         },
@@ -212,7 +253,7 @@ export const Default: Story = {
                         <ActionsMenu />
                     </div>
                     <p className="text-sm text-foreground mt-1">Please describe your experience in detail.</p>
-                    <div className="mt-3 rounded border border-border bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
+                    <div className="mt-3 rounded border border-border-ui bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
                         Respondent types a free-text answer here...
                     </div>
                 </div>
@@ -277,7 +318,7 @@ export const Selected: Story = {
                         <ActionsMenu />
                     </div>
                     <p className="text-sm text-foreground mt-1">Please describe your experience in detail.</p>
-                    <div className="mt-3 rounded border border-border bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
+                    <div className="mt-3 rounded border border-border-ui bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
                         Respondent types a free-text answer here...
                     </div>
                 </div>
@@ -322,7 +363,7 @@ export const Hovered: Story = {
                         <ActionsMenu />
                     </div>
                     <p className="text-sm text-foreground mt-1">Please describe your experience in detail.</p>
-                    <div className="mt-3 rounded border border-border bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
+                    <div className="mt-3 rounded border border-border-ui bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
                         Respondent types a free-text answer here...
                     </div>
                 </div>
@@ -345,13 +386,111 @@ export const Collapsed: Story = {
 };
 
 // ---------------------------------------------------------------------------
-// Display Logic (dashed border)
+// Outgoing branching logic — "para" (this block sends to another block)
+// Alert appears AFTER all questions.
 // ---------------------------------------------------------------------------
 
-export const DisplayLogic: Story = {
-    name: 'Display Logic (dashed border)',
+export const OutgoingBranchingLogic: Story = {
+    name: 'Outgoing Branching Logic — Default',
     render: () => (
-        <BlockCard title="Follow-up Questions" blockId="B3" questionCount={2} isDashed>
+        <BlockCard title="Customer Satisfaction" blockId="B1" questionCount={2}>
+            <QuestionCardShell>
+                <DragHandle />
+                <div>
+                    <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-2">
+                            <QuestionId id="Q1" />
+                            <TypeBadge label="Multiple Choice" />
+                        </div>
+                        <ActionsMenu />
+                    </div>
+                    <p className="text-sm text-foreground mt-1">How satisfied are you with our service?</p>
+                    <div className="mt-3 space-y-0.5">
+                        <ChoiceRow label="Very satisfied" />
+                        <ChoiceRow label="Satisfied" />
+                        <ChoiceRow label="Neutral" />
+                        <ChoiceRow label="Dissatisfied" />
+                    </div>
+                </div>
+            </QuestionCardShell>
+            <QuestionCardShell>
+                <DragHandle />
+                <div>
+                    <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-2">
+                            <QuestionId id="Q2" />
+                            <TypeBadge label="Text Entry" />
+                        </div>
+                        <ActionsMenu />
+                    </div>
+                    <p className="text-sm text-foreground mt-1">Any additional comments?</p>
+                    <div className="mt-3 rounded border border-border-ui bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
+                        Respondent types a free-text answer here...
+                    </div>
+                </div>
+            </QuestionCardShell>
+            {/* Alert AFTER all questions — this block branches to another */}
+            <FlowLogicAlert message="If Q1 = 'Dissatisfied' → jump to B3 (Follow-up Questions)" />
+        </BlockCard>
+    ),
+};
+
+export const OutgoingBranchingLogicError: Story = {
+    name: 'Outgoing Branching Logic — Error',
+    render: () => (
+        <BlockCard title="Customer Satisfaction" blockId="B1" questionCount={2}>
+            <QuestionCardShell>
+                <DragHandle />
+                <div>
+                    <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-2">
+                            <QuestionId id="Q1" />
+                            <TypeBadge label="Multiple Choice" />
+                        </div>
+                        <ActionsMenu />
+                    </div>
+                    <p className="text-sm text-foreground mt-1">How satisfied are you with our service?</p>
+                    <div className="mt-3 space-y-0.5">
+                        <ChoiceRow label="Very satisfied" />
+                        <ChoiceRow label="Satisfied" />
+                        <ChoiceRow label="Neutral" />
+                        <ChoiceRow label="Dissatisfied" />
+                    </div>
+                </div>
+            </QuestionCardShell>
+            <QuestionCardShell>
+                <DragHandle />
+                <div>
+                    <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-2">
+                            <QuestionId id="Q2" />
+                            <TypeBadge label="Text Entry" />
+                        </div>
+                        <ActionsMenu />
+                    </div>
+                    <p className="text-sm text-foreground mt-1">Any additional comments?</p>
+                    <div className="mt-3 rounded border border-border-ui bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
+                        Respondent types a free-text answer here...
+                    </div>
+                </div>
+            </QuestionCardShell>
+            {/* Error alert AFTER all questions — outgoing branch target was deleted */}
+            <FlowLogicErrorAlert message="Branch target 'B3 – Follow-up' was deleted. Update or remove this rule." />
+        </BlockCard>
+    ),
+};
+
+// ---------------------------------------------------------------------------
+// Incoming branching logic — "de" (this block is the destination of a branch)
+// Alert appears BEFORE all questions.
+// ---------------------------------------------------------------------------
+
+export const IncomingBranchingLogic: Story = {
+    name: 'Incoming Branching Logic — Default',
+    render: () => (
+        <BlockCard title="Follow-up Questions" blockId="B3" questionCount={2}>
+            {/* Alert BEFORE all questions — respondents arrive here via branching from B1 */}
+            <FlowLogicAlert message="Reached from B1 — shown only when Q1 = 'Dissatisfied'" />
             <QuestionCardShell>
                 <DragHandle />
                 <div>
@@ -359,7 +498,6 @@ export const DisplayLogic: Story = {
                         <div className="flex items-center gap-2">
                             <QuestionId id="Q5" />
                             <TypeBadge label="Multiple Choice" />
-                            <Badge variant="secondary">Display Logic</Badge>
                         </div>
                         <ActionsMenu />
                     </div>
@@ -381,8 +519,52 @@ export const DisplayLogic: Story = {
                         </div>
                         <ActionsMenu />
                     </div>
-                    <p className="text-sm text-foreground mt-1">Any additional comments?</p>
-                    <div className="mt-3 rounded border border-border bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
+                    <p className="text-sm text-foreground mt-1">Please describe what went wrong.</p>
+                    <div className="mt-3 rounded border border-border-ui bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
+                        Respondent types a free-text answer here...
+                    </div>
+                </div>
+            </QuestionCardShell>
+        </BlockCard>
+    ),
+};
+
+export const IncomingBranchingLogicError: Story = {
+    name: 'Incoming Branching Logic — Error',
+    render: () => (
+        <BlockCard title="Follow-up Questions" blockId="B3" questionCount={2}>
+            {/* Error alert BEFORE all questions — the originating rule is broken */}
+            <FlowLogicErrorAlert message="Source rule in B1 references a deleted choice. This block may never be reached." />
+            <QuestionCardShell>
+                <DragHandle />
+                <div>
+                    <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-2">
+                            <QuestionId id="Q5" />
+                            <TypeBadge label="Multiple Choice" />
+                        </div>
+                        <ActionsMenu />
+                    </div>
+                    <p className="text-sm text-foreground mt-1">What could we have done better?</p>
+                    <div className="mt-3 space-y-0.5">
+                        <ChoiceRow label="Faster response time" />
+                        <ChoiceRow label="Better communication" />
+                        <ChoiceRow label="Lower prices" />
+                    </div>
+                </div>
+            </QuestionCardShell>
+            <QuestionCardShell>
+                <DragHandle />
+                <div>
+                    <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-2">
+                            <QuestionId id="Q6" />
+                            <TypeBadge label="Text Entry" />
+                        </div>
+                        <ActionsMenu />
+                    </div>
+                    <p className="text-sm text-foreground mt-1">Please describe what went wrong.</p>
+                    <div className="mt-3 rounded border border-border-ui bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
                         Respondent types a free-text answer here...
                     </div>
                 </div>
@@ -392,11 +574,59 @@ export const DisplayLogic: Story = {
 };
 
 // ---------------------------------------------------------------------------
-// With logic error inside a question card
+// Question card with logic alert (inside) — default state
 // ---------------------------------------------------------------------------
 
-export const WithLogicError: Story = {
-    name: 'With Logic Error',
+export const QuestionWithLogic: Story = {
+    name: 'Question With Logic — Default',
+    render: () => (
+        <BlockCard title="Customer Satisfaction" blockId="B1" questionCount={2}>
+            <QuestionCardShell isSelected>
+                <DragHandle />
+                <div>
+                    <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-2">
+                            <QuestionId id="Q1" />
+                            <TypeBadge label="Multiple Choice" />
+                        </div>
+                        <ActionsMenu />
+                    </div>
+                    <p className="text-sm text-foreground mt-1">How satisfied are you with our service?</p>
+                    <div className="mt-3 space-y-0.5">
+                        <ChoiceRow label="Very satisfied" />
+                        <ChoiceRow label="Satisfied" />
+                        <ChoiceRow label="Neutral" />
+                        <ChoiceRow label="Dissatisfied" />
+                    </div>
+                    <LogicAlert message="Skip to Q3 if respondent selects 'Dissatisfied'" />
+                </div>
+            </QuestionCardShell>
+            <QuestionCardShell>
+                <DragHandle />
+                <div>
+                    <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-2">
+                            <QuestionId id="Q2" />
+                            <TypeBadge label="Text Entry" />
+                        </div>
+                        <ActionsMenu />
+                    </div>
+                    <p className="text-sm text-foreground mt-1">What did we do well?</p>
+                    <div className="mt-3 rounded border border-border-ui bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
+                        Respondent types a free-text answer here...
+                    </div>
+                </div>
+            </QuestionCardShell>
+        </BlockCard>
+    ),
+};
+
+// ---------------------------------------------------------------------------
+// Question card with logic alert (inside) — error state
+// ---------------------------------------------------------------------------
+
+export const QuestionWithLogicError: Story = {
+    name: 'Question With Logic — Error',
     render: () => (
         <BlockCard title="Customer Satisfaction" blockId="B1" questionCount={2}>
             <QuestionCardShell isSelected hasError>
@@ -430,7 +660,7 @@ export const WithLogicError: Story = {
                         <ActionsMenu />
                     </div>
                     <p className="text-sm text-foreground mt-1">Please describe your experience in detail.</p>
-                    <div className="mt-3 rounded border border-border bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
+                    <div className="mt-3 rounded border border-border-ui bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
                         Respondent types a free-text answer here...
                     </div>
                 </div>
@@ -475,7 +705,7 @@ export const Dragging: Story = {
                         <ActionsMenu />
                     </div>
                     <p className="text-sm text-foreground mt-1">Please describe your experience in detail.</p>
-                    <div className="mt-3 rounded border border-border bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
+                    <div className="mt-3 rounded border border-border-ui bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
                         Respondent types a free-text answer here...
                     </div>
                 </div>
@@ -492,7 +722,7 @@ export const Empty: Story = {
     name: 'Empty (Drop Zone)',
     render: () => (
         <BlockCard title="New Block" blockId="B4" questionCount={0}>
-            <div className="flex flex-col items-center justify-center py-8 border-2 border-dashed border-border rounded-lg text-muted-foreground gap-2">
+            <div className="flex flex-col items-center justify-center py-8 border-2 border-dashed border-border-ui rounded-lg text-muted-foreground gap-2">
                 <span className="material-symbols-rounded text-2xl">add_circle</span>
                 <span className="text-sm">Drag a question here or click to add</span>
             </div>
@@ -501,7 +731,7 @@ export const Empty: Story = {
 };
 
 // ---------------------------------------------------------------------------
-// Multi-block canvas (overview)
+// Multi-block canvas (overview) — includes a branching logic example
 // ---------------------------------------------------------------------------
 
 export const MultipleBlocks: Story = {
@@ -525,7 +755,8 @@ export const MultipleBlocks: Story = {
                     </div>
                 </QuestionCardShell>
             </BlockCard>
-            <BlockCard title="Customer Satisfaction" blockId="B2" questionCount={2} isSelected>
+
+            <BlockCard title="Customer Satisfaction" blockId="B2" questionCount={3} isSelected>
                 <QuestionCardShell isSelected>
                     <DragHandle />
                     <div>
@@ -543,6 +774,7 @@ export const MultipleBlocks: Story = {
                             <ChoiceRow label="Neutral" />
                             <ChoiceRow label="Dissatisfied" />
                         </div>
+                        <LogicAlert message="Skip to Q4 if respondent selects 'Very satisfied' or 'Satisfied'" />
                     </div>
                 </QuestionCardShell>
                 <QuestionCardShell>
@@ -555,13 +787,32 @@ export const MultipleBlocks: Story = {
                             </div>
                             <ActionsMenu />
                         </div>
-                        <p className="text-sm text-foreground mt-1">Any additional feedback?</p>
-                        <div className="mt-3 rounded border border-border bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
+                        <p className="text-sm text-foreground mt-1">What could we have done better?</p>
+                        <div className="mt-3 rounded border border-border-ui bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
                             Respondent types a free-text answer here...
                         </div>
                     </div>
                 </QuestionCardShell>
+                <QuestionCardShell>
+                    <DragHandle />
+                    <div>
+                        <div className="flex items-center justify-between mb-1">
+                            <div className="flex items-center gap-2">
+                                <QuestionId id="Q4" />
+                                <TypeBadge label="Text Entry" />
+                            </div>
+                            <ActionsMenu />
+                        </div>
+                        <p className="text-sm text-foreground mt-1">Any additional feedback?</p>
+                        <div className="mt-3 rounded border border-border-ui bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
+                            Respondent types a free-text answer here...
+                        </div>
+                    </div>
+                </QuestionCardShell>
+                {/* Outgoing branch — AFTER all questions */}
+                <FlowLogicAlert message="If Q2 = 'Dissatisfied' → jump to B3 (Follow-up Questions)" />
             </BlockCard>
+
             <BlockCard title="Demographics" blockId="B3" questionCount={3} isCollapsed>
                 {/* Collapsed — body not rendered */}
             </BlockCard>

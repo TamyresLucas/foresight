@@ -43,7 +43,7 @@ const CardShell = ({ children, isSelected, hasError, isDashed, className }: Card
             isSelected && hasError && 'border-destructive shadow-md',
             isSelected && !hasError && 'border-primary shadow-md',
             !isSelected && isDashed && 'border-dashed border-primary/50',
-            !isSelected && !isDashed && 'border-border-ui hover:shadow-sm',
+            !isSelected && !isDashed && 'border-border-ui hover:shadow-md',
             className
         )}
     >
@@ -60,14 +60,24 @@ const QuestionText = ({ children }: { children: React.ReactNode }) => (
 // ---------------------------------------------------------------------------
 const ChoiceRow = ({ label, type = 'radio' }: { label: string; type?: 'radio' | 'checkbox' }) => (
     <div className="flex items-center gap-2 py-1">
-        <div className={cn('w-4 h-4 border border-border-ui flex-shrink-0', type === 'radio' ? 'rounded-full' : 'rounded-sm')} />
+        <div className={cn('w-4 h-4 border border-foreground flex-shrink-0', type === 'radio' ? 'rounded-full' : 'rounded-sm')} />
         <span className="text-sm text-foreground">{label}</span>
     </div>
 );
 
 // ---------------------------------------------------------------------------
-// Logic error alert
+// Logic alerts (inside question card)
 // ---------------------------------------------------------------------------
+
+/** Default/info state — question has a valid logic rule configured */
+const LogicAlert = ({ message }: { message: string }) => (
+    <Alert className="mt-3 py-2.5">
+        <span className="material-symbols-rounded text-base">account_tree</span>
+        <AlertDescription className="text-xs">{message}</AlertDescription>
+    </Alert>
+);
+
+/** Error state — question's logic rule is broken */
 const LogicErrorAlert = ({ message }: { message: string }) => (
     <Alert variant="destructive" className="mt-3 py-2.5">
         <span className="material-symbols-rounded text-base">error</span>
@@ -93,12 +103,19 @@ const meta: Meta = {
 | State | Border | Shadow |
 |-------|--------|--------|
 | Default | \`border-border-ui\` | none |
-| Hovered | \`border-primary/40\` | sm |
+| Hovered | \`border-border-ui\` | sm |
 | Selected | \`border-primary\` | md |
 | Selected + Logic Error | \`border-destructive\` | md |
 | Display Logic (dashed) | \`border-primary/50 dashed\` | none |
 
-Logic errors are shown as a destructive \`<Alert>\` attached inside the card footer.
+### Logic alerts (inside question card)
+
+Logic can be configured on any question (skip logic, display logic, branching). The alert appears inside the card footer.
+
+| State | When |
+|-------|------|
+| Default | Rule is valid — shows the configured logic condition |
+| Error | Rule is broken — references a deleted question, choice, or page |
                 `,
             },
         },
@@ -339,6 +356,63 @@ export const TextEntryError: Story = {
                     Respondent types a free-text answer here...
                 </div>
                 <LogicErrorAlert message="Branch logic jumps to Q7 which is on a previous page. Forward-only branching required." />
+            </div>
+        </CardShell>
+    ),
+};
+
+// ---------------------------------------------------------------------------
+// Multiple Choice — With Logic (default state)
+// ---------------------------------------------------------------------------
+
+export const MultipleChoiceRadioWithLogic: Story = {
+    name: 'Multiple Choice / Radio — With Logic',
+    render: () => (
+        <CardShell isSelected>
+            <DragHandle />
+            <div>
+                <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-2">
+                        <QuestionId id="Q1" />
+                        <TypeBadge label="Multiple Choice" />
+                    </div>
+                    <ActionsMenu />
+                </div>
+                <QuestionText>How satisfied are you with our service?</QuestionText>
+                <div className="mt-3 space-y-0.5">
+                    <ChoiceRow label="Very satisfied" />
+                    <ChoiceRow label="Satisfied" />
+                    <ChoiceRow label="Neutral" />
+                    <ChoiceRow label="Dissatisfied" />
+                </div>
+                <LogicAlert message="Skip to Q4 if respondent selects 'Very satisfied' or 'Satisfied'" />
+            </div>
+        </CardShell>
+    ),
+};
+
+// ---------------------------------------------------------------------------
+// Text Entry — With Logic (default state)
+// ---------------------------------------------------------------------------
+
+export const TextEntryWithLogic: Story = {
+    name: 'Text Entry — With Logic',
+    render: () => (
+        <CardShell isSelected>
+            <DragHandle />
+            <div>
+                <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-2">
+                        <QuestionId id="Q3" />
+                        <TypeBadge label="Text Entry" />
+                    </div>
+                    <ActionsMenu />
+                </div>
+                <QuestionText>Please describe your experience in detail.</QuestionText>
+                <div className="mt-3 rounded border border-border bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
+                    Respondent types a free-text answer here...
+                </div>
+                <LogicAlert message="Display only if Q1 = 'Dissatisfied' or 'Neutral'" />
             </div>
         </CardShell>
     ),

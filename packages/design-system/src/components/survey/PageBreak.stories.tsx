@@ -36,11 +36,11 @@ const PageBreak = ({ pageNumber, pageName, isSelected, isDragging }: PageBreakPr
 
                 <div className="flex-shrink-0 flex items-stretch border border-border-ui rounded-full overflow-hidden hover:border-primary/50 transition-colors">
                     {/* Page number badge */}
-                    <span className="bg-muted px-3 py-1.5 text-xs font-bold text-foreground border-r border-border-ui">
+                    <span className="bg-white dark:bg-muted px-3 py-1.5 text-xs font-bold text-foreground border-r border-border-ui">
                         P{pageNumber}
                     </span>
                     {/* Page name */}
-                    <span className="text-xs font-semibold text-foreground bg-card hover:bg-muted/50 px-3 py-1.5 transition-colors cursor-text">
+                    <span className="text-xs font-semibold text-foreground bg-white dark:bg-card hover:bg-muted/50 px-3 py-1.5 transition-colors cursor-text">
                         {label}
                     </span>
                 </div>
