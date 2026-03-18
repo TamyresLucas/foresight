@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { Badge } from '../ui/badge';
 import { cn } from '../../lib/utils';
 
 // ---------------------------------------------------------------------------
@@ -69,7 +70,7 @@ const ContextCard = ({ id, label, children }: { id: string; label: string; child
         <div>
             <div className="flex items-center gap-2 mb-1">
                 <span className="text-xs font-mono font-semibold text-muted-foreground uppercase tracking-wide">{id}</span>
-                <span className="text-xs text-muted-foreground border border-border rounded px-1.5 py-0.5">{label}</span>
+                <Badge variant="outline">{label}</Badge>
             </div>
             {children}
         </div>

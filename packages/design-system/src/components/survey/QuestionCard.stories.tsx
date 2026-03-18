@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Alert, AlertTitle, AlertDescription } from '../ui/alert';
+import { Badge } from '../ui/badge';
 import { cn } from '../../lib/utils';
 
 // ---------------------------------------------------------------------------
@@ -18,7 +19,7 @@ const QuestionId = ({ id }: { id: string }) => (
 );
 
 const TypeBadge = ({ label }: { label: string }) => (
-    <span className="text-xs text-muted-foreground border border-border rounded px-1.5 py-0.5">{label}</span>
+    <Badge variant="outline">{label}</Badge>
 );
 
 const ActionsMenu = () => (
@@ -399,7 +400,7 @@ export const DescriptionWithDisplayLogic: Story = {
                     <div className="flex items-center gap-2">
                         <QuestionId id="Q4" />
                         <TypeBadge label="Description" />
-                        <span className="text-xs text-primary border border-primary/30 rounded px-1.5 py-0.5">Display Logic</span>
+                        <Badge variant="secondary">Display Logic</Badge>
                     </div>
                     <ActionsMenu />
                 </div>
