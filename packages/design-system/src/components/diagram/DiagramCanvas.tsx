@@ -78,12 +78,12 @@ const DiagramCanvasInner: React.FC<DiagramCanvasProps> = ({
   const defaultEdgeOptions = useMemo(
     () => ({
       style: {
-        stroke: "hsl(var(--foreground))",
+        stroke: "hsl(var(--primary))",
         strokeWidth: 2,
       },
       markerEnd: {
         type: "arrowclosed" as const,
-        color: "hsl(var(--foreground))",
+        color: "hsl(var(--primary))",
       },
     }),
     [],
@@ -106,12 +106,12 @@ const DiagramCanvasInner: React.FC<DiagramCanvasProps> = ({
     <div className={cn("w-full h-full min-h-[400px]", className)}>
       <style>
         {`
-                    .react-flow__edge.selected .react-flow__edge-path {
+                    .react-flow__edge .react-flow__edge-path {
                         stroke: hsl(var(--primary)) !important;
                     }
-                    .react-flow__edge.selected .react-flow__arrowhead {
+                    .react-flow__arrowhead .arrowclosed {
+                        stroke: hsl(var(--primary)) !important;
                         fill: hsl(var(--primary)) !important;
-                        stroke: hsl(var(--primary)) !important; 
                     }
                 `}
       </style>
@@ -134,7 +134,7 @@ const DiagramCanvasInner: React.FC<DiagramCanvasProps> = ({
             variant={backgroundVariant}
             gap={16}
             size={1}
-            className="bg-[hsl(var(--secondary))]"
+            className="bg-primary/5"
           />
         )}
         {showControls && <Controls className="diagram-controls" />}

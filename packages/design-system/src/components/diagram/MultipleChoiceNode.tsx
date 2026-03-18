@@ -15,17 +15,17 @@ const MultipleChoiceNode: React.FC<MultipleChoiceNodeProps> = ({ data, selected 
         <div
             className={cn(
                 'w-80 bg-card border rounded-lg shadow-lg transition-all',
-                selected ? 'border-primary shadow-2xl' : 'border-border'
+                selected ? 'border-primary shadow-2xl' : 'border-primary'
             )}
         >
             {/* Header */}
-            <header className="p-3 border-b border-border">
+            <header className="p-3 border-b border-primary/20">
                 <div className="flex items-center gap-2 min-w-0">
-                    <Icon className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                    <Icon className="w-4 h-4 text-foreground flex-shrink-0" />
                     <span className="font-bold text-sm text-foreground flex-shrink-0 mr-1">
                         {data.variableName}
                     </span>
-                    <p className="text-sm text-muted-foreground truncate">
+                    <p className="text-sm text-foreground truncate">
                         {data.question}
                     </p>
                 </div>
@@ -38,11 +38,11 @@ const MultipleChoiceNode: React.FC<MultipleChoiceNodeProps> = ({ data, selected 
                     {data.options.map((option) => (
                         <li
                             key={option.id}
-                            className="relative flex items-center p-2 rounded bg-background border border-border"
+                            className="relative flex items-center p-2 rounded bg-primary/5 border border-primary"
                         >
                             <div
                                 className={cn(
-                                    'w-4 h-4 border mr-2 flex items-center justify-center border-muted-foreground',
+                                    'w-4 h-4 border mr-2 flex items-center justify-center border-foreground/40',
                                     data.subtype === 'checkbox' ? 'rounded-sm' : 'rounded-full'
                                 )}
                             />

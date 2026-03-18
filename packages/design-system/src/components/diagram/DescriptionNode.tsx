@@ -13,13 +13,13 @@ const DescriptionNode: React.FC<DescriptionNodeProps> = ({ data, selected }) => 
         <div
             className={cn(
                 'relative w-80 bg-card border rounded-lg shadow-lg transition-all',
-                selected ? 'border-primary shadow-2xl' : 'border-border'
+                selected ? 'border-primary shadow-2xl' : 'border-primary'
             )}
         >
             {/* Header */}
-            <header className="p-3 border-b border-border">
+            <header className="p-3 border-b border-primary/20">
                 <div className="flex items-center gap-2 min-w-0">
-                    <FileText className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                    <FileText className="w-4 h-4 text-foreground flex-shrink-0" />
                     <p className="font-bold text-sm text-foreground truncate">
                         Description / Info
                     </p>
@@ -29,7 +29,7 @@ const DescriptionNode: React.FC<DescriptionNodeProps> = ({ data, selected }) => 
             {/* Content */}
             <main className="p-3 relative">
                 <InputHandle highlighted={data.highlightInputHandle} />
-                <div className="bg-background rounded p-2 text-sm text-foreground border border-border max-h-24 overflow-y-auto">
+                <div className="bg-primary/5 rounded p-2 text-sm text-foreground border border-primary/20 max-h-24 overflow-y-auto">
                     {data.question}
                 </div>
                 <OutputHandle highlighted={data.highlightSourceHandles} />

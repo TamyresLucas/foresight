@@ -2,7 +2,7 @@ import React from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { cn } from '../../lib/utils';
 
-const baseHandleStyles = 'w-2.5 h-2.5 rounded-full border-2 bg-card';
+const baseHandleStyles = '!w-3 !h-3 !rounded-full !border-2 !bg-card';
 
 interface HandleProps {
     highlighted?: boolean;
@@ -19,11 +19,11 @@ export const InputHandle: React.FC<HandleProps> = ({ highlighted, className }) =
         id="input"
         className={cn(
             baseHandleStyles,
-            highlighted ? 'border-primary' : 'border-border',
+            '!border-primary',
             className
         )}
         style={{
-            left: '-5px',
+            left: '-6px',
             top: '50%',
             transform: 'translateY(-50%)',
         }}
@@ -40,11 +40,11 @@ export const OutputHandle: React.FC<HandleProps> = ({ highlighted, className }) 
         id="output"
         className={cn(
             baseHandleStyles,
-            highlighted ? 'border-primary' : 'border-border',
+            '!border-primary',
             className
         )}
         style={{
-            right: '-5px',
+            right: '-6px',
             top: '50%',
             transform: 'translateY(-50%)',
         }}
@@ -69,11 +69,11 @@ export const ChoiceOutputHandle: React.FC<ChoiceHandleProps> = ({
         id={id}
         className={cn(
             baseHandleStyles,
-            highlighted ? 'border-primary' : 'border-border',
+            '!border-primary',
             className
         )}
         style={{
-            right: '-17px',
+            right: '-6px',
             top: '50%',
             transform: 'translateY(-50%)',
         }}
