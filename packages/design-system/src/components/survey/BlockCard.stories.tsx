@@ -40,7 +40,7 @@ const QuestionCardShell = ({ children, isSelected, hasError }: QuestionCardShell
             'p-4 rounded-lg border transition-all group relative grid items-start gap-x-4 bg-card grid-cols-[auto_1fr]',
             isSelected && hasError && 'border-destructive shadow-md',
             isSelected && !hasError && 'border-primary shadow-md',
-            !isSelected && 'border-border hover:border-primary/40 hover:shadow-sm',
+            !isSelected && 'border-border-ui hover:border-primary/40 hover:shadow-sm',
         )}
     >
         {children}
@@ -49,7 +49,7 @@ const QuestionCardShell = ({ children, isSelected, hasError }: QuestionCardShell
 
 const ChoiceRow = ({ label, type = 'radio' }: { label: string; type?: 'radio' | 'checkbox' }) => (
     <div className="flex items-center gap-2 py-1">
-        <div className={cn('w-4 h-4 border border-border flex-shrink-0', type === 'radio' ? 'rounded-full' : 'rounded-sm')} />
+        <div className={cn('w-4 h-4 border border-border-ui flex-shrink-0', type === 'radio' ? 'rounded-full' : 'rounded-sm')} />
         <span className="text-sm text-foreground">{label}</span>
     </div>
 );
@@ -97,12 +97,12 @@ const BlockCard = ({
                 isDragging && 'opacity-50',
                 isSelected && 'border-2 border-primary shadow-md',
                 !isSelected && isHovered && 'border-primary/50 shadow-sm',
-                !isSelected && !isHovered && 'border-border',
+                !isSelected && !isHovered && 'border-border-ui',
                 isDashed && 'border-dashed',
             )}
         >
             {/* Header */}
-            <div className={cn('flex items-center justify-between px-4 py-3', !isCollapsed && 'border-b border-border')}>
+            <div className={cn('flex items-center justify-between px-4 py-3', !isCollapsed && 'border-b border-border-ui')}>
                 <div className="flex items-center gap-2 cursor-grab">
                     <span className="material-symbols-rounded text-base text-muted-foreground opacity-0 group-hover:opacity-100 select-none">
                         drag_indicator

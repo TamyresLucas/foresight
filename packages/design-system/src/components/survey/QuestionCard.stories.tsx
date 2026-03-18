@@ -43,7 +43,7 @@ const CardShell = ({ children, isSelected, hasError, isDashed, className }: Card
             isSelected && hasError && 'border-destructive shadow-md',
             isSelected && !hasError && 'border-primary shadow-md',
             !isSelected && isDashed && 'border-dashed border-primary/50',
-            !isSelected && !isDashed && 'border-border hover:border-primary/40 hover:shadow-sm',
+            !isSelected && !isDashed && 'border-border-ui hover:border-primary/40 hover:shadow-sm',
             className
         )}
     >
@@ -60,7 +60,7 @@ const QuestionText = ({ children }: { children: React.ReactNode }) => (
 // ---------------------------------------------------------------------------
 const ChoiceRow = ({ label, type = 'radio' }: { label: string; type?: 'radio' | 'checkbox' }) => (
     <div className="flex items-center gap-2 py-1">
-        <div className={cn('w-4 h-4 border border-border flex-shrink-0', type === 'radio' ? 'rounded-full' : 'rounded-sm')} />
+        <div className={cn('w-4 h-4 border border-border-ui flex-shrink-0', type === 'radio' ? 'rounded-full' : 'rounded-sm')} />
         <span className="text-sm text-foreground">{label}</span>
     </div>
 );
@@ -92,7 +92,7 @@ const meta: Meta = {
 ### States
 | State | Border | Shadow |
 |-------|--------|--------|
-| Default | \`border-border\` | none |
+| Default | \`border-border-ui\` | none |
 | Hovered | \`border-primary/40\` | sm |
 | Selected | \`border-primary\` | md |
 | Selected + Logic Error | \`border-destructive\` | md |

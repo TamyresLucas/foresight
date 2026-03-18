@@ -32,11 +32,11 @@ const PageBreak = ({ pageNumber, pageName, isSelected, isDragging }: PageBreakPr
 
             {/* Rule + pill */}
             <div className="flex items-center gap-4 text-muted-foreground w-full">
-                <div className="flex-grow h-px bg-border" />
+                <div className="flex-grow h-px bg-border-ui" />
 
-                <div className="flex-shrink-0 flex items-stretch border border-border rounded-full overflow-hidden hover:border-primary/50 transition-colors">
+                <div className="flex-shrink-0 flex items-stretch border border-border-ui rounded-full overflow-hidden hover:border-primary/50 transition-colors">
                     {/* Page number badge */}
-                    <span className="bg-muted px-3 py-1.5 text-xs font-bold text-foreground border-r border-border">
+                    <span className="bg-muted px-3 py-1.5 text-xs font-bold text-foreground border-r border-border-ui">
                         P{pageNumber}
                     </span>
                     {/* Page name */}
@@ -45,7 +45,7 @@ const PageBreak = ({ pageNumber, pageName, isSelected, isDragging }: PageBreakPr
                     </span>
                 </div>
 
-                <div className="flex-grow h-px bg-border" />
+                <div className="flex-grow h-px bg-border-ui" />
             </div>
 
             {/* Overflow actions — right, visible on hover */}
@@ -63,7 +63,7 @@ const PageBreak = ({ pageNumber, pageName, isSelected, isDragging }: PageBreakPr
 // ---------------------------------------------------------------------------
 
 const ContextCard = ({ id, label, children }: { id: string; label: string; children: React.ReactNode }) => (
-    <div className="p-4 rounded-lg border border-border bg-card grid items-start gap-x-4 grid-cols-[auto_1fr]">
+    <div className="p-4 rounded-lg border border-border-ui bg-card grid items-start gap-x-4 grid-cols-[auto_1fr]">
         <div className="flex items-center justify-center w-5 text-muted-foreground">
             <span className="material-symbols-rounded text-base select-none">drag_indicator</span>
         </div>
