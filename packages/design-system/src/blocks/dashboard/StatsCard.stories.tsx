@@ -53,19 +53,19 @@ export const SimpleWithNegativeTrend: Story = {
 }
 
 // ============================================================================
-// Variant 3: Monetary Value
+// Variant 3: Primary
 // ============================================================================
 
 /**
- * Stats card for displaying monetary/currency values.
- * Includes currency formatting in the value.
+ * Stats card with primary color background and contrasting text.
+ * Use to highlight a key metric with brand emphasis.
  */
-export const MonetaryValue: Story = {
+export const Primary: Story = {
     args: {
         title: "Survey Revenue",
         value: "$98.1M",
-        trend: { value: 0.4, type: "positive" },
-        comparison: <><span className="text-[hsl(var(--success))]">+$0.3M</span> since last month</>,
+        variant: "primary",
+        comparison: "+$0.3M since last month",
     },
 }
 
@@ -198,8 +198,8 @@ export const AllVariations: Story = {
                 <StatsCard
                     title="Survey Revenue"
                     value="$98.1M"
-                    trend={{ value: 0.4, type: "positive" }}
-                    comparison={<><span className="text-[hsl(var(--success))]">+$0.3M</span> since last month</>}
+                    variant="primary"
+                    comparison="+$0.3M since last month"
                 />
                 <StatsCard
                     title="Active Surveys"

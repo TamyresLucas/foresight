@@ -107,6 +107,8 @@ export interface StatsCardProps {
   metrics?: StatsMetric[];
   /** Progress segments (for progress bar variant) */
   progress?: StatsProgressItem[];
+  /** Card color scheme */
+  variant?: "default" | "primary";
   /** Additional CSS classes */
   className?: string;
 }
@@ -222,24 +224,26 @@ const StatsCard = React.forwardRef<HTMLDivElement, StatsCardProps>(
       items,
       metrics,
       progress,
+      variant = "default",
       className,
       ...props
     },
     ref,
   ) => {
+    const isPrimary = variant === "primary";
     return (
       <Card
         ref={ref}
-        variant="default"
+        variant={isPrimary ? "primary" : "default"}
         className={cn("w-full", className)}
         {...props}
       >
         <CardHeader className="pb-2">
-          <CardDescription className="text-sm font-medium">
+          <CardDescription className={cn("text-sm font-medium", isPrimary && "text-primary-foreground/70")}>
             {title}
           </CardDescription>
           {subtitle && (
-            <CardTitle className="text-xs font-normal text-muted-foreground">
+            <CardTitle className={cn("text-xs font-normal", isPrimary ? "text-primary-foreground/60" : "text-muted-foreground")}>
               {subtitle}
             </CardTitle>
           )}
@@ -248,14 +252,14 @@ const StatsCard = React.forwardRef<HTMLDivElement, StatsCardProps>(
           {/* Main Value */}
           {value !== undefined && (
             <div className="flex flex-wrap items-baseline gap-2">
-              <span className="whitespace-nowrap text-3xl font-bold tracking-tight">{value}</span>
+              <span className={cn("whitespace-nowrap text-3xl font-bold tracking-tight", isPrimary && "text-primary-foreground")}>{value}</span>
               {trend && <TrendIndicator trend={trend} />}
             </div>
           )}
 
           {/* Comparison Text */}
           {comparison && (
-            <p className="text-xs text-foreground/50">{comparison}</p>
+            <p className={cn("text-xs", isPrimary ? "text-primary-foreground/60" : "text-foreground/50")}>{comparison}</p>
           )}
 
           {/* Metrics Grid */}

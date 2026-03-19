@@ -8,6 +8,7 @@ const cardVariants = cva("rounded-lg border border-border-subtle", {
   variants: {
     variant: {
       default: "bg-card text-card-foreground",
+      primary: "bg-primary text-primary-foreground border-primary/20",
       destructive:
         "border-destructive/40 text-foreground [&>svg]:text-destructive [&>.material-symbols-rounded]:text-destructive bg-[hsl(var(--destructive))]",
       success:
