@@ -168,7 +168,7 @@ function ItemsList({ items }: { items: StatsListItem[] }) {
 function ProgressStack({ segments }: { segments: StatsProgressItem[] }) {
   return (
     <div className="space-y-3">
-      <div className="flex h-3 w-full gap-2">
+      <div className="flex h-3 w-full gap-1">
         {segments.map((segment, index) => (
           <div
             key={index}
@@ -259,7 +259,7 @@ const StatsCard = React.forwardRef<HTMLDivElement, StatsCardProps>(
 
           {/* Comparison Text */}
           {comparison && (
-            <p className={cn("text-xs", isPrimary ? "text-primary-foreground/60" : "text-foreground/50")}>{comparison}</p>
+            <p className={cn("text-xs", isPrimary ? "text-primary-foreground/60" : "text-muted-foreground")}>{comparison}</p>
           )}
 
           {/* Metrics Grid */}

@@ -31,7 +31,7 @@ export const SimpleWithPositiveTrend: Story = {
         title: "Total Responses",
         value: "122,380",
         trend: { value: 15.1, type: "positive" },
-        comparison: <><span className="text-[hsl(var(--success))]">+16,458</span> since last month</>,
+        comparison: <><span className="font-semibold text-success">+16,458</span><span className="text-muted-foreground"> since last month</span></>,
     },
 }
 
@@ -48,24 +48,24 @@ export const SimpleWithNegativeTrend: Story = {
         title: "Abandonment Rate",
         value: "1.9M",
         trend: { value: 2, type: "negative" },
-        comparison: <><span className="text-[hsl(var(--destructive))]">-0.1M</span> since last month</>,
+        comparison: <><span className="font-semibold text-destructive">-0.1M</span><span className="text-muted-foreground"> since last month</span></>,
     },
 }
 
 // ============================================================================
-// Variant 3: Primary
+// Variant 3: Quotas
 // ============================================================================
 
 /**
  * Stats card with primary color background and contrasting text.
- * Use to highlight a key metric with brand emphasis.
+ * Use to highlight a key metric with brand emphasis, like quota completion.
  */
-export const Primary: Story = {
+export const Quotas: Story = {
     args: {
-        title: "Survey Revenue",
-        value: "$98.1M",
+        title: "Quotas",
+        value: "72%",
         variant: "primary",
-        comparison: "+$0.3M since last month",
+        comparison: "Completed",
     },
 }
 
@@ -82,7 +82,7 @@ export const LargeNumber: Story = {
         title: "Active Surveys",
         value: "48,210",
         trend: { value: 3.7, type: "positive" },
-        comparison: <><span className="text-[hsl(var(--success))]">+1,730</span> since last month</>,
+        comparison: <><span className="font-semibold text-success">+1,730</span><span className="text-muted-foreground"> since last month</span></>,
     },
 }
 
@@ -187,25 +187,25 @@ export const AllVariations: Story = {
                     title="Total Responses"
                     value="122,380"
                     trend={{ value: 15.1, type: "positive" }}
-                    comparison={<><span className="text-[hsl(var(--success))]">+16,458</span> since last month</>}
+                    comparison={<><span className="font-semibold text-success">+16,458</span><span className="text-muted-foreground"> since last month</span></>}
                 />
                 <StatsCard
                     title="Abandonment Rate"
                     value="1.9M"
                     trend={{ value: 2, type: "negative" }}
-                    comparison={<><span className="text-[hsl(var(--destructive))]">-0.1M</span> since last month</>}
+                    comparison={<><span className="font-semibold text-destructive">-0.1M</span><span className="text-muted-foreground"> since last month</span></>}
                 />
                 <StatsCard
-                    title="Survey Revenue"
-                    value="$98.1M"
+                    title="Quotas"
+                    value="72%"
                     variant="primary"
-                    comparison="+$0.3M since last month"
+                    comparison="Completed"
                 />
                 <StatsCard
                     title="Active Surveys"
                     value="48,210"
                     trend={{ value: 3.7, type: "positive" }}
-                    comparison={<><span className="text-[hsl(var(--success))]">+1,730</span> since last month</>}
+                    comparison={<><span className="font-semibold text-success">+1,730</span><span className="text-muted-foreground"> since last month</span></>}
                 />
                 <StatsCard
                     title="Survey Status"

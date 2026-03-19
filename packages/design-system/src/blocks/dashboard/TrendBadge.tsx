@@ -21,8 +21,8 @@ export function TrendBadge({ type, value, className }: TrendBadgeProps) {
       className={cn(
         "inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap",
         type === "positive"
-          ? "bg-[hsl(var(--success))] text-[hsl(var(--success-foreground))]"
-          : "bg-[hsl(var(--destructive))] text-[hsl(var(--destructive-foreground))]",
+          ? "bg-success text-success-foreground"
+          : "bg-destructive text-destructive-foreground",
         className,
       )}
     >
