@@ -316,7 +316,7 @@ const StatsCard = React.forwardRef<HTMLDivElement, StatsCardProps>(
             </div>
           </CardHeader>
         ) : (
-          <CardHeader className="flex-row items-center justify-between gap-2 pb-1">
+          <CardHeader className="flex-row items-center justify-between gap-2 space-y-0 pb-1">
             <div>
               <CardDescription className="text-sm font-medium text-card-foreground">
                 {title}
