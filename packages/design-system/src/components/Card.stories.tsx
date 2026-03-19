@@ -10,7 +10,7 @@ import {
 import { Button } from './ui/button';
 
 const meta = {
-    title: 'ShadCn/Dashboard UI/Overlay/Card',
+    title: 'ShadCn/Overlay/Card',
     component: Card,
     parameters: {
         layout: 'centered',

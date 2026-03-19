@@ -1,6 +1,9 @@
 // Dashboard Blocks
 // Composite components for building dashboard interfaces
 
+export { TrendBadge } from "./TrendBadge"
+export type { TrendBadgeProps, TrendBadgeType } from "./TrendBadge"
+
 export { StatsCard } from "./StatsCard"
 export type {
     StatsCardProps,

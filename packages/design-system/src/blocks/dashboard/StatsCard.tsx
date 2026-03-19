@@ -8,8 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { TrendingUp, TrendingDown, Minus } from "../../components/ui/icons";
+import { Minus } from "../../components/ui/icons";
+import { TrendBadge } from "./TrendBadge";
 
 // ============================================================================
 // Types
@@ -101,37 +101,15 @@ export interface StatsCardProps {
 // ============================================================================
 
 function TrendIndicator({ trend }: { trend: StatsTrend }) {
-  const Icon =
-    trend.type === "positive"
-      ? TrendingUp
-      : trend.type === "negative"
-        ? TrendingDown
-        : Minus;
-
-  const variant =
-    trend.type === "positive"
-      ? "success"
-      : trend.type === "negative"
-        ? "destructive"
-        : "secondary";
-
-  const prefix = trend.type === "positive" ? "+" : "";
-
-  const ariaLabel =
-    trend.type === "positive"
-      ? `Increase of ${trend.value} percent`
-      : trend.type === "negative"
-        ? `Decrease of ${trend.value} percent`
-        : `No change, ${trend.value} percent`;
-
+  if (trend.type === "positive" || trend.type === "negative") {
+    return <TrendBadge type={trend.type} value={trend.value} />;
+  }
+  // neutral
   return (
-    <Badge variant={variant as any} className="gap-1" aria-label={ariaLabel}>
-      <Icon className="h-3 w-3" aria-hidden="true" />
-      <span aria-hidden="true">
-        {prefix}
-        {trend.value}%
-      </span>
-    </Badge>
+    <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-0.5 text-xs font-semibold text-secondary-foreground">
+      <Minus className="h-3 w-3" aria-hidden="true" />
+      <span>{trend.value}%</span>
+    </span>
   );
 }
 
@@ -238,17 +216,10 @@ const StatsCard = React.forwardRef<HTMLDivElement, StatsCardProps>(
     },
     ref,
   ) => {
-    const cardVariant =
-      trend?.type === "negative"
-        ? "destructive"
-        : trend?.type === "positive"
-          ? "success"
-          : ("default" as any);
-
     return (
       <Card
         ref={ref}
-        variant={cardVariant}
+        variant="default"
         className={cn("w-full", className)}
         {...props}
       >

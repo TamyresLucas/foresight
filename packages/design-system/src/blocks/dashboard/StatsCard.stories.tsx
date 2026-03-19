@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react"
 import { StatsCard } from "./StatsCard"
 
 const meta: Meta<typeof StatsCard> = {
-    title: "ShadCn/Dashboard UI/Cards/Stats Cards",
+    title: "ShadCn/Dashboard UI/Cards/Hero Cards",
     component: StatsCard,
     parameters: {
         layout: "padded",
