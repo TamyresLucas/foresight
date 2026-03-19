@@ -47,6 +47,22 @@ const statsColorVariants = cva("", {
   },
 });
 
+const progressColorVariants = cva("", {
+  variants: {
+    color: {
+      primary: "bg-[hsl(var(--chart-1))]",
+      secondary: "bg-[hsl(var(--chart-2))]",
+      success: "bg-[hsl(var(--chart-positive))]",
+      warning: "bg-[hsl(var(--chart-3))]",
+      destructive: "bg-[hsl(var(--destructive))]",
+      muted: "bg-muted",
+    },
+  },
+  defaultVariants: {
+    color: "primary",
+  },
+});
+
 export interface StatsListItem {
   /** Label for the item */
   label: string;
@@ -150,13 +166,13 @@ function ItemsList({ items }: { items: StatsListItem[] }) {
 function ProgressStack({ segments }: { segments: StatsProgressItem[] }) {
   return (
     <div className="space-y-3">
-      <div className="flex h-3 w-full overflow-hidden rounded-full bg-secondary">
+      <div className="flex h-3 w-full gap-2">
         {segments.map((segment, index) => (
           <div
             key={index}
             className={cn(
-              "h-full transition-all",
-              statsColorVariants({ color: segment.color || "primary" }),
+              "h-full rounded-full transition-all",
+              progressColorVariants({ color: segment.color || "primary" }),
             )}
             style={{ width: `${segment.percentage}%` }}
           />
@@ -168,7 +184,7 @@ function ProgressStack({ segments }: { segments: StatsProgressItem[] }) {
             <div
               className={cn(
                 "h-2 w-2 rounded-full",
-                statsColorVariants({ color: segment.color || "primary" }),
+                progressColorVariants({ color: segment.color || "primary" }),
               )}
             />
             <span className="text-muted-foreground">{segment.label}</span>
