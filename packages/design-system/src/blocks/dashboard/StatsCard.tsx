@@ -237,7 +237,7 @@ const StatsCard = React.forwardRef<HTMLDivElement, StatsCardProps>(
 
           {/* Comparison Text */}
           {comparison && (
-            <p className="text-xs text-muted-foreground">{comparison}</p>
+            <p className="text-xs text-foreground/50">{comparison}</p>
           )}
 
           {/* Metrics Grid */}
