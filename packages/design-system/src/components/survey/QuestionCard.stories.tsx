@@ -99,7 +99,17 @@ const meta: Meta = {
                 component: `
 **QuestionCard** is the primary editing unit in the Survey Canvas. Each question in a survey is represented by one card.
 
+### Supported question types
+
+| Type | Input preview |
+|------|---------------|
+| Multiple Choice (radio) | Circular radio options |
+| Multiple Choice (checkbox) | Square checkbox options |
+| Text Entry | Muted placeholder text area |
+| Description / Info | Plain text block, no input |
+
 ### States
+
 | State | Border | Shadow |
 |-------|--------|--------|
 | Default | \`border-border-ui\` | none |
@@ -110,12 +120,14 @@ const meta: Meta = {
 
 ### Logic alerts (inside question card)
 
-Logic can be configured on any question (skip logic, display logic, branching). The alert appears inside the card footer.
+Logic can be configured on any question (skip logic, display logic, branching). When a rule is configured, an \`Alert\` is rendered at the bottom of the card content area.
 
-| State | When |
-|-------|------|
-| Default | Rule is valid — shows the configured logic condition |
-| Error | Rule is broken — references a deleted question, choice, or page |
+| State | Variant | Icon | When |
+|-------|---------|------|------|
+| Default | default (neutral) | \`account_tree\` | Rule is valid — shows the configured logic condition text |
+| Error | \`destructive\` | \`error\` | Rule is broken — references a deleted question, choice, or page |
+
+The dashed-border display logic state (\`isDashed\`) is used when the question's visibility is controlled by a logic rule — a \`Display Logic\` badge appears in the header alongside the type badge.
                 `,
             },
         },

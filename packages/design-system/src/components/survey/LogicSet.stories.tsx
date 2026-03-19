@@ -429,7 +429,45 @@ function LogicSetDisplay({
 const meta = {
     title: 'Survey Builder/Logic/LogicSet',
     component: LogicSetDisplay,
-    parameters: { layout: 'padded' },
+    parameters: {
+        layout: 'padded',
+        docs: {
+            description: {
+                component: `
+**LogicSet** is the condition editor used throughout the Survey Builder to configure skip logic, display logic, branching rules, and choice visibility rules.
+
+### States
+
+| State | Border | Background | Footer |
+|-------|--------|------------|--------|
+| Empty | — | — | "+ Add logic set" ghost button only |
+| Unconfirmed | \`border-primary\` | \`bg-muted shadow-sm\` | Cancel + Apply |
+| Confirmed | \`border-border-ui\` | \`bg-muted/50\` | Delete only |
+| Validation error | \`border-destructive/40\` | — | Cancel + Apply, invalid selects highlighted |
+
+### Header patterns
+
+The header content changes depending on the rule type:
+
+| Rule type | Header |
+|-----------|--------|
+| Display question logic | Show/Hide select + question ID + "if" |
+| Display choice logic | Show/Hide select + choice ID select + "if" |
+| Skip logic | "Skip to" + question select + "if" |
+| Branching logic | "Branch to" + block select + "if" |
+| Generic | "Logic Set" label + "if" |
+
+### Multiple conditions
+
+When two or more conditions are added, an **AND / OR** toggle badge row appears above the conditions list and each row gets a numeric index. The toggle uses three states: \`default\` (selected), \`secondary\` (hovered), \`outline\` (inactive).
+
+### Operators
+
+Operators that do not require a value (\`is_empty\`, \`is_not_empty\`) hide the value select column to keep the layout clean.
+                `,
+            },
+        },
+    },
     tags: ['autodocs'],
 } satisfies Meta<typeof LogicSetDisplay>;
 

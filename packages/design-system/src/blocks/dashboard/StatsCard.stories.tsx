@@ -7,6 +7,57 @@ const meta: Meta<typeof StatsCard> = {
     component: StatsCard,
     parameters: {
         layout: "padded",
+        docs: {
+            description: {
+                component: `
+**StatsCard** is the primary KPI/metric card used in survey dashboards. It supports multiple display modes depending on what data needs to be surfaced.
+
+### Props overview
+
+| Prop | Type | Description |
+|------|------|-------------|
+| \`title\` | \`string\` | Card label (e.g. "Quota", "Completed") |
+| \`value\` | \`string\` | Main displayed value |
+| \`variant\` | \`"default" \\| "primary"\` | \`primary\` renders with brand background and inverted text |
+| \`trend\` | \`{ value: number; type: "positive" \\| "negative" \\| "neutral" }\` | Percentage change badge. Non-neutral trends also show an \`ArrowUpRight\` action button |
+| \`comparison\` | \`ReactNode \\| string\` | Supporting text below the value (e.g. "+200 since last month") |
+| \`icon\` | \`ReactNode\` | 16×16 icon rendered above the title — useful for neutral-trend cards to communicate category at a glance |
+| \`items\` | \`StatsListItem[]\` | Renders a colored-dot list (e.g. Quota Strata breakdown) |
+| \`metrics\` | \`StatsMetric[]\` | Renders a 2-column grid of label/value pairs (e.g. Distribution Status) |
+| \`progress\` | \`StatsProgress[]\` | Renders a stacked segmented progress bar (e.g. survey response categories) |
+
+### SemanticColor tokens
+
+Used on \`items[].color\` and \`progress[].color\`:
+
+| Token | Visual | Use case |
+|-------|--------|----------|
+| \`success\` | Green | Completed, positive outcomes |
+| \`secondary\` | Teal / mint | Drop Outs, neutral secondary |
+| \`primary\` | Brand blue | Quota met / primary category |
+| \`warning\` | Amber | Half-closed, at-risk |
+| \`destructive\` | Red | — |
+| \`muted\` | Grey | Subdued data |
+| \`chart4\` | Purple | Quota Met/Closed |
+| \`chart8\` | Grey | Screened out |
+| \`negative\` | Red | Interrupted / errors |
+
+### Arrow button
+
+An \`ArrowUpRight\` circular outline button is automatically rendered in the card header **only when** \`trend.type\` is \`"positive"\` or \`"negative"\`. It does not appear on neutral-trend or trendless cards.
+
+### List item badges
+
+Each item in the \`items\` array can carry a \`badge\` string and \`badgeVariant\` to communicate status inline next to the label:
+
+| Status | Variant |
+|--------|---------|
+| Open | \`secondary\` |
+| Closed | \`success\` |
+| Half-closed | \`warning\` |
+                `,
+            },
+        },
     },
     argTypes: {
         trend: {
@@ -59,7 +110,8 @@ export const SimpleWithNegativeTrend: Story = {
 
 /**
  * Stats card with primary color background and contrasting text.
- * Use to highlight a key metric with brand emphasis.
+ * Used for the Quota status indicator — shows a simple state value ("Open", "Closed", etc.)
+ * without a trend badge. No arrow button is rendered since there is no trend.
  */
 export const Primary: Story = {
     args: {
@@ -91,8 +143,9 @@ export const LargeNumber: Story = {
 // ============================================================================
 
 /**
- * Stats card showing a neutral/unchanged trend.
- * For metrics that are stable.
+ * Stats card with a neutral (unchanged) trend. The TrendBadge shows 0% and the
+ * ArrowUpRight action button is hidden — it only appears for positive or negative trends.
+ * An `icon` is rendered above the title to communicate the metric category at a glance.
  */
 export const NeutralTrend: Story = {
     args: {
@@ -109,8 +162,10 @@ export const NeutralTrend: Story = {
 // ============================================================================
 
 /**
- * Stats card with a list of items showing distribution.
- * Perfect for "Survey Status" or "Category Breakdown".
+ * Stats card displaying a Quota Strata breakdown. Each item shows a color-coded dot,
+ * a label (demographic group), a completed/goal value (e.g. "320/500"), and an inline
+ * status badge. Badge variants map to quota status: `secondary` = Open, `success` = Closed,
+ * `warning` = Half-closed. The `chart4` color token (purple) is used for the Age Group stratum.
  */
 export const WithList: Story = {
     args: {
@@ -129,8 +184,10 @@ export const WithList: Story = {
 // ============================================================================
 
 /**
- * Stats card with a grid of multiple metrics.
- * Ideal for "Website Analytics" or "Performance Overview".
+ * Stats card displaying email distribution summary metrics in a 2-column grid.
+ * Used for the "Distribution Status" panel — shows invitation funnel data:
+ * total invitations sent, delivered, undelivered, and computed rates.
+ * No trend or progress bar — data is purely informational.
  */
 export const WithMultipleMetrics: Story = {
     args: {
@@ -150,8 +207,15 @@ export const WithMultipleMetrics: Story = {
 // ============================================================================
 
 /**
- * Stats card with stacked progress bar showing distribution.
- * Great for "Goal Tracking" or "Response Quota".
+ * Stats card showing total completed responses with a stacked progress bar breaking
+ * down response disposition categories. Semantic chart color tokens are used:
+ * - `success` (green) → Completed
+ * - `chart4` (purple) → Quota Met/Closed
+ * - `chart8` (grey) → Screened out
+ * - `negative` (red) → Interrupted
+ * - `secondary` (teal) → Drop Outs
+ *
+ * A positive trend shows the TrendBadge and the ArrowUpRight action button.
  */
 export const WithProgressBar: Story = {
     args: {

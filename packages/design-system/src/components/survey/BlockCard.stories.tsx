@@ -176,6 +176,12 @@ const meta: Meta = {
                 component: `
 **BlockCard** is the top-level container in the Survey Canvas. Each survey is made up of one or more blocks, each holding an ordered list of question cards.
 
+### Anatomy
+
+- **Header**: drag handle, collapse toggle, block ID (e.g. \`B1\`), block title, question count, actions menu
+- **Body**: ordered list of QuestionCard items, separated by PageBreaks when multi-page
+- **Logic alerts**: rendered inside the body at the edges (before or after all questions), never between questions
+
 ### States
 
 | State | Border | Shadow |
@@ -185,19 +191,27 @@ const meta: Meta = {
 | Selected | \`border-2 border-primary\` | md |
 | Dragging | normal border + \`opacity-50\` | — |
 | Collapsed | header only, body hidden | — |
+| Empty | body shows a dashed drop zone | — |
 
-### Branching logic alerts (block-level, outside question cards)
+### Branching logic alerts (block-level)
 
 Logic alerts appear at the **edges** of the block body — never between questions.
 
-| Position | Direction | When |
-|----------|-----------|------|
-| **Before** all questions | Incoming ("de") | This block is the destination of a branch from a previous block |
-| **After** all questions | Outgoing ("para") | This block sends respondents to another block based on answers |
+| Position | Alert type | When |
+|----------|------------|------|
+| **First child** (before questions) | Incoming | This block is the destination of a branch from a previous block |
+| **Last child** (after questions) | Outgoing | This block routes respondents to another block based on answers |
 
-Each position supports two states: default (valid rule) and error (broken rule).
+Both positions support two states:
 
-Question cards themselves may also carry logic alerts (inside) with the same two states.
+| State | Component | When |
+|-------|-----------|------|
+| Default | \`FlowLogicAlert\` (neutral) | Rule is valid — shows the branch condition |
+| Error | \`FlowLogicErrorAlert\` (destructive) | Rule is broken — branch target or source was deleted |
+
+### Question-level logic
+
+Individual QuestionCards inside a block may also carry their own logic alerts (skip logic, display logic). These appear inside the card, not at the block edges.
 `,
             },
         },

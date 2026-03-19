@@ -6,6 +6,27 @@ const meta: Meta<typeof TrendBadge> = {
     component: TrendBadge,
     parameters: {
         layout: "centered",
+        docs: {
+            description: {
+                component: `
+**TrendBadge** is a compact inline badge used inside StatsCard to communicate directional change.
+
+### Props
+
+| Prop | Type | Description |
+|------|------|-------------|
+| \`type\` | \`"positive" \\| "negative"\` | Controls color and arrow direction |
+| \`value\` | \`number\` | Percentage value displayed (e.g. \`15.1\` → "+15.1%") |
+
+### Behavior in StatsCard
+
+- \`positive\` → green badge with upward arrow (↑)
+- \`negative\` → red badge with downward arrow (↓)
+- When \`type\` is \`"neutral"\`, **no TrendBadge is rendered** — the StatsCard uses plain text instead
+- Non-neutral trends also trigger an \`ArrowUpRight\` circular outline button in the card header
+                `,
+            },
+        },
     },
     argTypes: {
         type: {
