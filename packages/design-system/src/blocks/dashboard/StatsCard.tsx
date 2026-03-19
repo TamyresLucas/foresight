@@ -8,6 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ArrowUpRight } from "@/components/ui/icons";
 import { TrendBadge } from "./TrendBadge";
 
 // ============================================================================
@@ -29,7 +32,10 @@ export type SemanticColor =
   | "success"
   | "warning"
   | "destructive"
-  | "muted";
+  | "muted"
+  | "chart4"
+  | "chart8"
+  | "negative";
 
 const statsColorVariants = cva("", {
   variants: {
@@ -40,6 +46,9 @@ const statsColorVariants = cva("", {
       warning: "bg-warning",
       destructive: "bg-destructive",
       muted: "bg-muted",
+      chart4: "bg-[hsl(var(--chart-4))]",
+      chart8: "bg-[hsl(var(--chart-8))]",
+      negative: "bg-[hsl(var(--chart-negative))]",
     },
   },
   defaultVariants: {
@@ -56,6 +65,9 @@ const progressColorVariants = cva("", {
       warning: "bg-[hsl(var(--chart-3))]",
       destructive: "bg-[hsl(var(--destructive))]",
       muted: "bg-muted",
+      chart4: "bg-[hsl(var(--chart-4))]",
+      chart8: "bg-[hsl(var(--chart-8))]",
+      negative: "bg-[hsl(var(--chart-negative))]",
     },
   },
   defaultVariants: {
@@ -70,6 +82,10 @@ export interface StatsListItem {
   value: string;
   /** Optional secondary value (e.g., amount) */
   amount?: string;
+  /** Optional status badge label */
+  badge?: string;
+  /** Optional badge variant */
+  badgeVariant?: "default" | "secondary" | "destructive" | "outline" | "success" | "warning";
   /** Optional semantic color for visual distinction */
   color?: SemanticColor;
 }
@@ -107,6 +123,8 @@ export interface StatsCardProps {
   metrics?: StatsMetric[];
   /** Progress segments (for progress bar variant) */
   progress?: StatsProgressItem[];
+  /** Optional icon displayed above the title */
+  icon?: React.ReactNode;
   /** Card color scheme */
   variant?: "default" | "primary";
   /** Additional CSS classes */
@@ -152,6 +170,9 @@ function ItemsList({ items }: { items: StatsListItem[] }) {
               />
             )}
             <span className="text-sm font-medium">{item.label}</span>
+            {item.badge && (
+              <Badge variant={item.badgeVariant ?? "outline"} className="text-xs">{item.badge}</Badge>
+            )}
           </div>
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">{item.value}</span>
@@ -224,6 +245,7 @@ const StatsCard = React.forwardRef<HTMLDivElement, StatsCardProps>(
       items,
       metrics,
       progress,
+      icon,
       variant = "default",
       className,
       ...props
@@ -238,14 +260,30 @@ const StatsCard = React.forwardRef<HTMLDivElement, StatsCardProps>(
         className={cn("w-full", className)}
         {...props}
       >
-        <CardHeader className="pb-2">
-          <CardDescription className={cn("text-sm font-medium", isPrimary && "text-primary-foreground/70")}>
-            {title}
-          </CardDescription>
+        <CardHeader className="flex-row items-start justify-between pb-2">
+          <div>
+            {icon && (
+              <div className={cn("mb-1.5 h-4 w-4", isPrimary ? "text-primary-foreground/70" : "text-muted-foreground")}>
+                {icon}
+              </div>
+            )}
+            <CardDescription className={cn("text-sm font-medium", isPrimary && "text-primary-foreground/70")}>
+              {title}
+            </CardDescription>
           {subtitle && (
             <CardTitle className={cn("text-xs font-normal", isPrimary ? "text-primary-foreground/60" : "text-muted-foreground")}>
               {subtitle}
             </CardTitle>
+          )}
+          </div>
+          {trend && trend.type !== "neutral" && (
+            <Button
+              variant="outline"
+              size="icon"
+              className={cn("h-7 w-7 shrink-0 rounded-full", isPrimary && "border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10")}
+            >
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </Button>
           )}
         </CardHeader>
         <CardContent className="space-y-3">

@@ -7,12 +7,13 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
+import { TrendBadge } from "../blocks/dashboard/TrendBadge";
 
 // Stats Card Component
 interface StatsCardProps {
   title: string;
   value: string | number;
-  description?: string;
+  description?: React.ReactNode;
   icon?: React.ReactNode;
   trend?: {
     value: number;
@@ -36,18 +37,17 @@ const StatsCard = ({
         {icon && <div className="h-4 w-4 text-muted-foreground">{icon}</div>}
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
-        {(description || trend) && (
-          <div className="flex items-center gap-1 text-xs text-muted-foreground">
-            {trend && (
-              <span
-                className={trend.isPositive ? "text-green-600" : "text-red-600"}
-              >
-                {trend.isPositive ? "↑" : "↓"} {Math.abs(trend.value)}%
-              </span>
-            )}
-            {description && <span>{description}</span>}
-          </div>
+        <div className="flex flex-wrap items-baseline gap-2">
+          <div className="text-2xl font-bold whitespace-nowrap">{value}</div>
+          {trend && (
+            <TrendBadge
+              type={trend.isPositive ? "positive" : "negative"}
+              value={trend.value}
+            />
+          )}
+        </div>
+        {description && (
+          <p className="mt-1 text-xs text-muted-foreground">{description}</p>
         )}
       </CardContent>
     </Card>
@@ -154,7 +154,7 @@ export const WithTrend: Story = {
     title: "Response Rate",
     value: "72.5%",
     trend: { value: 12.5, isPositive: true },
-    description: "from last month",
+    description: <><span className="font-semibold text-success">+1,563 responses</span><span className="text-muted-foreground"> since last month</span></>,
     icon: <ChartIcon />,
   },
 };
@@ -164,7 +164,7 @@ export const NegativeTrend: Story = {
     title: "Bounce Rate",
     value: "24.3%",
     trend: { value: 4.2, isPositive: false },
-    description: "from last month",
+    description: <><span className="font-semibold text-destructive">-892 responses</span><span className="text-muted-foreground"> since last month</span></>,
     icon: <ChartIcon />,
   },
 };
@@ -186,21 +186,21 @@ export const SurveyDashboard: Story = {
         title="Total Responses"
         value="12,543"
         trend={{ value: 18.2, isPositive: true }}
-        description="from last month"
+        description={<><span className="font-semibold text-success">+1,923 responses</span><span className="text-muted-foreground"> since last month</span></>}
         icon={<UsersIcon />}
       />
       <StatsCard
         title="Avg. Completion Rate"
         value="87.3%"
         trend={{ value: 5.4, isPositive: true }}
-        description="from last month"
+        description={<><span className="font-semibold text-success">+4.5%</span><span className="text-muted-foreground"> since last month</span></>}
         icon={<CheckCircleIcon />}
       />
       <StatsCard
         title="Avg. Response Time"
         value="4m 23s"
         trend={{ value: 8.1, isPositive: false }}
-        description="slower than last month"
+        description={<><span className="font-semibold text-destructive">+21s slower</span><span className="text-muted-foreground"> since last month</span></>}
         icon={<ChartIcon />}
       />
     </div>
@@ -306,22 +306,22 @@ export const CompactStats: any = {
   render: () => (
     <div className="flex gap-6 w-full max-w-2xl">
       <div className="text-center">
-        <div className="text-3xl font-bold text-primary">24</div>
+        <div className="text-3xl font-bold text-foreground">24</div>
         <div className="text-sm text-muted-foreground">Active Surveys</div>
       </div>
       <div className="w-px bg-border" />
       <div className="text-center">
-        <div className="text-3xl font-bold text-primary">12.5k</div>
+        <div className="text-3xl font-bold text-foreground">12.5k</div>
         <div className="text-sm text-muted-foreground">Total Responses</div>
       </div>
       <div className="w-px bg-border" />
       <div className="text-center">
-        <div className="text-3xl font-bold text-green-600">87%</div>
+        <div className="text-3xl font-bold text-success">87%</div>
         <div className="text-sm text-muted-foreground">Completion Rate</div>
       </div>
       <div className="w-px bg-border" />
       <div className="text-center">
-        <div className="text-3xl font-bold text-primary">4.2</div>
+        <div className="text-3xl font-bold text-foreground">4.2</div>
         <div className="text-sm text-muted-foreground">Avg. Rating</div>
       </div>
     </div>

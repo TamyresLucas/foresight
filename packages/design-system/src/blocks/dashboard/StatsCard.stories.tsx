@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import { StatsCard } from "./StatsCard"
+import { Percent } from "../../components/ui/icons"
 
 const meta: Meta<typeof StatsCard> = {
     title: "ShadCn/Dashboard UI/Cards/Hero Cards",
@@ -53,19 +54,18 @@ export const SimpleWithNegativeTrend: Story = {
 }
 
 // ============================================================================
-// Variant 3: Quotas
+// Variant 3: Primary
 // ============================================================================
 
 /**
  * Stats card with primary color background and contrasting text.
- * Use to highlight a key metric with brand emphasis, like quota completion.
+ * Use to highlight a key metric with brand emphasis.
  */
-export const Quotas: Story = {
+export const Primary: Story = {
     args: {
-        title: "Quotas",
-        value: "72%",
+        title: "Quota",
+        value: "Open",
         variant: "primary",
-        comparison: "Completed",
     },
 }
 
@@ -100,6 +100,7 @@ export const NeutralTrend: Story = {
         value: "24.5%",
         trend: { value: 0, type: "neutral" },
         comparison: "No change since last month",
+        icon: <Percent />,
     },
 }
 
@@ -113,12 +114,12 @@ export const NeutralTrend: Story = {
  */
 export const WithList: Story = {
     args: {
-        title: "Survey Status",
+        title: "Quota Strata",
         items: [
-            { label: "Qualified", value: "24%", amount: "$267,800", color: "success" },
-            { label: "Proposal", value: "18%", amount: "$192,400", color: "primary" },
-            { label: "Negotiation", value: "12%", amount: "$129,600", color: "warning" },
-            { label: "Closed Won", value: "8%", amount: "$87,200", color: "secondary" },
+            { label: "Women", value: "320/500", color: "success", badge: "Open", badgeVariant: "secondary" },
+            { label: "Men", value: "200/200", color: "primary", badge: "Closed", badgeVariant: "success" },
+            { label: "Ethnicity", value: "80/150", color: "warning", badge: "Half-closed", badgeVariant: "warning" },
+            { label: "Age Group", value: "45/100", color: "chart4", badge: "Open", badgeVariant: "secondary" },
         ],
     },
 }
@@ -133,15 +134,13 @@ export const WithList: Story = {
  */
 export const WithMultipleMetrics: Story = {
     args: {
-        title: "Website Analytics",
-        subtitle: "Total conversion rate: 28.5%",
+        title: "Distribution Status",
         metrics: [
-            { label: "Direct", value: "432" },
-            { label: "Organic", value: "216" },
-            { label: "Sessions", value: "29%" },
-            { label: "Page Views", value: "2.3K" },
-            { label: "Leads", value: "1.6K" },
-            { label: "Conversions", value: "8%" },
+            { label: "Total Invitations", value: "19" },
+            { label: "Total Sent", value: "6,857" },
+            { label: "Total Undelivered", value: "478" },
+            { label: "Participation Rate", value: "1.46%" },
+            { label: "Undelivered Rate", value: "6.97%" },
         ],
     },
 }
@@ -156,13 +155,16 @@ export const WithMultipleMetrics: Story = {
  */
 export const WithProgressBar: Story = {
     args: {
-        title: "Response Goal",
-        value: "$42.5k",
-        subtitle: "+20.1% from last month",
+        title: "Completed",
+        value: "5000",
+        trend: { value: 12.5, type: "positive" },
+        comparison: <><span className="font-semibold text-success">+200</span><span className="text-muted-foreground"> since last month</span></>,
         progress: [
-            { label: "Orders", percentage: 62.2, color: "success" },
-            { label: "Visits", percentage: 25.5, color: "primary" },
-            { label: "Other", percentage: 12.3, color: "secondary" },
+            { label: "Completed", percentage: 38, color: "success" },
+            { label: "Quota Met/Closed", percentage: 22, color: "chart4" },
+            { label: "Screened out", percentage: 18, color: "chart8" },
+            { label: "Interrupted", percentage: 12, color: "negative" },
+            { label: "Drop Outs", percentage: 10, color: "secondary" },
         ],
     },
 }
@@ -196,10 +198,9 @@ export const AllVariations: Story = {
                     comparison={<><span className="font-semibold text-destructive">-0.1M</span><span className="text-muted-foreground"> since last month</span></>}
                 />
                 <StatsCard
-                    title="Quotas"
-                    value="72%"
+                    title="Quota"
+                    value="Open"
                     variant="primary"
-                    comparison="Completed"
                 />
                 <StatsCard
                     title="Active Surveys"
@@ -208,30 +209,35 @@ export const AllVariations: Story = {
                     comparison={<><span className="font-semibold text-success">+1,730</span><span className="text-muted-foreground"> since last month</span></>}
                 />
                 <StatsCard
-                    title="Survey Status"
+                    title="Quota Strata"
                     items={[
-                        { label: "Qualified", value: "24%", amount: "$267,800", color: "success" },
-                        { label: "Proposal", value: "18%", amount: "$192,400", color: "primary" },
-                        { label: "Negotiation", value: "12%", amount: "$129,600", color: "warning" },
+                        { label: "Women", value: "320/500", color: "success", badge: "Open", badgeVariant: "secondary" },
+                        { label: "Men", value: "200/200", color: "primary", badge: "Closed", badgeVariant: "success" },
+                        { label: "Ethnicity", value: "80/150", color: "warning", badge: "Half-closed", badgeVariant: "warning" },
+                        { label: "Age Group", value: "45/100", color: "chart4", badge: "Open", badgeVariant: "secondary" },
                     ]}
                 />
                 <StatsCard
-                    title="Website Analytics"
-                    subtitle="Total conversion rate: 28.5%"
+                    title="Distribution Status"
                     metrics={[
-                        { label: "Direct", value: "432" },
-                        { label: "Organic", value: "216" },
-                        { label: "Sessions", value: "29%" },
-                        { label: "Page Views", value: "2.3K" },
+                        { label: "Total Invitations", value: "19" },
+                        { label: "Total Sent", value: "6,857" },
+                        { label: "Total Undelivered", value: "478" },
+                        { label: "Participation Rate", value: "1.46%" },
+                        { label: "Undelivered Rate", value: "6.97%" },
                     ]}
                 />
                 <StatsCard
-                    title="Response Goal"
-                    value="$42.5k"
-                    subtitle="+20.1% from last month"
+                    title="Completed"
+                    value="5000"
+                    trend={{ value: 12.5, type: "positive" }}
+                    comparison={<><span className="font-semibold text-success">+200</span><span className="text-muted-foreground"> since last month</span></>}
                     progress={[
-                        { label: "Orders", percentage: 62.2, color: "success" },
-                        { label: "Visits", percentage: 25.5, color: "primary" },
+                        { label: "Completed", percentage: 38, color: "success" },
+                        { label: "Quota Met/Closed", percentage: 22, color: "chart4" },
+                        { label: "Screened out", percentage: 18, color: "chart8" },
+                        { label: "Interrupted", percentage: 12, color: "negative" },
+                        { label: "Drop Outs", percentage: 10, color: "secondary" },
                     ]}
                 />
                 <StatsCard
@@ -239,6 +245,7 @@ export const AllVariations: Story = {
                     value="24.5%"
                     trend={{ value: 0, type: "neutral" }}
                     comparison="No change since last month"
+                    icon={<Percent />}
                 />
             </div>
         </div>

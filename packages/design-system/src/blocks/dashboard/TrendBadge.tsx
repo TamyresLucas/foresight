@@ -27,7 +27,7 @@ export function TrendBadge({ type, value, className }: TrendBadgeProps) {
       )}
     >
       <Icon className="h-3 w-3" aria-hidden="true" />
-      <span>
+      <span className="font-semibold">
         {prefix}{value}%
       </span>
     </span>
