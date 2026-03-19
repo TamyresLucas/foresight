@@ -119,14 +119,22 @@ export interface StatsCardProps {
   subtitle?: string;
   /** List of items with values (for list variant) */
   items?: StatsListItem[];
+  /** Layout mode for items — "list" (default) or "grid" */
+  itemsLayout?: "list" | "grid";
   /** Grid of metrics (for multi-metric variant) */
   metrics?: StatsMetric[];
   /** Progress segments (for progress bar variant) */
   progress?: StatsProgressItem[];
-  /** Optional icon displayed above the title */
+  /** When true, shows an ArrowUpRight circular button in the top-right corner */
+  learnMore?: boolean;
+  /** Icon to display in the top-right corner (used when learnMore is false) */
   icon?: React.ReactNode;
-  /** Card color scheme */
-  variant?: "default" | "primary";
+  /**
+   * Compact stats shown inline in the header, right-aligned.
+   * Each item renders as a small label + bold value pair.
+   * Replaces the icon/learnMore slot when provided.
+   */
+  headerStats?: StatsMetric[];
   /** Additional CSS classes */
   className?: string;
 }
@@ -155,16 +163,37 @@ function MetricsGrid({ metrics }: { metrics: StatsMetric[] }) {
   );
 }
 
+function ItemsGrid({ items }: { items: StatsListItem[] }) {
+  return (
+    <div className="grid grid-cols-2 gap-x-4 gap-y-4">
+      {items.map((item, index) => (
+        <div key={index} className="space-y-1">
+          <div className="flex flex-wrap items-center gap-1.5">
+            {item.color && (
+              <div className={cn("h-2 w-2 shrink-0 rounded-full", statsColorVariants({ color: item.color }))} />
+            )}
+            <span className="text-xs text-muted-foreground">{item.label}</span>
+            {item.badge && (
+              <Badge variant={item.badgeVariant ?? "outline"} className="text-xs">{item.badge}</Badge>
+            )}
+          </div>
+          <p className="text-2xl font-bold">{item.value}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function ItemsList({ items }: { items: StatsListItem[] }) {
   return (
     <div className="space-y-3">
       {items.map((item, index) => (
         <div key={index} className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {item.color && (
               <div
                 className={cn(
-                  "h-2 w-2 rounded-full",
+                  "h-2 w-2 shrink-0 rounded-full",
                   statsColorVariants({ color: item.color }),
                 )}
               />
@@ -243,74 +272,110 @@ const StatsCard = React.forwardRef<HTMLDivElement, StatsCardProps>(
       comparison,
       subtitle,
       items,
+      itemsLayout = "list",
       metrics,
       progress,
+      learnMore,
       icon,
-      variant = "default",
+      headerStats,
       className,
       ...props
     },
     ref,
   ) => {
-    const isPrimary = variant === "primary";
     return (
       <Card
         ref={ref}
-        variant={isPrimary ? "primary" : "default"}
-        className={cn("w-full", className)}
+        className={cn("w-full", headerStats && headerStats.length > 0 && "overflow-hidden rounded-b-none", className)}
         {...props}
       >
-        <CardHeader className="flex-row items-start justify-between pb-2">
-          <div>
-            {icon && (
-              <div className={cn("mb-1.5 h-4 w-4", isPrimary ? "text-primary-foreground/70" : "text-muted-foreground")}>
-                {icon}
+        {headerStats && headerStats.length > 0 ? (
+          <CardHeader className="flex-row items-center pt-0 pb-0 pr-0 space-y-0">
+            <div className="flex-1 pr-4">
+              <CardDescription className="text-sm font-medium text-card-foreground">
+                {title}
+              </CardDescription>
+              {subtitle && (
+                <CardTitle className="text-xs font-normal text-muted-foreground">
+                  {subtitle}
+                </CardTitle>
+              )}
+            </div>
+            <div
+              className="grid shrink-0 divide-x divide-border border-l border-border"
+              style={{ gridTemplateColumns: `repeat(${headerStats.length}, minmax(0, 1fr))` }}
+            >
+              {headerStats.map((stat, i) => (
+                <div key={i} className="flex flex-col gap-0.5 p-4">
+                  <p className="text-xs text-muted-foreground">{stat.label}</p>
+                  <p className="text-xl font-bold tracking-tight tabular-nums">
+                    {stat.value}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </CardHeader>
+        ) : (
+          <CardHeader className="flex-row items-center justify-between gap-2 pb-1">
+            <div>
+              <CardDescription className="text-sm font-medium text-card-foreground">
+                {title}
+              </CardDescription>
+              {subtitle && (
+                <CardTitle className="text-xs font-normal text-muted-foreground">
+                  {subtitle}
+                </CardTitle>
+              )}
+            </div>
+            {learnMore ? (
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-7 w-7 shrink-0 rounded-full"
+              >
+                <ArrowUpRight className="h-3.5 w-3.5" />
+              </Button>
+            ) : icon ? (
+              <div className="flex h-7 w-7 shrink-0 items-center justify-center text-muted-foreground">
+                {React.cloneElement(icon as React.ReactElement, {
+                  className: cn("h-6 w-6", (icon as React.ReactElement).props?.className),
+                  fill: false,
+                })}
+              </div>
+            ) : null}
+          </CardHeader>
+        )}
+        {(value !== undefined || comparison || (metrics && metrics.length > 0) || (items && items.length > 0) || (progress && progress.length > 0)) && (
+          <CardContent className="space-y-3">
+            {/* Main Value */}
+            {value !== undefined && (
+              <div className="flex flex-wrap items-baseline gap-2">
+                <span className="whitespace-nowrap text-3xl font-bold tracking-tight">{value}</span>
+                {trend && <TrendIndicator trend={trend} />}
               </div>
             )}
-            <CardDescription className={cn("text-sm font-medium", isPrimary && "text-primary-foreground/70")}>
-              {title}
-            </CardDescription>
-          {subtitle && (
-            <CardTitle className={cn("text-xs font-normal", isPrimary ? "text-primary-foreground/60" : "text-muted-foreground")}>
-              {subtitle}
-            </CardTitle>
-          )}
-          </div>
-          {trend && trend.type !== "neutral" && (
-            <Button
-              variant="outline"
-              size="icon"
-              className={cn("h-7 w-7 shrink-0 rounded-full", isPrimary && "border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10")}
-            >
-              <ArrowUpRight className="h-3.5 w-3.5" />
-            </Button>
-          )}
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {/* Main Value */}
-          {value !== undefined && (
-            <div className="flex flex-wrap items-baseline gap-2">
-              <span className={cn("whitespace-nowrap text-3xl font-bold tracking-tight", isPrimary && "text-primary-foreground")}>{value}</span>
-              {trend && <TrendIndicator trend={trend} />}
-            </div>
-          )}
 
-          {/* Comparison Text */}
-          {comparison && (
-            <p className={cn("text-xs", isPrimary ? "text-primary-foreground/60" : "text-muted-foreground")}>{comparison}</p>
-          )}
+            {/* Comparison Text */}
+            {comparison && (
+              <p className="text-xs text-muted-foreground">{comparison}</p>
+            )}
 
-          {/* Metrics Grid */}
-          {metrics && metrics.length > 0 && <MetricsGrid metrics={metrics} />}
+            {/* Metrics Grid */}
+            {metrics && metrics.length > 0 && <MetricsGrid metrics={metrics} />}
 
-          {/* Items List */}
-          {items && items.length > 0 && <ItemsList items={items} />}
+            {/* Items List / Grid */}
+            {items && items.length > 0 && (
+              itemsLayout === "grid"
+                ? <ItemsGrid items={items} />
+                : <ItemsList items={items} />
+            )}
 
-          {/* Progress Bar */}
-          {progress && progress.length > 0 && (
-            <ProgressStack segments={progress} />
-          )}
-        </CardContent>
+            {/* Progress Bar */}
+            {progress && progress.length > 0 && (
+              <ProgressStack segments={progress} />
+            )}
+          </CardContent>
+        )}
       </Card>
     );
   },

@@ -1,9 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react"
+import {
+    BarChart3,
+    TrendingDown,
+    FileText,
+    Users,
+    Mail,
+    CheckCircle,
+    Clock,
+} from "@/components/ui/icons"
 import { StatsCard } from "./StatsCard"
-import { Percent } from "../../components/ui/icons"
 
 const meta: Meta<typeof StatsCard> = {
-    title: "ShadCn/Dashboard UI/Cards/Hero Cards",
+    title: "ShadCn/Dashboard UI/Cards/Stats Cards",
     component: StatsCard,
     parameters: {
         layout: "padded",
@@ -18,10 +26,8 @@ const meta: Meta<typeof StatsCard> = {
 |------|------|-------------|
 | \`title\` | \`string\` | Card label (e.g. "Quota", "Completed") |
 | \`value\` | \`string\` | Main displayed value |
-| \`variant\` | \`"default" \\| "primary"\` | \`primary\` renders with brand background and inverted text |
 | \`trend\` | \`{ value: number; type: "positive" \\| "negative" \\| "neutral" }\` | Percentage change badge. Non-neutral trends also show an \`ArrowUpRight\` action button |
 | \`comparison\` | \`ReactNode \\| string\` | Supporting text below the value (e.g. "+200 since last month") |
-| \`icon\` | \`ReactNode\` | 16×16 icon rendered above the title — useful for neutral-trend cards to communicate category at a glance |
 | \`items\` | \`StatsListItem[]\` | Renders a colored-dot list (e.g. Quota Strata breakdown) |
 | \`metrics\` | \`StatsMetric[]\` | Renders a 2-column grid of label/value pairs (e.g. Distribution Status) |
 | \`progress\` | \`StatsProgress[]\` | Renders a stacked segmented progress bar (e.g. survey response categories) |
@@ -84,6 +90,25 @@ export const SimpleWithPositiveTrend: Story = {
         value: "122,380",
         trend: { value: 15.1, type: "positive" },
         comparison: <><span className="font-semibold text-success">+16,458</span><span className="text-muted-foreground"> since last month</span></>,
+        icon: <BarChart3 />,
+    },
+}
+
+// ============================================================================
+// Variant: Learn More
+// ============================================================================
+
+/**
+ * Stats card with the "Learn more" ArrowUpRight button in the top-right corner.
+ * All other variants show a contextual icon instead.
+ */
+export const LearnMore: Story = {
+    args: {
+        title: "Total Responses",
+        value: "122,380",
+        trend: { value: 15.1, type: "positive" },
+        comparison: <><span className="font-semibold text-success">+16,458</span><span className="text-muted-foreground"> since last month</span></>,
+        learnMore: true,
     },
 }
 
@@ -101,64 +126,49 @@ export const SimpleWithNegativeTrend: Story = {
         value: "1.9M",
         trend: { value: 2, type: "negative" },
         comparison: <><span className="font-semibold text-destructive">-0.1M</span><span className="text-muted-foreground"> since last month</span></>,
+        icon: <TrendingDown />,
     },
 }
 
 // ============================================================================
-// Variant 3: Primary
+// Variant: Default (no trend badge)
 // ============================================================================
 
 /**
- * Stats card with primary color background and contrasting text.
- * Used for the Quota status indicator — shows a simple state value ("Open", "Closed", etc.)
- * without a trend badge. No arrow button is rendered since there is no trend.
+ * Default stats card with a value and comparison text, but no trend badge.
+ * Use when directional change isn't relevant or available.
  */
-export const Primary: Story = {
-    args: {
-        title: "Quota",
-        value: "Open",
-        variant: "primary",
-    },
-}
-
-// ============================================================================
-// Variant 4: Large Number Counter
-// ============================================================================
-
-/**
- * Stats card for large counters/totals.
- * Great for "Active Surveys", "Total Users", etc.
- */
-export const LargeNumber: Story = {
+export const Default: Story = {
     args: {
         title: "Active Surveys",
         value: "48,210",
-        trend: { value: 3.7, type: "positive" },
-        comparison: <><span className="font-semibold text-success">+1,730</span><span className="text-muted-foreground"> since last month</span></>,
+        comparison: <span className="text-muted-foreground">last synced Mar 20, 2026</span>,
+        icon: <FileText />,
     },
 }
 
 // ============================================================================
-// Variant 5: Neutral Trend
+// Variant: With Header Stats
 // ============================================================================
 
 /**
- * Stats card with a neutral (unchanged) trend. The TrendBadge shows 0% and the
- * ArrowUpRight action button is hidden — it only appears for positive or negative trends.
- * An `icon` is rendered above the title to communicate the metric category at a glance.
+ * Compact multi-metric card: instead of one big value in the body,
+ * two or more labeled stats appear inline in the header (right-aligned).
+ * Mirrors the "Bar Chart - Interactive" header pattern from shadcn charts.
  */
-export const NeutralTrend: Story = {
+export const WithHeaderStats: Story = {
     args: {
-        title: "Conversion Rate",
-        value: "24.5%",
-        trend: { value: 0, type: "neutral" },
-        comparison: "No change since last month",
-        icon: <Percent />,
+        title: "Total Visitors",
+        subtitle: "Jan - Jun 2024",
+        headerStats: [
+            { label: "Desktop", value: "24,828" },
+            { label: "Mobile", value: "25,010" },
+        ],
     },
 }
 
 // ============================================================================
-// Variant 6: With List of Items
+// Variant 4: With List of Items
 // ============================================================================
 
 /**
@@ -170,17 +180,40 @@ export const NeutralTrend: Story = {
 export const WithList: Story = {
     args: {
         title: "Quota Strata",
+        icon: <Users />,
         items: [
-            { label: "Women", value: "320/500", color: "success", badge: "Open", badgeVariant: "secondary" },
-            { label: "Men", value: "200/200", color: "primary", badge: "Closed", badgeVariant: "success" },
+            { label: "Women", value: "320/500", color: "primary", badge: "Open", badgeVariant: "secondary" },
+            { label: "Men", value: "200/200", color: "success", badge: "Closed", badgeVariant: "success" },
             { label: "Ethnicity", value: "80/150", color: "warning", badge: "Half-closed", badgeVariant: "warning" },
-            { label: "Age Group", value: "45/100", color: "chart4", badge: "Open", badgeVariant: "secondary" },
+            { label: "Age Group", value: "45/100", color: "primary", badge: "Open", badgeVariant: "secondary" },
         ],
     },
 }
 
 // ============================================================================
-// Variant 7: With Multiple Metrics
+// Variant 5b: With List — Grid Layout
+// ============================================================================
+
+/**
+ * Same Quota Strata data as WithList, rendered as a 2-column grid.
+ * Each cell shows the label + status badge on top and the value (number) below.
+ */
+export const WithListGrid: Story = {
+    args: {
+        title: "Quota Strata",
+        icon: <Users />,
+        itemsLayout: "grid",
+        items: [
+            { label: "Women", value: "320/500", color: "primary", badge: "Open", badgeVariant: "secondary" },
+            { label: "Men", value: "200/200", color: "success", badge: "Closed", badgeVariant: "success" },
+            { label: "Ethnicity", value: "80/150", color: "warning", badge: "Half-closed", badgeVariant: "warning" },
+            { label: "Age Group", value: "45/100", color: "primary", badge: "Open", badgeVariant: "secondary" },
+        ],
+    },
+}
+
+// ============================================================================
+// Variant 6: With Multiple Metrics
 // ============================================================================
 
 /**
@@ -192,6 +225,7 @@ export const WithList: Story = {
 export const WithMultipleMetrics: Story = {
     args: {
         title: "Distribution Status",
+        icon: <Mail />,
         metrics: [
             { label: "Total Invitations", value: "19" },
             { label: "Total Sent", value: "6,857" },
@@ -203,7 +237,7 @@ export const WithMultipleMetrics: Story = {
 }
 
 // ============================================================================
-// Variant 8: With Progress Bar
+// Variant 7: With Progress Bar
 // ============================================================================
 
 /**
@@ -219,16 +253,14 @@ export const WithMultipleMetrics: Story = {
  */
 export const WithProgressBar: Story = {
     args: {
-        title: "Completed",
-        value: "5000",
-        trend: { value: 12.5, type: "positive" },
-        comparison: <><span className="font-semibold text-success">+200</span><span className="text-muted-foreground"> since last month</span></>,
+        title: "Participation",
+        value: "60%",
+        comparison: <span className="text-muted-foreground">Completed</span>,
+        icon: <CheckCircle />,
         progress: [
-            { label: "Completed", percentage: 38, color: "success" },
-            { label: "Quota Met/Closed", percentage: 22, color: "chart4" },
-            { label: "Screened out", percentage: 18, color: "chart8" },
-            { label: "Interrupted", percentage: 12, color: "negative" },
-            { label: "Drop Outs", percentage: 10, color: "secondary" },
+            { label: "Completed", percentage: 60, color: "success" },
+            { label: "Drop Outs", percentage: 25, color: "primary" },
+            { label: "Terminated", percentage: 15, color: "negative" },
         ],
     },
 }
@@ -246,43 +278,47 @@ export const AllVariations: Story = {
         layout: "fullscreen",
     },
     render: () => (
-        <div className="p-6">
+        <div className="space-y-4 p-6">
             <h2 className="mb-6 text-2xl font-bold">Dashboard Stats Cards</h2>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <StatsCard
                     title="Total Responses"
-                    value="122,380"
-                    trend={{ value: 15.1, type: "positive" }}
-                    comparison={<><span className="font-semibold text-success">+16,458</span><span className="text-muted-foreground"> since last month</span></>}
-                />
-                <StatsCard
-                    title="Abandonment Rate"
-                    value="1.9M"
-                    trend={{ value: 2, type: "negative" }}
-                    comparison={<><span className="font-semibold text-destructive">-0.1M</span><span className="text-muted-foreground"> since last month</span></>}
-                />
-                <StatsCard
-                    title="Quota"
-                    value="Open"
-                    variant="primary"
-                />
-                <StatsCard
-                    title="Active Surveys"
                     value="48,210"
-                    trend={{ value: 3.7, type: "positive" }}
-                    comparison={<><span className="font-semibold text-success">+1,730</span><span className="text-muted-foreground"> since last month</span></>}
+                    icon={<FileText />}
                 />
+                <StatsCard
+                    title="Response Rate"
+                    value="34.2%"
+                    trend={{ value: 4.8, type: "positive" }}
+                    icon={<BarChart3 />}
+                />
+                <StatsCard
+                    title="Completion Rate"
+                    value="71.5%"
+                    trend={{ value: 3.2, type: "negative" }}
+                    icon={<CheckCircle />}
+                />
+                <StatsCard
+                    title="Avg Completion Time"
+                    value="4m 32s"
+                    icon={<Clock />}
+                />
+            </div>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <StatsCard
                     title="Quota Strata"
+                    icon={<Users />}
+                    itemsLayout="grid"
                     items={[
-                        { label: "Women", value: "320/500", color: "success", badge: "Open", badgeVariant: "secondary" },
-                        { label: "Men", value: "200/200", color: "primary", badge: "Closed", badgeVariant: "success" },
+                        { label: "Women", value: "320/500", color: "primary", badge: "Open", badgeVariant: "secondary" },
+                        { label: "Men", value: "200/200", color: "success", badge: "Closed", badgeVariant: "success" },
                         { label: "Ethnicity", value: "80/150", color: "warning", badge: "Half-closed", badgeVariant: "warning" },
-                        { label: "Age Group", value: "45/100", color: "chart4", badge: "Open", badgeVariant: "secondary" },
+                        { label: "Age Group", value: "45/100", color: "primary", badge: "Open", badgeVariant: "secondary" },
                     ]}
                 />
                 <StatsCard
                     title="Distribution Status"
+                    icon={<Mail />}
                     metrics={[
                         { label: "Total Invitations", value: "19" },
                         { label: "Total Sent", value: "6,857" },
@@ -292,24 +328,15 @@ export const AllVariations: Story = {
                     ]}
                 />
                 <StatsCard
-                    title="Completed"
-                    value="5000"
-                    trend={{ value: 12.5, type: "positive" }}
-                    comparison={<><span className="font-semibold text-success">+200</span><span className="text-muted-foreground"> since last month</span></>}
+                    title="Participation"
+                    value="60%"
+                    comparison={<span className="text-muted-foreground">Completed</span>}
+                    icon={<CheckCircle />}
                     progress={[
-                        { label: "Completed", percentage: 38, color: "success" },
-                        { label: "Quota Met/Closed", percentage: 22, color: "chart4" },
-                        { label: "Screened out", percentage: 18, color: "chart8" },
-                        { label: "Interrupted", percentage: 12, color: "negative" },
-                        { label: "Drop Outs", percentage: 10, color: "secondary" },
+                        { label: "Completed", percentage: 60, color: "success" },
+                        { label: "Drop Outs", percentage: 25, color: "primary" },
+                        { label: "Terminated", percentage: 15, color: "negative" },
                     ]}
-                />
-                <StatsCard
-                    title="Conversion Rate"
-                    value="24.5%"
-                    trend={{ value: 0, type: "neutral" }}
-                    comparison="No change since last month"
-                    icon={<Percent />}
                 />
             </div>
         </div>
