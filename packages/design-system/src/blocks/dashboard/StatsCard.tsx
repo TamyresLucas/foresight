@@ -247,8 +247,8 @@ const StatsCard = React.forwardRef<HTMLDivElement, StatsCardProps>(
         <CardContent className="space-y-3">
           {/* Main Value */}
           {value !== undefined && (
-            <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold tracking-tight">{value}</span>
+            <div className="flex flex-wrap items-baseline gap-2">
+              <span className="whitespace-nowrap text-3xl font-bold tracking-tight">{value}</span>
               {trend && <TrendIndicator trend={trend} />}
             </div>
           )}

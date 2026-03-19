@@ -19,7 +19,7 @@ export function TrendBadge({ type, value, className }: TrendBadgeProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold",
+        "inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap",
         type === "positive"
           ? "bg-[hsl(var(--success))] text-[hsl(var(--success-foreground))]"
           : "bg-[hsl(var(--destructive))] text-[hsl(var(--destructive-foreground))]",
