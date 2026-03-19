@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Minus } from "../../components/ui/icons";
 import { TrendBadge } from "./TrendBadge";
 
 // ============================================================================
@@ -104,13 +103,7 @@ function TrendIndicator({ trend }: { trend: StatsTrend }) {
   if (trend.type === "positive" || trend.type === "negative") {
     return <TrendBadge type={trend.type} value={trend.value} />;
   }
-  // neutral
-  return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-0.5 text-xs font-semibold text-secondary-foreground">
-      <Minus className="h-3 w-3" aria-hidden="true" />
-      <span>{trend.value}%</span>
-    </span>
-  );
+  return null;
 }
 
 function MetricsGrid({ metrics }: { metrics: StatsMetric[] }) {
