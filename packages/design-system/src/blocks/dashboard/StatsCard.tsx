@@ -171,7 +171,9 @@ function ProgressStack({ segments }: { segments: StatsProgressItem[] }) {
           <div
             key={index}
             className={cn(
-              "h-full rounded-full transition-all",
+              "h-full transition-all",
+              index === 0 && "rounded-l-full",
+              index === segments.length - 1 && "rounded-r-full",
               progressColorVariants({ color: segment.color || "primary" }),
             )}
             style={{ width: `${segment.percentage}%` }}
