@@ -31,7 +31,7 @@ export const SimpleWithPositiveTrend: Story = {
         title: "Total Responses",
         value: "122,380",
         trend: { value: 15.1, type: "positive" },
-        comparison: "vs. last month 105,922",
+        comparison: <><span className="text-[hsl(var(--success))]">+16,458</span> since last month</>,
     },
 }
 
@@ -48,7 +48,7 @@ export const SimpleWithNegativeTrend: Story = {
         title: "Abandonment Rate",
         value: "1.9M",
         trend: { value: 2, type: "negative" },
-        comparison: "vs. last month 2.0M",
+        comparison: <><span className="text-[hsl(var(--destructive))]">-0.1M</span> since last month</>,
     },
 }
 
@@ -65,7 +65,7 @@ export const MonetaryValue: Story = {
         title: "Survey Revenue",
         value: "$98.1M",
         trend: { value: 0.4, type: "positive" },
-        comparison: "vs. last month $97.8M",
+        comparison: <><span className="text-[hsl(var(--success))]">+$0.3M</span> since last month</>,
     },
 }
 
@@ -82,7 +82,7 @@ export const LargeNumber: Story = {
         title: "Active Surveys",
         value: "48,210",
         trend: { value: 3.7, type: "positive" },
-        comparison: "vs. last month 46,480",
+        comparison: <><span className="text-[hsl(var(--success))]">+1,730</span> since last month</>,
     },
 }
 
@@ -187,25 +187,25 @@ export const AllVariations: Story = {
                     title="Total Responses"
                     value="122,380"
                     trend={{ value: 15.1, type: "positive" }}
-                    comparison="vs. last month 105,922"
+                    comparison={<><span className="text-[hsl(var(--success))]">+16,458</span> since last month</>}
                 />
                 <StatsCard
                     title="Abandonment Rate"
                     value="1.9M"
                     trend={{ value: 2, type: "negative" }}
-                    comparison="vs. last month 2.0M"
+                    comparison={<><span className="text-[hsl(var(--destructive))]">-0.1M</span> since last month</>}
                 />
                 <StatsCard
                     title="Survey Revenue"
                     value="$98.1M"
                     trend={{ value: 0.4, type: "positive" }}
-                    comparison="vs. last month $97.8M"
+                    comparison={<><span className="text-[hsl(var(--success))]">+$0.3M</span> since last month</>}
                 />
                 <StatsCard
                     title="Active Surveys"
                     value="48,210"
                     trend={{ value: 3.7, type: "positive" }}
-                    comparison="vs. last month 46,480"
+                    comparison={<><span className="text-[hsl(var(--success))]">+1,730</span> since last month</>}
                 />
                 <StatsCard
                     title="Survey Status"

@@ -83,7 +83,7 @@ export interface StatsCardProps {
   /** Trend indicator showing change */
   trend?: StatsTrend;
   /** Comparison text (e.g., "vs last month") */
-  comparison?: string;
+  comparison?: React.ReactNode;
   /** Subtitle or additional description */
   subtitle?: string;
   /** List of items with values (for list variant) */
