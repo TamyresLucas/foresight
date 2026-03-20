@@ -4,7 +4,7 @@ import { ToolboxItem } from './ui/toolbox-item';
 import { Check, Search, Settings, Mail, Bell } from './ui/icons';
 
 const meta = {
-    title: 'Survey Builder/ToolboxItem',
+    title: 'Survey Builder/Build/ToolboxItem',
     component: ToolboxItem,
     parameters: {
         layout: 'centered',

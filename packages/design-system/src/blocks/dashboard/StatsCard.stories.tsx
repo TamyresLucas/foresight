@@ -253,14 +253,12 @@ export const WithMultipleMetrics: Story = {
  */
 export const WithProgressBar: Story = {
     args: {
-        title: "Participation",
-        value: "60%",
-        comparison: <span className="text-muted-foreground">Completed</span>,
+        title: "Total responses",
+        value: "5,300",
+        comparison: "5,300 / 8,833 responses",
         icon: <CheckCircle />,
         progress: [
-            { label: "Completed", percentage: 60, color: "success" },
-            { label: "Drop Outs", percentage: 25, color: "primary" },
-            { label: "Terminated", percentage: 15, color: "negative" },
+            { label: "Completed", percentage: 60, color: "primary" },
         ],
     },
 }
@@ -282,9 +280,13 @@ export const AllVariations: Story = {
             <h2 className="mb-6 text-2xl font-bold">Dashboard Stats Cards</h2>
             <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <StatsCard
-                    title="Total Responses"
-                    value="48,210"
-                    icon={<FileText />}
+                    title="Total responses"
+                    value="5,300"
+                    comparison="5,300 / 8,833 responses"
+                    icon={<CheckCircle />}
+                    progress={[
+                        { label: "Completed", percentage: 60, color: "primary" },
+                    ]}
                 />
                 <StatsCard
                     title="Response Rate"
@@ -304,7 +306,7 @@ export const AllVariations: Story = {
                     icon={<Clock />}
                 />
             </div>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <StatsCard
                     title="Quota Strata"
                     icon={<Users />}
@@ -325,17 +327,6 @@ export const AllVariations: Story = {
                         { label: "Total Undelivered", value: "478" },
                         { label: "Participation Rate", value: "1.46%" },
                         { label: "Undelivered Rate", value: "6.97%" },
-                    ]}
-                />
-                <StatsCard
-                    title="Participation"
-                    value="60%"
-                    comparison={<span className="text-muted-foreground">Completed</span>}
-                    icon={<CheckCircle />}
-                    progress={[
-                        { label: "Completed", percentage: 60, color: "success" },
-                        { label: "Drop Outs", percentage: 25, color: "primary" },
-                        { label: "Terminated", percentage: 15, color: "negative" },
                     ]}
                 />
             </div>

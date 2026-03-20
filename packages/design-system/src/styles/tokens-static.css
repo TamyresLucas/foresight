@@ -3,7 +3,7 @@
 /* Source: https://www.notion.so/29e0a268c6384d43a73b8a9b675253d2 */
 :root {
   --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
+  --foreground: 0 0% 9%;
 
   /* Primary — Voxco brand periwinkle (#5568F2) */
   --primary: 233 86% 64%;
@@ -19,7 +19,7 @@
 
   /* Warning — Voxco brand tangerine (#F59E0B) */
   --warning: 38 92% 50%;
-  --warning-foreground: 222.2 47.4% 11.2%;
+  --warning-foreground: 0 0% 9%;
 
   /* Info — (#3B82F6) */
   --info: 217 91% 60%;
@@ -27,12 +27,12 @@
 
   --secondary: 232.5 100% 96.9%;
   --secondary-hover: 232.5 100% 94%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
+  --secondary-foreground: 0 0% 9%;
   --muted: 220 5% 97.5%;
-  --muted-foreground: 222.2 47.4% 11.2%;
+  --muted-foreground: color-mix(in oklch, hsl(var(--primary)) 32%, hsl(0 0% 46%));
   --disabled-foreground: 220 40% 70%;
   --accent: 220 10% 95%;
-  --accent-foreground: 222.2 47.4% 11.2%;
+  --accent-foreground: 0 0% 9%;
   --background-destructive: 349 8% 96%;
   --border-destructive: 349 42% 80%;
   --background-success: 161 8% 96%;
@@ -40,7 +40,7 @@
   --background-warning: 38 9% 95%;
   --border-warning: 38 46% 75%;
   --border-info: 217 35% 75%;
-  --border: 220 13% 85%;
+  --border: 230 20% 94%;
   /* ─── Border scale ───────────────────────────────────────────────────────────
      Use --border-decorative for non-interactive containers (cards, dialogs,
      dividers, tooltips). Non-text contrast ≈ 1.3:1 — decorative only.
@@ -189,20 +189,20 @@
   --background: 210 40% 6%;
   --foreground: 210 40% 98%;
   --primary: 235 100% 86%;
-  --primary-foreground: 222.2 47.4% 11.2%;
+  --primary-foreground: 0 0% 9%;
   --destructive: 352 84% 64%;
   --destructive-foreground: 210 40% 98%;
   --success: 161 100% 26%;
   --success-foreground: 0 0% 100%;
   --warning: 35 93% 67%;
-  --warning-foreground: 222.2 47.4% 11.2%;
+  --warning-foreground: 0 0% 9%;
   --info: 239 84% 67%;
   --info-foreground: 0 0% 100%;
   --secondary: 232.5 16.3% 19.2%;
   --secondary-hover: 232.5 16.3% 25%;
   --secondary-foreground: 210 40% 98%;
   --muted: 222 8% 9.5%;
-  --muted-foreground: 220 15% 65%;
+  --muted-foreground: color-mix(in oklch, hsl(var(--primary)) 30%, hsl(0 0% 62%));
   --disabled-foreground: 210 40% 98%;
   --accent: 222 10% 14%;
   --accent-foreground: 210 40% 98%;
@@ -213,7 +213,7 @@
   --background-warning: 38 9% 14%;
   --border-warning: 38 46% 35%;
   --border-info: 217 35% 35%;
-  --border: 220 13% 18%;
+  --border: 230 20% 20%;
   --border-decorative: 235 100% 86% / 0.2;  /* ~1.3:1  — decorative containers (non-interactive) */
   --border-ui: 235 100% 86% / 0.2;          /* ~1.3:1 — interactive default; focus-visible:border-ring compensates */
 

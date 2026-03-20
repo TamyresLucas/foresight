@@ -3,7 +3,7 @@ import * as StatsCardStories from "./StatsCard.stories"
 
 <Meta of={StatsCardStories} />
 
-# Stats Cards
+# Hero Cards
 
 Statistics cards for displaying metrics and KPIs in dashboards.
 
@@ -19,17 +19,17 @@ import { StatsCard } from "@voxco/design-system/blocks/dashboard"
 |----------|---------------------|
 | Results Dashboard | SimpleWithPositiveTrend |
 | Abandonment Rate | SimpleWithNegativeTrend |
-| Brand Emphasis | Primary |
-| Active Surveys | LargeNumber |
+| Active Surveys | Default |
 | Status Distribution | WithList |
 | Multiple Analytics | WithMultipleMetrics |
 | Response Goal | WithProgressBar |
+| Explore / Navigate | LearnMore |
 
 ---
 
 ## Variants
 
-### 1. Simple Card with Positive Trend
+### Simple Card with Positive Trend
 
 Ideal for metrics showing growth.
 
@@ -37,43 +37,43 @@ Ideal for metrics showing growth.
 
 <Controls of={StatsCardStories.SimpleWithPositiveTrend} />
 
-### 2. Card with Negative Trend
+### Card with Negative Trend
 
 For metrics showing decline (e.g., abandonment rate).
 
 <Canvas of={StatsCardStories.SimpleWithNegativeTrend} />
 
-### 3. Primary Card
+### Learn More
 
-Stats card with primary color background and contrasting text.
+Card with a navigation button in the top-right corner.
 
-<Canvas of={StatsCardStories.Primary} />
+<Canvas of={StatsCardStories.LearnMore} />
 
-### 4. Card with Large Number
+### Card without Trend
 
-For counters and totals.
+For counters and totals without directional indicator.
 
-<Canvas of={StatsCardStories.LargeNumber} />
+<Canvas of={StatsCardStories.Default} />
 
-### 5. Card with Neutral Trend
+### Card with Header Stats
 
-For stable metrics with no variation.
+Compact multi-metric header with labeled values on the right.
 
-<Canvas of={StatsCardStories.NeutralTrend} />
+<Canvas of={StatsCardStories.WithHeaderStats} />
 
-### 6. Card with Item List
+### Card with Item List
 
 Item distribution with percentages and values.
 
 <Canvas of={StatsCardStories.WithList} />
 
-### 7. Card with Multiple Metrics
+### Card with Multiple Metrics
 
 Grid of related metrics.
 
 <Canvas of={StatsCardStories.WithMultipleMetrics} />
 
-### 8. Card with Progress Bar
+### Card with Progress Bar
 
 Goal with visual segment distribution.
 
@@ -100,6 +100,8 @@ All variants in a responsive dashboard grid.
 | `trend` | `{ value: number, type: 'positive' \| 'negative' \| 'neutral' }` | Trend indicator |
 | `comparison` | `string` | Comparison text (e.g., "vs. last month") |
 | `subtitle` | `string` | Subtitle or additional description |
+| `icon` | `React.ReactNode` | Outlined icon shown in the top-right corner |
+| `learnMore` | `boolean` | Shows the arrow navigation button instead of an icon |
 | `items` | `StatsListItem[]` | List of items for list variant |
 | `metrics` | `StatsMetric[]` | Metrics grid for multi-metric variant |
 | `progress` | `StatsProgressItem[]` | Progress segments for bar variant |

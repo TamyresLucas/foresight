@@ -152,11 +152,11 @@ function TrendIndicator({ trend }: { trend: StatsTrend }) {
 
 function MetricsGrid({ metrics }: { metrics: StatsMetric[] }) {
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+    <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))" }}>
       {metrics.map((metric, index) => (
         <div key={index} className="space-y-1">
-          <p className="text-2xl font-bold">{metric.value}</p>
-          <p className="text-xs text-muted-foreground">{metric.label}</p>
+          <p className="whitespace-nowrap text-2xl font-bold">{metric.value}</p>
+          <p className="whitespace-nowrap text-xs text-muted-foreground">{metric.label}</p>
         </div>
       ))}
     </div>
@@ -165,7 +165,7 @@ function MetricsGrid({ metrics }: { metrics: StatsMetric[] }) {
 
 function ItemsGrid({ items }: { items: StatsListItem[] }) {
   return (
-    <div className="grid grid-cols-2 gap-x-4 gap-y-4">
+    <div className="grid gap-x-4 gap-y-4" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))" }}>
       {items.map((item, index) => (
         <div key={index} className="space-y-1">
           <div className="flex flex-wrap items-center gap-1.5">
@@ -216,36 +216,13 @@ function ItemsList({ items }: { items: StatsListItem[] }) {
 }
 
 function ProgressStack({ segments }: { segments: StatsProgressItem[] }) {
+  const total = segments.reduce((sum, s) => sum + s.percentage, 0);
   return (
-    <div className="space-y-3">
-      <div className="flex h-3 w-full gap-1">
-        {segments.map((segment, index) => (
-          <div
-            key={index}
-            className={cn(
-              "h-full transition-all",
-              index === 0 && "rounded-l-full",
-              index === segments.length - 1 && "rounded-r-full",
-              progressColorVariants({ color: segment.color || "primary" }),
-            )}
-            style={{ width: `${segment.percentage}%` }}
-          />
-        ))}
-      </div>
-      <div className="flex flex-wrap gap-x-4 gap-y-1">
-        {segments.map((segment, index) => (
-          <div key={index} className="flex items-center gap-1.5 text-xs">
-            <div
-              className={cn(
-                "h-2 w-2 rounded-full",
-                progressColorVariants({ color: segment.color || "primary" }),
-              )}
-            />
-            <span className="text-muted-foreground">{segment.label}</span>
-            <span className="font-medium">{segment.percentage}%</span>
-          </div>
-        ))}
-      </div>
+    <div className="h-3 w-full rounded-full bg-primary/10">
+      <div
+        className="h-full rounded-full bg-[var(--foundation-chart-blueberry)] transition-all"
+        style={{ width: `${Math.min(total, 100)}%` }}
+      />
     </div>
   );
 }
@@ -286,7 +263,7 @@ const StatsCard = React.forwardRef<HTMLDivElement, StatsCardProps>(
     return (
       <Card
         ref={ref}
-        className={cn("w-full", headerStats && headerStats.length > 0 && "overflow-hidden rounded-b-none", className)}
+        className={cn("flex w-full flex-col", headerStats && headerStats.length > 0 && "overflow-hidden rounded-b-none", className)}
         {...props}
       >
         {headerStats && headerStats.length > 0 ? (
@@ -346,18 +323,18 @@ const StatsCard = React.forwardRef<HTMLDivElement, StatsCardProps>(
           </CardHeader>
         )}
         {(value !== undefined || comparison || (metrics && metrics.length > 0) || (items && items.length > 0) || (progress && progress.length > 0)) && (
-          <CardContent className="space-y-3">
+          <CardContent className="flex flex-1 flex-col space-y-3">
             {/* Main Value */}
             {value !== undefined && (
-              <div className="flex flex-wrap items-baseline gap-2">
+              <div className="flex min-h-9 flex-wrap items-baseline gap-2">
                 <span className="whitespace-nowrap text-3xl font-bold tracking-tight">{value}</span>
                 {trend && <TrendIndicator trend={trend} />}
               </div>
             )}
 
-            {/* Comparison Text */}
-            {comparison && (
-              <p className="text-xs text-muted-foreground">{comparison}</p>
+            {/* Spacer to push bottom content down (only when there IS bottom content) */}
+            {((metrics && metrics.length > 0) || (items && items.length > 0) || (progress && progress.length > 0) || comparison) && (
+              <div className="flex-1" />
             )}
 
             {/* Metrics Grid */}
@@ -372,7 +349,14 @@ const StatsCard = React.forwardRef<HTMLDivElement, StatsCardProps>(
 
             {/* Progress Bar */}
             {progress && progress.length > 0 && (
-              <ProgressStack segments={progress} />
+              <div className="!mt-0">
+                <ProgressStack segments={progress} />
+              </div>
+            )}
+
+            {/* Comparison Text */}
+            {comparison && (
+              <p className="!mt-2 text-xs text-muted-foreground">{comparison}</p>
             )}
           </CardContent>
         )}
