@@ -19,13 +19,19 @@ const meta = {
             control: 'boolean',
             description: 'When false, renders the item in a disabled/muted state.',
         },
-        isDragging: {
+        isDragged: {
             control: 'boolean',
-            description: 'When true, applies dragging visual state.',
+            description: 'When true, reduces the item\'s opacity to 30%, indicating it is being dragged.',
         },
         isDraggable: {
             control: 'boolean',
             description: 'When false, renders as a click-only item (no drag handle).',
+        },
+        endAction: {
+            description: 'Optional content rendered at the trailing end of the item (e.g. a button or icon). Visible only on hover.',
+        },
+        icon: {
+            description: 'The icon component to render. Accepts a React.ElementType.',
         },
     },
 } satisfies Meta<typeof ToolboxItem>;
@@ -38,7 +44,7 @@ export const Default: Story = {
         icon: Check,
         label: 'Multiple Choice',
         isEnabled: true,
-        isDragging: false,
+        isDragged: false,
         isDraggable: true,
     },
 };
@@ -48,7 +54,7 @@ export const Disabled: Story = {
         icon: Search,
         label: 'Search (disabled)',
         isEnabled: false,
-        isDragging: false,
+        isDragged: false,
         isDraggable: true,
     },
 };
@@ -58,19 +64,25 @@ export const Dragging: Story = {
         icon: Settings,
         label: 'Settings Block',
         isEnabled: true,
-        isDragging: true,
+        isDragged: true,
         isDraggable: true,
     },
 };
 
 export const NotDraggable: Story = {
+    parameters: {
+        docs: {
+            description: {
+                story: 'When isDraggable is false, the item renders without drag capability. Dragging is disabled and no drag events are fired.',
+            },
+        },
+    },
     args: {
         icon: Mail,
         label: 'Email Question',
         isEnabled: true,
-        isDragging: false,
+        isDragged: false,
         isDraggable: false,
-        onClick: () => alert('Clicked — insert question'),
     },
 };
 

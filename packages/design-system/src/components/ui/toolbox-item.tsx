@@ -9,8 +9,8 @@ interface ToolboxItemProps {
     label: string;
     /** Whether the item is enabled (default: true) */
     isEnabled?: boolean;
-    /** Whether the item is currently being dragged */
-    isDragging?: boolean;
+    /** When true, reduces the item's opacity to 30%, indicating it is being dragged. */
+    isDragged?: boolean;
     /** Whether the item can be dragged (default: true) */
     isDraggable?: boolean;
     /** Drag start handler */
@@ -19,6 +19,8 @@ interface ToolboxItemProps {
     onDragEnd?: (e: React.DragEvent) => void;
     /** Click handler (for non-draggable items) */
     onClick?: () => void;
+    /** Optional content rendered at the trailing end of the item (e.g. a button or icon). Visible only on hover. */
+    endAction?: React.ReactNode;
     /** Additional CSS classes */
     className?: string;
 }
@@ -27,11 +29,12 @@ export const ToolboxItem: React.FC<ToolboxItemProps> = ({
     icon: Icon,
     label,
     isEnabled = true,
-    isDragging = false,
+    isDragged = false,
     isDraggable = true,
     onDragStart,
     onDragEnd,
     onClick,
+    endAction,
     className = ''
 }) => {
     const handleClick = () => {
@@ -45,7 +48,7 @@ export const ToolboxItem: React.FC<ToolboxItemProps> = ({
             role="button"
             tabIndex={isEnabled ? 0 : -1}
             aria-disabled={!isEnabled}
-            aria-grabbed={isDragging}
+            aria-grabbed={isDragged}
             aria-label={`Add ${label} question`}
             draggable={isEnabled && isDraggable}
             onDragStart={isEnabled && isDraggable ? onDragStart : undefined}
@@ -62,16 +65,16 @@ export const ToolboxItem: React.FC<ToolboxItemProps> = ({
                 // Border color based on state
                 isEnabled ? 'border-primary/20' : 'border-primary/10',
                 // Background: card normally, primary when dragging
-                isDragging ? 'bg-primary' : 'bg-card',
+                isDragged ? 'bg-primary' : 'bg-card',
                 // Hover state (only when enabled and not dragging)
-                isEnabled && !isDragging && 'hover:bg-muted',
+                isEnabled && !isDragged && 'hover:bg-muted',
                 // Cursor based on state
                 !isEnabled && 'cursor-not-allowed',
-                isEnabled && isDraggable && !isDragging && 'cursor-grab',
-                isEnabled && isDraggable && isDragging && 'cursor-grabbing',
+                isEnabled && isDraggable && !isDragged && 'cursor-grab',
+                isEnabled && isDraggable && isDragged && 'cursor-grabbing',
                 isEnabled && !isDraggable && 'cursor-pointer',
                 // Dragging effect
-                isDragging && 'shadow-md',
+                isDragged && 'shadow-md',
                 className
             )}
         >
@@ -82,11 +85,11 @@ export const ToolboxItem: React.FC<ToolboxItemProps> = ({
                         className={cn(
                             'text-lg leading-none transition-opacity duration-200',
                             // Hide when dragging or on hover (only when enabled)
-                            isDragging && 'opacity-0',
-                            isEnabled && !isDragging && 'group-hover:opacity-0',
+                            isDragged && 'opacity-0',
+                            isEnabled && !isDragged && 'group-hover:opacity-0',
                             // Color
                             isEnabled ? 'text-primary' : 'text-primary/40',
-                            isDragging ? 'text-primary-foreground' : ''
+                            isDragged ? 'text-primary-foreground' : ''
                         )}
                     />
                     {/* Drag indicator - show on hover OR when dragging */}
@@ -94,9 +97,9 @@ export const ToolboxItem: React.FC<ToolboxItemProps> = ({
                         <div
                             className={cn(
                                 'absolute inset-0 flex items-center justify-center transition-opacity duration-200',
-                                isDragging ? 'text-primary-foreground' : 'text-muted-foreground',
+                                isDragged ? 'text-primary-foreground' : 'text-muted-foreground',
                                 // Show when dragging, or on hover
-                                isDragging ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                                isDragged ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
                             )}
                         >
                             <GripVertical className="text-lg leading-none" />
@@ -107,12 +110,17 @@ export const ToolboxItem: React.FC<ToolboxItemProps> = ({
                     className={cn(
                         'text-sm truncate',
                         isEnabled ? 'text-foreground' : 'text-primary/40',
-                        isDragging ? 'text-primary-foreground' : ''
+                        isDragged ? 'text-primary-foreground' : ''
                     )}
                 >
                     {label}
                 </span>
             </div>
+            {endAction && (
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0">
+                    {endAction}
+                </div>
+            )}
         </div>
     );
 };

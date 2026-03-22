@@ -1,8 +1,92 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { MarkerType } from '@xyflow/react';
+import React from 'react';
+import {
+    useNodesState,
+    useEdgesState,
+    BackgroundVariant,
+    type Node,
+    type Edge,
+} from '@xyflow/react';
 import { DiagramCanvas } from './DiagramCanvas';
-import type { Node, Edge } from '@xyflow/react';
 
+// ---------------------------------------------------------------------------
+// Seed data — nodes & edges já no formato React Flow
+// ---------------------------------------------------------------------------
+const START_NODE: Node = {
+    id: 'start',
+    type: 'start',
+    position: { x: 300, y: 40 },
+    data: { label: 'Start' },
+};
+
+const END_NODE: Node = {
+    id: 'end',
+    type: 'end',
+    position: { x: 300, y: 600 },
+    data: { label: 'End' },
+};
+
+const MC_NODE: Node = {
+    id: 'mc-1',
+    type: 'multipleChoice',
+    position: { x: 200, y: 160 },
+    data: {
+        variableName: 'Q1',
+        question: 'How satisfied are you?',
+        subtype: 'radio',
+        options: [
+            { id: 'opt1', text: 'Very satisfied' },
+            { id: 'opt2', text: 'Satisfied' },
+            { id: 'opt3', text: 'Neutral' },
+            { id: 'opt4', text: 'Dissatisfied' },
+        ],
+    },
+};
+
+const TEXT_NODE: Node = {
+    id: 'text-1',
+    type: 'textEntry',
+    position: { x: 200, y: 360 },
+    data: {
+        variableName: 'Q2',
+        question: 'Any additional comments?',
+    },
+};
+
+const DESC_NODE: Node = {
+    id: 'desc-1',
+    type: 'description',
+    position: { x: 600, y: 160 },
+    data: {
+        question: 'Please answer the following questions honestly.',
+    },
+};
+
+// Edges
+const BASE_EDGES: Edge[] = [
+    { id: 'e-start-mc', source: 'start', target: 'mc-1', animated: false },
+    {
+        id: 'e-mc-text',
+        source: 'mc-1',
+        sourceHandle: 'opt1',
+        target: 'text-1',
+        targetHandle: 'input',
+        label: 'Very satisfied',
+    },
+    {
+        id: 'e-mc-end',
+        source: 'mc-1',
+        sourceHandle: 'opt4',
+        target: 'end',
+        targetHandle: 'input',
+        label: 'Dissatisfied',
+    },
+    { id: 'e-text-end', source: 'text-1', sourceHandle: 'output', target: 'end', targetHandle: 'input' },
+];
+
+// ---------------------------------------------------------------------------
+// Meta
+// ---------------------------------------------------------------------------
 const meta: Meta<typeof DiagramCanvas> = {
     title: 'Survey Builder/Logic/DiagramCanvas',
     component: DiagramCanvas,
@@ -10,301 +94,318 @@ const meta: Meta<typeof DiagramCanvas> = {
         layout: 'fullscreen',
         docs: {
             description: {
-                component: `
-A React Flow-based diagram canvas for visualizing survey flows.
-
-## Features
-- **Start Node**: Represents the beginning of a survey
-- **End Node**: Represents the end of a survey  
-- **Multiple Choice Node**: Radio or checkbox questions with per-choice output handles
-- **Text Entry Node**: Open-ended text questions
-- **Description Node**: Informational content blocks
-
-## Styling
-All components use Shadcn design tokens for consistent theming:
-- \`--primary\` for selection highlights
-- \`--card\` for node backgrounds
-- \`--border\` for edges and outlines
-- \`--success\` for start/end node borders
-        `,
+                component:
+                    'A React Flow-based diagram canvas for visualizing survey flows. ' +
+                    'Accepts pre-formatted `nodes` and `edges` — survey-to-diagram ' +
+                    'conversion must happen upstream (e.g. via a `useSurveyDiagram` hook). ' +
+                    'Wrapped internally in `ReactFlowProvider`; no external provider needed.',
             },
         },
     },
     tags: ['autodocs'],
-    decorators: [
-        (Story) => (
-            <div style={{ width: '100%', height: '600px' }}>
-                <Story />
-            </div>
-        ),
-    ],
+    argTypes: {
+        showControls: { control: 'boolean' },
+        showBackground: { control: 'boolean' },
+        backgroundVariant: {
+            control: 'select',
+            options: Object.values(BackgroundVariant),
+        },
+        nodesDraggable: { control: 'boolean' },
+        panOnDrag: { control: 'boolean' },
+        zoomOnScroll: { control: 'boolean' },
+        fitView: { control: 'boolean' },
+        // handlers — hide from controls table, keep in props table
+        onNodeClick: { action: 'nodeClicked' },
+        onNodesChange: { action: 'nodesChanged' },
+        onEdgesChange: { action: 'edgesChanged' },
+        // slots rendered by ReactFlow — suppress docgen noise
+        nodes: { control: false },
+        edges: { control: false },
+    },
 };
 
 export default meta;
 type Story = StoryObj<typeof DiagramCanvas>;
 
-// Sample nodes for the demo
-const sampleNodes: Node[] = [
-    {
-        id: 'start',
-        type: 'start',
-        position: { x: 0, y: 150 },
-        data: { label: 'Start of Survey' },
+// ---------------------------------------------------------------------------
+// Helper: interactive wrapper (useNodesState / useEdgesState)
+// ---------------------------------------------------------------------------
+function InteractiveCanvas(
+    props: React.ComponentProps<typeof DiagramCanvas> & {
+        initialNodes: Node[];
+        initialEdges: Edge[];
     },
-    {
-        id: 'q1',
-        type: 'multipleChoice',
-        position: { x: 250, y: 50 },
-        data: {
-            variableName: 'Q1',
-            question: 'How satisfied are you with our service?',
-            subtype: 'radio',
-            options: [
-                { id: 'opt1', text: 'Very Satisfied' },
-                { id: 'opt2', text: 'Satisfied' },
-                { id: 'opt3', text: 'Neutral' },
-                { id: 'opt4', text: 'Dissatisfied' },
-            ],
-        },
-    },
-    {
-        id: 'q2',
-        type: 'textEntry',
-        position: { x: 650, y: 0 },
-        data: {
-            variableName: 'Q2',
-            question: 'What could we improve?',
-        },
-    },
-    {
-        id: 'desc1',
-        type: 'description',
-        position: { x: 650, y: 180 },
-        data: {
-            question: 'Thank you for your positive feedback! We appreciate your support.',
-        },
-    },
-    {
-        id: 'q3',
-        type: 'multipleChoice',
-        position: { x: 650, y: 350 },
-        data: {
-            variableName: 'Q3',
-            question: 'Would you recommend us?',
-            subtype: 'checkbox',
-            options: [
-                { id: 'rec1', text: 'To friends' },
-                { id: 'rec2', text: 'To family' },
-                { id: 'rec3', text: 'To colleagues' },
-            ],
-        },
-    },
-    {
-        id: 'end',
-        type: 'end',
-        position: { x: 1050, y: 200 },
-        data: { label: 'End of Survey' },
-    },
-];
+) {
+    const { initialNodes, initialEdges, ...rest } = props;
+    const [nodes, , onNodesChange] = useNodesState(initialNodes);
+    const [edges, , onEdgesChange] = useEdgesState(initialEdges);
+    return (
+        <DiagramCanvas
+            {...rest}
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+        />
+    );
+}
 
-// Sample edges connecting the nodes
-const sampleEdges: Edge[] = [
-    {
-        id: 'e-start-q1',
-        source: 'start',
-        sourceHandle: 'output',
-        target: 'q1',
-        targetHandle: 'input',
-        markerEnd: { type: MarkerType.ArrowClosed },
-    },
-    {
-        id: 'e-q1-opt1-desc1',
-        source: 'q1',
-        sourceHandle: 'opt1',
-        target: 'desc1',
-        targetHandle: 'input',
-        label: 'Very Satisfied',
-        markerEnd: { type: MarkerType.ArrowClosed },
-    },
-    {
-        id: 'e-q1-opt2-desc1',
-        source: 'q1',
-        sourceHandle: 'opt2',
-        target: 'desc1',
-        targetHandle: 'input',
-        markerEnd: { type: MarkerType.ArrowClosed },
-    },
-    {
-        id: 'e-q1-opt3-q2',
-        source: 'q1',
-        sourceHandle: 'opt3',
-        target: 'q2',
-        targetHandle: 'input',
-        label: 'Neutral',
-        style: { strokeDasharray: '5, 5' },
-        markerEnd: { type: MarkerType.ArrowClosed },
-    },
-    {
-        id: 'e-q1-opt4-q2',
-        source: 'q1',
-        sourceHandle: 'opt4',
-        target: 'q2',
-        targetHandle: 'input',
-        label: 'Dissatisfied',
-        style: { strokeDasharray: '5, 5' },
-        markerEnd: { type: MarkerType.ArrowClosed },
-    },
-    {
-        id: 'e-desc1-q3',
-        source: 'desc1',
-        sourceHandle: 'output',
-        target: 'q3',
-        targetHandle: 'input',
-        markerEnd: { type: MarkerType.ArrowClosed },
-    },
-    {
-        id: 'e-q2-end',
-        source: 'q2',
-        sourceHandle: 'output',
-        target: 'end',
-        targetHandle: 'input',
-        markerEnd: { type: MarkerType.ArrowClosed },
-    },
-    {
-        id: 'e-q3-rec1-end',
-        source: 'q3',
-        sourceHandle: 'rec1',
-        target: 'end',
-        targetHandle: 'input',
-        markerEnd: { type: MarkerType.ArrowClosed },
-    },
-    {
-        id: 'e-q3-rec2-end',
-        source: 'q3',
-        sourceHandle: 'rec2',
-        target: 'end',
-        targetHandle: 'input',
-        markerEnd: { type: MarkerType.ArrowClosed },
-    },
-    {
-        id: 'e-q3-rec3-end',
-        source: 'q3',
-        sourceHandle: 'rec3',
-        target: 'end',
-        targetHandle: 'input',
-        markerEnd: { type: MarkerType.ArrowClosed },
-    },
-];
-
+// ---------------------------------------------------------------------------
+// Stories
+// ---------------------------------------------------------------------------
 /**
- * Default survey flow diagram showing all node types and edge connections.
+ * Full interactive survey flow with all node types connected.
+ * Nodes are draggable and edges are live — mirrors real usage.
  */
-export const Default: Story = {
+export const FullSurveyFlow: Story = {
+    name: 'Full Survey Flow',
+    render: (args) => (
+        <div style={{ width: '100%', height: '600px' }}>
+            <InteractiveCanvas
+                {...args}
+                initialNodes={[START_NODE, MC_NODE, TEXT_NODE, DESC_NODE, END_NODE]}
+                initialEdges={BASE_EDGES}
+            />
+        </div>
+    ),
     args: {
-        nodes: sampleNodes,
-        edges: sampleEdges,
         showControls: true,
         showBackground: true,
+        backgroundVariant: BackgroundVariant.Dots,
+        nodesDraggable: true,
+        panOnDrag: true,
+        zoomOnScroll: true,
         fitView: true,
     },
 };
 
 /**
- * Diagram without controls panel - useful for read-only displays.
+ * Minimal flow — Start → End only.
+ * Useful for testing the canvas renders with the smallest valid input.
  */
-export const WithoutControls: Story = {
+export const MinimalFlow: Story = {
+    name: 'Minimal Flow',
+    render: (args) => (
+        <div style={{ width: '100%', height: '400px' }}>
+            <InteractiveCanvas
+                {...args}
+                initialNodes={[START_NODE, END_NODE]}
+                initialEdges={[{ id: 'e-start-end', source: 'start', target: 'end' }]}
+            />
+        </div>
+    ),
     args: {
-        nodes: sampleNodes,
-        edges: sampleEdges,
+        showControls: true,
+        showBackground: true,
+        backgroundVariant: BackgroundVariant.Dots,
+        nodesDraggable: true,
+        panOnDrag: true,
+        zoomOnScroll: true,
+        fitView: true,
+    },
+};
+
+/**
+ * Start node in isolation — verifies --success border and label rendering.
+ */
+export const StartNodeStory: Story = {
+    name: 'Node › Start',
+    render: (args) => (
+        <div style={{ width: '100%', height: '300px' }}>
+            <DiagramCanvas
+                {...args}
+                nodes={[{ ...START_NODE, position: { x: 200, y: 100 } }]}
+                edges={[]}
+            />
+        </div>
+    ),
+    args: {
         showControls: false,
         showBackground: true,
+        backgroundVariant: BackgroundVariant.Dots,
+        nodesDraggable: false,
         fitView: true,
     },
 };
 
 /**
- * Diagram without background - clean look for presentations.
+ * End node in isolation — verifies --success border and label rendering.
  */
-export const WithoutBackground: Story = {
+export const EndNodeStory: Story = {
+    name: 'Node › End',
+    render: (args) => (
+        <div style={{ width: '100%', height: '300px' }}>
+            <DiagramCanvas
+                {...args}
+                nodes={[{ ...END_NODE, position: { x: 200, y: 100 } }]}
+                edges={[]}
+            />
+        </div>
+    ),
     args: {
-        nodes: sampleNodes,
-        edges: sampleEdges,
-        showControls: true,
-        showBackground: false,
-        fitView: true,
-    },
-};
-
-// Simple linear flow for basic demonstrations
-const simpleNodes: Node[] = [
-    {
-        id: 'start',
-        type: 'start',
-        position: { x: 0, y: 100 },
-        data: { label: 'Start' },
-    },
-    {
-        id: 'q1',
-        type: 'textEntry',
-        position: { x: 250, y: 80 },
-        data: {
-            variableName: 'Name',
-            question: "What's your name?",
-        },
-    },
-    {
-        id: 'q2',
-        type: 'textEntry',
-        position: { x: 550, y: 80 },
-        data: {
-            variableName: 'Email',
-            question: "What's your email?",
-        },
-    },
-    {
-        id: 'end',
-        type: 'end',
-        position: { x: 850, y: 100 },
-        data: { label: 'Complete' },
-    },
-];
-
-const simpleEdges: Edge[] = [
-    {
-        id: 'e1',
-        source: 'start',
-        sourceHandle: 'output',
-        target: 'q1',
-        targetHandle: 'input',
-        markerEnd: { type: MarkerType.ArrowClosed },
-    },
-    {
-        id: 'e2',
-        source: 'q1',
-        sourceHandle: 'output',
-        target: 'q2',
-        targetHandle: 'input',
-        markerEnd: { type: MarkerType.ArrowClosed },
-    },
-    {
-        id: 'e3',
-        source: 'q2',
-        sourceHandle: 'output',
-        target: 'end',
-        targetHandle: 'input',
-        markerEnd: { type: MarkerType.ArrowClosed },
-    },
-];
-
-/**
- * A simple linear survey flow with text entry questions only.
- */
-export const SimpleLinearFlow: Story = {
-    args: {
-        nodes: simpleNodes,
-        edges: simpleEdges,
-        showControls: true,
+        showControls: false,
         showBackground: true,
+        backgroundVariant: BackgroundVariant.Dots,
+        nodesDraggable: false,
+        fitView: true,
+    },
+};
+
+/**
+ * MultipleChoice node with 4 choices — each choice renders its own
+ * output handle on the right side.
+ */
+export const MultipleChoiceNodeStory: Story = {
+    name: 'Node › Multiple Choice',
+    render: (args) => (
+        <div style={{ width: '100%', height: '360px' }}>
+            <DiagramCanvas
+                {...args}
+                nodes={[{ ...MC_NODE, position: { x: 200, y: 80 } }]}
+                edges={[]}
+            />
+        </div>
+    ),
+    args: {
+        showControls: false,
+        showBackground: true,
+        backgroundVariant: BackgroundVariant.Dots,
+        nodesDraggable: false,
+        fitView: true,
+    },
+};
+
+/**
+ * TextEntry node — open-ended question with a single output handle.
+ */
+export const TextEntryNodeStory: Story = {
+    name: 'Node › Text Entry',
+    render: (args) => (
+        <div style={{ width: '100%', height: '300px' }}>
+            <DiagramCanvas
+                {...args}
+                nodes={[{ ...TEXT_NODE, position: { x: 200, y: 80 } }]}
+                edges={[]}
+            />
+        </div>
+    ),
+    args: {
+        showControls: false,
+        showBackground: true,
+        backgroundVariant: BackgroundVariant.Dots,
+        nodesDraggable: false,
+        fitView: true,
+    },
+};
+
+/**
+ * Description node — informational content block, no question handles.
+ */
+export const DescriptionNodeStory: Story = {
+    name: 'Node › Description',
+    render: (args) => (
+        <div style={{ width: '100%', height: '300px' }}>
+            <DiagramCanvas
+                {...args}
+                nodes={[{ ...DESC_NODE, position: { x: 200, y: 80 } }]}
+                edges={[]}
+            />
+        </div>
+    ),
+    args: {
+        showControls: false,
+        showBackground: true,
+        backgroundVariant: BackgroundVariant.Dots,
+        nodesDraggable: false,
+        fitView: true,
+    },
+};
+
+/**
+ * Read-only canvas — all interaction disabled.
+ * Mirrors an embed or preview context.
+ */
+export const ReadOnly: Story = {
+    name: 'Read-Only Canvas',
+    render: (args) => (
+        <div style={{ width: '100%', height: '600px' }}>
+            <DiagramCanvas
+                {...args}
+                nodes={[START_NODE, MC_NODE, TEXT_NODE, END_NODE]}
+                edges={BASE_EDGES}
+            />
+        </div>
+    ),
+    args: {
+        showControls: false,
+        showBackground: true,
+        backgroundVariant: BackgroundVariant.Lines,
+        nodesDraggable: false,
+        panOnDrag: false,
+        zoomOnScroll: false,
+        fitView: true,
+    },
+};
+
+/**
+ * Background variants — visually compare Dots vs Lines vs Cross.
+ */
+export const BackgroundDots: Story = {
+    name: 'Background › Dots',
+    render: (args) => (
+        <div style={{ width: '100%', height: '400px' }}>
+            <DiagramCanvas
+                {...args}
+                nodes={[START_NODE, END_NODE]}
+                edges={[{ id: 'e', source: 'start', target: 'end' }]}
+            />
+        </div>
+    ),
+    args: {
+        showControls: false,
+        showBackground: true,
+        backgroundVariant: BackgroundVariant.Dots,
+        nodesDraggable: false,
+        fitView: true,
+    },
+};
+
+export const BackgroundLines: Story = {
+    name: 'Background › Lines',
+    render: (args) => (
+        <div style={{ width: '100%', height: '400px' }}>
+            <DiagramCanvas
+                {...args}
+                nodes={[START_NODE, END_NODE]}
+                edges={[{ id: 'e', source: 'start', target: 'end' }]}
+            />
+        </div>
+    ),
+    args: {
+        showControls: false,
+        showBackground: true,
+        backgroundVariant: BackgroundVariant.Lines,
+        nodesDraggable: false,
+        fitView: true,
+    },
+};
+
+export const BackgroundCross: Story = {
+    name: 'Background › Cross',
+    render: (args) => (
+        <div style={{ width: '100%', height: '400px' }}>
+            <DiagramCanvas
+                {...args}
+                nodes={[START_NODE, END_NODE]}
+                edges={[{ id: 'e', source: 'start', target: 'end' }]}
+            />
+        </div>
+    ),
+    args: {
+        showControls: false,
+        showBackground: true,
+        backgroundVariant: BackgroundVariant.Cross,
+        nodesDraggable: false,
         fitView: true,
     },
 };

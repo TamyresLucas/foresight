@@ -11,7 +11,7 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
-    layout: 'padded',
+    layout: 'centered',
     backgrounds: { disabled: true },
     options: {
       storySort: {
@@ -20,22 +20,23 @@ const preview: Preview = {
       },
     },
     darkMode: {
-      // Storybook theme configuration
-      current: 'light',
-      // Apply classes to preview iframe
+      // NOTE: Do NOT set `current` here — the addon re-reads it on every
+      // story navigation, causing a visible light→dark flash before the
+      // persisted state is restored from localStorage.
       classTarget: 'html',
       darkClass: 'dark',
       lightClass: 'light',
-      stylePreview: true,
-      // Theme objects with proper class names
+      // Let CSS tokens (--background) control the preview background.
+      // `stylePreview: true` applies an inline background that can desync
+      // from the token-driven background during the class toggle, causing
+      // a second flash.
+      stylePreview: false,
       dark: {
-        class: 'dark',
         appBg: '#1a1a2e',
         appContentBg: '#16162a',
         barBg: '#1a1a2e',
       },
       light: {
-        class: 'light',
         appBg: '#ffffff',
         appContentBg: '#f8fafc',
         barBg: '#ffffff',
@@ -80,3 +81,10 @@ const preview: Preview = {
 };
 
 export default preview;
+
+// NOTE: The `globalTypes.theme` toolbar was removed because it was a
+// duplicate theme toggle that competed with `storybook-dark-mode`.
+// The addon already provides its own toggle in the toolbar (moon/sun icon).
+// Having both created two independent buttons where only one actually
+// worked, and the `defaultValue: 'light'` could interfere with the
+// addon's persisted state on navigation.
