@@ -1,34 +1,25 @@
 module.exports = {
-  root: true,
-  env: {
-    browser: true,
-    es2021: true,
-    node: true,
-  },
-  extends: ["eslint:recommended", "plugin:storybook/recommended"],
-  overrides: [
-    {
-      files: ["**/*.test.tsx"],
-      rules: {
-        "no-unused-vars": "off",
-      },
-    },
-    {
-      files: ["**/*.stories.tsx"],
-      rules: {
-        "storybook/no-renderer-packages": "off",
-      },
-    },
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react-hooks/recommended',
+    'plugin:storybook/recommended',
   ],
-  parser: "@typescript-eslint/parser",
-  parserOptions: {
-    ecmaVersion: "latest",
-    sourceType: "module",
-  },
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint', 'react-hooks', 'unused-imports'],
   rules: {
-    "no-unused-vars": "warn",
-    "no-console": "off",
-    "no-undef": "off",
+    'prefer-const': 'error',
+    'no-var': 'error',
+    '@typescript-eslint/no-unused-vars': 'off',
+    'unused-imports/no-unused-imports': 'error',
+    'unused-imports/no-unused-vars': [
+      'error',
+      { 'vars': 'all', 'varsIgnorePattern': '^_', 'args': 'after-used', 'argsIgnorePattern': '^_' }
+    ],
   },
-  ignorePatterns: ["dist/", "node_modules/"],
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
 };

@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Added
+- Created Notion API workflow automation scripts to interact with internal Kanban and Execution Log DBs (stored as untracked scratch files).
+
 - Restored custom `paper` MCP server configuration in `opencode.jsonc` that was overwritten during reformatting.
 - Created "Red Core" design artboard in Paper Design Tool, featuring a vibrant red-to-dark gradient background, modern typography (Outfit), and a centered login experience with glassmorphism effects and primary action buttons.
 ### Fixed
@@ -11,6 +13,11 @@ All notable changes to this project will be documented in this file.
 - Fixed a ghost syntax error (Expected comma at EOF) in `opencode.jsonc` by re-formatting the JSON to enforce a trailing newline.
 - Fixed the `Calendar` component in `@foresight/design-system` not displaying day numbers. The custom `CalendarDayButton` component has been refactored to correctly implement the `useDayRender` hook from `react-day-picker` v8, ensuring that day numbers are rendered and properly styled with all required modifiers (e.g. `selected`, `disabled`, `range_start`).
 ### Changed
+- Replaced hardcoded surface hover tokens in `lytenyte-grid.css` with precise `--primary` CSS variable mappings to strictly adhere to the updated token audit requirements.
+- Addressed 80 legacy TypeScript/ESLint strict errors within `_reference` components using an AST auto-fixer: eliminated unused imports, removed deprecated payload hooks, and coerced implicit `any` assignments to `unknown`.
+- Upgraded local `zod` module to immediately resolve `ERR_PACKAGE_PATH_NOT_EXPORTED` pipeline halts, allowing the re-enablement of strict `react-hooks` and `storybook` configuration validations.
+- Applied targeted inline suppressions for 43 remaining hook exhaustive-deps/rules constraints strictly for unmigrated legacy `_reference` survey components.
+
 - Updated `ghost-primary` button variant hover state to match the standard `ghost` variant hover styles (primary background with 10% opacity and primary text color).
 - Updated `Badge` component: variants (`secondary`, `destructive`, `success`, `warning`) now implement a layered background system. In light mode, a pure white base is used under a 10% opacity color overlay (matching `ghost` button hover) to ensure accurate color rendering. The text remains standard `text-foreground` for legibility. The `warning` variant is now aligned with the Voxco brand tangerine tokens.
 - Updated `Switch` component: the background color when in the "on" (checked) state now correctly uses the primary color token.
