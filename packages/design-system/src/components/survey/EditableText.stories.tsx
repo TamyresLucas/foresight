@@ -156,6 +156,7 @@ type Story = StoryObj<typeof meta>;
 
 /** Default — text at rest. Hover to see the underline affordance; click to enter editing mode. */
 export const Default: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Default',
     args: {
         value: 'How satisfied are you with our service?',
@@ -165,6 +166,7 @@ export const Default: Story = {
 
 /** Editing — the inline input is active with the text selected, ready for the user to type. */
 export const Editing: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Editing',
     args: {
         value: 'How satisfied are you with our service?',
@@ -175,6 +177,7 @@ export const Editing: Story = {
 
 /** Empty — no value set. The placeholder text is visible until the user types. */
 export const Empty: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Empty',
     args: {
         value: '',
@@ -185,6 +188,7 @@ export const Empty: Story = {
 
 /** Long Text — verifies multi-line wrapping within a constrained container. */
 export const LongText: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Long Text',
     args: {
         value:
@@ -195,6 +199,7 @@ export const LongText: Story = {
 
 /** Disabled — read-only state used in print mode or locked surveys. No interaction affordances are shown. */
 export const Disabled: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Disabled',
     args: {
         value: 'How satisfied are you with our service?',

@@ -245,7 +245,7 @@ export const InCard = {
     action: { label: "Copy Link" },
     icon: <ResponsesIcon />,
   },
-  render: (args: any) => (
+  render: (args: unknown) => (
     <div className="w-full max-w-2xl border border-primary/20 rounded-lg bg-card p-4">
       <EmptyState {...(args || {})} />
     </div>

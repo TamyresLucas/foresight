@@ -106,7 +106,7 @@ export const Vertical: Story = {
 // === WITH INDICATORS (Dots) ===
 
 const CarouselWithIndicators = () => {
-  const [api, setApi] = React.useState<any>();
+  const [api, setApi] = React.useState<unknown>();
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
 

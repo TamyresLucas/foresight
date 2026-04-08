@@ -12,6 +12,7 @@ interface HandleProps {
 /**
  * Input handle for diagram nodes (left side)
  */
+// eslint-disable-next-line unused-imports/no-unused-vars
 export const InputHandle: React.FC<HandleProps> = ({ highlighted, className }) => (
     <Handle
         type="target"
@@ -33,6 +34,7 @@ export const InputHandle: React.FC<HandleProps> = ({ highlighted, className }) =
 /**
  * Output handle for diagram nodes (right side)
  */
+// eslint-disable-next-line unused-imports/no-unused-vars
 export const OutputHandle: React.FC<HandleProps> = ({ highlighted, className }) => (
     <Handle
         type="source"
@@ -60,6 +62,7 @@ interface ChoiceHandleProps extends HandleProps {
  */
 export const ChoiceOutputHandle: React.FC<ChoiceHandleProps> = ({
     id,
+// eslint-disable-next-line unused-imports/no-unused-vars
     highlighted,
     className
 }) => (

@@ -33,9 +33,9 @@ export interface DiagramCanvasProps {
   /** Array of edges connecting nodes */
   edges: Edge[];
   /** Callback when nodes change (for controlled mode) */
-  onNodesChange?: (changes: any) => void;
+  onNodesChange?: (changes: unknown) => void;
   /** Callback when edges change (for controlled mode) */
-  onEdgesChange?: (changes: any) => void;
+  onEdgesChange?: (changes: unknown) => void;
   /** Callback when a node is clicked */
   onNodeClick?: (event: React.MouseEvent, node: Node) => void;
   /** Whether to show the controls panel */

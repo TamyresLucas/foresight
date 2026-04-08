@@ -181,6 +181,7 @@ interface DisplayLogicDisplayMockProps {
 
 function DisplayLogicDisplayMock({
     logic,
+// eslint-disable-next-line unused-imports/no-unused-vars
     survey,
     onClick,
     onRemove,

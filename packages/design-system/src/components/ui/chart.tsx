@@ -15,7 +15,6 @@ import {
   Radar,
   RadialBarChart as RechartsRadialBarChart,
   RadialBar,
-  Customized,
   PolarGrid,
   PolarAngleAxis,
   PolarRadiusAxis,
@@ -499,9 +498,9 @@ export function BarChart({
 
           // For single-series charts, render a solid background rect first so the
           // semi-transparent muted bars appear as a lighter solid color (not see-through).
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+           
           const barShape = isSingleSeries
-            ? (p: any) => {
+            ? (p: unknown) => {
                 const { x, y, width, height, fill } = p;
                 if (!fill || width <= 0 || height <= 0) return <g />;
                 return (

@@ -147,6 +147,7 @@ type Story = StoryObj<typeof meta>;
 
 /** Default — a survey row in its resting state. The chevron points right indicating it is collapsed. */
 export const Default: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Default',
     args: {
         title: 'Customer Satisfaction Survey',
@@ -155,6 +156,7 @@ export const Default: Story = {
 
 /** Expanded — the chevron rotates 90° to point downward, indicating the survey tree is open. */
 export const Expanded: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Expanded',
     args: {
         title: 'Customer Satisfaction Survey',
@@ -164,6 +166,7 @@ export const Expanded: Story = {
 
 /** Long Title — a survey title that exceeds the available width and is truncated with an ellipsis. */
 export const LongTitle: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Long Title',
     args: {
         title: 'Q4 2024 Annual Employee Engagement & Wellbeing Survey — Extended Edition',
@@ -172,6 +175,7 @@ export const LongTitle: Story = {
 
 /** Dragged — the row is currently being dragged. Opacity drops to 30% to leave a ghost placeholder in the sidebar. */
 export const Dragged: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Dragged',
     args: {
         title: 'Customer Satisfaction Survey',
@@ -185,6 +189,7 @@ export const Dragged: Story = {
 
 /** All states — all four states rendered together as they might appear in the sidebar. */
 export const AllStates: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'All States',
     render: () => (
         <div className="w-64 border border-border-ui rounded-lg overflow-hidden">

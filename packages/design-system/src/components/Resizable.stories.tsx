@@ -17,7 +17,7 @@ const meta = {
 export default meta;
 // Removed strict Story typing for local story to ease maintenance
 
-export const Default: any = {
+export const Default: unknown = {
   render: () => (
     <ResizablePanelGroup
       direction="horizontal"

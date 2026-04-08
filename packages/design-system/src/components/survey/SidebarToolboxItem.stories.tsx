@@ -107,6 +107,7 @@ export const TextEntry: Story = {
 
 /** Description — informational text block; no respondent input. */
 export const Description: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Description',
     args: {
         icon: FormatParagraph,
@@ -116,6 +117,7 @@ export const Description: Story = {
 
 /** Page Break — structural separator that creates a new survey page. */
 export const PageBreak: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Page Break',
     args: {
         icon: InsertPageBreak,
@@ -129,6 +131,7 @@ export const PageBreak: Story = {
 
 /** Dragging — item is being dragged. Background switches to primary with white text and icon. */
 export const Dragging: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Dragging',
     args: {
         icon: RadioButtonChecked,
@@ -139,6 +142,7 @@ export const Dragging: Story = {
 
 /** Disabled — item is greyed out and cannot be interacted with. */
 export const Disabled: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Disabled',
     args: {
         icon: RadioButtonChecked,
@@ -149,6 +153,7 @@ export const Disabled: Story = {
 
 /** With End Action — trailing `+` button visible on hover (e.g. for quick-add). */
 export const WithEndAction: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'With End Action',
     args: {
         icon: RadioButtonChecked,
@@ -171,6 +176,7 @@ export const WithEndAction: Story = {
 
 /** All Types — the 5 core question types stacked as they appear in the sidebar toolbox. */
 export const AllTypes: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'All Types',
     render: (args) => (
         <div className="w-64 border border-border-ui rounded-lg overflow-hidden">
@@ -196,6 +202,7 @@ export const AllTypes: Story = {
 
 /** Full Library — every question type from `toolbox-items.ts`, rendered in their category groups. */
 export const FullLibrary: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Full Library',
     render: (args) => (
         <div className="w-64 border border-border-ui rounded-lg overflow-hidden">

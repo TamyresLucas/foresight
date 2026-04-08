@@ -31,7 +31,7 @@ export interface ColorPickerProps {
 // Helpers
 // ============================================================================
 
-const formatColor = (color: any, format: ColorFormat): string => {
+const formatColor = (color: unknown, format: ColorFormat): string => {
   switch (format) {
     case "hex":
       return color.hex();
@@ -55,7 +55,7 @@ export function ColorPicker({
   format = "hex",
   disabled = false,
 }: ColorPickerProps) {
-  const [internalColor, setInternalColor] = React.useState<any>(Color(value));
+  const [internalColor, setInternalColor] = React.useState<unknown>(Color(value));
   const [activeFormat, setActiveFormat] = React.useState<ColorFormat>(format);
   const [open, setOpen] = React.useState(false);
 
@@ -63,6 +63,7 @@ export function ColorPicker({
   React.useEffect(() => {
     try {
       setInternalColor(Color(value));
+// eslint-disable-next-line unused-imports/no-unused-vars
     } catch (e) {
       // Ignore invalid colors from props, keep last valid
     }
@@ -80,7 +81,7 @@ export function ColorPicker({
       | { h: number; s: number; l: number; a: number },
   ) => {
     try {
-      let c: any;
+      let c: unknown;
       if (typeof newColor === "string") {
         c = Color(newColor);
       } else {
@@ -114,6 +115,7 @@ export function ColorPicker({
       const c = Color(val);
       setInternalColor(c);
       onChange?.(formatColor(c, activeFormat));
+// eslint-disable-next-line unused-imports/no-unused-vars
     } catch (error) {
       // Allow typing (invalid state) but don't update color object yet
       // In a real app we might want local input state
@@ -194,6 +196,6 @@ export function ColorPicker({
 // Add EyeDropper type definition if missing
 declare global {
   interface Window {
-    EyeDropper: any;
+    EyeDropper: unknown;
   }
 }

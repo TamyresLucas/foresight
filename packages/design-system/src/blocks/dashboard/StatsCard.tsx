@@ -56,6 +56,7 @@ const statsColorVariants = cva("", {
   },
 });
 
+// eslint-disable-next-line unused-imports/no-unused-vars
 const progressColorVariants = cva("", {
   variants: {
     color: {

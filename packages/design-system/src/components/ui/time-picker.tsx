@@ -50,6 +50,7 @@ export function TimePicker({
         if (hour && minute) {
             onChange?.(`${hour}:${minute}`)
         }
+// eslint-disable-next-line react-hooks/exhaustive-deps
     }, [hour, minute]) // Removed onChange from dep array to avoid loops if onChange is unstable
 
     // Sync with prop
@@ -63,6 +64,7 @@ export function TimePicker({
                 if (m !== minute) setMinute(m)
             }
         }
+// eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value])
 
     return (

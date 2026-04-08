@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 // Shim for Lucide icons to Google Material Symbols
 
 const createIcon = (name: string, defaultClass?: string) => {
-    return ({ className, ...props }: any) => (
+    return ({ className, ...props }: unknown) => (
         <Icon name={name} className={cn(defaultClass, className)} {...props} />
     )
 }

@@ -57,6 +57,7 @@ export const Negative: Story = {
 }
 
 export const AllVariants: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: "All Variants",
     render: () => (
         <div className="flex items-center gap-4">

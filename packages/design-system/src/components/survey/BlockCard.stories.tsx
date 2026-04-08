@@ -234,6 +234,7 @@ type Story = StoryObj<typeof meta>;
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Default',
     render: () => (
         <BlockCard title="Customer Satisfaction" blockId="B1" questionCount={3}>
@@ -299,6 +300,7 @@ export const Default: Story = {
 // ---------------------------------------------------------------------------
 
 export const Selected: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Selected',
     render: () => (
         <BlockCard title="Customer Satisfaction" blockId="B1" questionCount={2} isSelected>
@@ -346,6 +348,7 @@ export const Selected: Story = {
 // ---------------------------------------------------------------------------
 
 export const Hovered: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Hovered',
     render: () => (
         <BlockCard title="Customer Satisfaction" blockId="B1" questionCount={2} isHovered>
@@ -391,6 +394,7 @@ export const Hovered: Story = {
 // ---------------------------------------------------------------------------
 
 export const Collapsed: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Collapsed',
     render: () => (
         <BlockCard title="Demographics" blockId="B2" questionCount={4} isCollapsed>
@@ -688,6 +692,7 @@ export const QuestionWithLogicError: Story = {
 // ---------------------------------------------------------------------------
 
 export const Dragging: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Dragging',
     render: () => (
         <BlockCard title="Customer Satisfaction" blockId="B1" questionCount={2} isDragging>

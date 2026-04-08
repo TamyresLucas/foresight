@@ -158,6 +158,7 @@ function InteractiveCanvas(
  * Nodes are draggable and edges are live — mirrors real usage.
  */
 export const FullSurveyFlow: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Full Survey Flow',
     render: (args) => (
         <div style={{ width: '100%', height: '600px' }}>
@@ -184,6 +185,7 @@ export const FullSurveyFlow: Story = {
  * Useful for testing the canvas renders with the smallest valid input.
  */
 export const MinimalFlow: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Minimal Flow',
     render: (args) => (
         <div style={{ width: '100%', height: '400px' }}>

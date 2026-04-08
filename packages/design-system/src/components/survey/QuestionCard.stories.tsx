@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Alert, AlertTitle, AlertDescription } from '../ui/alert';
 import { Badge } from '../ui/badge';
 import { cn } from '../../lib/utils';
+import { Textarea } from '../ui/textarea';
 
 // ---------------------------------------------------------------------------
 // Shared primitives
@@ -15,7 +16,7 @@ const DragHandle = () => (
 );
 
 const QuestionId = ({ id }: { id: string }) => (
-    <span className="text-xs font-mono font-semibold text-muted-foreground uppercase tracking-wide">{id}</span>
+    <span className="text-xs font-mono font-semibold text-foreground uppercase tracking-wide">{id}</span>
 );
 
 const TypeBadge = ({ label }: { label: string }) => (
@@ -320,9 +321,11 @@ export const TextEntryDefault: Story = {
                     <ActionsMenu />
                 </div>
                 <QuestionText>Please describe your experience in detail.</QuestionText>
-                <div className="mt-3 rounded border border-border bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
-                    Respondent types a free-text answer here...
-                </div>
+                <Textarea
+                    className="mt-3"
+                    placeholder="Respondent types a free-text answer here..."
+                    readOnly
+                />
             </div>
         </CardShell>
     ),
@@ -342,9 +345,11 @@ export const TextEntrySelected: Story = {
                     <ActionsMenu />
                 </div>
                 <QuestionText>Please describe your experience in detail.</QuestionText>
-                <div className="mt-3 rounded border border-border bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
-                    Respondent types a free-text answer here...
-                </div>
+                <Textarea
+                    className="mt-3"
+                    placeholder="Respondent types a free-text answer here..."
+                    readOnly
+                />
             </div>
         </CardShell>
     ),
@@ -364,9 +369,11 @@ export const TextEntryError: Story = {
                     <ActionsMenu />
                 </div>
                 <QuestionText>Please describe your experience in detail.</QuestionText>
-                <div className="mt-3 rounded border border-border bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
-                    Respondent types a free-text answer here...
-                </div>
+                <Textarea
+                    className="mt-3"
+                    placeholder="Respondent types a free-text answer here..."
+                    readOnly
+                />
                 <LogicErrorAlert message="Branch logic jumps to Q7 which is on a previous page. Forward-only branching required." />
             </div>
         </CardShell>
@@ -421,9 +428,11 @@ export const TextEntryWithLogic: Story = {
                     <ActionsMenu />
                 </div>
                 <QuestionText>Please describe your experience in detail.</QuestionText>
-                <div className="mt-3 rounded border border-border bg-muted/30 px-3 py-2 text-sm text-muted-foreground italic">
-                    Respondent types a free-text answer here...
-                </div>
+                <Textarea
+                    className="mt-3"
+                    placeholder="Respondent types a free-text answer here..."
+                    readOnly
+                />
                 <LogicAlert message="Display only if Q1 = 'Dissatisfied' or 'Neutral'" />
             </div>
         </CardShell>

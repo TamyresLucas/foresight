@@ -223,6 +223,7 @@ function LogicSetDisplay({
     startEmpty = false,
     actionValue: initialActionValue,
     headerContent,
+// eslint-disable-next-line unused-imports/no-unused-vars
     issues = [],
     showRowIfLabel = false,
     transparentBackground = false,

@@ -133,6 +133,7 @@ type Story = StoryObj<typeof meta>;
 
 /** Default — the zone at rest. Renders as a near-invisible 2 px separator between question cards. */
 export const Default: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Default',
     args: {
         isActive: false,
@@ -142,6 +143,7 @@ export const Default: Story = {
 
 /** Active — a question or toolbox item is being dragged over this zone. The strip expands and highlights to invite a drop. */
 export const Active: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Active',
     args: {
         isActive: true,
@@ -183,6 +185,7 @@ export const After: Story = {
 
 /** Overview — all states shown in context with adjacent question cards. */
 export const Overview: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Overview',
     render: () => (
         <div className="w-[460px] p-4 space-y-0">

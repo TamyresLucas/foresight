@@ -135,6 +135,7 @@ type Story = StoryObj<typeof meta>;
 // ---------------------------------------------------------------------------
 
 export const Default: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Default',
     render: () => (
         <div className="space-y-1">
@@ -173,6 +174,7 @@ export const Named: Story = {
 // ---------------------------------------------------------------------------
 
 export const Selected: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Selected',
     render: () => (
         <div className="space-y-1">
@@ -192,6 +194,7 @@ export const Selected: Story = {
 // ---------------------------------------------------------------------------
 
 export const Dragging: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Dragging',
     render: () => (
         <div className="space-y-1">
@@ -211,6 +214,7 @@ export const Dragging: Story = {
 // ---------------------------------------------------------------------------
 
 export const MultiplePageBreaks: Story = {
+// eslint-disable-next-line storybook/no-redundant-story-name
     name: 'Multiple Page Breaks',
     render: () => (
         <div className="space-y-1">
