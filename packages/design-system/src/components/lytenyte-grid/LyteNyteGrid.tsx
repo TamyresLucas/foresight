@@ -4,7 +4,7 @@ import type { Column, RowLayout, SortModelItem, RowDetailRendererFn } from '@177
 import '@1771technologies/lytenyte-core/grid.css';
 import './lytenyte-grid.css';
 
-export type LyteNyteGridProps<T = any> = {
+export type LyteNyteGridProps<T = unknown> = {
     /** Column definitions */
     columns: Column<T>[];
     /** Row data array */
@@ -16,7 +16,7 @@ export type LyteNyteGridProps<T = any> = {
     /** Initial sort configuration */
     sortModel?: SortModelItem<T>[];
     /** Filter model for column filtering */
-    filterModel?: Record<string, any>;
+    filterModel?: Record<string, unknown>;
     /** Row selection mode */
     rowSelectionMode?: 'single' | 'multi' | 'none';
     /** Array of column IDs for row grouping */
@@ -106,7 +106,7 @@ export function LyteNyteGrid<T>({
     );
 }
 
-function RowSection<D = any>({
+function RowSection<D = unknown>({
     section,
     rows,
 }: {

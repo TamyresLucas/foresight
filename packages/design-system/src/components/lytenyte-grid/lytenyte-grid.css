@@ -3,7 +3,7 @@
 /* Override LyteNyte's built-in CSS variables with design tokens */
 .lng-grid {
   --lng1771-row-selected: hsl(var(--border-subtle));
-  --lng1771-row-bg: hsl(233 86% 64% / 0.1);
+  --lng1771-row-bg: hsl(var(--primary) / 0.1);
   --lng1771-primary-50: hsl(var(--primary));
   --lng1771-gray-00: hsl(var(--background));
   --lng1771-gray-02: transparent;
@@ -39,19 +39,19 @@
 }
 
 [data-ln-row-selected="true"]:hover {
-  background-color: hsl(233 86% 64% / 0.1) !important;
+  background-color: hsl(var(--primary) / 0.1) !important;
   color: hsl(var(--primary)) !important;
   box-shadow: inset 2px 0 0 0 hsl(var(--primary)) !important;
 }
 
 /* Row hover effect - same as ghost button */
 [data-ln-row]:hover {
-  background-color: hsl(233 86% 64% / 0.1);
+  background-color: hsl(var(--primary) / 0.1);
 }
 
 /* Apply hover background to cells to override any internal backgrounds */
 [data-ln-row]:hover [data-ln-cell] {
-  background-color: hsl(233 86% 64% / 0.1) !important;
+  background-color: hsl(var(--primary) / 0.1) !important;
 }
 
 /* Row actions - hidden by default, visible on hover */

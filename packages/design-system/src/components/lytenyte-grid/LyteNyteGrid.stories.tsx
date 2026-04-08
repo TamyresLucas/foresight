@@ -304,7 +304,7 @@ const selectionColumns: Column<Employee>[] = [
     id: "_select",
     name: "",
     width: 40,
-    cellRenderer: (params: any) => {
+    cellRenderer: (params: unknown) => {
       const row = params.row;
       const grid = params.grid;
       const selectedIds = grid.state.rowSelectedIds.useValue();
@@ -447,7 +447,7 @@ const customRendererColumns: Column<OrderWithStatus>[] = [
     name: "Amount",
     type: "number",
     width: 100,
-    cellRenderer: (params: any) => (
+    cellRenderer: (params: unknown) => (
       <CurrencyCell value={params.value as number} />
     ),
   },
@@ -455,7 +455,7 @@ const customRendererColumns: Column<OrderWithStatus>[] = [
     id: "status",
     name: "Status",
     width: 110,
-    cellRenderer: (params: any) => (
+    cellRenderer: (params: unknown) => (
       <StatusCell value={params.value as string} />
     ),
   },
@@ -490,7 +490,7 @@ const ICONS = {
 import { TableRowActions } from "../ui/table-row-actions";
 
 // Row actions cell renderer using standard component
-const RowActionsCell = ({ row }: { row: any }) => {
+const RowActionsCell = ({ row }: { row: unknown }) => {
   if (!row) return null;
   const r = row as Employee;
   // Simulate different action counts for demonstration if needed,
@@ -562,7 +562,7 @@ const rowActionsColumns: Column<Employee>[] = [
     id: "_actions",
     name: "",
     width: 60,
-    cellRenderer: (params: any) => (
+    cellRenderer: (params: unknown) => (
       <RowActionsCell row={params.row as unknown as Employee} />
     ),
   },
