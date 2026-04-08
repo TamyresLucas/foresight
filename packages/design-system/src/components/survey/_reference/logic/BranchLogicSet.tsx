@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import type { BranchingLogicBranch, BranchingLogicCondition, LogicIssue, Question, Survey } from '../../../types';
 import { Button } from '@/components/Button';
-import { XIcon, PlusIcon } from '../../icons';
+import { PlusIcon } from '../../icons';
 import { LogicConditionRow, DestinationRow } from './';
 import { generateId } from '../../../utils';
 
@@ -22,6 +22,7 @@ export const BranchLogicSet: React.FC<BranchLogicSetProps> = ({
     onUpdate,
     onRemove,
     availableQuestions,
+// eslint-disable-next-line unused-imports/no-unused-vars
     followingQuestions,
     survey,
     currentBlockId,
@@ -51,6 +52,7 @@ export const BranchLogicSet: React.FC<BranchLogicSetProps> = ({
         if (branch.thenSkipToIsConfirmed) { // Assuming a saved branch has this confirmed
             originalBranchRef.current = JSON.parse(JSON.stringify(branch));
         }
+// eslint-disable-next-line react-hooks/exhaustive-deps
     }, []); // Run once on mount
 
     const handleCancel = () => {
@@ -65,7 +67,7 @@ export const BranchLogicSet: React.FC<BranchLogicSetProps> = ({
         setConditionErrors(new Map());
     };
 
-    const handleUpdateCondition = (conditionId: string, field: keyof BranchingLogicCondition, value: any) => {
+    const handleUpdateCondition = (conditionId: string, field: keyof BranchingLogicCondition, value: unknown) => {
         const newConditions = branch.conditions.map(c =>
             c.id === conditionId ? { ...c, [field]: value, isConfirmed: false } : c
         );
@@ -236,7 +238,7 @@ export const BranchLogicSet: React.FC<BranchLogicSetProps> = ({
                                 questionWidth="flex-[1.5] min-w-[120px]"
                                 valueWidth="flex-[1] min-w-[100px]"
                                 operatorWidth="flex-[1] min-w-[100px]"
-                                invalidFields={conditionErrors.get(condition.id) as any}
+                                invalidFields={conditionErrors.get(condition.id) as unknown}
                                 conditionIndex={index}
                             />
                         </div>

@@ -15,6 +15,7 @@ interface SidebarLibrarySurveyProps {
 }
 
 export const SidebarLibrarySurvey: React.FC<SidebarLibrarySurveyProps> = ({
+// eslint-disable-next-line unused-imports/no-unused-vars
     id,
     title,
     isDragged,

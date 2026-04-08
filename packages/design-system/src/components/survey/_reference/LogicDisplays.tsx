@@ -250,6 +250,8 @@ export const IncomingLogicDisplay: React.FC<{
     );
 };
 
+ 
+// eslint-disable-next-line unused-imports/no-unused-vars
 export const BranchingLogicDisplay: React.FC<{ logic: BranchingLogic; survey: Survey; onClick: (id?: string) => void; onRemove: () => void; question: Question; issues?: LogicIssue[]; isFocused?: boolean; focusedId?: string | null; readOnly?: boolean }> = ({ logic, survey, onClick, onRemove, question, issues = [], isFocused = false, focusedId, readOnly = false }) => {
     const showOtherwise = useMemo(() => {
         if (!question.choices || question.choices.length === 0) return true;

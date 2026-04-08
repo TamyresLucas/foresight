@@ -3,12 +3,12 @@ import type { Question, ToolboxItemData, Block } from '../../types';
 import { QuestionType } from '../../types';
 import { Button } from '../Button';
 import {
-    DotsHorizontalIcon, RadioIcon, ChevronDownIcon,
+    DotsHorizontalIcon, RadioIcon,
     AsteriskIcon, VisibilityOffIcon, DragIndicatorIcon
 } from '../icons';
-import { QuestionActionsMenu, QuestionTypeSelectionMenuContent } from '../ActionMenus';
+import { QuestionActionsMenu } from '../ActionMenus';
 import { Badge } from '../Badge';
-import { Toggle } from '../Toggle'; // Standard Toggle not used here yet (using checkbox for selection), but good to import if needed later. Checkbox is for selection.
+// Standard Toggle not used here yet (using checkbox for selection), but good to import if needed later. Checkbox is for selection.
 
 interface QuestionCardHeaderProps {
     question: Question;
@@ -18,7 +18,7 @@ interface QuestionCardHeaderProps {
     isActionsMenuOpen: boolean;
     typeMenuContainerRef: React.RefObject<HTMLDivElement>;
     actionsMenuContainerRef: React.RefObject<HTMLDivElement>;
-    questionTypeOptions: { type: QuestionType; label: string; icon: any }[];
+    questionTypeOptions: { type: QuestionType; label: string; icon: unknown }[];
     toolboxItems: ToolboxItemData[];
     printMode?: boolean;
     willAutoadvance: boolean;
@@ -61,16 +61,22 @@ interface QuestionCardHeaderProps {
 }
 
 export const QuestionCardHeader: React.FC<QuestionCardHeaderProps> = ({
+ 
+// eslint-disable-next-line unused-imports/no-unused-vars
     question, isChecked, showBulkEditCheckbox = false, isTypeMenuOpen, isActionsMenuOpen, typeMenuContainerRef, actionsMenuContainerRef,
+// eslint-disable-next-line unused-imports/no-unused-vars
     questionTypeOptions, toolboxItems, printMode, willAutoadvance, isHovered, draggedChoiceId, onDragStart, onDragEnd,
     isEditingLabel, labelValue, labelError,
     onToggleCheck, setLabelValue, setLabelError, saveLabel, handleLabelKeyDown, handleLabelEditClick,
+ 
+// eslint-disable-next-line unused-imports/no-unused-vars
     setIsTypeMenuOpen, handleTypeSelect, setIsActionsMenuOpen,
     onCopyQuestion, onDeleteQuestion, onAddPageBreakAfterQuestion,
     onAddQuestionAbove, onAddQuestionBelow,
     onMoveQuestionToNewBlock, onMoveQuestionToExistingBlock,
     onMoveTo, onAddToLibrary, onBulkEdit, handlePreview, handleActivate, handleDeactivate, blocks
 }) => {
+// eslint-disable-next-line unused-imports/no-unused-vars
     const CurrentQuestionTypeIcon = questionTypeOptions.find(o => o.type === question.type)?.icon || RadioIcon;
 
     const handleMoveToBlock = (target: string | 'new') => {

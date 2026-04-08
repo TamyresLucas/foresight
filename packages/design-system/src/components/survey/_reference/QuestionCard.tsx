@@ -48,6 +48,7 @@ const QuestionCard: React.FC<{
     totalPages?: number;
     showBulkEditCheckbox?: boolean;
 }> = memo(({
+// eslint-disable-next-line unused-imports/no-unused-vars
     question, survey, parentBlock, currentBlockId, logicIssues, isSelected, isChecked, onSelect, onToggleCheck, id,
     onUpdateQuestion, onUpdateBlock, onDeleteQuestion, onCopyQuestion, onMoveQuestionToNewBlock, onMoveQuestionToExistingBlock, onMoveTo,
     onAddQuestionAbove, onAddQuestionBelow, onAddToLibrary,

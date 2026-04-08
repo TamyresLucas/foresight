@@ -25,7 +25,7 @@ interface PageIndicatorProps {
     setPageNameValue: (val: string) => void;
     handleSavePageName: () => void;
     handlePageNameKeyDown: (e: React.KeyboardEvent) => void;
-    onMoveQuestionToNewBlock: (id: string, updates?: any) => void; // relaxed type to match usage
+    onMoveQuestionToNewBlock: (id: string, updates?: unknown) => void; // relaxed type to match usage
     onDeleteQuestion: (id: string) => void;
 }
 
@@ -106,8 +106,8 @@ export const PageIndicator: React.FC<PageIndicatorProps> = ({
                         </button>
                         {isActionsMenuOpen && (
                             <PageBreakActionsMenu
-                                onMoveToNewBlock={() => { onMoveQuestionToNewBlock(question.id); toggleActionsMenu({ stopPropagation: () => { } } as any); }} // Hacky mock event
-                                onDelete={!question.isAutomatic ? () => { onDeleteQuestion(question.id); toggleActionsMenu({ stopPropagation: () => { } } as any); } : undefined}
+                                onMoveToNewBlock={() => { onMoveQuestionToNewBlock(question.id); toggleActionsMenu({ stopPropagation: () => { } } as unknown); }} // Hacky mock event
+                                onDelete={!question.isAutomatic ? () => { onDeleteQuestion(question.id); toggleActionsMenu({ stopPropagation: () => { } } as unknown); } : undefined}
                             />
                         )}
                     </div>

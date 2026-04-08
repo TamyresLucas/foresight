@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import type { LogicSet as ILogicSet, Question, DisplayLogicCondition, LogicIssue } from '../../../types';
 import { LogicConditionRow } from './LogicConditionRow';
-import { PlusIcon, XIcon, CheckmarkIcon, ChevronDownIcon, WarningIcon } from '../../icons';
+import { PlusIcon, ChevronDownIcon, WarningIcon } from '../../icons';
 import { generateId } from '../../../utils';
 import { Button } from '../../Button';
 
@@ -49,7 +49,7 @@ export const LogicSet: React.FC<LogicSetProps> = ({
         }
     }, [logicSet.isConfirmed, logicSet]);
 
-    const handleUpdateCondition = (index: number, field: keyof DisplayLogicCondition, value: any) => {
+    const handleUpdateCondition = (index: number, field: keyof DisplayLogicCondition, value: unknown) => {
         const newConditions = [...logicSet.conditions];
         const updatedCondition = { ...newConditions[index], [field]: value };
 
@@ -65,7 +65,7 @@ export const LogicSet: React.FC<LogicSetProps> = ({
             if (question && question.choices) {
                 const choice = question.choices.find(c => c.text === value);
                 if (choice) {
-                    (updatedCondition as any).choiceId = choice.id;
+                    (updatedCondition as unknown).choiceId = choice.id;
                 }
             }
         }

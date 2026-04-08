@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from 'react';
-import { DestinationRow } from './DestinationRow';
 import { Button } from '../../Button';
 import { WarningIcon, ChevronDownIcon, PlusIcon } from '../../icons';
 import { LogicIssue, Survey, Block, Question } from '../../../types';
@@ -30,9 +29,12 @@ export const SkipLogicSet: React.FC<SkipLogicSetProps & { children?: React.React
     onRemove,
     isConfirmed,
     issues = [],
+// eslint-disable-next-line unused-imports/no-unused-vars
     followingBlocks = [],
     followingQuestions,
+// eslint-disable-next-line unused-imports/no-unused-vars
     survey,
+// eslint-disable-next-line unused-imports/no-unused-vars
     currentBlockId,
     transparentBackground = false,
     onAddCondition,

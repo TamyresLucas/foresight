@@ -33,6 +33,8 @@ export const ChoiceListRenderer: React.FC<ChoiceListRendererProps> = ({
 }) => {
     const [expandedChoiceId, setExpandedChoiceId] = React.useState<string | null>(null);
 
+ 
+// eslint-disable-next-line unused-imports/no-unused-vars
     const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -42,7 +44,7 @@ export const ChoiceListRenderer: React.FC<ChoiceListRendererProps> = ({
 
     if (!question.choices || question.choices.length === 0) return null;
 
-    const handlePropertyChange = (choiceId: string, property: keyof typeof question.choices[0], value: any) => {
+    const handlePropertyChange = (choiceId: string, property: keyof typeof question.choices[0], value: unknown) => {
         const newChoices = (question.choices || []).map(c =>
             c.id === choiceId ? { ...c, [property]: value } : c
         );

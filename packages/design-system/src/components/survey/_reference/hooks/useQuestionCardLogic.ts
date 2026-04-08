@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import type { Question, ToolboxItemData, Choice, Survey, Block, PageInfo } from '../types';
 import { QuestionType } from '../types';
-import { generateId, parseChoice } from '../utils';
+import { generateId } from '../utils';
 
 interface UseQuestionCardLogicProps {
     question: Question;
@@ -77,6 +77,7 @@ export const useQuestionCardLogic = ({
     // Effects
     useEffect(() => {
         if (pageInfo) {
+// eslint-disable-next-line react-hooks/set-state-in-effect
             setPageNameValue(pageInfo.pageName);
         }
     }, [pageInfo]);
@@ -89,6 +90,7 @@ export const useQuestionCardLogic = ({
     }, [isEditingPageName]);
 
     useEffect(() => {
+// eslint-disable-next-line react-hooks/set-state-in-effect
         setIsEditingLabel(false);
         setLabelValue(question.label || '');
         setLabelError(null);

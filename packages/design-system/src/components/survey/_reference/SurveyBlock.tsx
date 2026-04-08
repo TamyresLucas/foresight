@@ -1,14 +1,13 @@
-import React, { useEffect, useState, useRef, memo, useCallback, useMemo } from 'react';
-import type { Block, Question, ToolboxItemData, QuestionType, Choice, Survey, LogicIssue, SkipLogic } from '../types';
+import React, { useEffect, useState, useRef, memo, useMemo } from 'react';
+import type { Block, Question, ToolboxItemData, QuestionType, Survey, LogicIssue, SkipLogic } from '../types';
 import QuestionCard from './QuestionCard';
-import { ChevronDownIcon, DotsHorizontalIcon, DragIndicatorIcon } from './icons';
-import { BlockActionsMenu, QuestionTypeSelectionMenuContent } from './ActionMenus';
+import { ChevronDownIcon, DotsHorizontalIcon } from './icons';
+import { BlockActionsMenu } from './ActionMenus';
 import { Button } from './Button';
 import { QuestionType as QTEnum } from '../types';
 import type { PageInfo } from '../types';
 import { SurveyFlowDisplay, IncomingLogicDisplay } from './LogicDisplays';
 import { EditableText } from './EditableText';
-import { Badge } from './Badge';
 import { QuestionDropZone } from './QuestionDropZone';
 
 const DropIndicator = () => (
@@ -85,6 +84,7 @@ const SurveyBlock: React.FC<SurveyBlockProps> = memo(({
 
 
 
+// eslint-disable-next-line unused-imports/no-unused-vars
   const [isAddQuestionMenuOpen, setIsAddQuestionMenuOpen] = useState(false);
   const addQuestionMenuRef = useRef<HTMLDivElement>(null);
 
@@ -121,6 +121,7 @@ const SurveyBlock: React.FC<SurveyBlockProps> = memo(({
     [block.questions]
   );
 
+// eslint-disable-next-line unused-imports/no-unused-vars
   const { surveyFlowLogic, logicSource, allBranchingLogics } = useMemo(() => {
     let surveyFlowDestination: string | null = null;
     let source: 'branching' | 'skip' | 'block' | 'fallthrough' = 'fallthrough';

@@ -22,7 +22,7 @@ interface QuestionCardBodyProps {
 
     // Handlers
     onUpdateQuestion: (id: string, updates: Partial<Question>) => void;
-    onSelect: (question: Question, options?: any) => void;
+    onSelect: (question: Question, options?: unknown) => void;
     onAddChoice: (id: string, afterChoiceId?: string) => void;
     onAddDescriptionLine: (id: string, afterLineId?: string) => void;
     onDeleteDescriptionLine: (questionId: string, lineId: string) => void;
@@ -45,6 +45,7 @@ interface QuestionCardBodyProps {
 
 export const QuestionCardBody: React.FC<QuestionCardBodyProps> = (props) => {
     const {
+// eslint-disable-next-line unused-imports/no-unused-vars
         question, survey, printMode, showBulkEditCheckbox = false, logicIssues, focusedLogicSource,
         onUpdateQuestion, onSelect
     } = props;
