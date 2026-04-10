@@ -1,11 +1,11 @@
-# Foresight - Design System Monorepo
+# Foresight - AI-Native Design System & Governance
 
 [![Build Status](https://img.shields.io/badge/build-passing-success)](https://github.com/tamyreslucas/foresight)
 [![Tests](https://img.shields.io/badge/tests-100%25-success)](https://github.com/tamyreslucas/foresight)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-19.1-blue)](https://react.dev/)
 
-Workspace dedicated to **Foresight Design System** - a complete design system based on shadcn/ui, Radix UI and Tailwind CSS.
+Foresight is an **AI-native design system and governance framework**. It is structured so AI can operate inside it, connecting design, code, and documentation into one seamless operational workflow.
 
 ## 🚀 Quick Start
 
@@ -28,15 +28,15 @@ npm run build
 ```
 foresight/
 ├── apps/
-│   └── playground/          # Testing and experiments app
+│   └── playground/          # AI-assisted testing and experiments app
 ├── packages/
-│   └── design-system/       # Main DS package
+│   └── design-system/       # Main AI-native DS package (shadcn/ui base)
 ├── tools/
-│   ├── scripts/             # Automation scripts
-│   └── build-scripts/       # Build scripts
-├── docs/                    # Complete documentation
+│   ├── scripts/             # Automation and governance scripts
+│   └── build-scripts/       # Build pipelines
+├── docs/                    # Integrated documentation (Notion knowledge layer)
 └── .opencode/
-    └── skills/              # Skills organized by category
+    └── skills/              # AI agent skills and workflow definitions
 ```
 
 ## 📚 Documentation
@@ -58,78 +58,49 @@ npm run build            # Build all packages
 npm run build:design-system # Build only DS
 
 # Quality
-npm run lint            # Run linting
+npm run lint            # Run syntax and governance checks
 npm run type-check      # Check TypeScript types
-npm run test            # Run tests
+npm run test            # Run automated tests
 npm run format          # Format code with Prettier
-
-# Cleanup
-npm run clean           # Clean builds and caches
 ```
 
 ## 🎨 Design System
 
-The Design System includes:
+The system is built on **shadcn/ui**, **Radix UI**, and **Tailwind CSS**, optimized for AI governance:
 
-- **51+ components** based on shadcn/ui
-- **Complete semantic tokens**
-- **Storybook** for documentation
-- **Native dark mode**
-- **Accessibility** (ARIA, keyboard navigation)
-- **TypeScript** strict mode
+- **AI-Native Governance**: Structure optimized for code agents via MCP.
+- **Notion Knowledge Layer**: Bi-directional documentation sync for AI agents.
+- **Semantic Token Naming**: Token roles follow component-native conventions.
+- **Auto-Documentation Loop**: Knowledge stays current via automated agent updates.
 
-### Main Components
+### Usage Example
 
 ```typescript
-import { Button, Input, Dialog, Card } from '@voxco/design-system';
+import { Button, Input, Dialog, Card } from '@foresight/design-system';
 
-// Usage
+// AI-native components follow standardized roles
 <Button variant="default" size="lg">
-  Click here
+  Operational Action
 </Button>
 ```
 
-## 🧠 Available Skills
+## 🧠 Core Skills
 
-Skills are organized into categories:
+Skills are organized to guide AI and human collaboration:
 
-- **01-fundamentals/** - React, TypeScript, Tailwind, Patterns
-- **02-design-system/** - DS Architecture, shadcn, Storybook
-- **03-survey-builder/** - Domain-specific (Canvas, Editor, Logic)
-- **04-quality/** - Code review, testing, quality gates
+- **01-fundamentals/** - Core languages, tools, and design patterns.
+- **02-design-system/** - AI-native architecture and component governance.
+- **04-quality/** - Automated review, testing, and compliance gates.
 
 ## 🔧 MCP Configuration
 
-The project uses MCP servers for:
+Foresight leverages Model Context Protocol (MCP) to expose system internals to AI:
 
-- **Notion** - Documentation integration
-- **shadcn/ui** - Component management
-- **Tailwind CSS** - Utilities and configuration
+- **Notion** - Context-aware documentation access.
+- **shadcn/ui** - Native component registration and search.
+- **Tailwind CSS** - Intelligent utility and token mapping.
 
-See [MCP Setup](./docs/mcp/setup-guide.md) for details.
-
-## 📝 Useful Scripts
-
-```bash
-# Code review
-node tools/scripts/code-review-checklist.js
-
-# Validate skills
-node tools/scripts/validate-skills.js
-```
-
-## 🤝 Contribution
-
-1. Read the [Contributing Guide](./docs/guides/contributing.md)
-2. Follow the [Quality Skills](./.opencode/skills/04-quality/)
-3. Run checks before PR:
-   ```bash
-   npm run lint && npm run type-check && npm run test
-   ```
-
-## 📄 License
-
-MIT - See [LICENSE](./LICENSE) for details.
+See [MCP Setup](./docs/mcp/setup-guide.md) for detailed configuration.
 
 ---
 

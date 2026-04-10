@@ -15,9 +15,13 @@
     "type-check": "turbo run type-check",
     "type-check:colorpalette": "tsc -p packages/design-system/colorcheck/tsconfig.json --noEmit",
     "clean": "turbo run clean",
+    "dev:design-system": "turbo run storybook --filter=@foresight/design-system",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "build-storybook": "cd packages/design-system && npm run build-storybook"
+    "build-storybook": "cd packages/design-system && npm run build-storybook",
+    "figma:connect": "npx figma connect publish",
+    "figma:connect:dry-run": "npx figma connect publish --dry-run",
+    "figma:connect:check": "npx figma connect check"
   },
   "dependencies": {
     "@modelcontextprotocol/server-sequential-thinking": "^2025.12.18",
@@ -30,6 +34,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@figma/code-connect": "^1.4.3",
     "@types/color": "^4.2.0",
     "prettier": "^3.0.0",
     "tailwindcss": "^3.4.1",

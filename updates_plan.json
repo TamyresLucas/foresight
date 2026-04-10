@@ -1,0 +1,50 @@
+[
+  {
+    "id": "33d4b1b3-1a6e-813a-8b72-dadca93186ac",
+    "title": "[M5] S3 (:qa) \u2014 QA Gate: Code Review (PASS required)",
+    "needs_wf": false,
+    "needs_type": false
+  },
+  {
+    "id": "33d4b1b3-1a6e-812c-aa5a-fed24c778f22",
+    "title": "[M5] S2 (:implement) \u2014 P2: Add modern --radius-* multiplicative scale",
+    "needs_wf": false,
+    "needs_type": false
+  },
+  {
+    "id": "33d4b1b3-1a6e-817c-967e-e53373a8a8c0",
+    "title": "[M5] S2 (:implement) \u2014 P2: Evaluate OKLCH migration from HSL (future)",
+    "needs_wf": false,
+    "needs_type": false
+  },
+  {
+    "id": "33d4b1b3-1a6e-8123-a576-f6a5ac461142",
+    "title": "[M5] S2 (:implement) \u2014 P2: Pre-bake color-mix() in --muted-foreground",
+    "needs_wf": false,
+    "needs_type": false
+  },
+  {
+    "id": "33d4b1b3-1a6e-815f-b5a8-ea009682d54a",
+    "title": "[M5] S2 (:implement) \u2014 P1: Remove --secondary-hover, --disabled-foreground, --placeholder-foreground",
+    "needs_wf": false,
+    "needs_type": false
+  },
+  {
+    "id": "33d4b1b3-1a6e-8190-b2d5-ebd1625b1019",
+    "title": "[M5] S2 (:implement) \u2014 P1: Align --background-{status}/--border-{status} to Shadcn naming",
+    "needs_wf": false,
+    "needs_type": false
+  },
+  {
+    "id": "33d4b1b3-1a6e-8105-a953-d06d53519cbf",
+    "title": "[M5] S2 (:implement) \u2014 P0: Rename --lng1771-* tokens to semantic names",
+    "needs_wf": false,
+    "needs_type": false
+  },
+  {
+    "id": "33d4b1b3-1a6e-812b-a001-f8d11e967e79",
+    "title": "[M5] S1 (:spec) \u2014 Consumer impact scan + rename mapping",
+    "needs_wf": false,
+    "needs_type": false
+  }
+]

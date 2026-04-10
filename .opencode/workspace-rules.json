@@ -277,6 +277,254 @@
         "Criar GitHub Release"
       ],
       "output": "Release notes completas com versão e CHANGELOG atualizado"
+    },
+    {
+      "id": "ssot-ai-jira-global-contracts",
+      "name": "SSOT — AI-Jira Global Contracts",
+      "category": "SSOT",
+      "priority": "critical",
+      "trigger": "Sempre que executar trabalho no sistema (Kanban/Skills/Workflows/Agents)",
+      "conditions": [
+        "Trabalho envolve Kanban, Skills, Workflows ou Agents",
+        "Usuário solicita execução ou revisão"
+      ],
+      "actions": [
+        "Nunca inferir por texto livre — usar Workflow Key 1:1",
+        "Se Workflow Key vazio: Status = Bloqueado + Execution Log",
+        "Seguir Skill Runbook template (Purpose/Inputs/Steps/Outputs/Logging/Handoff)",
+        "Seguir Workflow Protocol template (Purpose/Trigger/Router/Stop-Block/Logging/Handoff)",
+        "Seguir Agent Spec template (agent_id/display_name/purpose/scope/routing/stop_block/logging/workflows/skills)",
+        "Task ID é chave canônica para upsert — idempotência garantida"
+      ],
+      "output": "Execução determinística sem heurística"
+    },
+    {
+      "id": "ssot-kanban-workflow-routing",
+      "name": "SSOT — Kanban Workflow Routing Contract",
+      "category": "SSOT",
+      "priority": "critical",
+      "trigger": "Ao criar ou atualizar cards no Kanban",
+      "conditions": [
+        "Card tem Workflow Key preenchido",
+        "Card pertence a qualquer Status"
+      ],
+      "actions": [
+        "Workflow Key → Workflow mapping 1:1 (verificar tabela de mapeamento)",
+        "DOCS_WORKFLOW só para Project Doc — Doc Type obrigatório",
+        "NUNCA inferir Workflow Key de texto/título",
+        "Dependências: Epic→Plan, PRD→Epic, Story→PRD, Spec→Story, Task→Spec"
+      ],
+      "output": "Card com Workflow derivação determinística"
+    },
+    {
+      "id": "ssot-execution-logs",
+      "name": "SSOT — Execution Logs Template",
+      "category": "SSOT",
+      "priority": "critical",
+      "trigger": "Ao executar qualquer workflow ou gate",
+      "conditions": ["Workflow executado", "Gate de QA revisado"],
+      "actions": [
+        "Execution Log (exec): Run ID = exec:<workflow>:<yyyymmdd>-<seq>, Status, Inputs, Outputs, Notes/Blockers",
+        "Execution Log (review): Run ID = review:<workflow>:<yyyymmdd>-<seq>, Status, Inputs, Outputs, Notes/Blockers",
+        "TBDs e blockers explícitos — sem inferência",
+        "Evidência mínima: 1 exec log + 1 review log por gate"
+      ],
+      "output": "Execution Logs criados com templates canônicos"
+    },
+    {
+      "id": "ssot-workflow-key-mapping",
+      "name": "SSOT — Workflow Key → Workflow Canonical Mapping",
+      "category": "SSOT",
+      "priority": "critical",
+      "trigger": "Ao derivar workflow de Workflow Key",
+      "conditions": ["Workflow Key está presente no card"],
+      "actions": [
+        "ROADMAP_HUB → 🗺️ Roadmap Hub Workflow",
+        "TOKEN_MAINTENANCE → Token Maintenance Workflow",
+        "DOCS_WORKFLOW → Documentation Workflow (A→Z)",
+        "COMPONENT_CREATION → Component Creation Workflow",
+        "WORKFLOW_CHAINS → Frontend & Design Standards Chain",
+        "SKILL_LIFECYCLE → Orphan Skills Intake (auto-assign)",
+        "TESTING_QA → Testing Workflow (A→Z + QA Gate)",
+        "SECURITY_PERF → Security & Performance Ops Chain",
+        "BACKEND_INFRA_OPS → Backend & Infra Ops Chain"
+      ],
+      "output": "Workflow canônico derivado 1:1"
+    },
+    {
+      "id": "ssot-workflow-active-ready",
+      "name": "SSOT — Workflow Active-ready Checklist",
+      "category": "SSOT",
+      "priority": "critical",
+      "trigger": "Ao promover workflow para Status = Active",
+      "conditions": [
+        "Workflow está em Review Skill",
+        "Usuário solicita promoção"
+      ],
+      "actions": [
+        "Verificar Trigger, Description, AI Recommendation não-vazios",
+        "Description deve ter: Purpose, Trigger, Router, Stop/Block, Logging, Handoff, Skills",
+        "AI Recommendation deve conter: Router, Stop/Block, Logging, Handoff",
+        "Criar Execution Log (review) com PASS antes de promover",
+        "Se TBDs existem: manter Review Skill + registrar Blocked"
+      ],
+      "output": "Workflow promotion com evidência canônica"
+    },
+    {
+      "id": "ssot-routing-audit-queries",
+      "name": "SSOT — Task-driven Routing Audit Queries",
+      "category": "SSOT",
+      "priority": "important",
+      "trigger": "Ao auditar readiness de task-driven routing",
+      "conditions": [
+        "Auditoria de sistema ou sprint",
+        "Verificação de compliance"
+      ],
+      "actions": [
+        "Cards missing Workflow Key = 0",
+        "Cards missing Task ID = 0",
+        "DOCS_WORKFLOW sem Doc Type = 0",
+        "Workflows Active sem Trigger = 0",
+        "Workflows Active sem Description = 0",
+        "Workflows Active sem AI Recommendation = 0",
+        "PASS só se todos 0 OU itens não-zero com Execution Log Blocked explícito"
+      ],
+      "output": "Relatório de auditoria determinística"
+    },
+    {
+      "id": "ssot-workflow-key-backfill",
+      "name": "SSOT — Workflow Key Backfill Rules",
+      "category": "SSOT",
+      "priority": "important",
+      "trigger": "Ao fazer backfill de Workflow Key em batch",
+      "conditions": [
+        "Bulk update de cards no Kanban",
+        "Sincronização de sistema"
+      ],
+      "actions": [
+        "Rule A: Workflow (canônico) → derivar Workflow Key do mapping",
+        "Rule B: Work Item Type = Project Doc → DOCS_WORKFLOW",
+        "Rule C: Card com Story → herdar Workflow Key da Story",
+        "Rule D: DOCS_WORKFLOW só para Project Doc — senão Bloqueado",
+        "Nunca inferir de texto/título",
+        "Registrar mudanças em Execution Log (batch)"
+      ],
+      "output": "Workflow Keys derivados sem inferência"
+    },
+    {
+      "id": "ssot-evidencia-minima",
+      "name": "SSOT — Evidência Mínima Prova de Execução",
+      "category": "SSOT",
+      "priority": "critical",
+      "trigger": "Ao declarar tarefa como concluída",
+      "conditions": ["Task(card) em Feito", "Gate de QA Passed"],
+      "actions": [
+        "Links para Execution Logs (exec + review)",
+        "Links para artefatos criados/atualizados",
+        "TBDs declarados explicitamente",
+        "Blockers documentados",
+        "Sem inventar evidências"
+      ],
+      "output": "Evidência canônica documentada"
+    },
+    {
+      "id": "ssot-epic-readiness",
+      "name": "SSOT — Epic Readiness (Specs + QA Gating)",
+      "category": "SSOT",
+      "priority": "critical",
+      "trigger": "Ao mover Epic para Done",
+      "conditions": ["Epic com todas Stories em Done", "Todas QA Gates Passed"],
+      "actions": [
+        "Verificar Epic.linked (Plan) existe",
+        "Verificar todas Stories linked ao Epic têm Specs + QA",
+        "Verificar todos Specs linked a Stories",
+        "Bloquear se dependência ausente"
+      ],
+      "output": "Epic com dependências verificadas"
+    },
+    {
+      "id": "ssot-sequential-integrity",
+      "name": "SSOT — Sequential Integrity Protocol (QA Gates as Gates)",
+      "category": "SSOT",
+      "priority": "critical",
+      "trigger": "Ao executar gates sequenciais",
+      "conditions": [
+        "Epic com múltiplos gates QA",
+        "Story com gate de validação"
+      ],
+      "actions": [
+        "Gate N só executa se Gate N-1 Passed",
+        "Se Gate falha: parar e registrar blockers",
+        "Não pular gates",
+        "Documentar cada gate em Execution Log separado"
+      ],
+      "output": "Gates executados em sequência com evidência"
+    },
+    {
+      "id": "ssot-story-acceptance-criteria",
+      "name": "SSOT — Story Acceptance Criteria (Mandatory)",
+      "category": "SSOT",
+      "priority": "critical",
+      "trigger": "Ao criar Story",
+      "conditions": ["Nova Story criada", "Story atualizada"],
+      "actions": [
+        "Acceptance Criteria devem ser: Específicos, Mensuráveis, Testáveis",
+        "Cada AC deve ter pelo menos 1 critério de QA",
+        "ACs não podem ser TBD",
+        "Bloquear Story se ACs ausentes ou vagos"
+      ],
+      "output": "Story com Acceptance Criteria determinísticos"
+    },
+    {
+      "id": "ssot-behaviour-isolation",
+      "name": "SSOT — Behaviour Isolation Rule",
+      "category": "SSOT",
+      "priority": "important",
+      "trigger": "Ao isolar comportamento de componente",
+      "conditions": [
+        "Componente com múltiplos estados",
+        "Teste de behavior específico"
+      ],
+      "actions": [
+        "Isolar behavior em contexto/stub específico",
+        "Não compartilhar estado entre tests",
+        "Testar 1 behavior por test case",
+        "Mockar dependências externas"
+      ],
+      "output": "Behavior isolado e testável"
+    },
+    {
+      "id": "ssot-component-creation-gates",
+      "name": "SSOT — Component Creation Gates & Thresholds",
+      "category": "SSOT",
+      "priority": "critical",
+      "trigger": "Ao criar componente UI",
+      "conditions": ["Novo componente criado", "Componente promotion para DS"],
+      "actions": [
+        "Verificar: Storybook story com Controls",
+        "Verificar: Acessibilidade (axe-core)",
+        "Verificar: TypeScript sem errors",
+        "Verificar: Exports em index.ts",
+        "Verificar: Testes unitários",
+        "Gate: Todos checks PASS para promotion"
+      ],
+      "output": "Componente com gates verificados"
+    },
+    {
+      "id": "ssot-mapping-project-docs",
+      "name": "SSOT — Mapping Project Docs → Work Generation",
+      "category": "SSOT",
+      "priority": "critical",
+      "trigger": "Ao gerar work items de Project Docs",
+      "conditions": ["Project Doc criado/atualizado", "Epic a ser gerado"],
+      "actions": [
+        "Project Doc → Epic",
+        "Epic → PRD → Test Plan → Story → Spec → Task",
+        "Cada item depende do anterior",
+        "Task só existe com Spec vinculada",
+        "Bloquear se dependência ausente"
+      ],
+      "output": "Work items derivados hierarquicamente"
     }
   ],
   "processes": [

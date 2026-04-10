@@ -5,19 +5,19 @@
   --background: 0 0% 100%;
   --foreground: 0 0% 9%;
 
-  /* Primary — Voxco brand periwinkle (#5568F2) */
+  /* Primary — Foresight foundation periwinkle (#5568F2) */
   --primary: 233 86% 64%;
   --primary-foreground: 0 0% 100%;
 
-  /* Destructive — Voxco brand coral-dark (#CF455C) */
+  /* Destructive — Foundation coral-dark (#CF455C) */
   --destructive: 349 54% 54%;
   --destructive-foreground: 0 0% 100%;
 
-  /* Success — Voxco brand green-dark (#008563) */
+  /* Success — Foundation green-dark (#008563) */
   --success: 161 100% 26%;
   --success-foreground: 0 0% 100%;
 
-  /* Warning — Voxco brand tangerine (#F59E0B) */
+  /* Warning — Foundation tangerine (#F59E0B) */
   --warning: 38 92% 50%;
   --warning-foreground: 0 0% 9%;
 
@@ -225,6 +225,12 @@
   --lng1771-row-selected: 220 70% 23%;
   --lng1771-gray-20: 220 70% 23%;
   --lng1771-row-bg: 220 45% 14%;
+  --surface-1: 210 30% 10%;
+  --surface-2: 210 30% 12%;
+  --surface-3: 210 30% 14%;
+  --surface-4: 210 30% 16%;
+  --surface-5: 210 30% 8%;
+  --surface-6: 210 30% 18%;
 
   /* Missing and Additional Tokens */
   --card: 228 18% 14%;

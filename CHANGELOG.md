@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Added
+- Completed comprehensive design token audit comparing all Foresight CSS custom properties against Shadcn/ui canonical naming conventions. Identified 21/21 core tokens conformant, ~70 well-named extensions, 3 critical `--lng1771-*` naming violations, and ~15 naming divergences (mostly `--background-{status}` / `--border-{status}` patterns).
+- Created Milestone 5 Story in Notion ("Shadcn token naming audit cleanup") under Epic "3 layer architecture" with 8 tasks (S1 spec, S2 implement ×6, S3 QA). Sequenced before Milestone 4 (tokens.css deprecation).
 - Created Notion API workflow automation scripts to interact with internal Kanban and Execution Log DBs (stored as untracked scratch files).
 
 - Restored custom `paper` MCP server configuration in `opencode.jsonc` that was overwritten during reformatting.
@@ -19,7 +21,7 @@ All notable changes to this project will be documented in this file.
 - Applied targeted inline suppressions for 43 remaining hook exhaustive-deps/rules constraints strictly for unmigrated legacy `_reference` survey components.
 
 - Updated `ghost-primary` button variant hover state to match the standard `ghost` variant hover styles (primary background with 10% opacity and primary text color).
-- Updated `Badge` component: variants (`secondary`, `destructive`, `success`, `warning`) now implement a layered background system. In light mode, a pure white base is used under a 10% opacity color overlay (matching `ghost` button hover) to ensure accurate color rendering. The text remains standard `text-foreground` for legibility. The `warning` variant is now aligned with the Voxco brand tangerine tokens.
+- Updated `Badge` component: variants (`secondary`, `destructive`, `success`, `warning`) now implement a layered background system. In light mode, a pure white base is used under a 10% opacity color overlay (matching `ghost` button hover) to ensure accurate color rendering. The text remains standard `text-foreground` for legibility. The `warning` variant is now aligned with the primary design tokens.
 - Updated `Switch` component: the background color when in the "on" (checked) state now correctly uses the primary color token.
 - Updated `Checkbox` component: Fixed styling issue where checkboxes appeared circular; they are now rounded squares with soft borders in the unchecked state and correctly use design tokens.
 - Standardized border colors across the design system: `border-primary/20` for containers (Cards, Dialogs, Popovers, Tabs, Collapsible sections) and `border-primary/40` for interactive elements and data display (Inputs, Selects, Tables).

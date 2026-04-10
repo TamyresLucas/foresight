@@ -95,7 +95,7 @@ npm run build
 ### Import components
 
 ```typescript
-import { Button, Input, Card } from '@voxco/design-system';
+import { Button, Input, Card } from '@foresight/design-system';
 
 function MyComponent() {
   return (

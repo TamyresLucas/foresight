@@ -1,0 +1,25 @@
+{
+  "codeConnect": {
+    "include": [
+      "packages/design-system/src/components/ui/*.tsx",
+      "packages/design-system/src/components/ui/**/*.tsx",
+      "packages/design-system/src/components/**/*.figma.tsx"
+    ],
+    "exclude": [
+      "node_modules",
+      "dist",
+      "**/*.stories.tsx",
+      "**/*.test.tsx",
+      "**/*.spec.tsx"
+    ],
+    "parser": "react",
+    "importPaths": {
+      "packages/design-system/src/components/ui/*": "@foresight/design-system",
+      "packages/design-system/src/components/*": "@foresight/design-system/components"
+    },
+    "paths": {
+      "@/*": ["packages/design-system/src/*"]
+    },
+    "documentUrlSubstitutions": {}
+  }
+}

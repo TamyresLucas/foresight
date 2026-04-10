@@ -39,12 +39,11 @@ foresight/
 │   ├── guides/                # Tutorials
 │   └── mcp/                   # MCP docs
 │
-├── 📁 .opencode/              # Opencode config
-│   └── skills/                # Organized skills
-│       ├── 01-fundamentals/
-│       ├── 02-design-system/
-│       ├── 03-survey-builder/
-│       └── 04-quality/
+├── 📁 .opencode/              # AI-native setup
+│   └── skills/                # AI agent skills
+│       ├── 01-fundamentals/   # Core patterns
+│       ├── 02-design-system/  # AI-native DS
+│       └── 04-quality/        # Governance gates
 │
 └── 📁 .github/                # CI/CD
     └── workflows/
@@ -75,7 +74,7 @@ foresight/
 // apps/playground/package.json
 {
   "dependencies": {
-    "@voxco/design-system": "workspace:*"
+    "@foresight/design-system": "workspace:*"
   }
 }
 ```
@@ -133,7 +132,7 @@ foresight/
 import * as React from "react";
 import { useState } from "react";
 
-import { Button } from "@voxco/design-system";
+import { Button } from "@foresight/design-system";
 
 import { MeuHook } from "@/hooks";
 import { formatDate } from "@/lib/utils";
@@ -141,7 +140,7 @@ import { formatDate } from "@/lib/utils";
 import { MeuComponente } from "./MeuComponente";
 
 // ❌ BAD: Messy imports
-import { Button } from "@voxco/design-system";
+import { Button } from "@foresight/design-system";
 import { useState } from "react";
 ```
 
@@ -234,7 +233,7 @@ packages/design-system/
 npm run build
 
 # Build only DS
-npm run build --filter=@voxco/design-system
+npm run build --filter=@foresight/design-system
 
 # Build only Playground
 npm run build --filter=playground
