@@ -2,11 +2,8 @@
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local"],
   "pipeline": {
-    "tokens-survey#build": {
-      "outputs": ["dist/**"]
-    },
     "build": {
-      "dependsOn": ["^build", "tokens-survey#build"],
+      "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**", "!**/*.test.*"]
     },
     "test": {

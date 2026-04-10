@@ -12,8 +12,5 @@
     "build": "cp src/tokens-survey.css dist/ && cp src/survey.schema.json dist/",
     "typecheck": "echo 'No TypeScript source'"
   },
-  "devDependencies": {},
-  "peerDependencies": {
-    "@foresight/design-system": "workspace:*"
-  }
+  "devDependencies": {}
 }
