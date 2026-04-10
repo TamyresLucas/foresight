@@ -65,6 +65,12 @@
   --lng1771-gray-20: 220 40% 90%;
   --lng1771-row-bg: 220 20% 95%;
   --radius: 0.5rem;
+
+  /* Multiplicative radius scale (modern Shadcn pattern) */
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) * 1.5);
+  --radius-xl: calc(var(--radius) * 2);
   --surface-1: 210 50% 95%;
   --surface-2: 210 60% 94%;
   --surface-3: 210 40% 92%;
