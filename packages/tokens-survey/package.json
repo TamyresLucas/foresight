@@ -1,0 +1,19 @@
+{
+  "name": "@foresight/tokens-survey",
+  "version": "0.0.1",
+  "description": "Survey respondent design tokens with neutral grays and client-overridable semantics",
+  "main": "./dist/tokens-survey.css",
+  "types": "./dist/tokens-survey.d.ts",
+  "exports": {
+    ".": "./dist/tokens-survey.css",
+    "./schema": "./dist/survey.schema.json"
+  },
+  "scripts": {
+    "build": "cp src/tokens-survey.css dist/ && cp src/survey.schema.json dist/",
+    "typecheck": "echo 'No TypeScript source'"
+  },
+  "devDependencies": {},
+  "peerDependencies": {
+    "@foresight/design-system": "workspace:*"
+  }
+}
