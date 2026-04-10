@@ -29,7 +29,11 @@
   --secondary-hover: 232.5 100% 94%;
   --secondary-foreground: 0 0% 9%;
   --muted: 220 5% 97.5%;
-  --muted-foreground: color-mix(in oklch, hsl(var(--primary)) 32%, hsl(0 0% 46%));
+  --muted-foreground: color-mix(
+    in oklch,
+    hsl(var(--primary)) 32%,
+    hsl(0 0% 46%)
+  );
   --disabled-foreground: 220 40% 70%;
   --accent: 220 10% 95%;
   --accent-foreground: 0 0% 9%;
@@ -49,8 +53,8 @@
      Low contrast by default (~1.3:1) — same pattern as shadcn/ui.
      Accessibility compensated via focus-visible:border-ring on each component.
   ─────────────────────────────────────────────────────────────────────────── */
-  --border-decorative: 233 86% 64% / 0.2;   /* ~1.3:1 — decorative containers (non-interactive) */
-  --border-ui: 233 86% 64% / 0.2;           /* ~1.3:1 — interactive default; focus-visible:border-ring compensates */
+  --border-decorative: 233 86% 64% / 0.2; /* ~1.3:1 — decorative containers (non-interactive) */
+  --border-ui: 233 86% 64% / 0.2; /* ~1.3:1 — interactive default; focus-visible:border-ring compensates */
 
   /* Backward-compat aliases — prefer the named tokens above */
   --border-subtle: var(--border-decorative);
@@ -95,39 +99,51 @@
   ─────────────────────────────────────────────────────────────────────────── */
   /* chart-1 blueberry  base L=64% */
   --chart-1-lighter: 233 86% 80%;
-  --chart-1-light:   233 86% 72%;
-  --chart-1-dark:    233 86% 56%;
-  --chart-1-darker:  233 86% 48%;
+  --chart-1-light: 233 86% 72%;
+  --chart-1-dark: 233 86% 56%;
+  --chart-1-darker: 233 86% 48%;
 
   /* chart-2 mint  base L=38% */
   --chart-2-lighter: 177 100% 54%;
-  --chart-2-light:   177 100% 46%;
-  --chart-2-dark:    177 100% 30%;
-  --chart-2-darker:  177 100% 22%;
+  --chart-2-light: 177 100% 46%;
+  --chart-2-dark: 177 100% 30%;
+  --chart-2-darker: 177 100% 22%;
 
   /* chart-3 peach  base L=69% */
   --chart-3-lighter: 4 94% 85%;
-  --chart-3-light:   4 94% 77%;
-  --chart-3-dark:    4 94% 61%;
-  --chart-3-darker:  4 94% 53%;
+  --chart-3-light: 4 94% 77%;
+  --chart-3-dark: 4 94% 61%;
+  --chart-3-darker: 4 94% 53%;
 
   /* chart-4 grape  base L=53% */
   --chart-4-lighter: 283 62% 69%;
-  --chart-4-light:   283 62% 61%;
-  --chart-4-dark:    283 62% 45%;
-  --chart-4-darker:  283 62% 37%;
+  --chart-4-light: 283 62% 61%;
+  --chart-4-dark: 283 62% 45%;
+  --chart-4-darker: 283 62% 37%;
+
+  /* chart-5 lime  base L=39% */
+  --chart-5-lighter: 97 52% 55%;
+  --chart-5-light: 97 52% 47%;
+  --chart-5-dark: 97 52% 31%;
+  --chart-5-darker: 97 52% 23%;
 
   /* chart-6 watermelon  base L=58% */
   --chart-6-lighter: 331 75% 74%;
-  --chart-6-light:   331 75% 66%;
-  --chart-6-dark:    331 75% 50%;
-  --chart-6-darker:  331 75% 42%;
+  --chart-6-light: 331 75% 66%;
+  --chart-6-dark: 331 75% 50%;
+  --chart-6-darker: 331 75% 42%;
+
+  /* chart-7 blackberry  base L=51% */
+  --chart-7-lighter: 243 73% 67%;
+  --chart-7-light: 243 73% 59%;
+  --chart-7-dark: 243 73% 43%;
+  --chart-7-darker: 243 73% 35%;
 
   /* chart-8 grey  base L=51% */
   --chart-8-lighter: 218 18% 67%;
-  --chart-8-light:   218 18% 59%;
-  --chart-8-dark:    218 18% 43%;
-  --chart-8-darker:  218 18% 35%;
+  --chart-8-light: 218 18% 59%;
+  --chart-8-dark: 218 18% 43%;
+  --chart-8-darker: 218 18% 35%;
 
   /* Semantic chart tokens — lower contrast than UI semantics, optimized for data viz */
   --chart-positive: 165 100% 31%; /* #00A078 — success/positive */
@@ -135,22 +151,22 @@
 
   /* ─── Sentiment scale — 5 steps: chart-negative → warning → chart-positive ─── */
   --chart-sentiment-1: 352 83% 64%; /* #EF576B — very negative  (= --chart-negative) */
-  --chart-sentiment-2:  22 79% 59%; /* #E97E42 — negative */
-  --chart-sentiment-3:  38 92% 50%; /* #F59F0A — neutral        (= --warning) */
-  --chart-sentiment-4:  88 52% 47%; /* #7DB83A — positive */
+  --chart-sentiment-2: 22 79% 59%; /* #E97E42 — negative */
+  --chart-sentiment-3: 38 92% 50%; /* #F59F0A — neutral        (= --warning) */
+  --chart-sentiment-4: 88 52% 47%; /* #7DB83A — positive */
   --chart-sentiment-5: 165 100% 31%; /* #00A078 — very positive (= --chart-positive) */
 
   /* ─── NPS scale — 11 steps: score 0 (detractor) → 10 (promoter) ─────────── */
-  --chart-nps-0:  352 83% 64%; /* #EF576B — score 0  (= --chart-negative) */
-  --chart-nps-1:    7 76% 62%; /* #E86555 — score 1 */
-  --chart-nps-2:   20 72% 58%; /* #E17845 — score 2 */
-  --chart-nps-3:   32 68% 53%; /* #D98C36 — score 3 */
-  --chart-nps-4:   33 90% 52%; /* #F38F16 — score 4 */
-  --chart-nps-5:   38 92% 50%; /* #F59F0A — score 5  (= --warning) */
-  --chart-nps-6:   55 82% 45%; /* #CFBF14 — score 6 */
-  --chart-nps-7:   76 65% 45%; /* #94BB28 — score 7 */
-  --chart-nps-8:  110 48% 47%; /* #52B23E — score 8 */
-  --chart-nps-9:  146 69% 39%; /* #1FAA5C — score 9 */
+  --chart-nps-0: 352 83% 64%; /* #EF576B — score 0  (= --chart-negative) */
+  --chart-nps-1: 7 76% 62%; /* #E86555 — score 1 */
+  --chart-nps-2: 20 72% 58%; /* #E17845 — score 2 */
+  --chart-nps-3: 32 68% 53%; /* #D98C36 — score 3 */
+  --chart-nps-4: 33 90% 52%; /* #F38F16 — score 4 */
+  --chart-nps-5: 38 92% 50%; /* #F59F0A — score 5  (= --warning) */
+  --chart-nps-6: 55 82% 45%; /* #CFBF14 — score 6 */
+  --chart-nps-7: 76 65% 45%; /* #94BB28 — score 7 */
+  --chart-nps-8: 110 48% 47%; /* #52B23E — score 8 */
+  --chart-nps-9: 146 69% 39%; /* #1FAA5C — score 9 */
   --chart-nps-10: 165 100% 31%; /* #00A078 — score 10 (= --chart-positive) */
 
   /* ─── Muted variants (40% opacity) ──────────────────────────────────────────
@@ -159,24 +175,24 @@
   ─────────────────────────────────────────────────────────────────────────── */
 
   /* Categorical muted */
-  --chart-1-muted: 233 86% 64% / 0.4;  /* blueberry */
+  --chart-1-muted: 233 86% 64% / 0.4; /* blueberry */
   --chart-2-muted: 177 100% 38% / 0.4; /* mint */
-  --chart-3-muted:  4 94% 69% / 0.4;  /* peach */
-  --chart-4-muted: 283 62% 53% / 0.4;  /* grape */
-  --chart-5-muted:  97 52% 39% / 0.4;  /* lime */
-  --chart-6-muted: 331 75% 58% / 0.4;  /* watermelon */
-  --chart-7-muted: 243 73% 51% / 0.4;  /* blackberry */
-  --chart-8-muted: 218 18% 51% / 0.4;  /* grey */
+  --chart-3-muted: 4 94% 69% / 0.4; /* peach */
+  --chart-4-muted: 283 62% 53% / 0.4; /* grape */
+  --chart-5-muted: 97 52% 39% / 0.4; /* lime */
+  --chart-6-muted: 331 75% 58% / 0.4; /* watermelon */
+  --chart-7-muted: 243 73% 51% / 0.4; /* blackberry */
+  --chart-8-muted: 218 18% 51% / 0.4; /* grey */
 
   /* Semantic muted */
   --chart-positive-muted: 165 100% 31% / 0.4; /* #00A078 */
-  --chart-negative-muted: 352  83% 64% / 0.4; /* #EF576B */
+  --chart-negative-muted: 352 83% 64% / 0.4; /* #EF576B */
 
   /* Sentiment scale muted */
   --chart-sentiment-1-muted: 352 83% 64% / 0.4;
-  --chart-sentiment-2-muted:  22 79% 59% / 0.4;
-  --chart-sentiment-3-muted:  38 92% 50% / 0.4;
-  --chart-sentiment-4-muted:  88 52% 47% / 0.4;
+  --chart-sentiment-2-muted: 22 79% 59% / 0.4;
+  --chart-sentiment-3-muted: 38 92% 50% / 0.4;
+  --chart-sentiment-4-muted: 88 52% 47% / 0.4;
   --chart-sentiment-5-muted: 165 100% 31% / 0.4;
 
   /* Font Tokens */
@@ -202,7 +218,11 @@
   --secondary-hover: 232.5 16.3% 25%;
   --secondary-foreground: 210 40% 98%;
   --muted: 222 8% 9.5%;
-  --muted-foreground: color-mix(in oklch, hsl(var(--primary)) 30%, hsl(0 0% 62%));
+  --muted-foreground: color-mix(
+    in oklch,
+    hsl(var(--primary)) 30%,
+    hsl(0 0% 62%)
+  );
   --disabled-foreground: 210 40% 98%;
   --accent: 222 10% 14%;
   --accent-foreground: 210 40% 98%;
@@ -214,8 +234,8 @@
   --border-warning: 38 46% 35%;
   --border-info: 217 35% 35%;
   --border: 230 20% 20%;
-  --border-decorative: 235 100% 86% / 0.2;  /* ~1.3:1  — decorative containers (non-interactive) */
-  --border-ui: 235 100% 86% / 0.2;          /* ~1.3:1 — interactive default; focus-visible:border-ring compensates */
+  --border-decorative: 235 100% 86% / 0.2; /* ~1.3:1  — decorative containers (non-interactive) */
+  --border-ui: 235 100% 86% / 0.2; /* ~1.3:1 — interactive default; focus-visible:border-ring compensates */
 
   /* Backward-compat aliases */
   --border-subtle: var(--border-decorative);
@@ -254,39 +274,39 @@
   /* Lightness scales (dark) — same ±8% / ±16% logic, clamped to [18%, 88%] */
   /* chart-1 blueberry dark  base L=86% — lighter steps clamp near 88% */
   --chart-1-lighter: 235 100% 88%;
-  --chart-1-light:   235 100% 88%;
-  --chart-1-dark:    235 100% 78%;
-  --chart-1-darker:  235 100% 70%;
+  --chart-1-light: 235 100% 88%;
+  --chart-1-dark: 235 100% 78%;
+  --chart-1-darker: 235 100% 70%;
 
   /* chart-2 mint dark  base L=42% */
   --chart-2-lighter: 173 100% 58%;
-  --chart-2-light:   173 100% 50%;
-  --chart-2-dark:    173 100% 34%;
-  --chart-2-darker:  173 100% 26%;
+  --chart-2-light: 173 100% 50%;
+  --chart-2-dark: 173 100% 34%;
+  --chart-2-darker: 173 100% 26%;
 
   /* chart-3 peach dark  base L=69% */
   --chart-3-lighter: 4 94% 85%;
-  --chart-3-light:   4 94% 77%;
-  --chart-3-dark:    4 94% 61%;
-  --chart-3-darker:  4 94% 53%;
+  --chart-3-light: 4 94% 77%;
+  --chart-3-dark: 4 94% 61%;
+  --chart-3-darker: 4 94% 53%;
 
   /* chart-4 grape dark  base L=58% */
   --chart-4-lighter: 283 65% 74%;
-  --chart-4-light:   283 65% 66%;
-  --chart-4-dark:    283 65% 50%;
-  --chart-4-darker:  283 65% 42%;
+  --chart-4-light: 283 65% 66%;
+  --chart-4-dark: 283 65% 50%;
+  --chart-4-darker: 283 65% 42%;
 
   /* chart-6 watermelon dark  base L=58% (same as light) */
   --chart-6-lighter: 331 75% 74%;
-  --chart-6-light:   331 75% 66%;
-  --chart-6-dark:    331 75% 50%;
-  --chart-6-darker:  331 75% 42%;
+  --chart-6-light: 331 75% 66%;
+  --chart-6-dark: 331 75% 50%;
+  --chart-6-darker: 331 75% 42%;
 
   /* chart-8 grey dark  base L=51% (same as light) */
   --chart-8-lighter: 218 18% 67%;
-  --chart-8-light:   218 18% 59%;
-  --chart-8-dark:    218 18% 43%;
-  --chart-8-darker:  218 18% 35%;
+  --chart-8-light: 218 18% 59%;
+  --chart-8-dark: 218 18% 43%;
+  --chart-8-darker: 218 18% 35%;
 
   /* Semantic chart tokens (dark) */
   --chart-positive: 165 100% 31%; /* #00A078 */
@@ -294,38 +314,38 @@
 
   /* Sentiment scale (dark — same anchors, same intermediate steps) */
   --chart-sentiment-1: 352 83% 64%;
-  --chart-sentiment-2:  22 79% 59%;
-  --chart-sentiment-3:  38 92% 50%;
-  --chart-sentiment-4:  88 52% 47%;
+  --chart-sentiment-2: 22 79% 59%;
+  --chart-sentiment-3: 38 92% 50%;
+  --chart-sentiment-4: 88 52% 47%;
   --chart-sentiment-5: 165 100% 31%;
 
   /* NPS scale (dark) */
-  --chart-nps-0:  352 83% 64%;
-  --chart-nps-1:    7 76% 62%;
-  --chart-nps-2:   20 72% 58%;
-  --chart-nps-3:   32 68% 53%;
-  --chart-nps-4:   33 90% 52%;
-  --chart-nps-5:   38 92% 50%;
-  --chart-nps-6:   55 82% 45%;
-  --chart-nps-7:   76 65% 45%;
-  --chart-nps-8:  110 48% 47%;
-  --chart-nps-9:  146 69% 39%;
+  --chart-nps-0: 352 83% 64%;
+  --chart-nps-1: 7 76% 62%;
+  --chart-nps-2: 20 72% 58%;
+  --chart-nps-3: 32 68% 53%;
+  --chart-nps-4: 33 90% 52%;
+  --chart-nps-5: 38 92% 50%;
+  --chart-nps-6: 55 82% 45%;
+  --chart-nps-7: 76 65% 45%;
+  --chart-nps-8: 110 48% 47%;
+  --chart-nps-9: 146 69% 39%;
   --chart-nps-10: 165 100% 31%;
 
   /* Muted variants (dark) — dark chart colours are lighter so use same 40% opacity */
   --chart-1-muted: 235 100% 86% / 0.4;
   --chart-2-muted: 173 100% 42% / 0.4;
-  --chart-3-muted:  14  86% 58% / 0.4;
-  --chart-4-muted: 283  65% 58% / 0.4;
-  --chart-5-muted:  97  55% 49% / 0.4;
-  --chart-6-muted: 331  75% 58% / 0.4;
-  --chart-7-muted: 252  65% 53% / 0.4;
-  --chart-8-muted: 214  13% 53% / 0.4;
+  --chart-3-muted: 14 86% 58% / 0.4;
+  --chart-4-muted: 283 65% 58% / 0.4;
+  --chart-5-muted: 97 55% 49% / 0.4;
+  --chart-6-muted: 331 75% 58% / 0.4;
+  --chart-7-muted: 252 65% 53% / 0.4;
+  --chart-8-muted: 214 13% 53% / 0.4;
   --chart-positive-muted: 165 100% 31% / 0.4;
-  --chart-negative-muted: 352  83% 64% / 0.4;
+  --chart-negative-muted: 352 83% 64% / 0.4;
   --chart-sentiment-1-muted: 352 83% 64% / 0.4;
-  --chart-sentiment-2-muted:  22 79% 59% / 0.4;
-  --chart-sentiment-3-muted:  38 92% 50% / 0.4;
-  --chart-sentiment-4-muted:  88 52% 47% / 0.4;
+  --chart-sentiment-2-muted: 22 79% 59% / 0.4;
+  --chart-sentiment-3-muted: 38 92% 50% / 0.4;
+  --chart-sentiment-4-muted: 88 52% 47% / 0.4;
   --chart-sentiment-5-muted: 165 100% 31% / 0.4;
 }

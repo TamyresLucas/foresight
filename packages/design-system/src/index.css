@@ -3,8 +3,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap");
 /* Keep existing imports */
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200");
+
+/* 2. CANONICAL CSS IMPORT ORDER (Epic 3 - 3 Layer Architecture) */
+/* Layer 1: Platform primitives (raw HSL, no references) */
 @import "./styles/tokens-static.css";
-@import "./styles/tokens.css";
+/* Layer 2: Survey tokens (neutral grays, overrides platform for survey components) */
+/* Note: tokens-survey.css is applied via [data-survey-theme] attribute scoping */
+/* Layer 3: Deprecated tokens.css (pending full migration) */
+/* @import "./styles/tokens.css"; */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -44,9 +50,7 @@
   /* Points the legacy Shadcn variable to the new dynamic token */
   /* MOVED TO tokens-static.css */
 
-
   /* DARK MODE - MOVED TO tokens-static.css */
-
 }
 
 @layer base {
