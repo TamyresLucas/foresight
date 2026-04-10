@@ -51,6 +51,9 @@ export * from "./components/ui/tooltip";
 // Utilities
 export * from "./lib/utils";
 
+// Survey components
+export * from "./components/survey/BuildSidebar";
+
 // Data
 export { toolboxItems, questionGroups } from "./data/toolbox-items";
 
