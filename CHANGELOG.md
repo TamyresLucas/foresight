@@ -10,6 +10,11 @@ All notable changes to this project will be documented in this file.
 
 - Restored custom `paper` MCP server configuration in `opencode.jsonc` that was overwritten during reformatting.
 - Created "Red Core" design artboard in Paper Design Tool, featuring a vibrant red-to-dark gradient background, modern typography (Outfit), and a centered login experience with glassmorphism effects and primary action buttons.
+
+### Removed
+- Deleted legacy `src/components/survey/_reference` directory from `@foresight/design-system`. This directory contained 18 broken, dead-code files copied from the main Survey Builder application that were no longer maintainable or needed.
+- Removed the `src/components/survey/_reference` exclusion from `packages/design-system/tsconfig.json`.
+
 ### Fixed
 - Fixed syntax error (extra closing brace) in `opencode.jsonc` configuration file preventing MCP server initialization.
 - Fixed a ghost syntax error (Expected comma at EOF) in `opencode.jsonc` by re-formatting the JSON to enforce a trailing newline.

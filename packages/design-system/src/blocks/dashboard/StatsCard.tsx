@@ -56,26 +56,6 @@ const statsColorVariants = cva("", {
   },
 });
 
-// eslint-disable-next-line unused-imports/no-unused-vars
-const progressColorVariants = cva("", {
-  variants: {
-    color: {
-      primary: "bg-[hsl(var(--chart-1))]",
-      secondary: "bg-[hsl(var(--chart-2))]",
-      success: "bg-[hsl(var(--chart-positive))]",
-      warning: "bg-[hsl(var(--chart-3))]",
-      destructive: "bg-[hsl(var(--destructive))]",
-      muted: "bg-muted",
-      chart4: "bg-[hsl(var(--chart-4))]",
-      chart8: "bg-[hsl(var(--chart-8))]",
-      negative: "bg-[hsl(var(--chart-negative))]",
-    },
-  },
-  defaultVariants: {
-    color: "primary",
-  },
-});
-
 export interface StatsListItem {
   /** Label for the item */
   label: string;
@@ -86,7 +66,13 @@ export interface StatsListItem {
   /** Optional status badge label */
   badge?: string;
   /** Optional badge variant */
-  badgeVariant?: "default" | "secondary" | "destructive" | "outline" | "success" | "warning";
+  badgeVariant?:
+    | "default"
+    | "secondary"
+    | "destructive"
+    | "outline"
+    | "success"
+    | "warning";
   /** Optional semantic color for visual distinction */
   color?: SemanticColor;
 }
@@ -153,11 +139,16 @@ function TrendIndicator({ trend }: { trend: StatsTrend }) {
 
 function MetricsGrid({ metrics }: { metrics: StatsMetric[] }) {
   return (
-    <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))" }}>
+    <div
+      className="grid gap-4"
+      style={{ gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))" }}
+    >
       {metrics.map((metric, index) => (
         <div key={index} className="space-y-1">
           <p className="whitespace-nowrap text-2xl font-bold">{metric.value}</p>
-          <p className="whitespace-nowrap text-xs text-muted-foreground">{metric.label}</p>
+          <p className="whitespace-nowrap text-xs text-muted-foreground">
+            {metric.label}
+          </p>
         </div>
       ))}
     </div>
@@ -166,16 +157,29 @@ function MetricsGrid({ metrics }: { metrics: StatsMetric[] }) {
 
 function ItemsGrid({ items }: { items: StatsListItem[] }) {
   return (
-    <div className="grid gap-x-4 gap-y-4" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))" }}>
+    <div
+      className="grid gap-x-4 gap-y-4"
+      style={{ gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))" }}
+    >
       {items.map((item, index) => (
         <div key={index} className="space-y-1">
           <div className="flex flex-wrap items-center gap-1.5">
             {item.color && (
-              <div className={cn("h-2 w-2 shrink-0 rounded-full", statsColorVariants({ color: item.color }))} />
+              <div
+                className={cn(
+                  "h-2 w-2 shrink-0 rounded-full",
+                  statsColorVariants({ color: item.color }),
+                )}
+              />
             )}
             <span className="text-xs text-muted-foreground">{item.label}</span>
             {item.badge && (
-              <Badge variant={item.badgeVariant ?? "outline"} className="text-xs">{item.badge}</Badge>
+              <Badge
+                variant={item.badgeVariant ?? "outline"}
+                className="text-xs"
+              >
+                {item.badge}
+              </Badge>
             )}
           </div>
           <p className="text-2xl font-bold">{item.value}</p>
@@ -201,7 +205,12 @@ function ItemsList({ items }: { items: StatsListItem[] }) {
             )}
             <span className="text-sm font-medium">{item.label}</span>
             {item.badge && (
-              <Badge variant={item.badgeVariant ?? "outline"} className="text-xs">{item.badge}</Badge>
+              <Badge
+                variant={item.badgeVariant ?? "outline"}
+                className="text-xs"
+              >
+                {item.badge}
+              </Badge>
             )}
           </div>
           <div className="flex items-center gap-2">
@@ -264,7 +273,13 @@ const StatsCard = React.forwardRef<HTMLDivElement, StatsCardProps>(
     return (
       <Card
         ref={ref}
-        className={cn("flex w-full flex-col", headerStats && headerStats.length > 0 && "overflow-hidden rounded-b-none", className)}
+        className={cn(
+          "flex w-full flex-col",
+          headerStats &&
+            headerStats.length > 0 &&
+            "overflow-hidden rounded-b-none",
+          className,
+        )}
         {...props}
       >
         {headerStats && headerStats.length > 0 ? (
@@ -281,7 +296,9 @@ const StatsCard = React.forwardRef<HTMLDivElement, StatsCardProps>(
             </div>
             <div
               className="grid shrink-0 divide-x divide-border border-l border-border"
-              style={{ gridTemplateColumns: `repeat(${headerStats.length}, minmax(0, 1fr))` }}
+              style={{
+                gridTemplateColumns: `repeat(${headerStats.length}, minmax(0, 1fr))`,
+              }}
             >
               {headerStats.map((stat, i) => (
                 <div key={i} className="flex flex-col gap-0.5 p-4">
@@ -315,38 +332,61 @@ const StatsCard = React.forwardRef<HTMLDivElement, StatsCardProps>(
               </Button>
             ) : icon ? (
               <div className="flex h-7 w-7 shrink-0 items-center justify-center text-muted-foreground">
-                {React.cloneElement(icon as React.ReactElement, {
-                  className: cn("h-6 w-6", (icon as React.ReactElement).props?.className),
-                  fill: false,
-                })}
+                {React.cloneElement(
+                  icon as React.ReactElement<{
+                    className?: string;
+                    fill?: boolean;
+                  }>,
+                  {
+                    className: cn(
+                      "h-6 w-6",
+                      (
+                        icon as React.ReactElement<{
+                          className?: string;
+                          fill?: boolean;
+                        }>
+                      ).props?.className,
+                    ),
+                    fill: false,
+                  },
+                )}
               </div>
             ) : null}
           </CardHeader>
         )}
-        {(value !== undefined || comparison || (metrics && metrics.length > 0) || (items && items.length > 0) || (progress && progress.length > 0)) && (
+        {(value !== undefined ||
+          comparison ||
+          (metrics && metrics.length > 0) ||
+          (items && items.length > 0) ||
+          (progress && progress.length > 0)) && (
           <CardContent className="flex flex-1 flex-col space-y-3">
             {/* Main Value */}
             {value !== undefined && (
               <div className="flex min-h-9 flex-wrap items-baseline gap-2">
-                <span className="whitespace-nowrap text-3xl font-bold tracking-tight">{value}</span>
+                <span className="whitespace-nowrap text-3xl font-bold tracking-tight">
+                  {value}
+                </span>
                 {trend && <TrendIndicator trend={trend} />}
               </div>
             )}
 
             {/* Spacer to push bottom content down (only when there IS bottom content) */}
-            {((metrics && metrics.length > 0) || (items && items.length > 0) || (progress && progress.length > 0) || comparison) && (
-              <div className="flex-1" />
-            )}
+            {((metrics && metrics.length > 0) ||
+              (items && items.length > 0) ||
+              (progress && progress.length > 0) ||
+              comparison) && <div className="flex-1" />}
 
             {/* Metrics Grid */}
             {metrics && metrics.length > 0 && <MetricsGrid metrics={metrics} />}
 
             {/* Items List / Grid */}
-            {items && items.length > 0 && (
-              itemsLayout === "grid"
-                ? <ItemsGrid items={items} />
-                : <ItemsList items={items} />
-            )}
+            {items &&
+              items.length > 0 &&
+              (itemsLayout === "grid" ? (
+                <ItemsGrid items={items} />
+              ) : (
+                <ItemsList items={items} />
+              ))}
 
             {/* Progress Bar */}
             {progress && progress.length > 0 && (
@@ -357,7 +397,9 @@ const StatsCard = React.forwardRef<HTMLDivElement, StatsCardProps>(
 
             {/* Comparison Text */}
             {comparison && (
-              <p className="!mt-2 text-xs text-muted-foreground">{comparison}</p>
+              <p className="!mt-2 text-xs text-muted-foreground">
+                {comparison}
+              </p>
             )}
           </CardContent>
         )}

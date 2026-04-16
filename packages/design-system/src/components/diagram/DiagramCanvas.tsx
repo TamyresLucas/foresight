@@ -8,6 +8,8 @@ import {
   type NodeTypes,
   type Node,
   type Edge,
+  type OnNodesChange,
+  type OnEdgesChange,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 
@@ -33,9 +35,9 @@ export interface DiagramCanvasProps {
   /** Array of edges connecting nodes */
   edges: Edge[];
   /** Callback when nodes change (for controlled mode) */
-  onNodesChange?: (changes: unknown) => void;
+  onNodesChange?: OnNodesChange<Node>;
   /** Callback when edges change (for controlled mode) */
-  onEdgesChange?: (changes: unknown) => void;
+  onEdgesChange?: OnEdgesChange<Edge>;
   /** Callback when a node is clicked */
   onNodeClick?: (event: React.MouseEvent, node: Node) => void;
   /** Whether to show the controls panel */

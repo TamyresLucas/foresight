@@ -126,7 +126,7 @@ const OutgoingFlowErrorAlert = ({ destination }: { destination: string }) => (
 // ---------------------------------------------------------------------------
 
 interface SurveyBlockShellProps {
-    children: React.ReactNode;
+    children?: React.ReactNode;
     title?: string;
     blockId?: string;
     questionCount?: number;

@@ -123,6 +123,7 @@ const meta = {
   tags: ["autodocs"],
   args: {
     id: "survey-1",
+    title: "Customer Satisfaction Survey",
     isDragged: false,
     isExpanded: false,
     onDragStart: fn(),

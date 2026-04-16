@@ -1,4 +1,3 @@
-import * as React from "react";
 import { cn } from "@/lib/utils";
 import { TrendingUp, TrendingDown } from "../../components/ui/icons";
 
@@ -28,7 +27,8 @@ export function TrendBadge({ type, value, className }: TrendBadgeProps) {
     >
       <Icon className="h-3 w-3" aria-hidden="true" />
       <span className="font-semibold">
-        {prefix}{value}%
+        {prefix}
+        {value}%
       </span>
     </span>
   );

@@ -1,4 +1,3 @@
-import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "@storybook/test";
 import { ToolboxItem } from "../ui/toolbox-item";
@@ -52,9 +51,8 @@ const meta = {
   },
   tags: ["autodocs"],
   args: {
-    isEnabled: true,
-    isDragged: false,
-    isDraggable: true,
+    label: "Multiple Choice",
+    icon: RadioButtonIcon,
     onDragStart: fn(),
     onDragEnd: fn(),
     onClick: fn(),
@@ -72,157 +70,152 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 // ---------------------------------------------------------------------------
-// Core question type stories
+// Stories — Core Types
 // ---------------------------------------------------------------------------
 
-/** Radio Button — single-select multiple choice question. */
-export const Radio: Story = {
-  name: "Radio Button",
+/** Multiple Choice — the primary question type. */
+export const MultipleChoice: Story = {
   args: {
+    label: "Multiple Choice",
     icon: RadioButtonIcon,
-    label: "Radio Button",
   },
 };
 
-/** Check Box — multi-select multiple choice question. */
-export const Checkbox: Story = {
-  name: "Check Box",
+/** Boolean — Yes/No or True/False toggle. */
+export const Boolean: Story = {
   args: {
+    label: "Boolean (Yes/No)",
     icon: CheckboxIcon,
-    label: "Check Box",
   },
 };
 
-/** Text Input — open-ended free-text question. */
-export const TextEntry: Story = {
-  name: "Text Input",
+/** Open Text — multi-line or single-line text input. */
+export const OpenText: Story = {
   args: {
+    label: "Open Text",
     icon: TextAnswerIcon,
-    label: "Text Input",
   },
 };
 
-/** Description — informational text block; no respondent input. */
+/** Description — read-only content block (no question). */
 export const Description: Story = {
-  // eslint-disable-next-line storybook/no-redundant-story-name
-  name: "Description",
   args: {
-    icon: DescriptionIcon,
     label: "Description",
+    icon: DescriptionIcon,
   },
 };
 
-/** Page Break — structural separator that creates a new survey page. */
+/** Page Break — visual separator for survey pagination. */
 export const PageBreak: Story = {
-  // eslint-disable-next-line storybook/no-redundant-story-name
-  name: "Page Break",
   args: {
-    icon: PageBreakIcon,
     label: "Page Break",
+    icon: PageBreakIcon,
   },
 };
 
 // ---------------------------------------------------------------------------
-// State stories
+// Stories — Interactive States
 // ---------------------------------------------------------------------------
 
-/** Dragging — item is being dragged. Background switches to primary with white text and icon. */
+/** Dragging — the item is currently being moved. Opacity drops and background switches to primary. */
 export const Dragging: Story = {
-  // eslint-disable-next-line storybook/no-redundant-story-name
-  name: "Dragging",
   args: {
+    label: "Multiple Choice",
     icon: RadioButtonIcon,
-    label: "Radio Button",
     isDragged: true,
   },
 };
 
-/** Disabled — item is greyed out and cannot be interacted with. */
+/** Disabled — the item cannot be interacted with (e.g. if a limit is reached). */
 export const Disabled: Story = {
-  // eslint-disable-next-line storybook/no-redundant-story-name
-  name: "Disabled",
   args: {
+    label: "Multiple Choice",
     icon: RadioButtonIcon,
-    label: "Radio Button",
     isEnabled: false,
   },
 };
 
-/** With End Action — trailing `+` button visible on hover (e.g. for quick-add). */
-export const WithEndAction: Story = {
-  // eslint-disable-next-line storybook/no-redundant-story-name
-  name: "With End Action",
+// ---------------------------------------------------------------------------
+// Overview — all states stacked
+// ---------------------------------------------------------------------------
+
+/** All States — an overview of the core 5 types stacked together. */
+export const AllStates: Story = {
   args: {
+    label: "Multiple Choice",
     icon: RadioButtonIcon,
-    label: "Radio Button",
-    endAction: (
-      <button
-        className="p-1 rounded hover:bg-primary/10 text-primary transition-colors"
-        aria-label="Add Radio Button"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <Plus className="text-base leading-none" />
-      </button>
-    ),
   },
-};
-
-// ---------------------------------------------------------------------------
-// Overview stories
-// ---------------------------------------------------------------------------
-
-/** All Types — the 5 core question types stacked as they appear in the sidebar toolbox. */
-export const AllTypes: Story = {
-  // eslint-disable-next-line storybook/no-redundant-story-name
-  name: "All Types",
-  render: (args) => (
-    <div className="w-64 border border-border-ui rounded-lg overflow-hidden">
-      {[
-        { icon: RadioButtonIcon, label: "Radio Button" },
-        { icon: CheckboxIcon, label: "Check Box" },
-        { icon: TextAnswerIcon, label: "Text Input" },
-        { icon: DescriptionIcon, label: "Description" },
-        { icon: PageBreakIcon, label: "Page Break" },
-      ].map(({ icon, label }) => (
-        <ToolboxItem
-          key={label}
-          icon={icon}
-          label={label}
-          onDragStart={args.onDragStart}
-          onDragEnd={args.onDragEnd}
-          onClick={args.onClick}
-        />
-      ))}
+  render: () => (
+    <div className="flex flex-col">
+      <ToolboxItem
+        label="Multiple Choice"
+        icon={RadioButtonIcon}
+        onDragStart={fn()}
+        onDragEnd={fn()}
+        onClick={fn()}
+      />
+      <ToolboxItem
+        label="Boolean"
+        icon={CheckboxIcon}
+        onDragStart={fn()}
+        onDragEnd={fn()}
+        onClick={fn()}
+      />
+      <ToolboxItem
+        label="Open Text"
+        icon={TextAnswerIcon}
+        onDragStart={fn()}
+        onDragEnd={fn()}
+        onClick={fn()}
+      />
+      <ToolboxItem
+        label="Description"
+        icon={DescriptionIcon}
+        onDragStart={fn()}
+        onDragEnd={fn()}
+        onClick={fn()}
+      />
+      <ToolboxItem
+        label="Page Break"
+        icon={PageBreakIcon}
+        onDragStart={fn()}
+        onDragEnd={fn()}
+        onClick={fn()}
+      />
     </div>
   ),
 };
 
-/** Full Library — every question type from `toolbox-items.ts`, rendered in their category groups. */
+/** Full Library — rendering every available item grouped by category. */
 export const FullLibrary: Story = {
-  // eslint-disable-next-line storybook/no-redundant-story-name
-  name: "Full Library",
-  render: (args) => (
-    <div className="w-64 border border-border-ui rounded-lg overflow-hidden">
-      {Object.entries(questionGroups).map(([group, names]) => (
-        <div key={group}>
-          {/* Group heading */}
-          <div className="px-4 py-1.5 bg-muted/60 border-b border-border-ui">
-            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              {group}
+  args: {
+    label: "Multiple Choice",
+    icon: RadioButtonIcon,
+  },
+  render: () => (
+    <div className="flex flex-col max-h-[600px] overflow-y-auto">
+      {(questionGroups as any).map((group: any) => (
+        <div key={group.category}>
+          <div className="px-4 py-2 bg-muted/50 border-y border-border-ui">
+            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+              {group.category}
             </span>
           </div>
-          {/* Items in group */}
-          {names.map((name) => {
-            const icon = iconMap[name];
-            if (!icon) return null;
+          {group.items.map((type: string) => {
+            const Icon = (iconMap as any)[type];
             return (
               <ToolboxItem
-                key={name}
-                icon={icon}
-                label={name}
-                onDragStart={args.onDragStart}
-                onDragEnd={args.onDragEnd}
-                onClick={args.onClick}
+                key={type}
+                label={type}
+                icon={Icon || RadioButtonIcon}
+                onDragStart={fn()}
+                onDragEnd={fn()}
+                onClick={fn()}
+                endAction={
+                  <button className="p-1 rounded hover:bg-primary/10 text-primary transition-colors">
+                    <Plus className="h-4 w-4" />
+                  </button>
+                }
               />
             );
           })}

@@ -39,12 +39,16 @@ function Badge({ className, variant, children, ...props }: BadgeProps) {
         {variant && variant !== "default"
           ? React.Children.map(children, (child) =>
               React.isValidElement(child)
-                ? React.cloneElement(child as React.ReactElement<unknown>, {
-                    className: cn(
-                      "w-3.5 h-3.5 shrink-0",
-                      (child as React.ReactElement<unknown>).props.className,
-                    ),
-                  })
+                ? React.cloneElement(
+                    child as React.ReactElement<{ className?: string }>,
+                    {
+                      className: cn(
+                        "w-3.5 h-3.5 shrink-0",
+                        (child as React.ReactElement<{ className?: string }>)
+                          .props.className,
+                      ),
+                    },
+                  )
                 : child,
             )
           : children}

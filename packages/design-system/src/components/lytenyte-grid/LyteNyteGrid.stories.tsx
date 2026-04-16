@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { LyteNyteGrid, type Column } from "./LyteNyteGrid";
+import type { CellRendererParams } from "@1771technologies/lytenyte-core/types";
 
 const meta: Meta<typeof LyteNyteGrid> = {
   title: "ShadCn/Data Display/DataGrid",
@@ -304,7 +305,7 @@ const selectionColumns: Column<Employee>[] = [
     id: "_select",
     name: "",
     width: 40,
-    cellRenderer: (params: unknown) => {
+    cellRenderer: (params: CellRendererParams<Employee>) => {
       const row = params.row;
       const grid = params.grid;
       const selectedIds = grid.state.rowSelectedIds.useValue();
@@ -447,7 +448,7 @@ const customRendererColumns: Column<OrderWithStatus>[] = [
     name: "Amount",
     type: "number",
     width: 100,
-    cellRenderer: (params: unknown) => (
+    cellRenderer: (params: any) => (
       <CurrencyCell value={params.value as number} />
     ),
   },
@@ -455,7 +456,7 @@ const customRendererColumns: Column<OrderWithStatus>[] = [
     id: "status",
     name: "Status",
     width: 110,
-    cellRenderer: (params: unknown) => (
+    cellRenderer: (params: any) => (
       <StatusCell value={params.value as string} />
     ),
   },
@@ -533,7 +534,7 @@ const rowActionsColumns: Column<Employee>[] = [
     id: "_select",
     name: "",
     width: 40,
-    cellRenderer: ({ row, grid }) => {
+    cellRenderer: ({ row, grid }: any) => {
       const selectedIds = grid.state.rowSelectedIds.useValue();
       const isSelected = row?.id ? selectedIds.has(row.id) : false;
 
@@ -562,7 +563,7 @@ const rowActionsColumns: Column<Employee>[] = [
     id: "_actions",
     name: "",
     width: 60,
-    cellRenderer: (params: unknown) => (
+    cellRenderer: (params: any) => (
       <RowActionsCell row={params.row as unknown as Employee} />
     ),
   },

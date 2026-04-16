@@ -9,8 +9,8 @@
 @import "./styles/tokens-static.css";
 /* Layer 2: Survey tokens (neutral grays, overrides platform for survey components) */
 /* Note: tokens-survey.css is applied via [data-survey-theme] attribute scoping */
-/* Layer 3: Deprecated tokens.css (pending full migration) */
-/* @import "./styles/tokens.css"; */
+/* Layer 3: Legacy tokens - includes surface-container tokens needed by survey components */
+@import "./styles/tokens.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -61,11 +61,12 @@ export const ToolboxItem: React.FC<ToolboxItemProps> = ({
       }}
       className={cn(
         "flex items-center gap-2 px-4 py-3 h-[47px]",
-        "border-b border-solid border-[#e0e4ff]",
+        "border-b border-solid border-border",
         "rounded-none",
         "transition-colors group",
+        "bg-surface-container",
         isDragged ? "opacity-30" : "",
-        isEnabled && !isDragged && "hover:bg-[#f5f6ff]",
+        isEnabled && !isDragged && "hover:bg-surface-container-lowest",
         !isEnabled && "cursor-not-allowed opacity-50",
         isEnabled && isDraggable && !isDragged && "cursor-grab",
         isEnabled && isDraggable && isDragged && "cursor-grabbing",

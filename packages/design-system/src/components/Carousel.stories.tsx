@@ -6,6 +6,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type CarouselApi,
 } from "./ui/carousel";
 import { Card, CardContent } from "./ui/card";
 import { cn } from "../lib/utils";
@@ -106,7 +107,7 @@ export const Vertical: Story = {
 // === WITH INDICATORS (Dots) ===
 
 const CarouselWithIndicators = () => {
-  const [api, setApi] = React.useState<unknown>();
+  const [api, setApi] = React.useState<CarouselApi | undefined>();
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
 

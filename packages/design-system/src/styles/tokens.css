@@ -105,7 +105,9 @@
   --md-sys-color-surface: var(--foundation-neutral-scale-primary-10);
   --md-sys-color-surface-dim: var(--foundation-neutral-scale-primary-20);
   --md-sys-color-surface-bright: var(--foundation-white);
-  --md-sys-color-surface-container-lowest: var(--foundation-primary-gradients-primary-5);
+  --md-sys-color-surface-container-lowest: var(
+    --foundation-primary-gradients-primary-5
+  );
   --md-sys-color-surface-container-low: var(--foundation-white);
   --md-sys-color-surface-container: var(--foundation-white);
   --md-sys-color-surface-container-high: var(--foundation-white);
@@ -121,15 +123,15 @@
   --notification-warn-bg: var(--foundation-tangerine-light);
   --notification-suc-bg: var(--foundation-green-light);
   --notification-info-bg: var(--foundation-primary-gradients-primary-20);
-  --border-bd-def: #E0E4FF;
-  --border-bd-hov: #9CA3AF;
+  --border-bd-def: #e0e4ff;
+  --border-bd-hov: #9ca3af;
   --border-bd-sel: var(--foundation-periwinkle-dark);
-  --border-bd-dis: #E5E7EB;
+  --border-bd-dis: #e5e7eb;
   --button-btn-bd-def: #232323;
   --notification-err-bd: var(--foundation-coral);
   --notification-err-txt: var(--foundation-coral-dark);
   --notification-info-txt: var(--foundation-periwinkle-dark);
-  --input-field-input-bd-def: #6B7280;
+  --input-field-input-bd-def: #6b7280;
   --input-field-input-bd-sel: var(--foundation-periwinkle-dark);
   --input-field-input-txt: var(--text-txt-pri);
   --input-field-input-bd-dis: var(--background--surface-bg-dis);
@@ -144,23 +146,31 @@
   --text-txt-on-success: var(--foundation-white);
   --button-button-tertiary-alt: var(--foundation-periwinkle-dark);
   --button-button-primary: var(--foundation-periwinkle-dark);
-  --button-button-primary-hover: var(--foundation-primary-gradients-primary-100);
+  --button-button-primary-hover: var(
+    --foundation-primary-gradients-primary-100
+  );
   --button-button-tertiary-hover: var(--foundation-periwinkle);
   --button-button-danger: var(--foundation-coral-dark);
   --button-button-success: var(--foundation-green-dark);
   --button-button-danger-hover: var(--foundation-coral);
   --button-button-success-hover: var(--foundation-green);
   --text-txt-on-color-disable: var(--foundation-primary-gradients-primary-40);
-  --button-button-primary-disabled: var(--foundation-primary-gradients-primary-1);
-  --button-button-secondary-disabled: var(--foundation-primary-gradients-primary-40);
+  --button-button-primary-disabled: var(
+    --foundation-primary-gradients-primary-1
+  );
+  --button-button-secondary-disabled: var(
+    --foundation-primary-gradients-primary-40
+  );
   --text-txt-pri: var(--foundation-neutral);
   --text-txt-sec: var(--foundation-neutral-80);
   --text-hyperlink-def: var(--foundation-neutral);
   --text-hyperlink-hov: var(--foundation-periwinkle);
-  --thumbnail-thumbnail-bd-def: #DEE2FF;
+  --thumbnail-thumbnail-bd-def: #dee2ff;
   --thumbnail-thumbnail-bd-sel: var(--foundation-periwinkle);
   --thumbnail-thumbnail-bd-hov: #232323;
-  --thumbnail-thumbnail-icon-def: var(--foundation-primary-gradients-primary-60);
+  --thumbnail-thumbnail-icon-def: var(
+    --foundation-primary-gradients-primary-60
+  );
   --thumbnail-thumbnail-icon-sel: var(--foundation-periwinkle-dark);
   --menu-menu-def: var(--foundation-neutral);
   --menu-menu-hov: var(--foundation-periwinkle);
@@ -199,7 +209,9 @@
   --foundation-periwinkle-light: #eff1ff;
   --background--surface-bg-sel-hov: var(--foundation-periwinkle);
   --table-bg-row-def: var(--background--surface-bg-def);
-  --background--surface-bg-empty: var(--foundation-primary-gradients-primary-20);
+  --background--surface-bg-empty: var(
+    --foundation-primary-gradients-primary-20
+  );
   --background--surface-bg-filled: var(--foundation-periwinkle-dark);
   --thumbnail-thumbnail-bg-def: var(--foundation-primary-gradients-primary-5);
   --thumbnail-thumbnail-bg-sel: var(--foundation-primary-gradients-primary-1);
@@ -307,10 +319,16 @@
   --table-bd-hdr-def-alt: var(--foundation-neutral-scale-primary-40);
   --tags-tag-bd-icon--11: var(--foundation-chart-tangerine);
   --tags-tag-bg--11: #fffcf2;
-  --button-button-tertiary-disabled: var(--foundation-primary-gradients-primary-40);
+  --button-button-tertiary-disabled: var(
+    --foundation-primary-gradients-primary-40
+  );
   --button-button-primary-active: var(--foundation-periwinkle-dark);
-  --button-button-secondary-active: var(--foundation-primary-gradients-primary-100);
-  --button-button-tertiary-active: var(--foundation-primary-gradients-primary-100);
+  --button-button-secondary-active: var(
+    --foundation-primary-gradients-primary-100
+  );
+  --button-button-tertiary-active: var(
+    --foundation-primary-gradients-primary-100
+  );
   --button-button-danger-active: var(--notification-err-txt);
   --button-button-success-active: #007154;
   --border-bd-sel-alt: var(--foundation-white);
@@ -320,7 +338,9 @@
   --text-highlight-lemon: #fff9b1;
   --text-highlight-lettuce: #d1f786;
   --text-highlight-highlight-tool: var(--foundation-periwinkle);
-  --text-highlight-highlight-selection: var(--foundation-primary-gradients-primary-40);
+  --text-highlight-highlight-selection: var(
+    --foundation-primary-gradients-primary-40
+  );
   --foundation-primary-gradients-primary-80: #7b8bff;
 
   /* Specific Token for Diagram Edges */
@@ -335,8 +355,10 @@
   --elevation-0: none;
   --elevation-1: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --elevation-2: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  --elevation-3: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --elevation-4: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --elevation-3:
+    0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --elevation-4:
+    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
   /* Animation Tokens */
   --duration-instant: 75ms;
@@ -387,7 +409,7 @@
   --md-sys-color-surface: hsl(240 6% 10%);
   --md-sys-color-surface-dim: hsl(240 6% 6%);
   --md-sys-color-surface-bright: hsl(230 5% 20%);
-  --md-sys-color-surface-container-lowest: hsl(230 5% 11%);
+  --md-sys-color-surface-container-lowest: hsl(230 20% 16%);
   --md-sys-color-surface-container-low: hsla(228, 18%, 14%, 0.97);
   --md-sys-color-surface-container: hsla(228, 18%, 14%, 0.97);
   --md-sys-color-surface-container-high: hsla(228, 18%, 14%, 0.97);
@@ -396,8 +418,10 @@
   /* Dark mode elevation (stronger shadows) */
   --elevation-1: 0 1px 2px 0 rgb(0 0 0 / 0.3);
   --elevation-2: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.3);
-  --elevation-3: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-  --elevation-4: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+  --elevation-3:
+    0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --elevation-4:
+    0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.4);
 
   /* Legacy tokens for backward compatibility - will be removed after component updates */
   --background--surface-bg: var(--md-sys-color-surface);
@@ -409,15 +433,15 @@
   --notification-warn-bg: var(--foundation-tangerine-light);
   --notification-suc-bg: var(--foundation-green-light);
   --notification-info-bg: var(--foundation-primary-gradients-primary-20);
-  --border-bd-def: #363D65;
-  --border-bd-hov: #6B7280;
+  --border-bd-def: #363d65;
+  --border-bd-hov: #6b7280;
   --border-bd-sel: var(--foundation-periwinkle-dark);
-  --border-bd-dis: #1F2937;
-  --button-btn-bd-def: #FFFFFF;
+  --border-bd-dis: #1f2937;
+  --button-btn-bd-def: #ffffff;
   --notification-err-bd: var(--foundation-coral);
   --notification-err-txt: var(--foundation-coral-dark);
   --notification-info-txt: var(--foundation-periwinkle-dark);
-  --input-field-input-bd-def: #9CA3AF;
+  --input-field-input-bd-def: #9ca3af;
   --input-field-input-bd-sel: var(--foundation-periwinkle-dark);
   --input-field-input-txt: var(--text-txt-pri);
   --input-field-input-bd-dis: var(--background--surface-bg-dis);
@@ -432,7 +456,9 @@
   --text-txt-on-success: #1b1f50;
   --button-button-tertiary-alt: var(--foundation-periwinkle-dark);
   --button-button-primary: var(--foundation-periwinkle-dark);
-  --button-button-primary-hover: var(--foundation-primary-gradients-primary-100);
+  --button-button-primary-hover: var(
+    --foundation-primary-gradients-primary-100
+  );
   --button-button-tertiary-hover: var(--foundation-periwinkle);
   --button-button-danger: var(--foundation-coral-dark);
   --button-button-success: var(--foundation-green-dark);
@@ -440,7 +466,9 @@
   --button-button-success-hover: var(--foundation-green);
   --text-txt-on-color-disable: var(--foundation-neutral-scale-primary-50);
   --button-button-primary-disabled: var(--foundation-neutral-scale-primary-90);
-  --button-button-secondary-disabled: var(--foundation-neutral-scale-primary-60);
+  --button-button-secondary-disabled: var(
+    --foundation-neutral-scale-primary-60
+  );
   --text-txt-pri: var(--foundation-white);
   --text-txt-sec: #ffffff;
   --text-hyperlink-def: var(--foundation-white);
@@ -448,7 +476,9 @@
   --thumbnail-thumbnail-bd-def: var(--foundation-primary-gradients-primary-40);
   --thumbnail-thumbnail-bd-sel: var(--foundation-periwinkle);
   --thumbnail-thumbnail-bd-hov: #ffffff;
-  --thumbnail-thumbnail-icon-def: var(--foundation-primary-gradients-primary-60);
+  --thumbnail-thumbnail-icon-def: var(
+    --foundation-primary-gradients-primary-60
+  );
   --thumbnail-thumbnail-icon-sel: var(--foundation-periwinkle-dark);
   --menu-menu-def: var(--foundation-neutral);
   --menu-menu-hov: var(--foundation-periwinkle);
@@ -487,7 +517,9 @@
   --foundation-periwinkle-light: #292b39;
   --background--surface-bg-sel-hov: var(--foundation-neutral-scale-primary-70);
   --table-bg-row-def: var(--foundation-off-black);
-  --background--surface-bg-empty: var(--foundation-primary-gradients-primary-20);
+  --background--surface-bg-empty: var(
+    --foundation-primary-gradients-primary-20
+  );
   --background--surface-bg-filled: var(--foundation-periwinkle-dark);
   --thumbnail-thumbnail-bg-def: var(--foundation-primary-gradients-primary-5);
   --thumbnail-thumbnail-bg-sel: var(--foundation-primary-gradients-primary-1);
@@ -595,7 +627,9 @@
   --table-bd-hdr-def-alt: var(--foundation-neutral-scale-primary-40);
   --tags-tag-bd-icon--11: var(--foundation-chart-tangerine);
   --tags-tag-bg--11: var(--foundation-tangerine-light);
-  --button-button-tertiary-disabled: var(--foundation-primary-gradients-primary-40);
+  --button-button-tertiary-disabled: var(
+    --foundation-primary-gradients-primary-40
+  );
   --button-button-primary-active: var(--foundation-neutral-scale-primary-70);
   --button-button-secondary-active: var(--foundation-neutral-scale-primary-70);
   --button-button-tertiary-active: var(--foundation-neutral-scale-primary-70);
@@ -608,7 +642,9 @@
   --text-highlight-lemon: #fff9b1;
   --text-highlight-lettuce: #d1f786;
   --text-highlight-highlight-tool: var(--foundation-periwinkle);
-  --text-highlight-highlight-selection: var(--foundation-primary-gradients-primary-40);
+  --text-highlight-highlight-selection: var(
+    --foundation-primary-gradients-primary-40
+  );
   --foundation-primary-gradients-primary-80: #4858cc;
   --diagram-edge-def: var(--input-field-input-bd-def);
 }
