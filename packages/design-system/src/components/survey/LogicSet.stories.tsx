@@ -266,7 +266,7 @@ function LogicSetDisplay({
   const containerClass = [
     "p-3 border rounded-md relative transition-colors",
     transparentBackground
-      ? "border-border-subtle bg-transparent"
+      ? "border-border-decorative bg-transparent"
       : validationErrors.size > 0
         ? "border-destructive/40 shadow-sm"
         : logicSet.isConfirmed

@@ -256,7 +256,7 @@ If applicable
 
 To add new tokens:
 
-1. Edit `packages/design-system/src/styles/tokens.css`
+1. Edit `packages/design-system/src/styles/tokens-static.css`
 2. Update `packages/design-system/tailwind.config.js`
 3. Document in Storybook
 

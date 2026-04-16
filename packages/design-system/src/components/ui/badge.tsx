@@ -10,7 +10,7 @@ const badgeVariants = cva(
       variant: {
         default:
           "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
-        outline: "text-foreground border-border-default font-normal",
+        outline: "text-foreground border-border-ui font-normal",
         destructive:
           "border-destructive/40 bg-white dark:bg-transparent relative after:absolute after:inset-0 after:bg-destructive/10 text-foreground [&>svg]:text-destructive [&>.material-symbols-rounded]:text-destructive hover:after:bg-destructive/20 font-normal overflow-hidden",
         success:

@@ -9,8 +9,8 @@
 @import "./styles/tokens-static.css";
 /* Layer 2: Survey tokens (neutral grays, overrides platform for survey components) */
 /* Note: tokens-survey.css is applied via [data-survey-theme] attribute scoping */
-/* Layer 3: Legacy tokens - includes surface-container tokens needed by survey components */
-@import "./styles/tokens.css";
+@import "@foresight/tokens-survey";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -83,30 +83,28 @@
 
   .table-body-row {
     border-bottom-width: 1px;
-    border-color: hsl(var(--border-subtle));
+    border-color: hsl(var(--border-decorative));
     transition-property: color, background-color;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
   }
 
   .table-body-row:hover {
-    background-color: hsl(var(--primary) / 0.1);
-    color: hsl(var(--foreground));
+    @apply bg-primary/10 text-foreground;
   }
 
   .table-body-row[data-state="selected"] {
-    color: hsl(var(--primary));
-    box-shadow: inset 2px 0 0 0 hsl(var(--primary));
+    @apply text-primary shadow-[inset_2px_0_0_0_hsl(var(--primary))];
   }
 
   /* Utility for placeholder text using placeholder-foreground token */
   .placeholder-muted::placeholder {
-    color: var(--placeholder-foreground);
+    @apply text-[var(--placeholder-foreground)];
   }
 
   /* Survey Content Typography Utility */
   .font-survey {
-    font-family: var(--font-survey);
+    @apply font-[family-name:var(--font-survey)];
   }
 }
 
@@ -134,18 +132,15 @@
 .react-flow__edge.selected .react-flow__edge-path,
 .react-flow__edge:focus .react-flow__edge-path,
 .react-flow__edge:focus-visible .react-flow__edge-path {
-  stroke: hsl(var(--primary));
-  stroke-width: 3px;
+  @apply stroke-primary stroke-[3px];
 }
 
 .react-flow__edge-text {
-  font-size: 12px;
-  fill: hsl(var(--muted-foreground));
+  @apply text-xs fill-muted-foreground;
 }
 
 .react-flow__edge.selected .react-flow__edge-text {
-  fill: hsl(var(--primary));
-  font-weight: 600;
+  @apply fill-primary font-semibold;
 }
 
 .react-flow__marker-end path {
@@ -153,19 +148,16 @@
 }
 
 .react-flow__edge.selected .react-flow__marker-end path {
-  fill: hsl(var(--primary));
+  @apply fill-primary;
 }
 
 .react-flow__background {
-  background-color: hsl(var(--muted));
+  @apply bg-muted;
 }
 
 /* React Flow Controls Styling */
 .diagram-controls {
-  background-color: hsl(var(--card));
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  @apply bg-card border border-border shadow-sm;
 }
 
 .diagram-controls button {
@@ -174,20 +166,20 @@
 }
 
 .diagram-controls button:hover {
-  background-color: var(--accent);
+  @apply bg-accent;
 }
 
 .diagram-controls button svg {
-  fill: hsl(var(--foreground));
+  @apply fill-foreground;
 }
 
 /* Dark mode adjustments for React Flow */
 .dark .react-flow__background {
-  background-color: hsl(var(--background));
+  @apply bg-background;
 }
 
 .dark .diagram-controls {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  @apply shadow-[0_1px_3px_rgba(0,0,0,0.4)];
 }
 
 @layer components {

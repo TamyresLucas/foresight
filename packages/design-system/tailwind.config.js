@@ -5,22 +5,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        "surface-container-lowest":
-          "var(--md-sys-color-surface-container-lowest)",
-        "surface-container": "var(--md-sys-color-surface-container)",
-        "surface-container-high": "var(--md-sys-color-surface-container-high)",
-        "surface-container-highest":
-          "var(--md-sys-color-surface-container-highest)",
-        surface: "var(--md-sys-color-surface)",
         border: "hsl(var(--border))",
         /* Named scale — prefer these */
         "border-decorative":
           "hsl(var(--border-decorative))" /* ~1.3:1  non-interactive only */,
         "border-ui":
           "hsl(var(--border-ui))" /* ~4.97:1 interactive elements  */,
-        /* Backward-compat aliases */
-        "border-subtle": "hsl(var(--border-subtle))",
-        "border-default": "hsl(var(--border-default))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
@@ -45,15 +35,20 @@ export default {
           DEFAULT: "hsl(var(--info))",
           foreground: "hsl(var(--info-foreground))",
         },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
         muted: {
           DEFAULT: "hsl(var(--muted))",
-          foreground: "var(--muted-foreground)",
+          foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
         disabled: {
+          DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--disabled-foreground))",
         },
         popover: {

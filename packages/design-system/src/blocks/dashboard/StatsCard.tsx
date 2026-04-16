@@ -230,7 +230,7 @@ function ProgressStack({ segments }: { segments: StatsProgressItem[] }) {
   return (
     <div className="h-3 w-full rounded-full bg-primary/10">
       <div
-        className="h-full rounded-full bg-[var(--foundation-chart-blueberry)] transition-all"
+        className="h-full rounded-full bg-primary transition-all"
         style={{ width: `${Math.min(total, 100)}%` }}
       />
     </div>

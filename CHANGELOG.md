@@ -4,9 +4,19 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Added
-- Completed comprehensive design token audit comparing all Foresight CSS custom properties against Shadcn/ui canonical naming conventions. Identified 21/21 core tokens conformant, ~70 well-named extensions, 3 critical `--lng1771-*` naming violations, and ~15 naming divergences (mostly `--background-{status}` / `--border-{status}` patterns).
-- Created Milestone 5 Story in Notion ("Shadcn token naming audit cleanup") under Epic "3 layer architecture" with 8 tasks (S1 spec, S2 implement ×6, S3 QA). Sequenced before Milestone 4 (tokens.css deprecation).
-- Created Notion API workflow automation scripts to interact with internal Kanban and Execution Log DBs (stored as untracked scratch files).
+- Standardized `secondary` color and `disabled` foreground to `tailwind.config.js` to align with shadcn conventions.
+- Added raw HSL definitions for `muted-foreground` and `disabled-foreground` in `tokens-static.css` to support Tailwind opacity modifiers.
+- Integrated `@foresight/tokens-survey` as a monorepo workspace dependency.
+- Added missing `--chart-3`, `--chart-5`, and `--chart-7` shade variants to `tokens-static.css` for both light and dark modes.
+
+### Removed
+- Deleted deprecated `tokens.css` file from `packages/design-system` after migrating all remaining typography, elevation, animation, and surface system tokens to `tokens-static.css`.
+
+### Changed
+- Standardized `Button.tsx` variants (`secondary`, `disabled`) and `index.css` components (Vibe variants, table rows, React Flow) to use unified Tailwind classes instead of manual HSL lookups.
+- Refactored `index.css` to use `@apply` with standardized tokens for improved maintainability.
+- Consolidated color tokens across `packages/design-system` per shadcn conventions, ensuring consistency between CSS variables and Tailwind configuration.
+- Updated canonical CSS import order in `index.css` to follow the 3-layer architecture: Platform Primitives → Survey Tokens → Component Utilities.
 
 - Restored custom `paper` MCP server configuration in `opencode.jsonc` that was overwritten during reformatting.
 - Created "Red Core" design artboard in Paper Design Tool, featuring a vibrant red-to-dark gradient background, modern typography (Outfit), and a centered login experience with glassmorphism effects and primary action buttons.

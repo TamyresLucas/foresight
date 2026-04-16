@@ -2,24 +2,24 @@
 
 /* Override LyteNyte's built-in CSS variables with design tokens */
 .lng-grid {
-  --lng1771-row-selected: hsl(var(--border-subtle));
-  --lng1771-row-bg: hsl(var(--primary) / 0.1);
-  --lng1771-primary-50: hsl(var(--primary));
-  --lng1771-gray-00: hsl(var(--background));
-  --lng1771-gray-02: transparent;
+  --row-selected-bg: hsl(var(--border-decorative));
+  --row-hover-bg: hsl(var(--primary) / 0.1);
+  --grid-primary: hsl(var(--primary));
+  --grid-bg: hsl(var(--background));
+  --grid-cell-bg: transparent;
   /* Was muted, set to transparent to remove alternating row effect */
   /* Alternating row background - disable by setting to transparent */
-  --lng1771-gray-10: transparent;
-  --lng1771-gray-20: hsl(var(--border-subtle));
-  --lng1771-gray-80: hsl(var(--foreground));
-  --lng1771-focus-outline: hsl(var(--primary));
+  --grid-alternate-bg: transparent;
+  --grid-border: hsl(var(--border-decorative));
+  --grid-text: hsl(var(--foreground));
+  --grid-focus: hsl(var(--primary));
   background-color: hsl(var(--background));
   /* Use opaque background token */
 }
 
 /* Alternating row styling */
 .lng-grid [data-ln-alternate="true"] [data-ln-cell="true"] {
-  background-color: var(--lng1771-gray-02);
+  background-color: var(--grid-cell-bg);
 }
 
 /* Checkbox styling with primary color */
@@ -72,7 +72,7 @@
   color: var(--muted-foreground);
   background-color: transparent;
   /* Table header often has transparent or specific bg */
-  border-bottom: 1px solid hsl(var(--border-subtle)) !important;
+  border-bottom: 1px solid hsl(var(--border-decorative)) !important;
   cursor: pointer;
   user-select: none;
   display: flex;
@@ -89,7 +89,7 @@
 /* Cell styling with vertical centering - Remove vertical borders */
 [data-ln-cell] {
   border-right: none !important;
-  border-bottom: 1px solid hsl(var(--border-subtle)) !important;
+  border-bottom: 1px solid hsl(var(--border-decorative)) !important;
   display: flex;
   align-items: center;
   padding: var(--lng-cell-padding-y, 0) var(--lng-cell-padding-x, 12px);

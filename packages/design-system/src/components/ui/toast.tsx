@@ -28,14 +28,14 @@ const toastVariants = cva(
     variants: {
       variant: {
         default:
-          "border-border-subtle text-foreground [&>svg]:text-primary [&>.material-symbols-rounded]:text-primary bg-[hsl(var(--secondary))]",
+          "border-border-decorative text-foreground [&>svg]:text-primary [&>.material-symbols-rounded]:text-primary bg-[hsl(var(--secondary))]",
         destructive:
           "destructive group border-destructive/40 bg-[hsl(var(--destructive))] text-foreground [&>svg]:text-destructive [&>.material-symbols-rounded]:text-destructive",
         success:
           "group border-success/40 bg-[hsl(var(--success))] text-foreground [&>svg]:text-success [&>.material-symbols-rounded]:text-success",
         warning:
           "group border-warning/40 bg-[hsl(var(--warning))] text-foreground [&>svg]:text-warning [&>.material-symbols-rounded]:text-warning",
-        info: "group border-border-subtle bg-[hsl(var(--info))] text-foreground [&>svg]:text-info [&>.material-symbols-rounded]:text-info",
+        info: "group border-border-decorative bg-[hsl(var(--info))] text-foreground [&>svg]:text-info [&>.material-symbols-rounded]:text-info",
       },
     },
     defaultVariants: {

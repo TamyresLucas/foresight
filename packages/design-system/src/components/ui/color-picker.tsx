@@ -159,7 +159,7 @@ export function ColorPicker({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-64 p-3 mb-2 border border-border-subtle bg-card shadow-lg"
+        className="w-64 p-3 mb-2 border border-border-decorative bg-card shadow-lg"
         align="start"
       >
         <div className="space-y-3">
