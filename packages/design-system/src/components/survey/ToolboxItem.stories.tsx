@@ -194,15 +194,15 @@ export const FullLibrary: Story = {
   },
   render: () => (
     <div className="flex flex-col max-h-[600px] overflow-y-auto">
-      {(questionGroups as any).map((group: any) => (
-        <div key={group.category}>
+      {Object.entries(questionGroups).map(([category, items]) => (
+        <div key={category}>
           <div className="px-4 py-2 bg-muted/50 border-y border-border-ui">
             <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-              {group.category}
+              {category}
             </span>
           </div>
-          {group.items.map((type: string) => {
-            const Icon = (iconMap as any)[type];
+          {items.map((type: string) => {
+            const Icon = iconMap[type];
             return (
               <ToolboxItem
                 key={type}

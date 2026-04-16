@@ -500,9 +500,9 @@ export function BarChart({
           // semi-transparent muted bars appear as a lighter solid color (not see-through).
            
           const barShape = isSingleSeries
-            ? (p: any) => {
+            ? (p: { x?: number; y?: number; width?: number; height?: number; fill?: string }) => {
                 const { x, y, width, height, fill } = p;
-                if (!fill || width <= 0 || height <= 0) return <g />;
+                if (!fill || width === undefined || height === undefined || width <= 0 || height <= 0) return <g />;
                 return (
                   <g>
                     <rect x={x} y={y} width={width} height={height} fill="hsl(var(--background))" />
@@ -519,8 +519,7 @@ export function BarChart({
               name={bar.name || bar.dataKey}
               fill={fullColor}
               stackId={bar.stackId}
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              shape={barShape as any}
+              shape={barShape}
             >
               {hasCellColors
                 ? data.map((_, i) => (
@@ -747,17 +746,28 @@ export function AreaChart({
   );
 }
 
+interface PieLabelProps {
+  cx?: number;
+  cy?: number;
+  midAngle?: number;
+  innerRadius?: number;
+  outerRadius?: number;
+  name?: string;
+  percent?: number;
+  fill?: string;
+}
+
 // Custom SVG label for PieChart — 4×4 px dot + name + percentage in default text color.
 // Right-side labels: [●] text  /  Left-side labels: text [●] (dot acts as pointer toward slice)
-function renderPieLabel(props: any) {
+function renderPieLabel(props: PieLabelProps) {
   const {
-    cx,
-    cy,
-    midAngle,
-    outerRadius,
-    name,
-    percent,
-    fill,
+    cx = 0,
+    cy = 0,
+    midAngle = 0,
+    outerRadius = 0,
+    name = "",
+    percent = 0,
+    fill = "var(--foreground)",
   } = props;
   const RADIAN = Math.PI / 180;
   const radius = outerRadius + 30;

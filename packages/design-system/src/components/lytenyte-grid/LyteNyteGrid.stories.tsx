@@ -448,17 +448,19 @@ const customRendererColumns: Column<OrderWithStatus>[] = [
     name: "Amount",
     type: "number",
     width: 100,
-    cellRenderer: (params: any) => (
-      <CurrencyCell value={params.value as number} />
-    ),
+    cellRenderer: (params: CellRendererParams<OrderWithStatus>) => {
+      const value = params.grid.api.columnField(params.column, params.row);
+      return <CurrencyCell value={value as number} />;
+    },
   },
   {
     id: "status",
     name: "Status",
     width: 110,
-    cellRenderer: (params: any) => (
-      <StatusCell value={params.value as string} />
-    ),
+    cellRenderer: (params: CellRendererParams<OrderWithStatus>) => {
+      const value = params.grid.api.columnField(params.column, params.row);
+      return <StatusCell value={value as string} />;
+    },
   },
 ];
 
@@ -534,7 +536,7 @@ const rowActionsColumns: Column<Employee>[] = [
     id: "_select",
     name: "",
     width: 40,
-    cellRenderer: ({ row, grid }: any) => {
+    cellRenderer: ({ row, grid }: CellRendererParams<Employee>) => {
       const selectedIds = grid.state.rowSelectedIds.useValue();
       const isSelected = row?.id ? selectedIds.has(row.id) : false;
 
@@ -563,7 +565,7 @@ const rowActionsColumns: Column<Employee>[] = [
     id: "_actions",
     name: "",
     width: 60,
-    cellRenderer: (params: any) => (
+    cellRenderer: (params: CellRendererParams<Employee>) => (
       <RowActionsCell row={params.row as unknown as Employee} />
     ),
   },

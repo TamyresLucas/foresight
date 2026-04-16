@@ -50,6 +50,50 @@ interface MockLogicIssue {
   message: string;
 }
 
+interface MockCondition {
+  id: string;
+  operator: string;
+  questionId: string;
+  value?: string;
+  isConfirmed?: boolean;
+}
+
+interface MockLogicSet {
+  id: string;
+  operator: string;
+  conditions: MockCondition[];
+  isConfirmed?: boolean;
+}
+
+interface MockSkipRule {
+  choiceId: string;
+  skipTo: string;
+  isConfirmed: boolean;
+}
+
+interface MockBranch {
+  id: string;
+  pathName?: string;
+  operator: string;
+  conditions: MockCondition[];
+  thenSkipTo: string;
+  thenSkipToIsConfirmed: boolean;
+}
+
+interface MockLogic {
+  id?: string;
+  type?: string;
+  operator?: string;
+  conditions?: MockCondition[];
+  logicSets?: MockLogicSet[];
+  isConfirmed?: boolean;
+  skipTo?: string;
+  rules?: MockSkipRule[];
+  branches?: MockBranch[];
+  otherwiseIsConfirmed?: boolean;
+  otherwiseSkipTo?: string;
+}
+
 // ---------------------------------------------------------------------------
 // Shared helpers (port of _reference/LogicDisplays.tsx helpers)
 // ---------------------------------------------------------------------------
@@ -64,7 +108,7 @@ const OPERATOR_LABELS: Record<ConditionOperator, string> = {
   is_not_empty: "is not empty",
 };
 
-function fmt(cond: any): string {
+function fmt(cond: MockCondition): string {
   const op = OPERATOR_LABELS[cond.operator as ConditionOperator] || cond.operator;
   if (cond.operator === "is_empty" || cond.operator === "is_not_empty") {
     return `${cond.questionId} ${op}`;
@@ -114,20 +158,19 @@ function IssueCard({ issues }: { issues: MockLogicIssue[] }) {
 // ---------------------------------------------------------------------------
 
 interface DisplayLogicDisplayMockProps {
-  logic?: any;
+  logic?: MockLogic;
   survey: MockSurvey;
-  onClick?: any;
-  onRemove?: any;
+  onClick?: (id?: string) => void;
+  onRemove?: () => void;
   issues?: MockLogicIssue[];
   isFocused?: boolean;
   focusedId?: string | null;
   readOnly?: boolean;
-  currentQuestion?: any;
+  currentQuestion?: MockQuestion;
 }
 
 function DisplayLogicDisplayMock({
   logic,
-  survey: _survey,
   onClick,
   onRemove,
   issues = [],
@@ -139,11 +182,11 @@ function DisplayLogicDisplayMock({
   
   // Handlers for different logic structures passed in stories
   const confirmedConditions = logic.conditions ? logic.conditions.filter(
-    (c: any) => c.isConfirmed === true,
+    (c: MockCondition) => c.isConfirmed === true,
   ) : [];
   
   const confirmedSets = (logic.logicSets ?? []).filter(
-    (s: any) => s.isConfirmed === true,
+    (s: MockLogicSet) => s.isConfirmed === true,
   );
 
   if (confirmedConditions.length === 0 && confirmedSets.length === 0)
@@ -188,7 +231,7 @@ function DisplayLogicDisplayMock({
         <p className="mb-1">Show this question if:</p>
         <div className="flex flex-wrap gap-2 items-center">
           {/* Flat conditions */}
-          {confirmedConditions.map((c: any, i: number) => (
+          {confirmedConditions.map((c: MockCondition, i: number) => (
             <React.Fragment key={c.id}>
               {i > 0 && (
                 <span className="font-semibold text-foreground">
@@ -213,7 +256,7 @@ function DisplayLogicDisplayMock({
           ))}
 
           {/* Logic Sets (nested/grouped conditions) */}
-          {confirmedSets.map((s: any, i: number) => (
+          {confirmedSets.map((s: MockLogicSet, i: number) => (
             <React.Fragment key={s.id}>
               {(confirmedConditions.length > 0 || i > 0) && (
                 <span className="font-semibold text-foreground">
@@ -233,7 +276,7 @@ function DisplayLogicDisplayMock({
                 )}
               >
                 (
-                {s.conditions.map((c: any, ci: number) => (
+                {s.conditions.map((c: MockCondition, ci: number) => (
                   <React.Fragment key={c.id}>
                     {ci > 0 && (
                       <span className="font-bold text-foreground">
@@ -260,6 +303,17 @@ function DisplayLogicDisplayMock({
 // 2. SkipLogicDisplayMock
 // ---------------------------------------------------------------------------
 
+interface SkipLogicDisplayMockProps {
+  logic?: MockLogic;
+  currentQuestion?: MockQuestion;
+  survey: MockSurvey;
+  onClick?: () => void;
+  onRemove?: () => void;
+  issues?: MockLogicIssue[];
+  isFocused?: boolean;
+  readOnly?: boolean;
+}
+
 function SkipLogicDisplayMock({
   logic,
   currentQuestion,
@@ -269,11 +323,11 @@ function SkipLogicDisplayMock({
   issues = [],
   isFocused = false,
   readOnly = false,
-}: any) {
-  if (logic.type === "simple" && !logic.isConfirmed) return null;
+}: SkipLogicDisplayMockProps) {
+  if (!logic || (logic.type === "simple" && !logic.isConfirmed)) return null;
 
   const confirmedRules =
-    logic.type === "per_choice" ? logic.rules.filter((r: any) => r.isConfirmed) : [];
+    logic.type === "per_choice" ? (logic.rules ?? []).filter((r: MockSkipRule) => r.isConfirmed) : [];
   if (logic.type === "per_choice" && confirmedRules.length === 0) return null;
 
   return (
@@ -314,14 +368,14 @@ function SkipLogicDisplayMock({
           <p>
             If answered → skip to{" "}
             <span className="font-semibold text-foreground">
-              {fmtDest(logic.skipTo, survey)}
+              {fmtDest(logic.skipTo ?? "", survey)}
             </span>
             .
           </p>
         )}
         {logic.type === "per_choice" &&
-          currentQuestion?.choices?.map((choice: any) => {
-            const rule = confirmedRules.find((r: any) => r.choiceId === choice.id);
+          currentQuestion?.choices?.map((choice: MockChoice) => {
+            const rule = confirmedRules.find((r: MockSkipRule) => r.choiceId === choice.id);
             if (!rule) return null;
             return (
               <p key={choice.id}>
@@ -348,13 +402,21 @@ function SkipLogicDisplayMock({
 // 3. IncomingLogicDisplayMock
 // ---------------------------------------------------------------------------
 
+interface IncomingLogicDisplayMockProps {
+  branchName: string;
+  sourceQuestionId: string;
+  targetBlockId: string;
+  survey: MockSurvey;
+  onClick?: () => void;
+}
+
 function IncomingLogicDisplayMock({
   branchName,
   sourceQuestionId,
   targetBlockId,
   survey,
   onClick,
-}: any) {
+}: IncomingLogicDisplayMockProps) {
   const destination = fmtDest(`block:${targetBlockId}`, survey);
 
   return (
@@ -389,6 +451,17 @@ function IncomingLogicDisplayMock({
 // 4. BranchingLogicDisplayMock
 // ---------------------------------------------------------------------------
 
+interface BranchingLogicDisplayMockProps {
+  logic?: MockLogic;
+  survey: MockSurvey;
+  onClick?: (id?: string) => void;
+  onRemove?: () => void;
+  question?: MockQuestion;
+  issues?: MockLogicIssue[];
+  isFocused?: boolean;
+  focusedId?: string | null;
+}
+
 function BranchingLogicDisplayMock({
   logic,
   survey,
@@ -397,7 +470,8 @@ function BranchingLogicDisplayMock({
   issues = [],
   isFocused = false,
   focusedId,
-}: any) {
+}: BranchingLogicDisplayMockProps) {
+  if (!logic) return null;
   // Mirror: compute whether "Otherwise" row should show
   const usedChoiceTexts = new Set<string>();
   for (const branch of logic.branches ?? []) {
@@ -419,9 +493,9 @@ function BranchingLogicDisplayMock({
       : usedChoiceTexts.size < question.choices.length;
 
   const hasAnyConfirmed = (logic.branches ?? []).some(
-    (b: any) =>
+    (b: MockBranch) =>
       b.thenSkipToIsConfirmed &&
-      b.conditions.some((c: any) => c.isConfirmed === true),
+      b.conditions.some((c: MockCondition) => c.isConfirmed === true),
   );
 
   if (!hasAnyConfirmed) return null;
@@ -448,9 +522,9 @@ function BranchingLogicDisplayMock({
 
       {/* Branches */}
       <div className="space-y-2 text-sm">
-        {logic.branches.map((branch: any) => {
+        {(logic.branches ?? []).map((branch: MockBranch) => {
           const confirmed = branch.conditions.filter(
-            (c: any) => c.isConfirmed === true,
+            (c: MockCondition) => c.isConfirmed === true,
           );
           if (confirmed.length === 0 || !branch.thenSkipToIsConfirmed)
             return null;
@@ -477,7 +551,7 @@ function BranchingLogicDisplayMock({
                 <span>IF </span>
                 {confirmed.length > 1 ? (
                   <div className="ml-4 flex flex-col gap-1 my-1">
-                    {confirmed.map((c: any, ci: number) => (
+                    {confirmed.map((c: MockCondition, ci: number) => (
                       <div key={c.id}>
                         {ci > 0 && (
                           <span className="font-semibold">
@@ -492,7 +566,7 @@ function BranchingLogicDisplayMock({
                   </div>
                 ) : (
                   <span>
-                    {confirmed.map((c: any, ci: number) => (
+                    {confirmed.map((c: MockCondition, ci: number) => (
                       <React.Fragment key={c.id}>
                         {ci > 0 && <span> {branch.operator} </span>}
                         <span className="hover:text-primary hover:underline cursor-pointer">
@@ -549,13 +623,22 @@ function BranchingLogicDisplayMock({
 // 5. SurveyFlowDisplayMock
 // ---------------------------------------------------------------------------
 
+interface SurveyFlowDisplayMockProps {
+  logic?: MockLogic;
+  survey: MockSurvey;
+  onClick?: () => void;
+  sourceQuestion?: MockQuestion;
+  allBranchingLogics?: { question: MockQuestion; logic: MockLogic }[];
+}
+
 function SurveyFlowDisplayMock({
   logic,
   survey,
   onClick,
   sourceQuestion,
   allBranchingLogics = [],
-}: any) {
+}: SurveyFlowDisplayMockProps) {
+  if (!logic) return null;
   const hasBranching = allBranchingLogics.length > 0;
 
   return (
@@ -574,18 +657,18 @@ function SurveyFlowDisplayMock({
       {/* Content */}
       <div className="space-y-2 text-sm">
         {hasBranching &&
-          allBranchingLogics.map(({ question, logic: brLogic }: any) => (
+          allBranchingLogics.map(({ question, logic: brLogic }) => (
             <React.Fragment key={question.id}>
-              {brLogic.branches.map((branch: any) => {
+              {(brLogic.branches ?? []).map((branch: MockBranch) => {
                 const confirmed = branch.conditions.filter(
-                  (c: any) => c.isConfirmed === true,
+                  (c: MockCondition) => c.isConfirmed === true,
                 );
                 if (confirmed.length === 0 || !branch.thenSkipToIsConfirmed)
                   return null;
                 return (
                   <div key={branch.id} className="text-foreground">
                     <span>IF </span>
-                    {confirmed.map((c: any, ci: number) => (
+                    {confirmed.map((c: MockCondition, ci: number) => (
                       <React.Fragment key={c.id}>
                         {ci > 0 && <span> {branch.operator} </span>}
                         <span className="font-semibold">{fmt(c)}</span>
@@ -609,7 +692,7 @@ function SurveyFlowDisplayMock({
               <span className="material-symbols-rounded text-lg text-primary leading-none align-bottom mx-1.5 select-none inline-block">
                 arrow_right_alt
               </span>
-              <span>{fmtDest(logic.skipTo, survey)}</span>.
+              <span>{fmtDest(logic.skipTo ?? "", survey)}</span>.
             </>
           ) : (
             <>
@@ -617,7 +700,7 @@ function SurveyFlowDisplayMock({
               <span className="material-symbols-rounded text-lg text-primary leading-none align-bottom mx-1.5 select-none inline-block">
                 arrow_right_alt
               </span>
-              <span>{fmtDest(logic.skipTo, survey)}</span>.
+              <span>{fmtDest(logic.skipTo ?? "", survey)}</span>.
             </>
           )}
         </div>
