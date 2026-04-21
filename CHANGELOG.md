@@ -14,6 +14,9 @@ All notable changes to this project will be documented in this file.
   - Enhanced `ThemeSchema` and `Theme` types in `packages/design-system` to support optional foreground overrides (`primaryForeground`, `secondaryForeground`, `destructiveForeground`).
   - Updated `applyTheme()` to prioritize user-provided foreground overrides while maintaining intelligent derivation as a fallback.
   - Improved documentation and comments across survey token definitions for better clarity on overridable vs. protected tokens.
+- Restructured Storybook UI for improved organization:
+  - Introduced a new top-level "Survey Rendering" section, positioned below "Survey Builder".
+  - Moved the `Theme Editor` component to the "Survey Rendering" section to better reflect its role in the respondent experience.
 - Implemented core theme system foundation:
   - Introduced `--brand-*` tokens (primary, secondary, destructive, radius, fonts) in `tokens-static.css` for both light and dark modes.
   - Created Zod-backed `ThemeSchema` and `Theme` types for robust validation and persistence.

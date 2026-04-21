@@ -3,7 +3,7 @@ import { ThemeEditor } from './ThemeEditor';
 import { PresetPicker } from './PresetPicker';
 
 const meta: Meta<typeof ThemeEditor> = {
-  title: 'Blocks/Theme/ThemeEditor',
+  title: 'Survey Rendering/Theme/ThemeEditor',
   component: ThemeEditor,
   parameters: {
     layout: 'centered',
