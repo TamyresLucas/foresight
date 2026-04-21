@@ -1,4 +1,4 @@
-import { parse, hsl, formatHex, converter } from 'culori';
+import { parse, formatHex, converter } from 'culori';
 
 const toHsl = converter('hsl');
 

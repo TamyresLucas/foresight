@@ -65,7 +65,7 @@ export function ThemeEditor({
   onSave,
   onDelete
 }: ThemeEditorProps) {
-  const { control, handleSubmit, watch, reset, setValue } = useForm<Theme>({
+  const { control, handleSubmit, watch, reset } = useForm<Theme>({
     resolver: zodResolver(ThemeSchema),
     defaultValues: initialTheme,
   });

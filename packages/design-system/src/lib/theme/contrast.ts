@@ -1,4 +1,4 @@
-import { wcagContrast, formatHex, parse } from 'culori';
+import { wcagContrast, parse } from 'culori';
 
 /**
  * Calculates contrast between two colors.

@@ -1,4 +1,4 @@
-import { type Theme, validateTheme, isValidTheme } from './schema';
+import { type Theme, isValidTheme } from './schema';
 import { PRESETS, FORESIGHT_DEFAULT } from './presets';
 
 const STORAGE_KEY = 'foresight-survey-theme';

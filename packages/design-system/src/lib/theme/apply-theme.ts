@@ -1,7 +1,7 @@
 import { parse, formatHsl } from 'culori';
 import { type Theme } from './schema';
 import { getForegroundForBackground } from './contrast';
-import { getDarkVariant, getLightSurface, getLightBorder, getDarkSurface } from './derivation';
+import { getDarkVariant, getLightSurface, getLightBorder } from './derivation';
 
 /**
  * Converts a hex color to an HSL string format suitable for the CSS variables (e.g., "233 86% 64%").
@@ -19,7 +19,7 @@ function toHslChannels(color: string): string {
   if (!match) return '0 0% 0%';
   
   // Split by comma and clean up whitespace
-  const channels = match[1].split(',').map(c => c.trim());
+  const channels = match[1].split(',').map((c: string) => c.trim());
   
   // Round and join the first 3 channels (h, s, l) with spaces
   const h = Math.round(parseFloat(channels[0]));
@@ -51,8 +51,9 @@ function loadFont(fontName: string) {
  */
 export function applyTheme(theme: Theme, scope: HTMLElement = document.documentElement) {
   // 1. Load fonts
-  if (theme.fonts.sans) loadFont(theme.fonts.sans);
   if (theme.fonts.heading) loadFont(theme.fonts.heading);
+  if (theme.fonts.body) loadFont(theme.fonts.body);
+  if (theme.fonts.survey) loadFont(theme.fonts.survey);
   
   // 2. Derive variants
   const primaryDark = getDarkVariant(theme.primary);

@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ThemeEditor } from './ThemeEditor';
 import { PresetPicker } from './PresetPicker';
-import * as React from 'react';
 
 const meta: Meta<typeof ThemeEditor> = {
   title: 'Blocks/Theme/ThemeEditor',
