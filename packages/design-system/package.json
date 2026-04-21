@@ -43,7 +43,7 @@
     "react-dom": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
-    "@foresight/tokens-survey": "workspace:*",
+    "@foresight/tokens-survey": "*",
     "@1771technologies/lytenyte-core": "^1.0.20",
     "@google/genai": "^1.21.0",
     "@hookform/resolvers": "^3.3.4",
@@ -80,6 +80,7 @@
     "clsx": "^2.1.0",
     "cmdk": "^0.2.1",
     "color": "^5.0.3",
+    "culori": "^4.0.1",
     "date-fns": "^3.3.1",
     "embla-carousel-react": "^8.0.0",
     "html-to-image": "^1.11.13",

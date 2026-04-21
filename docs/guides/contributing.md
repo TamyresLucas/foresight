@@ -260,6 +260,20 @@ To add new tokens:
 2. Update `packages/design-system/tailwind.config.js`
 3. Document in Storybook
 
+### Theming & Dynamic Tokens
+
+The system uses a 3-layer token architecture:
+
+1.  **Platform Layer**: Static HSL values in `tokens-static.css`.
+2.  **Brand Layer**: Dynamic `--brand-*` tokens injected via `ThemeEditor` (e.g., `--brand-primary`, `--brand-font-body`).
+3.  **Survey Layer**: Scoped tokens in `tokens-survey.css` applied via the `[data-survey-theme]` attribute.
+
+**Guidelines:**
+
+*   **Avoid subtle `bg-secondary`**: The `secondary` token is now vibrant. For neutral backgrounds, use `bg-muted` or `bg-accent`.
+*   **Use Brand Tokens**: When creating components that should be themeable, reference the `--brand-*` variables.
+*   **Scoping**: To apply survey-specific overrides, wrap your component in a container with the `data-survey-theme` attribute.
+
 ## ✅ PR Checklist
 
 Before submitting:

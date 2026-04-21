@@ -44,27 +44,41 @@ const preview: Preview = {
     },
   },
 
-  decorators: [
-    (Story) => {
-      const isDark = useDarkMode();
+  globalTypes: {
+    surveyMode: {
+      name: 'Survey Mode',
+      description: 'Toggle survey-specific tokens [data-survey-theme]',
+      defaultValue: 'off',
+      toolbar: {
+        icon: 'book',
+        items: [
+          { value: 'off', title: 'Survey Mode: Off' },
+          { value: 'on', title: 'Survey Mode: On' },
+        ],
+        showName: true,
+      },
+    },
+  },
 
-      // Sync color scheme (addon handles class toggling via classTarget config)
+  decorators: [
+    (Story, context) => {
+      const isDark = useDarkMode();
+      const surveyMode = context.globals.surveyMode === 'on';
+
+      // Sync color scheme
       useEffect(() => {
         document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
       }, [isDark]);
 
-      // Apply saved font from localStorage on mount (simplified - no event listener needed)
+      // Apply saved font from localStorage on mount
       useEffect(() => {
         const html = document.documentElement;
         const savedFont = localStorage.getItem('global-font') || 'Inter';
-
-        // Set all font family CSS variables atomically
         const fontValue = `"${savedFont}", system-ui, sans-serif`;
         html.style.setProperty('--font-family-sans', fontValue);
         html.style.setProperty('--font-family-heading', fontValue);
         html.style.setProperty('--font-family-body', fontValue);
 
-        // Ensure the font is loaded from Google Fonts
         const linkId = `font-global-${savedFont}`;
         if (!document.getElementById(linkId)) {
           const link = document.createElement('link');
@@ -75,7 +89,14 @@ const preview: Preview = {
         }
       }, []);
 
-      return React.createElement(Story);
+      return React.createElement(
+        'div',
+        { 
+          'data-survey-theme': surveyMode ? 'true' : undefined,
+          style: { width: '100%', height: '100%' }
+        },
+        React.createElement(Story)
+      );
     },
   ],
 };

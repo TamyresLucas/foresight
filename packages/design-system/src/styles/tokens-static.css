@@ -2,39 +2,57 @@
 /* SYNCED FROM NOTION — Default (Template) — Light — 2026-03-09 */
 /* Source: https://www.notion.so/29e0a268c6384d43a73b8a9b675253d2 */
 :root {
+  /* Brand Foundation Tokens (Light) */
+  --brand-primary: 233 86% 64%; /* #5568F2 */
+  --brand-primary-foreground: 0 0% 100%;
+  
+  --brand-secondary: 161 100% 26%; /* #008563 */
+  --brand-secondary-foreground: 0 0% 100%;
+  
+  --brand-destructive: 349 54% 54%; /* #CF455C */
+  --brand-destructive-foreground: 0 0% 100%;
+  
+  --brand-background-destructive: 349 8% 96%;
+  --brand-border-destructive: 349 42% 80%;
+  
+  --brand-radius: 0.5rem;
+  --brand-font-sans: "Inter", system-ui, sans-serif;
+  --brand-font-heading: "Inter", system-ui, sans-serif;
+  --brand-font-body: "Inter", system-ui, sans-serif;
+  --brand-font-survey: "Outfit", sans-serif;
+  --brand-font-size: 16px;
+  --brand-font-weight: 400;
+
   --background: 0 0% 100%;
   --foreground: 0 0% 9%;
 
-  /* Primary — Foresight foundation periwinkle (#5568F2) */
-  --primary: 233 86% 64%;
-  --primary-foreground: 0 0% 100%;
+  /* Aliases — Aliasing shadcn variables to brand foundation */
+  --primary: var(--brand-primary);
+  --primary-foreground: var(--brand-primary-foreground);
 
-  /* Destructive — Foundation coral-dark (#CF455C) */
-  --destructive: 349 54% 54%;
-  --destructive-foreground: 0 0% 100%;
+  --secondary: var(--brand-secondary);
+  --secondary-hover: var(--brand-secondary); /* Hover handled via opacity or shift in S2 if needed */
+  --secondary-foreground: var(--brand-secondary-foreground);
 
-  /* Success — Foundation green-dark (#008563) */
+  --destructive: var(--brand-destructive);
+  --destructive-foreground: var(--brand-destructive-foreground);
+
   --success: 161 100% 26%;
   --success-foreground: 0 0% 100%;
 
-  /* Warning — Foundation tangerine (#F59E0B) */
   --warning: 38 92% 50%;
   --warning-foreground: 0 0% 9%;
 
-  /* Info — (#3B82F6) */
   --info: 217 91% 60%;
   --info-foreground: 0 0% 100%;
 
-  --secondary: 232.5 100% 96.9%;
-  --secondary-hover: 232.5 100% 94%;
-  --secondary-foreground: 0 0% 9%;
   --muted: 220 5% 97.5%;
   --muted-foreground: 222.2 47.4% 11.2%;
   --disabled-foreground: 220 40% 70%;
   --accent: 220 10% 95%;
   --accent-foreground: 0 0% 9%;
-  --background-destructive: 349 8% 96%;
-  --border-destructive: 349 42% 80%;
+  --background-destructive: var(--brand-background-destructive);
+  --border-destructive: var(--brand-border-destructive);
   --background-success: 161 8% 96%;
   --border-success: 161 38% 68%;
   --background-warning: 38 9% 95%;
@@ -49,18 +67,18 @@
      Low contrast by default (~1.3:1) — same pattern as shadcn/ui.
      Accessibility compensated via focus-visible:border-ring on each component.
   ─────────────────────────────────────────────────────────────────────────── */
-  --border-decorative: 233 86% 64% / 0.2; /* ~1.3:1 — decorative containers (non-interactive) */
-  --border-ui: 233 86% 64% / 0.2; /* ~1.3:1 — interactive default; focus-visible:border-ring compensates */
+  --border-decorative: var(--brand-primary) / 0.2; /* ~1.3:1 — decorative containers (non-interactive) */
+  --border-ui: var(--brand-primary) / 0.2; /* ~1.3:1 — interactive default; focus-visible:border-ring compensates */
 
   --input: 220 13% 85%;
-  --ring: 233 86% 64%;
-  --radius: 0.5rem;
+  --ring: var(--brand-primary);
+  --radius: var(--brand-radius);
 
   /* Multiplicative radius scale (modern Shadcn pattern) */
-  --radius-sm: calc(var(--radius) * 0.5);
-  --radius-md: var(--radius);
-  --radius-lg: calc(var(--radius) * 1.5);
-  --radius-xl: calc(var(--radius) * 2);
+  --radius-sm: calc(var(--brand-radius) * 0.5);
+  --radius-md: var(--brand-radius);
+  --radius-lg: calc(var(--brand-radius) * 1.5);
+  --radius-xl: calc(var(--brand-radius) * 2);
 
   /* Missing and Additional Tokens */
   --card: 0 0% 100%;
@@ -70,8 +88,9 @@
   --background-info: 233 20% 96%;
   --placeholder-foreground: 0 0% 40%;
 
-  /* Brand Charts - 8 colors complementing periwinkle */
-  --chart-1: 233 86% 64%; /* blueberry (primary) */
+  /* Brand Charts - Derived from primary */
+  --chart-1: var(--brand-primary);
+  --chart-grid: var(--brand-primary);
   --chart-2: 177 100% 38%; /* mint */
   --chart-3: 4 94% 69%; /* peach */
   --chart-4: 283 62% 53%; /* grape */
@@ -79,7 +98,6 @@
   --chart-6: 331 75% 58%; /* watermelon */
   --chart-7: 243 73% 51%; /* blackberry */
   --chart-8: 218 18% 51%; /* grey */
-  --chart-grid: 233 86% 64%; /* primary hue — apply with / 0.4 alpha for grid lines */
 
   /* ─── Lightness scales — 5-step centered on main (±8% / ±16% per step) ──────
      Use getChartColorShades(baseHex, count) in JS for dynamic item counts.
@@ -165,7 +183,7 @@
   ─────────────────────────────────────────────────────────────────────────── */
 
   /* Categorical muted */
-  --chart-1-muted: 233 86% 64% / 0.4; /* blueberry */
+  --chart-1-muted: var(--brand-primary) / 0.4;
   --chart-2-muted: 177 100% 38% / 0.4; /* mint */
   --chart-3-muted: 4 94% 69% / 0.4; /* peach */
   --chart-4-muted: 283 62% 53% / 0.4; /* grape */
@@ -188,9 +206,9 @@
   /* ─── Typography ────────────────────────────────────────────────────────── */
   --font-sans: "Inter", system-ui, sans-serif;
   --font-survey: "Outfit", sans-serif;
-  --font-family-sans: var(--font-sans);
-  --font-family-heading: var(--font-sans);
-  --font-family-body: var(--font-sans);
+  --font-family-sans: var(--brand-font-sans);
+  --font-family-heading: var(--brand-font-heading);
+  --font-family-body: var(--brand-font-body);
 
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
@@ -243,43 +261,62 @@
   --surface-dim-hsl: 233 100% 93%;
   --background-info: 233 20% 96%;
   --placeholder-foreground: 0 0% 40%;
+
+  /* Brand Foundation Tokens (Dark Defaults) */
+  --brand-primary-dark: 235 100% 86%;
+  --brand-primary-dark-foreground: 0 0% 9%;
+  
+  --brand-secondary-dark: 161 100% 26%;
+  --brand-secondary-dark-foreground: 0 0% 100%;
+  
+  --brand-destructive-dark: 352 84% 64%;
+  --brand-destructive-dark-foreground: 0 0% 9%;
 }
 
 /* Dark Mode */
 .dark {
   --background: 210 40% 6%;
   --foreground: 210 40% 98%;
-  --primary: 235 100% 86%;
-  --primary-foreground: 0 0% 9%;
-  --destructive: 352 84% 64%;
-  --destructive-foreground: 210 40% 98%;
+
+  /* Aliases — Aliasing shadcn variables to brand foundation */
+  --primary: var(--brand-primary-dark);
+  --primary-foreground: var(--brand-primary-dark-foreground);
+
+  --secondary: var(--brand-secondary-dark);
+  --secondary-hover: var(--brand-secondary-dark);
+  --secondary-foreground: var(--brand-secondary-dark-foreground);
+
+  --destructive: var(--brand-destructive-dark);
+  --destructive-foreground: var(--brand-destructive-dark-foreground);
+
   --success: 161 100% 26%;
   --success-foreground: 0 0% 100%;
+
   --warning: 35 93% 67%;
   --warning-foreground: 0 0% 9%;
+
   --info: 239 84% 67%;
   --info-foreground: 0 0% 100%;
-  --secondary: 232.5 16.3% 19.2%;
-  --secondary-hover: 232.5 16.3% 25%;
-  --secondary-foreground: 210 40% 98%;
+
   --muted: 222 8% 9.5%;
   --muted-foreground: 210 40% 98%;
   --disabled-foreground: 210 40% 98%;
   --accent: 222 10% 14%;
   --accent-foreground: 210 40% 98%;
-  --background-destructive: 0 6% 14%;
-  --border-destructive: 0 31% 35%;
+  --background-destructive: var(--brand-background-destructive);
+  --border-destructive: var(--brand-border-destructive);
   --background-success: 142 7% 14%;
   --border-success: 142 36% 35%;
   --background-warning: 38 9% 14%;
   --border-warning: 38 46% 35%;
   --border-info: 217 35% 35%;
   --border: 230 20% 20%;
-  --border-decorative: 235 100% 86% / 0.2; /* ~1.3:1  — decorative containers (non-interactive) */
-  --border-ui: 235 100% 86% / 0.2; /* ~1.3:1 — interactive default; focus-visible:border-ring compensates */
+  --border-decorative: var(--brand-primary-dark) / 0.2; /* ~1.3:1  — decorative containers (non-interactive) */
+  --border-ui: var(--brand-primary-dark) / 0.2; /* ~1.3:1 — interactive default; focus-visible:border-ring compensates */
 
   --input: 220 13% 18%;
-  --ring: 235 100% 86%;
+  --ring: var(--brand-primary-dark);
+  --radius: var(--brand-radius);
 
   /* Missing and Additional Tokens */
   --card: 228 18% 14%;
@@ -289,8 +326,9 @@
   --background-info: 239 15% 15%;
   --placeholder-foreground: 0 0% 60%;
 
-  /* Chart Colors (Dark) - 8 colors */
-  --chart-1: 235 100% 86%; /* blueberry */
+  /* Chart Colors (Dark) - Derived from primary dark */
+  --chart-1: var(--brand-primary-dark);
+  --chart-grid: var(--brand-primary-dark);
   --chart-2: 173 100% 42%; /* mint */
   --chart-3: 4 94% 69%; /* peach */
   --chart-4: 283 65% 58%; /* grape */
@@ -298,7 +336,6 @@
   --chart-6: 331 75% 58%; /* watermelon */
   --chart-7: 252 65% 53%; /* blackberry */
   --chart-8: 218 18% 51%; /* grey */
-  --chart-grid: 235 100% 86%; /* primary hue dark — apply with / 0.4 alpha for grid lines */
 
   /* Lightness scales (dark) — same ±8% / ±16% logic, clamped to [18%, 88%] */
   /* chart-1 blueberry dark  base L=86% — lighter steps clamp near 88% */
@@ -374,7 +411,7 @@
   --chart-nps-10: 165 100% 31%;
 
   /* Muted variants (dark) — dark chart colours are lighter so use same 40% opacity */
-  --chart-1-muted: 235 100% 86% / 0.4;
+  --chart-1-muted: var(--brand-primary-dark) / 0.4;
   --chart-2-muted: 173 100% 42% / 0.4;
   --chart-3-muted: 14 86% 58% / 0.4;
   --chart-4-muted: 283 65% 58% / 0.4;
@@ -391,9 +428,9 @@
   --chart-sentiment-5-muted: 165 100% 31% / 0.4;
 
   /* ─── Typography (inherited from :root unless overridden) ───────────────── */
-  --font-family-sans: var(--font-sans);
-  --font-family-heading: var(--font-sans);
-  --font-family-body: var(--font-sans);
+  --font-family-sans: var(--brand-font-sans);
+  --font-family-heading: var(--brand-font-heading);
+  --font-family-body: var(--brand-font-body);
 
   /* ─── Elevation (Dark Mode specific) ────────────────────────────────────── */
   --elevation-1: 0 1px 2px 0 rgb(0 0 0 / 0.3);

@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Added
+- Implemented core theme system foundation:
+  - Introduced `--brand-*` tokens (primary, secondary, destructive, radius, fonts) in `tokens-static.css` for both light and dark modes.
+  - Created Zod-backed `ThemeSchema` and `Theme` types for robust validation and persistence.
+  - Implemented `applyTheme()` function to dynamically apply CSS custom properties and load Google Fonts.
+  - Added WCAG AA contrast verification logic using `culori`.
+  - Added `default.json` theme preset with brand-aligned values.
+- Enhanced theme system with auto-derivation (Story 2):
+  - Added intelligent foreground color selection based on background luminance (WCAG AA).
+  - Implemented automatic generation of dark mode color variants with optimized lightness and saturation.
+  - Added derivation of surface tokens (backgrounds and borders) for semantic variants like destructive.
+  - Aligned `--ring`, borders, and chart tokens to automatically scale with the primary brand color in both light and dark modes.
 - Standardized `secondary` color and `disabled` foreground to `tailwind.config.js` to align with shadcn conventions.
 - Added raw HSL definitions for `muted-foreground` and `disabled-foreground` in `tokens-static.css` to support Tailwind opacity modifiers.
 - Integrated `@foresight/tokens-survey` as a monorepo workspace dependency.

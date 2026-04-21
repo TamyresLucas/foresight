@@ -10,15 +10,15 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground hover:bg-primary/90 disabled:[&:not([data-loading=true])]:bg-secondary disabled:[&:not([data-loading=true])]:text-muted-foreground/40",
+          "bg-primary text-primary-foreground hover:bg-primary/90 disabled:[&:not([data-loading=true])]:bg-muted disabled:[&:not([data-loading=true])]:text-muted-foreground/40",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90 disabled:[&:not([data-loading=true])]:bg-secondary disabled:[&:not([data-loading=true])]:text-muted-foreground/40",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 disabled:[&:not([data-loading=true])]:bg-muted disabled:[&:not([data-loading=true])]:text-muted-foreground/40",
         success:
-          "bg-success text-success-foreground hover:bg-success/90 disabled:[&:not([data-loading=true])]:bg-secondary disabled:[&:not([data-loading=true])]:text-muted-foreground/40",
+          "bg-success text-success-foreground hover:bg-success/90 disabled:[&:not([data-loading=true])]:bg-muted disabled:[&:not([data-loading=true])]:text-muted-foreground/40",
         outline:
           "border border-border-ui bg-transparent hover:bg-primary/10 focus-visible:border-ring disabled:[&:not([data-loading=true])]:bg-background disabled:[&:not([data-loading=true])]:text-muted-foreground/40 disabled:[&:not([data-loading=true])]:border-muted-foreground/20",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80 disabled:[&:not([data-loading=true])]:bg-secondary disabled:[&:not([data-loading=true])]:text-muted-foreground/40",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 disabled:[&:not([data-loading=true])]:bg-muted disabled:[&:not([data-loading=true])]:text-muted-foreground/40",
         ghost:
           "hover:bg-primary/10 hover:text-primary disabled:[&:not([data-loading=true])]:bg-transparent disabled:[&:not([data-loading=true])]:text-muted-foreground/40",
         "ghost-destructive":

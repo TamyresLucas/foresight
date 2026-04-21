@@ -50,9 +50,14 @@ export * from "./components/ui/tooltip";
 
 // Utilities
 export * from "./lib/utils";
+export * from "./lib/theme";
 
 // Survey components
 export * from "./components/survey/BuildSidebar";
+
+// Theme blocks
+export * from "./blocks/theme/ThemeEditor";
+export * from "./blocks/theme/PresetPicker";
 
 // Data
 export { toolboxItems, questionGroups } from "./data/toolbox-items";
