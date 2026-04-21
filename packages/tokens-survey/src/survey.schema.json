@@ -16,6 +16,18 @@
         "primaryForeground": {
           "$ref": "#/definitions/hsl",
           "description": "Primary foreground color — overridable"
+        },
+        "destructive": {
+          "$ref": "#/definitions/hsl",
+          "description": "Destructive brand color (e.g., error states) — overridable"
+        },
+        "destructiveForeground": {
+          "$ref": "#/definitions/hsl",
+          "description": "Destructive foreground color — overridable"
+        },
+        "destructiveBorder": {
+          "$ref": "#/definitions/hslAlpha",
+          "description": "Destructive brand border (e.g., error states) — overridable"
         }
       }
     },
@@ -139,9 +151,6 @@
   "_protected": {
     "description": "Protected tokens — NOT overridable by clients",
     "tokens": [
-      "--survey-destructive",
-      "--survey-destructive-foreground",
-      "--survey-destructive-border",
       "--survey-success",
       "--survey-success-foreground",
       "--survey-warning",

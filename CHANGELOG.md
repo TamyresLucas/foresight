@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Added
+- Implemented THEME-S5: Token Bridging and Contrast Validation:
+  - Added bridge mappings in `tokens-survey.css` to link `--survey-*` tokens to `--brand-*` overrides with appropriate fallbacks.
+  - Implemented automated contrast validation in `applyTheme()` that warns if derived foregrounds do not meet WCAG AA (4.5:1) standards, and automatically falls back to safe brand defaults.
+  - Added comprehensive unit tests for theme propagation, scope isolation, and contrast fallback logic.
+  - Reverted architectural over-reach bridges for survey neutrals and secondary tokens to ensure perfect grey independence.
+- Implemented THEME-S7: Schema and Type System Enhancements:
+  - Updated `survey.schema.json` to move `--survey-destructive`, `--survey-destructive-foreground`, and `--survey-destructive-border` from protected to overridable brand properties.
+  - Enhanced `ThemeSchema` and `Theme` types in `packages/design-system` to support optional foreground overrides (`primaryForeground`, `secondaryForeground`, `destructiveForeground`).
+  - Updated `applyTheme()` to prioritize user-provided foreground overrides while maintaining intelligent derivation as a fallback.
+  - Improved documentation and comments across survey token definitions for better clarity on overridable vs. protected tokens.
 - Implemented core theme system foundation:
   - Introduced `--brand-*` tokens (primary, secondary, destructive, radius, fonts) in `tokens-static.css` for both light and dark modes.
   - Created Zod-backed `ThemeSchema` and `Theme` types for robust validation and persistence.

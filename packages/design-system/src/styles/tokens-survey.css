@@ -1,73 +1,142 @@
-/* Survey Respondent Theme Tokens */
-/* Scoped to [data-survey-theme] — zero impact on platform components */
-/* Source of truth: foresight-survey-theme / SURVEY-THEME-P1             */
+/**
+ * Survey Respondent Theme Tokens
+ * 
+ * Scoped to [data-survey-theme] — zero impact on platform components
+ * 
+ * Token Types:
+ * - overridable: Client can override via SurveyThemeOverrides
+ * - protected: Internal use only, not exposed to client overrides
+ * 
+ * Color Model: OKLCH for perceptual uniformity (future migration from HSL)
+ */
 
-[data-survey-theme] {
-  /* ── Survey token definitions (canonical source of truth) ──────────── */
+/* ── Survey token definitions (canonical source of truth) ──────────── */
 
-  /* Brand — overridable by client via SurveyThemeOverrides */
-  --survey-primary:            0 0% 23%;      /* charcoal — 10.3:1 vs white (AAA) */
-  --survey-primary-foreground: 0 0% 100%;
+/* Brand — overridable by client via SurveyThemeOverrides */
+--survey-primary: var(--brand-primary, 0 0% 23%); /* charcoal — 10.3:1 vs white (AAA) */
+--survey-primary-foreground: var(--brand-primary-foreground, 0 0% 100%);
+
+--survey-secondary: var(--survey-muted);
+--survey-secondary-foreground: var(--survey-foreground);
+
+--survey-destructive: var(--brand-destructive, 0 72% 51%); /* 4.6:1 vs white (AA) */
+--survey-destructive-foreground: var(--brand-destructive-foreground, 0 0% 100%);
+--survey-destructive-border: var(--brand-destructive, 0 72% 51%) / 0.5;
+
+/* Surfaces — overridable */
+--survey-background: 0 0% 100%;
+--survey-foreground: 0 0% 9%; /* 18.1:1 vs background (AAA) */
+--survey-card: 0 0% 100%;
+--survey-card-foreground: 0 0% 14%; /* 15.4:1 vs card (AAA) */
+--survey-muted: 0 0% 96%;
+--survey-muted-foreground: 0 0% 45%; /* 4.6:1 vs muted (AA) */
+--survey-accent: 0 0% 95%;
+--survey-accent-foreground: 0 0% 9%; /* 18.1:1 vs accent (AAA) */
+
+/* Secondary / Popover — overridable */
+--survey-popover: var(--survey-card);
+--survey-popover-foreground: var(--survey-card-foreground);
+
+/* Interactive — overridable */
+--survey-border: 0 0% 90%;
+--survey-border-ui: 0 0% 23% / 0.25;
+--survey-border-decorative: 0 0% 23% / 0.15;
+--survey-input: 0 0% 90%;
+--survey-ring: 0 0% 23%; /* focus ring (AAA) */
+
+/* Semantic — protected, not exposed to client overrides */
+--survey-success: 142 76% 36%;
+--survey-success-foreground: 0 0% 100%;
+--survey-warning: 38 92% 55%;
+--survey-warning-foreground: 0 0% 9%;
+--survey-info: 199 89% 48%;
+--survey-info-foreground: 0 0% 100%;
+
+/* Semantic borders — protected */
+--survey-warning-border: 38 92% 55% / 0.5;
+--survey-info-border: 199 89% 48% / 0.5;
+
+/* Geometry — overridable by client */
+--survey-radius: var(--brand-radius, 0.375rem); /* 6px default */
+--survey-radius-sm: var(--brand-radius-sm, 0.25rem); /* 4px */
+--survey-radius-md: var(--brand-radius-md, 0.375rem); /* 6px */
+--survey-radius-lg: var(--brand-radius-lg, 0.5rem); /* 8px */
+--survey-radius-xl: var(--brand-radius-xl, 0.75rem); /* 12px */
+
+/* Typography — font family overridable; size/weight protected */
+--survey-font-family: var(--brand-font-survey, var(--font-survey, "Outfit", sans-serif));
+--survey-font-size-xs: 0.75rem;
+--survey-font-size-sm: 0.875rem;
+--survey-font-size-base: 1rem;
+--survey-font-size-lg: 1.125rem;
+--survey-font-size-xl: 1.25rem;
+--survey-font-size-2xl: 1.5rem;
+
+/* Focus — protected */
+--survey-focus-ring:
+  0 0 0 2px var(--survey-background), 0 0 0 4px var(--survey-ring);
+
+/* ── Bare token aliasing ────────────────────────────────────────────
+   Remaps platform token names to survey values so existing shadcn/ui
+   components (Button, Input, Card, etc.) work inside [data-survey-theme]
+   without any wrapper components. The CSS cascade resolves these within
+   the attribute boundary only — zero leakage outside.
+────────────────────────────────────────────────────────────────────── */
+
+[data-survey-theme],
+[data-survey-theme] * {
+  /* Brand */
+  --primary: var(--survey-primary);
+  --primary-foreground: var(--survey-primary-foreground);
 
   /* Surfaces */
-  --survey-background:         0 0% 100%;
-  --survey-foreground:         0 0% 9%;       /* 18.1:1 vs background (AAA) */
-  --survey-card:               0 0% 100%;
-  --survey-card-foreground:    0 0% 14%;      /* 15.4:1 vs card (AAA) */
-  --survey-muted:              0 0% 96%;
-  --survey-muted-foreground:   0 0% 45%;      /* 4.6:1 vs muted (AA) */
-  --survey-accent:             0 0% 95%;
-  --survey-accent-foreground:  0 0% 9%;       /* 18.1:1 vs accent (AAA) */
+  --background: var(--survey-background);
+  --foreground: var(--survey-foreground);
+  --card: var(--survey-card);
+  --card-foreground: var(--survey-card-foreground);
+  --muted: var(--survey-muted);
+  --muted-foreground: var(--survey-muted-foreground);
+  --accent: var(--survey-accent);
+  --accent-foreground: var(--survey-accent-foreground);
+
+  /* Secondary / Popover */
+  --secondary: var(--survey-secondary);
+  --secondary-foreground: var(--survey-secondary-foreground);
+  --popover: var(--survey-popover);
+  --popover-foreground: var(--survey-popover-foreground);
 
   /* Interactive */
-  --survey-border:             0 0% 90%;
-  --survey-border-ui:          0 0% 23% / 0.25;   /* ~1.8:1 — compensated by focus ring */
-  --survey-border-decorative:  0 0% 23% / 0.15;   /* ~1.3:1 — non-interactive containers */
-  --survey-input:              0 0% 90%;
-  --survey-ring:               0 0% 23%;      /* 10.3:1 — focus ring (AAA) */
+  --border: var(--survey-border);
+  --border-ui: var(--survey-border-ui);
+  --border-decorative: var(--survey-border-decorative);
+  --input: var(--survey-input);
+  --ring: var(--survey-ring);
 
-  /* Semantic — protected, not exposed to client overrides */
-  --survey-destructive:            0 72% 51%;   /* 4.6:1 vs white (AA) */
-  --survey-destructive-foreground: 0 0% 100%;
-  --survey-success:                142 76% 36%;
-  --survey-success-foreground:     0 0% 100%;
-
-  /* Geometry — overridable by client */
-  --survey-radius: 0.375rem;  /* 6px default */
-
-  /* Typography — font family overridable; size/weight protected */
-  --survey-font-family: var(--font-survey, "Outfit", sans-serif);
-
-  /* ── Bare token aliasing ────────────────────────────────────────────
-     Remaps platform token names to survey values so existing shadcn/ui
-     components (Button, Input, Card, etc.) work inside [data-survey-theme]
-     without any wrapper components. The CSS cascade resolves these within
-     the attribute boundary only — zero leakage outside.
-  ────────────────────────────────────────────────────────────────────── */
-  --primary:            var(--survey-primary);
-  --primary-foreground: var(--survey-primary-foreground);
-  --background:         var(--survey-background);
-  --foreground:         var(--survey-foreground);
-  --card:               var(--survey-card);
-  --card-foreground:    var(--survey-card-foreground);
-  --muted:              var(--survey-muted);
-  --muted-foreground:   var(--survey-muted-foreground);
-  --accent:             var(--survey-accent);
-  --accent-foreground:  var(--survey-accent-foreground);
-  --border:             var(--survey-border);
-  --border-ui:          var(--survey-border-ui);
-  --border-decorative:  var(--survey-border-decorative);
-  --input:              var(--survey-input);
-  --ring:               var(--survey-ring);
-  --destructive:            var(--survey-destructive);
+  /* Semantic */
+  --destructive: var(--survey-destructive);
   --destructive-foreground: var(--survey-destructive-foreground);
-  --success:            var(--survey-success);
+  --success: var(--survey-success);
   --success-foreground: var(--survey-success-foreground);
-  --radius:             var(--survey-radius);
+  --warning: var(--survey-warning);
+  --warning-foreground: var(--survey-warning-foreground);
+  --info: var(--survey-info);
+  --info-foreground: var(--survey-info-foreground);
 
-  /* Derived aliases for components that reference secondary/popover */
-  --secondary:            var(--survey-muted);
-  --secondary-foreground: var(--survey-foreground);
-  --popover:              var(--survey-card);
-  --popover-foreground:   var(--survey-card-foreground);
+  /* Semantic borders */
+  --destructive-border: var(--survey-destructive-border);
+  --warning-border: var(--survey-warning-border);
+  --info-border: var(--survey-info-border);
+
+  /* Geometry */
+  --radius: var(--survey-radius);
+  --radius-sm: var(--survey-radius-sm);
+  --radius-md: var(--survey-radius-md);
+  --radius-lg: var(--survey-radius-lg);
+  --radius-xl: var(--survey-radius-xl);
+
+  /* Typography */
+  --font-family: var(--survey-font-family);
+
+  /* Focus */
+  --focus-ring: var(--survey-focus-ring);
 }

@@ -1,7 +1,16 @@
 import { parse, formatHsl } from 'culori';
 import { type Theme } from './schema';
-import { getForegroundForBackground } from './contrast';
+import { getForegroundForBackground, getContrastRatio } from './contrast';
 import { getDarkVariant, getLightSurface, getLightBorder } from './derivation';
+
+const SAFE_DEFAULTS = {
+  primary: '#5568F2',
+  primaryDark: '#8B9AFF',
+  secondary: '#008563',
+  secondaryDark: '#00B386',
+  destructive: '#CF455C',
+  destructiveDark: '#EF576B',
+};
 
 /**
  * Converts a hex color to an HSL string format suitable for the CSS variables (e.g., "233 86% 64%").
@@ -27,6 +36,22 @@ function toHslChannels(color: string): string {
   const l = Math.round(parseFloat(channels[2]));
   
   return `${h} ${s}% ${l}%`;
+}
+
+/**
+ * Validates contrast for a color pair and warns if it fails WCAG AA.
+ * Returns true if contrast is acceptable, false otherwise.
+ */
+function validateContrast(background: string, foreground: string, label: string): boolean {
+  const ratio = getContrastRatio(background, foreground);
+  if (ratio < 4.5) {
+    console.warn(
+      `[Theme] Low contrast detected for ${label}: ${ratio.toFixed(2)}:1. ` +
+      `WCAG AA requires 4.5:1 for normal text. Falling back to safe default.`
+    );
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -59,32 +84,65 @@ export function applyTheme(theme: Theme, scope: HTMLElement = document.documentE
   const primaryDark = getDarkVariant(theme.primary);
   const secondaryDark = getDarkVariant(theme.secondary);
   const destructiveDark = getDarkVariant(theme.destructive);
+
+  const primaryFg = theme.primaryForeground || getForegroundForBackground(theme.primary);
+  const secondaryFg = theme.secondaryForeground || getForegroundForBackground(theme.secondary);
+  const destructiveFg = theme.destructiveForeground || getForegroundForBackground(theme.destructive);
   
-  // 3. Map theme to CSS variables
+  const primaryDarkFg = getForegroundForBackground(primaryDark);
+  const secondaryDarkFg = getForegroundForBackground(secondaryDark);
+  const destructiveDarkFg = getForegroundForBackground(destructiveDark);
+
+  // 3. Validate Contrast & Fallback
+  const primaryOk = validateContrast(theme.primary, primaryFg, 'Primary');
+  const finalPrimary = primaryOk ? theme.primary : SAFE_DEFAULTS.primary;
+  const finalPrimaryFg = primaryOk ? primaryFg : getForegroundForBackground(SAFE_DEFAULTS.primary);
+
+  const secondaryOk = validateContrast(theme.secondary, secondaryFg, 'Secondary');
+  const finalSecondary = secondaryOk ? theme.secondary : SAFE_DEFAULTS.secondary;
+  const finalSecondaryFg = secondaryOk ? secondaryFg : getForegroundForBackground(SAFE_DEFAULTS.secondary);
+
+  const destructiveOk = validateContrast(theme.destructive, destructiveFg, 'Destructive');
+  const finalDestructive = destructiveOk ? theme.destructive : SAFE_DEFAULTS.destructive;
+  const finalDestructiveFg = destructiveOk ? destructiveFg : getForegroundForBackground(SAFE_DEFAULTS.destructive);
+
+  const primaryDarkOk = validateContrast(primaryDark, primaryDarkFg, 'Primary (Dark Mode)');
+  const finalPrimaryDark = primaryDarkOk ? primaryDark : SAFE_DEFAULTS.primaryDark;
+  const finalPrimaryDarkFg = primaryDarkOk ? primaryDarkFg : getForegroundForBackground(SAFE_DEFAULTS.primaryDark);
+
+  const secondaryDarkOk = validateContrast(secondaryDark, secondaryDarkFg, 'Secondary (Dark Mode)');
+  const finalSecondaryDark = secondaryDarkOk ? secondaryDark : SAFE_DEFAULTS.secondaryDark;
+  const finalSecondaryDarkFg = secondaryDarkOk ? secondaryDarkFg : getForegroundForBackground(SAFE_DEFAULTS.secondaryDark);
+
+  const destructiveDarkOk = validateContrast(destructiveDark, destructiveDarkFg, 'Destructive (Dark Mode)');
+  const finalDestructiveDark = destructiveDarkOk ? destructiveDark : SAFE_DEFAULTS.destructiveDark;
+  const finalDestructiveDarkFg = destructiveDarkOk ? destructiveDarkFg : getForegroundForBackground(SAFE_DEFAULTS.destructiveDark);
+  
+  // 4. Map theme to CSS variables
   const variables: Record<string, string> = {
     // Light Mode Brand
-    '--brand-primary': toHslChannels(theme.primary),
-    '--brand-primary-foreground': toHslChannels(getForegroundForBackground(theme.primary)),
+    '--brand-primary': toHslChannels(finalPrimary),
+    '--brand-primary-foreground': toHslChannels(finalPrimaryFg),
     
-    '--brand-secondary': toHslChannels(theme.secondary),
-    '--brand-secondary-foreground': toHslChannels(getForegroundForBackground(theme.secondary)),
+    '--brand-secondary': toHslChannels(finalSecondary),
+    '--brand-secondary-foreground': toHslChannels(finalSecondaryFg),
     
-    '--brand-destructive': toHslChannels(theme.destructive),
-    '--brand-destructive-foreground': toHslChannels(getForegroundForBackground(theme.destructive)),
+    '--brand-destructive': toHslChannels(finalDestructive),
+    '--brand-destructive-foreground': toHslChannels(finalDestructiveFg),
     
     // Dark Mode Brand
-    '--brand-primary-dark': toHslChannels(primaryDark),
-    '--brand-primary-dark-foreground': toHslChannels(getForegroundForBackground(primaryDark)),
+    '--brand-primary-dark': toHslChannels(finalPrimaryDark),
+    '--brand-primary-dark-foreground': toHslChannels(finalPrimaryDarkFg),
     
-    '--brand-secondary-dark': toHslChannels(secondaryDark),
-    '--brand-secondary-dark-foreground': toHslChannels(getForegroundForBackground(secondaryDark)),
+    '--brand-secondary-dark': toHslChannels(finalSecondaryDark),
+    '--brand-secondary-dark-foreground': toHslChannels(finalSecondaryDarkFg),
     
-    '--brand-destructive-dark': toHslChannels(destructiveDark),
-    '--brand-destructive-dark-foreground': toHslChannels(getForegroundForBackground(destructiveDark)),
+    '--brand-destructive-dark': toHslChannels(finalDestructiveDark),
+    '--brand-destructive-dark-foreground': toHslChannels(finalDestructiveDarkFg),
     
     // Surfaces & Borders (Light Mode)
-    '--brand-background-destructive': toHslChannels(getLightSurface(theme.destructive)),
-    '--brand-border-destructive': toHslChannels(getLightBorder(theme.destructive)),
+    '--brand-background-destructive': toHslChannels(getLightSurface(finalDestructive)),
+    '--brand-border-destructive': toHslChannels(getLightBorder(finalDestructive)),
     
     // Config
     '--brand-radius': theme.radius || '0.5rem',

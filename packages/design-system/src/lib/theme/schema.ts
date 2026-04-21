@@ -1,11 +1,16 @@
 import { z } from 'zod';
 
+const hexColor = z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Invalid hex color');
+
 export const ThemeSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, 'Theme name is required'),
-  primary: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Invalid hex color'),
-  secondary: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Invalid hex color'),
-  destructive: z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Invalid hex color'),
+  primary: hexColor,
+  primaryForeground: hexColor.optional(),
+  secondary: hexColor,
+  secondaryForeground: hexColor.optional(),
+  destructive: hexColor,
+  destructiveForeground: hexColor.optional(),
   radius: z.string().optional().default('0.5rem'),
   fontSize: z.string().optional().default('16px'),
   fontWeight: z.string().optional().default('400'),
