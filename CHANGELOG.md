@@ -14,6 +14,11 @@ All notable changes to this project will be documented in this file.
   - Enhanced `ThemeSchema` and `Theme` types in `packages/design-system` to support optional foreground overrides (`primaryForeground`, `secondaryForeground`, `destructiveForeground`).
   - Updated `applyTheme()` to prioritize user-provided foreground overrides while maintaining intelligent derivation as a fallback.
   - Improved documentation and comments across survey token definitions for better clarity on overridable vs. protected tokens.
+- Restructured Typography System for granular control:
+  - Renamed font types to **Header** (formerly Heading), **Body**, and **Navigation** (formerly Survey).
+  - Restructured theme schema to define `fontFamily`, `fontSize`, and `fontWeight` independently for each font type.
+  - Updated `applyTheme()` to map these granular settings to specific CSS variables (e.g., `--brand-font-size-header`, `--brand-font-weight-body`).
+  - Enhanced `Theme Editor` UI with dedicated sections for Header, Body, and Navigation font settings.
 - Restructured Storybook UI for improved organization:
   - Introduced a new top-level "Survey Rendering" section, positioned below "Survey Builder".
   - Moved the `Theme Editor` component to the "Survey Rendering" section to better reflect its role in the respondent experience.

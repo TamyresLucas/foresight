@@ -148,12 +148,15 @@ export function ThemeEditor({
         </div>
 
         {/* Typography */}
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 gap-4">
+        <div className="space-y-6">
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Typography</h3>
+          
+          {/* Header Font */}
+          <div className="space-y-3 p-3 border rounded-lg border-border-decorative bg-muted/30">
+            <Label className="text-sm font-bold">Header</Label>
             <div className="space-y-2">
-              <Label>Body Font</Label>
               <Controller
-                name="fonts.body"
+                name="header.fontFamily"
                 control={control}
                 render={({ field }) => (
                   <Select onValueChange={field.onChange} value={field.value}>
@@ -168,85 +171,154 @@ export function ThemeEditor({
                   </Select>
                 )}
               />
-            </div>
-            <div className="space-y-2">
-              <Label>Heading Font</Label>
-              <Controller
-                name="fonts.heading"
-                control={control}
-                render={({ field }) => (
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger className="border-primary/40">
-                      <SelectValue placeholder="Select font" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {FONT_OPTIONS.map(font => (
-                        <SelectItem key={font} value={font}>{font}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Survey Font</Label>
-              <Controller
-                name="fonts.survey"
-                control={control}
-                render={({ field }) => (
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger className="border-primary/40">
-                      <SelectValue placeholder="Select font" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {FONT_OPTIONS.map(font => (
-                        <SelectItem key={font} value={font}>{font}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              />
+              <div className="grid grid-cols-2 gap-2">
+                <Controller
+                  name="header.fontSize"
+                  control={control}
+                  render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger className="border-primary/40 h-8 text-xs">
+                        <SelectValue placeholder="Size" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {FONT_SIZE_OPTIONS.map(opt => (
+                          <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                <Controller
+                  name="header.fontWeight"
+                  control={control}
+                  render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger className="border-primary/40 h-8 text-xs">
+                        <SelectValue placeholder="Weight" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {FONT_WEIGHT_OPTIONS.map(opt => (
+                          <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+              </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          {/* Body Font */}
+          <div className="space-y-3 p-3 border rounded-lg border-border-decorative bg-muted/30">
+            <Label className="text-sm font-bold">Body</Label>
             <div className="space-y-2">
-              <Label>Base Font Size</Label>
               <Controller
-                name="fontSize"
+                name="body.fontFamily"
                 control={control}
                 render={({ field }) => (
                   <Select onValueChange={field.onChange} value={field.value}>
                     <SelectTrigger className="border-primary/40">
-                      <SelectValue placeholder="Select size" />
+                      <SelectValue placeholder="Select font" />
                     </SelectTrigger>
                     <SelectContent>
-                      {FONT_SIZE_OPTIONS.map(opt => (
-                        <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                      {FONT_OPTIONS.map(font => (
+                        <SelectItem key={font} value={font}>{font}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 )}
               />
+              <div className="grid grid-cols-2 gap-2">
+                <Controller
+                  name="body.fontSize"
+                  control={control}
+                  render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger className="border-primary/40 h-8 text-xs">
+                        <SelectValue placeholder="Size" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {FONT_SIZE_OPTIONS.map(opt => (
+                          <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                <Controller
+                  name="body.fontWeight"
+                  control={control}
+                  render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger className="border-primary/40 h-8 text-xs">
+                        <SelectValue placeholder="Weight" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {FONT_WEIGHT_OPTIONS.map(opt => (
+                          <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+              </div>
             </div>
+          </div>
+
+          {/* Navigation Font */}
+          <div className="space-y-3 p-3 border rounded-lg border-border-decorative bg-muted/30">
+            <Label className="text-sm font-bold">Navigation</Label>
             <div className="space-y-2">
-              <Label>Base Font Weight</Label>
               <Controller
-                name="fontWeight"
+                name="navigation.fontFamily"
                 control={control}
                 render={({ field }) => (
                   <Select onValueChange={field.onChange} value={field.value}>
                     <SelectTrigger className="border-primary/40">
-                      <SelectValue placeholder="Select weight" />
+                      <SelectValue placeholder="Select font" />
                     </SelectTrigger>
                     <SelectContent>
-                      {FONT_WEIGHT_OPTIONS.map(opt => (
-                        <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                      {FONT_OPTIONS.map(font => (
+                        <SelectItem key={font} value={font}>{font}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 )}
               />
+              <div className="grid grid-cols-2 gap-2">
+                <Controller
+                  name="navigation.fontSize"
+                  control={control}
+                  render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger className="border-primary/40 h-8 text-xs">
+                        <SelectValue placeholder="Size" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {FONT_SIZE_OPTIONS.map(opt => (
+                          <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                <Controller
+                  name="navigation.fontWeight"
+                  control={control}
+                  render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger className="border-primary/40 h-8 text-xs">
+                        <SelectValue placeholder="Weight" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {FONT_WEIGHT_OPTIONS.map(opt => (
+                          <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+              </div>
             </div>
           </div>
         </div>

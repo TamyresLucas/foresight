@@ -3,18 +3,40 @@ import { ThemeSchema, validateTheme } from '../schema';
 import * as contrastUtils from '../contrast';
 import { applyTheme } from '../apply-theme';
 import { getDarkVariant, getLightSurface } from '../derivation';
-import defaultTheme from '../../../themes/presets/default.json';
+
+const mockTheme = {
+  name: "Test Theme",
+  primary: "#5568F2",
+  secondary: "#008563",
+  destructive: "#CF455C",
+  radius: "0.5rem",
+  header: {
+    fontFamily: "Inter",
+    fontSize: "24px",
+    fontWeight: "700"
+  },
+  body: {
+    fontFamily: "Inter",
+    fontSize: "16px",
+    fontWeight: "400"
+  },
+  navigation: {
+    fontFamily: "Outfit",
+    fontSize: "14px",
+    fontWeight: "500"
+  }
+};
 
 describe('Theme System Foundation', () => {
   describe('Schema Validation', () => {
-    it('should validate the default theme correctly', () => {
-      const result = ThemeSchema.safeParse(defaultTheme);
+    it('should validate the mock theme correctly', () => {
+      const result = ThemeSchema.safeParse(mockTheme);
       expect(result.success).toBe(true);
     });
 
     it('should reject invalid hex colors', () => {
       const invalidTheme = {
-        ...defaultTheme,
+        ...mockTheme,
         primary: 'invalid-color'
       };
       const result = ThemeSchema.safeParse(invalidTheme);
@@ -61,7 +83,7 @@ describe('Theme System Foundation', () => {
     });
 
     it('should apply brand CSS variables including derived tokens', () => {
-      const theme = validateTheme(defaultTheme);
+      const theme = validateTheme(mockTheme);
       applyTheme(theme, mockElement);
 
       // Base
@@ -77,8 +99,25 @@ describe('Theme System Foundation', () => {
       expect(mockElement.style.getPropertyValue('--brand-background-destructive')).toBeDefined();
     });
 
+    it('should apply per-type font settings', () => {
+      const theme = validateTheme(mockTheme);
+      applyTheme(theme, mockElement);
+      
+      expect(mockElement.style.getPropertyValue('--brand-font-header')).toContain('Inter');
+      expect(mockElement.style.getPropertyValue('--brand-font-size-header')).toBe('24px');
+      expect(mockElement.style.getPropertyValue('--brand-font-weight-header')).toBe('700');
+      
+      expect(mockElement.style.getPropertyValue('--brand-font-body')).toContain('Inter');
+      expect(mockElement.style.getPropertyValue('--brand-font-size-body')).toBe('16px');
+      expect(mockElement.style.getPropertyValue('--brand-font-weight-body')).toBe('400');
+      
+      expect(mockElement.style.getPropertyValue('--brand-font-navigation')).toContain('Outfit');
+      expect(mockElement.style.getPropertyValue('--brand-font-size-navigation')).toBe('14px');
+      expect(mockElement.style.getPropertyValue('--brand-font-weight-navigation')).toBe('500');
+    });
+
     it('should ensure derived foregrounds meet WCAG AA against their background', () => {
-      const theme = validateTheme(defaultTheme);
+      const theme = validateTheme(mockTheme);
       applyTheme(theme, mockElement);
       
       // This is a manual check in code but let's verify logic is sound
@@ -95,7 +134,7 @@ describe('Theme System Foundation', () => {
 
     it('should warn when contrast is below WCAG AA', () => {
       const theme = validateTheme({
-        ...defaultTheme,
+        ...mockTheme,
         primary: '#888888',
         primaryForeground: '#999999', // intentional low contrast (~1.2:1)
       });
@@ -109,7 +148,7 @@ describe('Theme System Foundation', () => {
 
     it('should fall back to safe default when contrast is below WCAG AA', () => {
       const theme = validateTheme({
-        ...defaultTheme,
+        ...mockTheme,
         primary: '#888888',
         primaryForeground: '#999999', // intentional low contrast
       });

@@ -7,12 +7,20 @@ export const FORESIGHT_DEFAULT: Theme = {
   secondary: '#008563',
   destructive: '#CF455C',
   radius: '0.5rem',
-  fontSize: '16px',
-  fontWeight: '400',
-  fonts: {
-    body: 'Inter',
-    heading: 'Inter',
-    survey: 'Outfit',
+  header: {
+    fontFamily: 'Inter',
+    fontSize: '24px',
+    fontWeight: '700',
+  },
+  body: {
+    fontFamily: 'Inter',
+    fontSize: '16px',
+    fontWeight: '400',
+  },
+  navigation: {
+    fontFamily: 'Outfit',
+    fontSize: '14px',
+    fontWeight: '500',
   },
 };
 
@@ -23,12 +31,20 @@ export const CORPORATE: Theme = {
   secondary: '#475569',
   destructive: '#BE123C',
   radius: '0rem',
-  fontSize: '14px',
-  fontWeight: '500',
-  fonts: {
-    body: 'Inter',
-    heading: 'Inter',
-    survey: 'Inter',
+  header: {
+    fontFamily: 'Inter',
+    fontSize: '20px',
+    fontWeight: '700',
+  },
+  body: {
+    fontFamily: 'Inter',
+    fontSize: '14px',
+    fontWeight: '500',
+  },
+  navigation: {
+    fontFamily: 'Inter',
+    fontSize: '13px',
+    fontWeight: '600',
   },
 };
 
@@ -39,12 +55,20 @@ export const PLAYFUL: Theme = {
   secondary: '#FB923C',
   destructive: '#9F1239',
   radius: '0.5rem',
-  fontSize: '18px',
-  fontWeight: '600',
-  fonts: {
-    body: 'Outfit',
-    heading: 'Outfit',
-    survey: 'Outfit',
+  header: {
+    fontFamily: 'Outfit',
+    fontSize: '28px',
+    fontWeight: '800',
+  },
+  body: {
+    fontFamily: 'Outfit',
+    fontSize: '18px',
+    fontWeight: '600',
+  },
+  navigation: {
+    fontFamily: 'Outfit',
+    fontSize: '16px',
+    fontWeight: '700',
   },
 };
 

@@ -2,6 +2,12 @@ import { z } from 'zod';
 
 const hexColor = z.string().regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Invalid hex color');
 
+const FontSettingsSchema = z.object({
+  fontFamily: z.string().default('Inter'),
+  fontSize: z.string().default('16px'),
+  fontWeight: z.string().default('400'),
+});
+
 export const ThemeSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, 'Theme name is required'),
@@ -12,16 +18,20 @@ export const ThemeSchema = z.object({
   destructive: hexColor,
   destructiveForeground: hexColor.optional(),
   radius: z.string().optional().default('0.5rem'),
-  fontSize: z.string().optional().default('16px'),
-  fontWeight: z.string().optional().default('400'),
-  fonts: z.object({
-    body: z.string().default('Inter'),
-    heading: z.string().default('Inter'),
-    survey: z.string().default('Outfit'),
-  }).default({
-    body: 'Inter',
-    heading: 'Inter',
-    survey: 'Outfit',
+  header: FontSettingsSchema.default({
+    fontFamily: 'Inter',
+    fontSize: '24px',
+    fontWeight: '700',
+  }),
+  body: FontSettingsSchema.default({
+    fontFamily: 'Inter',
+    fontSize: '16px',
+    fontWeight: '400',
+  }),
+  navigation: FontSettingsSchema.default({
+    fontFamily: 'Outfit',
+    fontSize: '14px',
+    fontWeight: '500',
   }),
 });
 

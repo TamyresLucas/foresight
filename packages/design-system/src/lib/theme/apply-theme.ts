@@ -76,9 +76,9 @@ function loadFont(fontName: string) {
  */
 export function applyTheme(theme: Theme, scope: HTMLElement = document.documentElement) {
   // 1. Load fonts
-  if (theme.fonts.heading) loadFont(theme.fonts.heading);
-  if (theme.fonts.body) loadFont(theme.fonts.body);
-  if (theme.fonts.survey) loadFont(theme.fonts.survey);
+  loadFont(theme.header.fontFamily);
+  loadFont(theme.body.fontFamily);
+  loadFont(theme.navigation.fontFamily);
   
   // 2. Derive variants
   const primaryDark = getDarkVariant(theme.primary);
@@ -146,13 +146,28 @@ export function applyTheme(theme: Theme, scope: HTMLElement = document.documentE
     
     // Config
     '--brand-radius': theme.radius || '0.5rem',
-    '--brand-font-size': theme.fontSize || '16px',
-    '--brand-font-weight': theme.fontWeight || '400',
-    '--brand-font-body': `"${theme.fonts.body}", system-ui, sans-serif`,
-    '--brand-font-heading': `"${theme.fonts.heading}", system-ui, sans-serif`,
-    '--brand-font-survey': `"${theme.fonts.survey}", system-ui, sans-serif`,
-    // Backward compatibility for existing references to --brand-font-sans
-    '--brand-font-sans': `"${theme.fonts.body}", system-ui, sans-serif`,
+    
+    // Header Font
+    '--brand-font-header': `"${theme.header.fontFamily}", system-ui, sans-serif`,
+    '--brand-font-size-header': theme.header.fontSize,
+    '--brand-font-weight-header': theme.header.fontWeight,
+    
+    // Body Font
+    '--brand-font-body': `"${theme.body.fontFamily}", system-ui, sans-serif`,
+    '--brand-font-size-body': theme.body.fontSize,
+    '--brand-font-weight-body': theme.body.fontWeight,
+    
+    // Navigation Font
+    '--brand-font-navigation': `"${theme.navigation.fontFamily}", system-ui, sans-serif`,
+    '--brand-font-size-navigation': theme.navigation.fontSize,
+    '--brand-font-weight-navigation': theme.navigation.fontWeight,
+
+    // Backward compatibility for existing references
+    '--brand-font-heading': `"${theme.header.fontFamily}", system-ui, sans-serif`,
+    '--brand-font-survey': `"${theme.navigation.fontFamily}", system-ui, sans-serif`,
+    '--brand-font-sans': `"${theme.body.fontFamily}", system-ui, sans-serif`,
+    '--brand-font-size': theme.body.fontSize,
+    '--brand-font-weight': theme.body.fontWeight,
   };
   
   // 4. Apply variables to the scope
