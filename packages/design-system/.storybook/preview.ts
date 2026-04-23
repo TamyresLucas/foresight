@@ -75,9 +75,13 @@ const preview: Preview = {
         const html = document.documentElement;
         const savedFont = localStorage.getItem('global-font') || 'Inter';
         const fontValue = `"${savedFont}", system-ui, sans-serif`;
+        
+        // Only override sans and body fonts globally in Storybook
         html.style.setProperty('--font-family-sans', fontValue);
-        html.style.setProperty('--font-family-heading', fontValue);
         html.style.setProperty('--font-family-body', fontValue);
+        
+        // Heading font should stay as the brand default (Outfit) unless explicitly themed
+        // We do NOT override --font-family-heading here anymore
 
         const linkId = `font-global-${savedFont}`;
         if (!document.getElementById(linkId)) {

@@ -3,7 +3,7 @@
 /* Source: https://www.notion.so/29e0a268c6384d43a73b8a9b675253d2 */
 :root {
   /* Brand Foundation Tokens (Light) */
-  --brand-primary: 233 86% 64%; /* #5568F2 */
+  --brand-primary: 233 74% 59%; /* #485AE3 */
   --brand-primary-foreground: 0 0% 100%;
   
   --brand-secondary: 161 100% 26%; /* #008563 */
@@ -13,17 +13,18 @@
   --brand-destructive-foreground: 0 0% 100%;
   
   --brand-background-destructive: 349 8% 96%;
-  --brand-border-destructive: 349 42% 80%;
-  
+  --brand-destructive-border: 349 42% 80%;
+
   --brand-radius: 0.5rem;
   --brand-font-sans: "Inter", system-ui, sans-serif;
-  --brand-font-heading: "Inter", system-ui, sans-serif;
+  --brand-font-heading: "Outfit", sans-serif;
   --brand-font-body: "Inter", system-ui, sans-serif;
-  --brand-font-survey: "Outfit", sans-serif;
+  --brand-font-survey: "Open Sans", sans-serif;
   --brand-font-size: 16px;
   --brand-font-weight: 400;
 
   --background: 0 0% 100%;
+
   --foreground: 0 0% 9%;
 
   /* Aliases — Aliasing shadcn variables to brand foundation */
@@ -271,12 +272,46 @@
   
   --brand-destructive-dark: 352 84% 64%;
   --brand-destructive-dark-foreground: 0 0% 9%;
+
+  /* ─── Survey Rendering Tokens ─────────────────────────────────────── */
+  /* Defaults live in :root so any component using `text-survey-*` etc.
+     always resolves to the S2 palette. Customer-specific overrides
+     belong under [data-survey-theme] or [data-survey-theme="<brand>"]
+     (see bottom of file) — more specific selectors win via normal CSS
+     cascade, so setting different values there re-themes survey rendering
+     without touching defaults. */
+
+  --survey-foreground: 0 0% 14%;           /* #232323 */
+  --survey-background: 0 0% 100%;          /* #FFFFFF */
+
+  --survey-primary: 233 86% 64%;           /* #5568F2 — reactive brand color */
+  --survey-border-interactive: 0 0% 54%;   /* #8A8A8A — default input border */
+  --survey-muted-background: 0 0% 54%;     /* #8A8A8A — used with opacity for muted actions */
+  --survey-border-selected: 233 86% 64%;   /* #5568F2 — selected state */
+
+  --survey-destructive: 349 54% 54%;       /* #CF455C — required indicator / error */
+
+  --survey-border-muted: 0 0% 82%;         /* #D1D1D1 — lighter than interactive, for non-interactive borders */
+
+  --survey-radius-sm: 8px;
+  --survey-radius-md: 12px;
+
+  --survey-font-family: "Open Sans", sans-serif;
+  --survey-font-size-body: 16px;
+  --survey-font-weight-regular: 400;
 }
 
 /* Dark Mode */
 .dark {
   --background: 210 40% 6%;
   --foreground: 210 40% 98%;
+
+  /* Survey Rendering Tokens (Dark) */
+  --survey-foreground: 210 40% 98%;
+  --survey-background: 210 40% 6%;
+  --survey-border-interactive: 210 40% 50%;
+  --survey-border-selected: var(--brand-primary-dark);
+  --survey-destructive: var(--brand-destructive-dark);
 
   /* Aliases — Aliasing shadcn variables to brand foundation */
   --primary: var(--brand-primary-dark);
@@ -443,4 +478,20 @@
   --surface-dim-hsl: 240 6% 6%;
   --surface-container-hsl: 228 18% 14%;
   --surface-accent-hsl: 233 20% 20%;
+}
+
+/* ─── Survey Theme Overrides ──────────────────────────────────────── */
+/* Customer-specific survey rendering themes override --survey-* tokens
+   here. Example:
+
+   [data-survey-theme="acme"] {
+     --survey-border-selected: 280 80% 60%;
+     --survey-font-family: "Georgia", serif;
+   }
+
+   When [data-survey-theme] is present on an ancestor, these overrides
+   cascade into any nested survey-rendering component. No overrides
+   currently defined. */
+[data-survey-theme] {
+  /* empty by design — see above */
 }

@@ -18,6 +18,7 @@ export const ThemeSchema = z.object({
   destructive: hexColor,
   destructiveForeground: hexColor.optional(),
   radius: z.string().optional().default('0.5rem'),
+  margin: z.string().optional().default('8px'),
   header: FontSettingsSchema.default({
     fontFamily: 'Inter',
     fontSize: '24px',

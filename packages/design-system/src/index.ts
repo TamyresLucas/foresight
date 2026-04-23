@@ -8,6 +8,7 @@ export * from "./components/ui/badge";
 export * from "./components/ui/card";
 export * from "./components/ui/input";
 export * from "./components/ui/label";
+export * from "./components/ui/section-label";
 export * from "./components/ui/select";
 export * from "./components/ui/separator";
 export * from "./components/ui/textarea";
@@ -54,6 +55,11 @@ export * from "./lib/theme";
 
 // Survey components
 export * from "./components/survey/BuildSidebar";
+
+// Survey rendering components
+export * from "./components/survey-rendering/TextAnswer";
+export * from "./components/survey-rendering/OpenEndAnswer";
+export * from "./components/survey-rendering/SurveyNavigation";
 
 // Theme blocks
 export * from "./blocks/theme/ThemeEditor";

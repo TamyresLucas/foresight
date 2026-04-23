@@ -4,6 +4,17 @@ export default {
   content: ["./src/**/*.{js,ts,jsx,tsx}", "./stories/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-family-sans)", "Inter", "system-ui", "sans-serif"],
+        heading: ["var(--font-family-heading)", "Outfit", "sans-serif"],
+        survey: ["var(--survey-font-family)", "Outfit", "sans-serif"],
+      },
+      fontSize: {
+        "survey-body": "var(--survey-font-size-body)",
+      },
+      fontWeight: {
+        "survey-regular": "var(--survey-font-weight-regular)",
+      },
       colors: {
         border: "hsl(var(--border))",
         /* Named scale — prefer these */
@@ -59,11 +70,25 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        survey: {
+          primary: "hsl(var(--survey-primary))",
+          foreground: "hsl(var(--survey-foreground))",
+          background: "hsl(var(--survey-background))",
+          "rendering-overlay": "hsl(0 0% 0% / 0.1)",
+          "muted-background": "hsl(var(--survey-border-interactive) / 0.2)",
+          "border-interactive": "hsl(var(--survey-border-interactive))",
+          "border-selected": "hsl(var(--survey-border-selected))",
+          "border-accent": "hsl(var(--survey-border-accent))",
+          destructive: "hsl(var(--survey-destructive))",
+          "border-muted": "hsl(var(--survey-border-muted))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 1px)",
+        "survey-sm": "var(--survey-radius-sm)",
+        "survey-md": "var(--survey-radius-md)",
       },
       keyframes: {
         "accordion-down": {

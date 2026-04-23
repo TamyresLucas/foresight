@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Added
+- Implemented `OpenEndAnswer` component for Survey Rendering:
+  - Added multi-line text input (textarea) support with dedicated survey tokens.
+  - Implemented variants for `Default`, `Focused`, `Selected`, and `Selected + Focused` states.
+  - Added support for labels, required indicators, and validation error messages.
+  - Created Storybook documentation and Figma Code Connect mapping.
 - Implemented THEME-S5: Token Bridging and Contrast Validation:
   - Added bridge mappings in `tokens-survey.css` to link `--survey-*` tokens to `--brand-*` overrides with appropriate fallbacks.
   - Implemented automated contrast validation in `applyTheme()` that warns if derived foregrounds do not meet WCAG AA (4.5:1) standards, and automatically falls back to safe brand defaults.

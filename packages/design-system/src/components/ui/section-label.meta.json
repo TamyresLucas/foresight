@@ -1,0 +1,15 @@
+{
+  "name": "SectionLabel",
+  "description": "A label component used to demarcate sections. Supports S2 Section and S2 Subsection variants.",
+  "props": {
+    "variant": {
+      "type": "string",
+      "description": "The variant style of the label.",
+      "options": ["s2-subsection", "s2-section"]
+    },
+    "children": {
+      "type": "node",
+      "description": "The content to display in the label."
+    }
+  }
+}

@@ -2,6 +2,16 @@
   "mcpServers": {
     "notion": {
       "serverUrl": "https://mcp.notion.com/mcp"
+    },
+    "figma": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-figma"
+      ],
+      "env": {
+        "FIGMA_ACCESS_TOKEN": "$FIGMA_ACCESS_TOKEN"
+      }
     }
   }
 }

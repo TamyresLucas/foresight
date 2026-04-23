@@ -3,10 +3,11 @@ import { type Theme } from './schema';
 export const FORESIGHT_DEFAULT: Theme = {
   id: 'foresight-default',
   name: 'Foresight Default',
-  primary: '#5568F2',
+  primary: '#485AE3',
   secondary: '#008563',
   destructive: '#CF455C',
   radius: '0.5rem',
+  margin: '8px',
   header: {
     fontFamily: 'Inter',
     fontSize: '24px',
@@ -31,6 +32,7 @@ export const CORPORATE: Theme = {
   secondary: '#475569',
   destructive: '#BE123C',
   radius: '0rem',
+  margin: '8px',
   header: {
     fontFamily: 'Inter',
     fontSize: '20px',
@@ -55,6 +57,7 @@ export const PLAYFUL: Theme = {
   secondary: '#FB923C',
   destructive: '#9F1239',
   radius: '0.5rem',
+  margin: '8px',
   header: {
     fontFamily: 'Outfit',
     fontSize: '28px',

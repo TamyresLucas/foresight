@@ -146,6 +146,7 @@ export function applyTheme(theme: Theme, scope: HTMLElement = document.documentE
     
     // Config
     '--brand-radius': theme.radius || '0.5rem',
+    '--brand-margin': theme.margin || '8px',
     
     // Header Font
     '--brand-font-header': `"${theme.header.fontFamily}", system-ui, sans-serif`,
@@ -168,6 +169,17 @@ export function applyTheme(theme: Theme, scope: HTMLElement = document.documentE
     '--brand-font-sans': `"${theme.body.fontFamily}", system-ui, sans-serif`,
     '--brand-font-size': theme.body.fontSize,
     '--brand-font-weight': theme.body.fontWeight,
+
+    // Survey Rendering Tokens (Reactive)
+    '--survey-primary': toHslChannels(finalPrimary),
+    '--survey-destructive': toHslChannels(finalDestructive),
+    '--survey-border-selected': toHslChannels(finalPrimary),
+    '--survey-border-accent': toHslChannels(finalSecondary),
+    '--survey-font-family': `"${theme.body.fontFamily}", sans-serif`,
+    '--survey-font-size-body': theme.body.fontSize,
+    '--survey-font-weight-regular': theme.body.fontWeight,
+    '--survey-radius-md': theme.radius || '0.5rem',
+    '--survey-margin': theme.margin || '8px',
   };
   
   // 4. Apply variables to the scope
