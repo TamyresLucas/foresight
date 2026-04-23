@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { LanguageSelector } from './LanguageSelector';
 
-const meta: Meta<typeof LanguageSelector> = {
+const meta = {
   title: 'Survey Rendering/LanguageSelector',
   component: LanguageSelector,
   tags: ['autodocs'],
@@ -27,10 +27,10 @@ const meta: Meta<typeof LanguageSelector> = {
       },
     },
   },
-};
+} satisfies Meta<typeof LanguageSelector>;
 
 export default meta;
-type Story = StoryObj<typeof LanguageSelector>;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {

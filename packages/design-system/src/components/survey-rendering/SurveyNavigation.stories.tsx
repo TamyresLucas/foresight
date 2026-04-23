@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { SurveyNavigation } from './SurveyNavigation';
 
-const meta: Meta<typeof SurveyNavigation> = {
+const meta = {
   title: 'Survey Rendering/SurveyNavigation',
   component: SurveyNavigation,
   tags: ['autodocs'],
@@ -20,10 +20,10 @@ const meta: Meta<typeof SurveyNavigation> = {
       },
     },
   },
-};
+} satisfies Meta<typeof SurveyNavigation>;
 
 export default meta;
-type Story = StoryObj<typeof SurveyNavigation>;
+type Story = StoryObj<typeof meta>;
 
 export const Next: Story = {
   args: {

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { CheckboxOption } from './Checkbox';
 
-const meta: Meta<typeof CheckboxOption> = {
+const meta = {
   title: 'Survey Rendering/Checkbox',
   component: CheckboxOption,
   tags: ['autodocs'],
@@ -12,10 +12,10 @@ const meta: Meta<typeof CheckboxOption> = {
       </div>
     ),
   ],
-};
+} satisfies Meta<typeof CheckboxOption>;
 
 export default meta;
-type Story = StoryObj<typeof CheckboxOption>;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: { label: 'Option' },

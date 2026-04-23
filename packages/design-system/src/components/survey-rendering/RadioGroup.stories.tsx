@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { RadioGroup, RadioGroupOption } from './RadioGroup';
 
-const meta: Meta<typeof RadioGroup> = {
+const meta = {
   title: 'Survey Rendering/RadioGroup',
   component: RadioGroup,
   tags: ['autodocs'],
@@ -12,10 +12,10 @@ const meta: Meta<typeof RadioGroup> = {
       </div>
     ),
   ],
-};
+} satisfies Meta<typeof RadioGroup>;
 
 export default meta;
-type Story = StoryObj<typeof RadioGroup>;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: (args) => (

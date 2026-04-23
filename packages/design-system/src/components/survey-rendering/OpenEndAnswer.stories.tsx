@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { OpenEndAnswer } from './OpenEndAnswer';
 
-const meta: Meta<typeof OpenEndAnswer> = {
+const meta = {
   title: 'Survey Rendering/OpenEndAnswer',
   component: OpenEndAnswer,
   tags: ['autodocs'],
@@ -29,10 +29,10 @@ const meta: Meta<typeof OpenEndAnswer> = {
       },
     },
   },
-};
+} satisfies Meta<typeof OpenEndAnswer>;
 
 export default meta;
-type Story = StoryObj<typeof OpenEndAnswer>;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {

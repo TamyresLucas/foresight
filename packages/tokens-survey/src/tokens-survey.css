@@ -13,15 +13,15 @@
 /* ── Survey token definitions (canonical source of truth) ──────────── */
 
 /* Brand — overridable by client via SurveyThemeOverrides */
---survey-primary: var(--brand-primary, 0 0% 23%); /* charcoal — 10.3:1 vs white (AAA) */
+--survey-primary: var(--brand-primary, 233 74% 59%);
 --survey-primary-foreground: var(--brand-primary-foreground, 0 0% 100%);
 
 --survey-secondary: var(--survey-muted);
 --survey-secondary-foreground: var(--survey-foreground);
 
---survey-destructive: var(--brand-destructive, 0 72% 51%); /* 4.6:1 vs white (AA) */
+--survey-destructive: var(--brand-destructive, 349 54% 54%);
 --survey-destructive-foreground: var(--brand-destructive-foreground, 0 0% 100%);
---survey-destructive-border: var(--brand-destructive, 0 72% 51%) / 0.5;
+--survey-destructive-border: var(--brand-destructive, 349 54% 54%) / 0.5;
 
 /* Surfaces — overridable */
 --survey-background: 0 0% 100%;

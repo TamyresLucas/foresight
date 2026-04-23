@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { TextAnswer } from './TextAnswer';
 
-const meta: Meta<typeof TextAnswer> = {
+const meta = {
   title: 'Survey Rendering/TextAnswer',
   component: TextAnswer,
   tags: ['autodocs'],
@@ -29,10 +29,10 @@ const meta: Meta<typeof TextAnswer> = {
       },
     },
   },
-};
+} satisfies Meta<typeof TextAnswer>;
 
 export default meta;
-type Story = StoryObj<typeof TextAnswer>;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
