@@ -71,7 +71,6 @@ const SurveyNavigation = React.forwardRef<HTMLDivElement, SurveyNavigationProps>
     };
 
     const hasMiddleContent = showQuit || showSeeResponses;
-    const hasRightContent = showNext || showSubmit;
 
     return (
       <div
