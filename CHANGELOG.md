@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 ### Added
 - Implemented `OpenEndAnswer` component for Survey Rendering:
+... (existing entries)
+### Fixed
+- Improved Vercel deployment reliability by standardizing the Storybook build command to `npm run build-storybook`.
+- Fixed CSS syntax warnings ("Expected identifier but found whitespace") in `tokens-survey.css` by using intermediate variables for `var()` fallbacks, ensuring compatibility with strict CSS parsers used in Storybook 8 builds.
   - Added multi-line text input (textarea) support with dedicated survey tokens.
   - Implemented variants for `Default`, `Focused`, `Selected`, and `Selected + Focused` states.
   - Added support for labels, required indicators, and validation error messages.
