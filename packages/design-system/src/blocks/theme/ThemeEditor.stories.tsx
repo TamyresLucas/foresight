@@ -4,6 +4,7 @@ import { ThemeEditor } from './ThemeEditor';
 import { TextAnswer } from '../../components/survey-rendering/TextAnswer';
 import { OpenEndAnswer } from '../../components/survey-rendering/OpenEndAnswer';
 import { SurveyNavigation } from '../../components/survey-rendering/SurveyNavigation';
+import { SurveyCompletionBar } from '../../components/survey-rendering/SurveyCompletionBar';
 import { LanguageSelector } from '../../components/survey-rendering/LanguageSelector';
 import { CheckboxOption } from '../../components/survey-rendering/Checkbox';
 import { RadioGroup, RadioGroupOption } from '../../components/survey-rendering/RadioGroup';
@@ -36,6 +37,9 @@ const LivePreview = () => {
             onLanguageChange={setLang}
           />
         </div>
+
+        {/* Progress Bar */}
+        <SurveyCompletionBar value={35} variant="basic" />
 
         {/* Header */}
         <div className="space-y-2">

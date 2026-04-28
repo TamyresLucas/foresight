@@ -10,7 +10,7 @@ export const FORESIGHT_DEFAULT: Theme = {
   margin: '8px',
   header: {
     fontFamily: 'Inter',
-    fontSize: '24px',
+    fontSize: '18px',
     fontWeight: '700',
   },
   body: {
