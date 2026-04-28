@@ -91,10 +91,11 @@ const LanguageSelector = React.forwardRef<HTMLButtonElement, LanguageSelectorPro
               ref={ref}
               variant="outline"
               disabled={disabled}
+              style={{ borderRadius: 'var(--component-button-radius)' }}
               className={cn(
-                "text-survey-foreground bg-transparent rounded-lg h-10 px-4 flex items-center gap-3 font-survey font-survey-regular text-survey-body w-fit justify-between hover:bg-transparent hover:text-survey-foreground transition-all",
+                "text-survey-foreground bg-transparent h-10 px-4 flex items-center gap-3 font-survey font-survey-regular text-survey-body w-fit justify-between hover:bg-transparent hover:text-survey-foreground transition-all",
                 // Focused state: 1px inner, 2px outer (handled by wrapper)
-                focused 
+                focused
                   ? (isSelectedAndFocused ? "border border-survey-border-selected" : "border border-survey-border-interactive")
                   : (isSelectedAndNotFocused ? "border-2 border-survey-border-selected" : "border border-survey-border-interactive"),
                 // Auto-focus override
