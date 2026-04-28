@@ -179,6 +179,7 @@ export function applyTheme(theme: Theme, scope: HTMLElement = document.documentE
     '--survey-font-size-body': theme.body.fontSize,
     '--survey-font-weight-regular': theme.body.fontWeight,
     '--survey-radius-md': theme.radius || '0.5rem',
+    '--survey-radius-sm': `calc(${theme.radius || '0.5rem'} - 2px)`,
     '--survey-margin': theme.margin || '8px',
   };
   
