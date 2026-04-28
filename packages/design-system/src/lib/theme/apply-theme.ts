@@ -147,6 +147,9 @@ export function applyTheme(theme: Theme, scope: HTMLElement = document.documentE
     // Config
     '--brand-radius': theme.radius || '0.5rem',
     '--brand-margin': theme.margin || '8px',
+
+    // Component-specific radius (fully rounded for "Round" theme, otherwise matches theme radius)
+    '--component-button-radius': theme.radius === '1rem' ? '9999px' : (theme.radius || '0.5rem'),
     
     // Header Font
     '--brand-font-header': `"${theme.header.fontFamily}", system-ui, sans-serif`,

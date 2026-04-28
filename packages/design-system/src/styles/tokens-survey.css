@@ -69,6 +69,9 @@
 --survey-radius-lg: var(--brand-radius-lg, 0.5rem); /* 8px */
 --survey-radius-xl: var(--brand-radius-xl, 0.75rem); /* 12px */
 
+/* Component-specific radius (9999px for "Round" corner ratio, otherwise matches theme) */
+--component-button-radius: var(--brand-radius, 0.5rem); /* falls back to default radius */
+
 /* Typography — font family overridable; size/weight protected */
 --survey-font-family: var(--brand-font-survey, var(--font-survey, "Outfit", sans-serif));
 --survey-font-size-xs: 0.75rem;
