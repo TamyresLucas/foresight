@@ -5,18 +5,45 @@ import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { Check } from "../ui/icons";
 import { cn } from "@/lib/utils";
 
+const CheckboxGroupErrorContext = React.createContext<boolean>(false);
+
+export interface CheckboxGroupProps extends React.HTMLAttributes<HTMLDivElement> {
+  error?: string;
+}
+
+const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps>(
+  ({ className, error, children, ...props }, ref) => {
+    return (
+      <div ref={ref} className={cn("flex flex-col gap-2 w-full", className)} {...props}>
+        <CheckboxGroupErrorContext.Provider value={!!error}>
+          {children}
+        </CheckboxGroupErrorContext.Provider>
+        {error && (
+          <p className="text-xs font-survey font-survey-regular text-survey-destructive w-full">
+            {error}
+          </p>
+        )}
+      </div>
+    );
+  }
+);
+CheckboxGroup.displayName = "CheckboxGroup";
+
 export interface CheckboxOptionProps {
   label: string;
   id?: string;
   focused?: boolean;
+  error?: boolean;
   checked?: boolean | "indeterminate";
   onCheckedChange?: (checked: boolean | "indeterminate") => void;
   className?: string;
 }
 
 const CheckboxOption = React.forwardRef<HTMLLabelElement, CheckboxOptionProps>(
-  ({ label, id, focused = false, checked, onCheckedChange, className }, ref) => {
+  ({ label, id, focused = false, error, checked, onCheckedChange, className }, ref) => {
     const itemId = id ?? `survey-checkbox-${label}`;
+    const groupError = React.useContext(CheckboxGroupErrorContext);
+    const hasError = error ?? groupError;
     return (
       <label
         ref={ref}
@@ -26,11 +53,11 @@ const CheckboxOption = React.forwardRef<HTMLLabelElement, CheckboxOptionProps>(
           "rounded-survey-md border border-survey-border-muted bg-survey-background",
           "transition-colors hover:bg-survey-muted-background",
           "has-[[data-state=checked]]:border-survey-border-selected",
-          // Focused — static prop (for Storybook) and keyboard focus-visible
           focused && "ring-2 ring-survey-border-interactive ring-offset-2 ring-offset-survey-background",
           focused && "[&:has([data-state=checked])]:ring-survey-border-selected",
           "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-survey-border-interactive has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-survey-background",
           "[&:has([data-state=checked]):has(:focus-visible)]:ring-survey-border-selected",
+          hasError && "border-2 border-survey-destructive has-[[data-state=checked]]:border-survey-destructive ring-0 has-[:focus-visible]:ring-0",
           className,
         )}
       >
@@ -43,6 +70,7 @@ const CheckboxOption = React.forwardRef<HTMLLabelElement, CheckboxOptionProps>(
             "border-survey-border-interactive",
             "data-[state=checked]:border-survey-border-selected data-[state=checked]:bg-survey-border-selected",
             "focus:outline-none focus-visible:outline-none",
+            hasError && "border-survey-destructive data-[state=checked]:border-survey-destructive data-[state=checked]:bg-survey-destructive",
           )}
         >
           <CheckboxPrimitive.Indicator className="flex items-center justify-center text-white">
@@ -58,4 +86,4 @@ const CheckboxOption = React.forwardRef<HTMLLabelElement, CheckboxOptionProps>(
 );
 CheckboxOption.displayName = "CheckboxOption";
 
-export { CheckboxOption };
+export { CheckboxOption, CheckboxGroup };

@@ -6,7 +6,7 @@ import { OpenEndAnswer } from '../../components/survey-rendering/OpenEndAnswer';
 import { SurveyNavigation } from '../../components/survey-rendering/SurveyNavigation';
 import { SurveyCompletionBar } from '../../components/survey-rendering/SurveyCompletionBar';
 import { LanguageSelector } from '../../components/survey-rendering/LanguageSelector';
-import { CheckboxOption } from '../../components/survey-rendering/Checkbox';
+import { CheckboxOption, CheckboxGroup } from '../../components/survey-rendering/Checkbox';
 import { RadioGroup, RadioGroupOption } from '../../components/survey-rendering/RadioGroup';
 import { SurveyErrorMessage } from '../../components/survey-rendering/SurveyErrorMessage';
 
@@ -25,8 +25,17 @@ const LivePreview = () => {
   const [openValue, setOpenValue] = React.useState('');
   const [lang, setLang] = React.useState('en');
   const [checkedOptions, setCheckedOptions] = React.useState({ a: false, b: false, c: false });
-  const [contactMethod, setContactMethod] = React.useState('email');
+  const [contactMethod, setContactMethod] = React.useState<string>('');
   const [showError, setShowError] = React.useState(false);
+
+  const requiredErrorMsg = 'This question is required';
+  const textError = showError && !textValue ? requiredErrorMsg : undefined;
+  const radioError = showError && !contactMethod ? requiredErrorMsg : undefined;
+  const checkboxError =
+    showError && !checkedOptions.a && !checkedOptions.b && !checkedOptions.c
+      ? requiredErrorMsg
+      : undefined;
+  const openError = showError && !openValue ? requiredErrorMsg : undefined;
 
   return (
     <div className="w-full min-h-screen bg-muted/20 overflow-y-auto p-12">
@@ -64,13 +73,14 @@ const LivePreview = () => {
             required
             value={textValue}
             onChange={(e) => setTextValue(e.target.value)}
+            error={textError}
           />
 
           <div className="space-y-4">
             <label className="text-survey-body font-survey font-survey-regular text-survey-foreground">
               Select your preferred contact method:
             </label>
-            <RadioGroup value={contactMethod} onValueChange={setContactMethod}>
+            <RadioGroup value={contactMethod} onValueChange={setContactMethod} error={radioError}>
               <RadioGroupOption value="email" label="Email" />
               <RadioGroupOption value="phone" label="Phone" />
             </RadioGroup>
@@ -80,7 +90,7 @@ const LivePreview = () => {
             <label className="text-survey-body font-survey font-survey-regular text-survey-foreground">
               Which features are most important to you?
             </label>
-            <div className="flex flex-col gap-2 w-full">
+            <CheckboxGroup error={checkboxError}>
               <CheckboxOption
                 label="Real-time collaboration"
                 checked={checkedOptions.a}
@@ -96,7 +106,7 @@ const LivePreview = () => {
                 checked={checkedOptions.c}
                 onCheckedChange={(val) => setCheckedOptions(p => ({ ...p, c: !!val }))}
               />
-            </div>
+            </CheckboxGroup>
           </div>
 
           <OpenEndAnswer
@@ -105,6 +115,7 @@ const LivePreview = () => {
             required
             value={openValue}
             onChange={(e) => setOpenValue(e.target.value)}
+            error={openError}
           />
 
           <div className="pt-8 border-t border-border-decorative space-y-8">

@@ -48,7 +48,8 @@ const TextAnswer = React.forwardRef<HTMLInputElement, TextAnswerProps>(
             'border-transparent', // Default state
             'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-survey-border-interactive',
             focused && 'border-survey-border-interactive',
-            focused && isSelected && 'border-survey-border-selected'
+            focused && isSelected && 'border-survey-border-selected',
+            error && 'border-transparent group-has-[:focus-visible]/survey-input:border-transparent'
           )}
         >
           <div
@@ -58,7 +59,7 @@ const TextAnswer = React.forwardRef<HTMLInputElement, TextAnswerProps>(
               'group-data-[selected=true]/survey-input:border-survey-border-selected group-data-[selected=true]/survey-input:border-2',
               'group-has-[:focus-visible]/survey-input:border',
               focused && 'border',
-              error && 'border-survey-destructive'
+              error && 'border-2 border-survey-destructive'
             )}
           >
             <input
@@ -76,7 +77,11 @@ const TextAnswer = React.forwardRef<HTMLInputElement, TextAnswerProps>(
         </div>
 
         {/* Error message */}
-        {error && <p className="text-xs text-survey-destructive w-full">{error}</p>}
+        {error && (
+          <p className="text-xs font-survey font-survey-regular text-survey-destructive w-full">
+            {error}
+          </p>
+        )}
       </div>
     );
   },
