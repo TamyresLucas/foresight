@@ -8,6 +8,7 @@ import { SurveyCompletionBar } from '../../components/survey-rendering/SurveyCom
 import { LanguageSelector } from '../../components/survey-rendering/LanguageSelector';
 import { CheckboxOption } from '../../components/survey-rendering/Checkbox';
 import { RadioGroup, RadioGroupOption } from '../../components/survey-rendering/RadioGroup';
+import { SurveyErrorMessage } from '../../components/survey-rendering/SurveyErrorMessage';
 
 const meta: Meta = {
   title: 'Survey Rendering/Theme/ThemeEditor',
@@ -25,6 +26,7 @@ const LivePreview = () => {
   const [lang, setLang] = React.useState('en');
   const [checkedOptions, setCheckedOptions] = React.useState({ a: false, b: false, c: false });
   const [contactMethod, setContactMethod] = React.useState('email');
+  const [showError, setShowError] = React.useState(false);
 
   return (
     <div className="w-full min-h-screen bg-muted/20 overflow-y-auto p-12">
@@ -40,6 +42,9 @@ const LivePreview = () => {
 
         {/* Progress Bar */}
         <SurveyCompletionBar value={35} variant="basic" />
+
+        {/* Error Message */}
+        {showError && <SurveyErrorMessage />}
 
         {/* Header */}
         <div className="space-y-2">
@@ -103,7 +108,12 @@ const LivePreview = () => {
           />
 
           <div className="pt-8 border-t border-border-decorative space-y-8">
-            <SurveyNavigation showPrevious showNext nextLabel="Next Page" />
+            <SurveyNavigation
+              showPrevious
+              showNext
+              nextLabel="Next Page"
+              onNext={() => setShowError(true)}
+            />
             <SurveyNavigation showSeeResponses showQuit />
             <div className="w-full flex justify-center pt-4">
               <p className="text-xs font-normal text-muted-foreground tracking-tight">
