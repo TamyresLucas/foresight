@@ -107,7 +107,7 @@ const LivePreview = () => {
             <SurveyNavigation showSeeResponses showQuit />
             <div className="w-full flex justify-center pt-4">
               <p className="text-xs font-normal text-muted-foreground tracking-tight">
-                Survey engine powered by{' '}
+                Survey software powered by{' '}
                 <a
                   href="https://voxco.com"
                   target="_blank"
