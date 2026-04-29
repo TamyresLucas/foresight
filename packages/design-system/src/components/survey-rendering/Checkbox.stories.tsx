@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { CheckboxOption } from './Checkbox';
+import { CheckboxOption, CheckboxGroup } from './Checkbox';
 
 const meta = {
   title: 'Survey Rendering/Checkbox',
@@ -31,4 +31,18 @@ export const Focused: Story = {
 
 export const FocusedAndSelected: Story = {
   args: { label: 'Option', focused: true, checked: true },
+};
+
+export const WithError: Story = {
+  args: { label: 'Option', error: true },
+};
+
+export const GroupWithError: Story = {
+  render: () => (
+    <CheckboxGroup error="This question is required">
+      <CheckboxOption label="Option" />
+      <CheckboxOption label="Option" />
+      <CheckboxOption label="Option" />
+    </CheckboxGroup>
+  ),
 };

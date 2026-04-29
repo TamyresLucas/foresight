@@ -74,7 +74,7 @@ export const WithError: Story = {
   args: {
     label: 'Open ended answer question that can be recorded',
     required: true,
-    error: 'This field is required',
+    error: 'This question is required',
     placeholder: 'Type your answer here...',
   },
 };

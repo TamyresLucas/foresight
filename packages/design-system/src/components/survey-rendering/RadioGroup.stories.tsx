@@ -61,6 +61,17 @@ export const FocusedAndSelected: Story = {
   ),
 };
 
+export const WithError: Story = {
+  render: (args) => (
+    <RadioGroup {...args} error="This question is required">
+      <RadioGroupOption value="option-1" label="Option" />
+      <RadioGroupOption value="option-2" label="Option" />
+      <RadioGroupOption value="option-3" label="Option" />
+      <RadioGroupOption value="option-4" label="Option" />
+    </RadioGroup>
+  ),
+};
+
 export const WithRealOptions: Story = {
   render: (args) => (
     <RadioGroup {...args} defaultValue="satisfied">

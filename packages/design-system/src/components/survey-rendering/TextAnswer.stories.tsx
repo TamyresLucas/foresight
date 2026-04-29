@@ -70,7 +70,7 @@ export const WithError: Story = {
   args: {
     label: 'Textual answer question with optional custom validation',
     required: true,
-    error: 'This field is required',
+    error: 'This question is required',
   },
 };
 
