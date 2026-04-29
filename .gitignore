@@ -77,3 +77,4 @@ load-secrets.sh
 .netlify
 packages/design-system/storybook-static
 .vercel
+.claude/worktrees/
