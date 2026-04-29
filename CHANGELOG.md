@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Added
+- Added `--brand-question-spacing` and `--survey-question-spacing` tokens that scale with the margin preset (3x `theme.margin`).
+- Applied the new `--survey-question-spacing` token to the vertical gap between question blocks in the `Theme Editor` live preview.
 - Implemented `OpenEndAnswer` component for Survey Rendering:
 ... (existing entries)
 ### Fixed

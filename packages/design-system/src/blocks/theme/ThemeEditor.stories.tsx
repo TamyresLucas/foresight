@@ -52,7 +52,7 @@ const LivePreview = () => {
         </div>
 
         {/* Questions */}
-        <div className="space-y-12">
+        <div className="flex flex-col" style={{ gap: 'var(--survey-question-spacing, 48px)' }}>
           <TextAnswer
             label="What is your primary area of focus?"
             placeholder="e.g. Design, Engineering, Product..."

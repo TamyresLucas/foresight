@@ -9,7 +9,7 @@
     "./schema": "./dist/survey.schema.json"
   },
   "scripts": {
-    "build": "cp src/tokens-survey.css dist/ && cp src/survey.schema.json dist/",
+    "build": "mkdir -p dist && cp src/tokens-survey.css dist/ && cp src/survey.schema.json dist/",
     "typecheck": "echo 'No TypeScript source'"
   },
   "devDependencies": {}

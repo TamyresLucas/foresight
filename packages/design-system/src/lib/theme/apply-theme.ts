@@ -147,6 +147,7 @@ export function applyTheme(theme: Theme, scope: HTMLElement = document.documentE
     // Config
     '--brand-radius': theme.radius || '0.5rem',
     '--brand-margin': theme.margin || '8px',
+    '--brand-question-spacing': `calc(${theme.margin || '8px'} * 3)`,
 
     // Component-specific radius (fully rounded for "Round" theme, otherwise matches theme radius)
     '--component-button-radius': theme.radius === '1rem' ? '9999px' : (theme.radius || '0.5rem'),
@@ -184,6 +185,7 @@ export function applyTheme(theme: Theme, scope: HTMLElement = document.documentE
     '--survey-radius-md': theme.radius || '0.5rem',
     '--survey-radius-sm': `calc(${theme.radius || '0.5rem'} - 2px)`,
     '--survey-margin': theme.margin || '8px',
+    '--survey-question-spacing': `calc(${theme.margin || '8px'} * 3)`,
   };
   
   // 4. Apply variables to the scope
