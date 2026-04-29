@@ -16,7 +16,7 @@ const SurveyErrorMessage = React.forwardRef<HTMLDivElement, SurveyErrorMessagePr
         ref={ref}
         role="alert"
         className={cn(
-          'flex items-center gap-3 w-full p-3 border-2 border-survey-destructive',
+          'flex items-center gap-3 w-full p-3 border border-survey-destructive',
           className,
         )}
         style={{ borderRadius: 'var(--component-button-radius)' }}
