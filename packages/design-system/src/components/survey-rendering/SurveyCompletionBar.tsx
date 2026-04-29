@@ -78,8 +78,8 @@ const SurveyCompletionBar = React.forwardRef<HTMLDivElement, SurveyCompletionBar
       >
         {showInlineLabel ? (
           <div className="flex w-full items-center gap-2 text-survey-body font-survey-regular text-survey-foreground leading-none">
-            <span className="whitespace-nowrap">{pctText}</span>
-            <span className="flex-1 min-w-px text-right">{label}</span>
+            <span className="flex-1 min-w-px">{label}</span>
+            <span className="whitespace-nowrap text-right">{pctText}</span>
           </div>
         ) : (
           <div className={trackClass}>
@@ -98,8 +98,8 @@ const SurveyCompletionBar = React.forwardRef<HTMLDivElement, SurveyCompletionBar
 
         {showBelowLabel && (
           <div className="flex w-full items-center gap-2 text-survey-body font-survey-regular text-survey-foreground leading-none">
-            <span className="whitespace-nowrap">{pctText}</span>
-            <span className="flex-1 min-w-px text-right">{label}</span>
+            <span className="flex-1 min-w-px">{label}</span>
+            <span className="whitespace-nowrap text-right">{pctText}</span>
           </div>
         )}
       </div>

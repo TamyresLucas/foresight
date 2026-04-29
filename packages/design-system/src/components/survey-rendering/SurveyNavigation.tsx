@@ -86,10 +86,7 @@ const SurveyNavigation = React.forwardRef<HTMLDivElement, SurveyNavigationProps>
               onClick={onPrevious}
               style={{ borderRadius: 'var(--component-button-radius)' }}
               className={cn(
-                "border-survey-primary text-survey-primary h-10 px-6 hover:bg-transparent flex items-center gap-2 transition-all focus-visible:outline-none",
-                (focused === 'previous' || true) && "border",
-                focused !== 'previous' && "group-has-[:focus-visible]/survey-nav-previous:border",
-                focused === 'previous' ? "border" : "border-2",
+                "border border-survey-primary text-survey-primary h-10 px-6 hover:bg-transparent flex items-center gap-2 transition-all focus-visible:outline-none",
                 hoverOverlayClass
               )}
             >
@@ -105,10 +102,11 @@ const SurveyNavigation = React.forwardRef<HTMLDivElement, SurveyNavigationProps>
             <div className="flex gap-4 items-center">
               {showSeeResponses && renderFocusedWrapper('see-responses', (
                 <Button
+                  variant="outline"
                   onClick={onSeeResponses}
                   style={{ borderRadius: 'var(--component-button-radius)' }}
                   className={cn(
-                    "bg-survey-muted-background text-foreground h-10 px-6 hover:bg-survey-muted-background transition-all border-none focus-visible:outline-none",
+                    "border border-survey-border-interactive text-foreground h-10 px-6 hover:bg-transparent transition-all focus-visible:outline-none",
                     hoverOverlayClass
                   )}
                 >
@@ -118,10 +116,11 @@ const SurveyNavigation = React.forwardRef<HTMLDivElement, SurveyNavigationProps>
 
               {showQuit && renderFocusedWrapper('quit', (
                 <Button
+                  variant="outline"
                   onClick={onQuit}
                   style={{ borderRadius: 'var(--component-button-radius)' }}
                   className={cn(
-                    "bg-survey-muted-background text-foreground h-10 px-6 hover:bg-survey-muted-background flex items-center gap-2 transition-all border-none focus-visible:outline-none",
+                    "border border-survey-border-interactive text-foreground h-10 px-6 hover:bg-transparent flex items-center gap-2 transition-all focus-visible:outline-none",
                     hoverOverlayClass
                   )}
                 >

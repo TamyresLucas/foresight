@@ -13,11 +13,21 @@ export interface OpenEndAnswerProps
 }
 
 const OpenEndAnswer = React.forwardRef<HTMLTextAreaElement, OpenEndAnswerProps>(
-  ({ className, label, required = false, selected = false, focused = false, error, ...props }, ref) => {
+  ({ className, label, required = false, selected, focused = false, error, onBlur, ...props }, ref) => {
+    const [internalSelected, setInternalSelected] = React.useState(false);
+    const isSelected = selected ?? internalSelected;
+
+    const handleBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+      setInternalSelected(false);
+      onBlur?.(e);
+    };
+
     return (
       <div 
         className="flex flex-col w-full group/survey-input"
         style={{ gap: 'var(--survey-margin)', marginBottom: 'var(--survey-margin)' }}
+        onPointerDown={() => setInternalSelected(true)}
+        data-selected={isSelected}
       >
         {/* Label */}
         {label && (
@@ -29,27 +39,26 @@ const OpenEndAnswer = React.forwardRef<HTMLTextAreaElement, OpenEndAnswerProps>(
 
         {/* 
           Multi-layered concentric focus frame.
-          Activated by 'focused' prop OR browser :focus-visible (tab navigation).
+          Activated by 'focused' prop (for Storybook) OR browser :focus-visible (tab navigation).
+          Click triggers 'selected' state (blue border).
         */}
         <div
           className={cn(
             'rounded-[calc(var(--radius)+2px)] p-[2px] border-2 w-full transition-all bg-transparent',
             'border-transparent', // Default state
+            'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-survey-border-interactive',
             focused && 'border-survey-border-interactive',
-            !focused && 'group-has-[:focus-visible]/survey-input:border-survey-border-interactive',
-            selected && focused && 'border-survey-border-selected',
-            selected && 'group-has-[:focus-visible]/survey-input:border-survey-border-selected',
+            focused && isSelected && 'border-survey-border-selected'
           )}
         >
           <div
             className={cn(
               'rounded-lg border bg-transparent transition-all w-full',
-              // Inner frame logic matching TextAnswer
-              focused ? 'border' : 'group-has-[:focus-visible]/survey-input:border',
-              selected 
-                ? (error ? 'border-survey-destructive' : (focused ? 'border' : 'border-2 border-survey-border-selected')) 
-                : (error ? 'border-survey-destructive' : 'border-survey-border-interactive'),
-              selected && focused && 'border-survey-border-selected border'
+              'border-survey-border-interactive', // Default
+              'group-data-[selected=true]/survey-input:border-survey-border-selected group-data-[selected=true]/survey-input:border-2',
+              'group-has-[:focus-visible]/survey-input:border',
+              focused && 'border',
+              error && 'border-survey-destructive'
             )}
           >
             <textarea
@@ -59,6 +68,7 @@ const OpenEndAnswer = React.forwardRef<HTMLTextAreaElement, OpenEndAnswerProps>(
                 className,
               )}
               ref={ref}
+              onBlur={handleBlur}
               {...props}
             />
           </div>

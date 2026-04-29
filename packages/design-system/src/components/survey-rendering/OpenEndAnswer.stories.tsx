@@ -87,3 +87,11 @@ export const WithValue: Story = {
     focused: true,
   },
 };
+
+export const Interactive: Story = {
+  args: {
+    label: 'Interactive (click or tab to test)',
+    required: true,
+    placeholder: 'Click me for blue border, Tab for gray...',
+  },
+};

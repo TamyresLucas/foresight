@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Changed
+- Restyled `See Responses` and `Quit` buttons in `SurveyNavigation` to match the `Previous` button's outline style. They now use `border-survey-border-interactive` and `text-foreground` instead of a muted background.
+- Updated `SurveyCompletionBar` layout to align the label ("Survey completion") to the left and the percentage to the right.
+- Refactored `OpenEndAnswer`, `TextAnswer`, and `LanguageSelector` to follow the Foresight design pattern for selected and focused states.
+  - Implemented internal selection state on click (pointer down) with a blue border (`--survey-border-selected`).
+  - Restricted the gray focus ring (`--survey-border-interactive`) to keyboard navigation (`:focus-visible`).
+  - Simplified component styling by replacing nested ternary logic with data-attribute-driven Tailwind classes (`data-selected`).
+  - Updated `LanguageSelector` to use `focus-visible:` classes for dropdown items.
+  - Added new "Interactive" stories to `OpenEndAnswer` and `TextAnswer` for behavior validation.
 ### Added
 - Added `--brand-question-spacing` and `--survey-question-spacing` tokens that scale with the margin preset (3x `theme.margin`).
 - Applied the new `--survey-question-spacing` token to the vertical gap between question blocks in the `Theme Editor` live preview.

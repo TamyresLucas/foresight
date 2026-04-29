@@ -120,7 +120,7 @@ const LanguageSelector = React.forwardRef<HTMLButtonElement, LanguageSelectorPro
               key={lang.code}
               onClick={() => onLanguageChange?.(lang.code)}
               className={cn(
-                "cursor-pointer focus:bg-survey-rendering-overlay focus:text-survey-foreground transition-colors",
+                "cursor-pointer focus-visible:bg-survey-rendering-overlay focus-visible:text-survey-foreground transition-colors",
                 selectedLanguage === lang.code && "font-bold text-survey-primary"
               )}
             >
