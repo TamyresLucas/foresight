@@ -38,6 +38,7 @@ export const WithError: Story = {
 };
 
 export const GroupWithError: Story = {
+  args: { label: 'Option' },
   render: () => (
     <CheckboxGroup error="This question is required">
       <CheckboxOption label="Option" />

@@ -13,6 +13,10 @@ All notable changes to this project will be documented in this file.
   - Updated `LanguageSelector` to use `focus-visible:` classes for dropdown items.
   - Added new "Interactive" stories to `OpenEndAnswer` and `TextAnswer` for behavior validation.
 ### Added
+- Added Desktop/Mobile viewport toggle in `ThemeEditor` UI for visual debugging.
+  - Extended `ThemeEditorProps` with `viewport` and `onViewportChange`.
+  - Added "Preview Mode" section with `Monitor` and `Smartphone` icons from `lucide-react`.
+  - Updated `ThemeEditor.stories.tsx` to include an interactive viewport toggle that adjusts the width of the `LivePreview` (375px for mobile, max-w-2xl for desktop).
 - Added `--brand-question-spacing` and `--survey-question-spacing` tokens that scale with the margin preset (3x `theme.margin`).
 - Applied the new `--survey-question-spacing` token to the vertical gap between question blocks in the `Theme Editor` live preview.
 - Implemented `OpenEndAnswer` component for Survey Rendering:

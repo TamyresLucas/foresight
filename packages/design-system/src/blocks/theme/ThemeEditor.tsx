@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Save, RotateCcw, Trash2, Plus } from 'lucide-react';
+import { Save, RotateCcw, Trash2, Plus, Monitor, Smartphone } from 'lucide-react';
 
 import { 
   Theme, 
@@ -14,6 +14,7 @@ import {
   FORESIGHT_DEFAULT 
 } from '../../lib/theme';
 
+import { cn } from '../../lib/utils';
 import { ColorPicker } from '../../components/ui/color-picker';
 import { Button } from '../../components/ui/button';
 import { Label } from '../../components/ui/label';
@@ -66,12 +67,16 @@ interface ThemeEditorProps {
   initialTheme?: Theme;
   onSave?: (theme: Theme) => void;
   onDelete?: (themeId: string) => void;
+  viewport?: 'desktop' | 'mobile';
+  onViewportChange?: (viewport: 'desktop' | 'mobile') => void;
 }
 
 export function ThemeEditor({ 
   initialTheme = FORESIGHT_DEFAULT, 
   onSave,
-  onDelete
+  onDelete,
+  viewport = 'desktop',
+  onViewportChange
 }: ThemeEditorProps) {
   const [availableThemes, setAvailableThemes] = React.useState<Theme[]>([]);
   
@@ -151,6 +156,41 @@ export function ThemeEditor({
         <CardTitle className="text-lg font-bold">Theme Editor</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
+        {/* Preview Mode */}
+        <div className="space-y-2">
+          <Label>Preview Mode</Label>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => onViewportChange?.('desktop')}
+              aria-pressed={viewport === 'desktop'}
+              aria-label="Desktop view"
+              className={cn(
+                "flex-1 flex items-center justify-center gap-2 h-9 rounded-md border border-primary/40 transition-colors",
+                viewport === 'desktop' ? "bg-primary text-primary-foreground" : "bg-muted/50 hover:bg-muted"
+              )}
+            >
+              <Monitor className="h-4 w-4" />
+              Desktop
+            </button>
+            <button
+              type="button"
+              onClick={() => onViewportChange?.('mobile')}
+              aria-pressed={viewport === 'mobile'}
+              aria-label="Mobile view"
+              className={cn(
+                "flex-1 flex items-center justify-center gap-2 h-9 rounded-md border border-primary/40 transition-colors",
+                viewport === 'mobile' ? "bg-primary text-primary-foreground" : "bg-muted/50 hover:bg-muted"
+              )}
+            >
+              <Smartphone className="h-4 w-4" />
+              Mobile
+            </button>
+          </div>
+        </div>
+
+        <SelectSeparator className="my-2" />
+
         {/* Theme Selector */}
         <div className="space-y-2">
           <Label>Selected Theme</Label>

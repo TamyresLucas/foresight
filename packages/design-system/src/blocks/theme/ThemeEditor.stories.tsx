@@ -9,6 +9,7 @@ import { LanguageSelector } from '../../components/survey-rendering/LanguageSele
 import { CheckboxOption, CheckboxGroup } from '../../components/survey-rendering/Checkbox';
 import { RadioGroup, RadioGroupOption } from '../../components/survey-rendering/RadioGroup';
 import { SurveyErrorMessage } from '../../components/survey-rendering/SurveyErrorMessage';
+import { cn } from '../../lib/utils';
 
 const meta: Meta = {
   title: 'Survey Rendering/Theme/ThemeEditor',
@@ -20,7 +21,7 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-const LivePreview = () => {
+const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile' }) => {
   const [textValue, setTextValue] = React.useState('');
   const [openValue, setOpenValue] = React.useState('');
   const [lang, setLang] = React.useState('en');
@@ -39,7 +40,10 @@ const LivePreview = () => {
 
   return (
     <div className="w-full min-h-screen bg-muted/20 overflow-y-auto p-12">
-      <div className="max-w-2xl mx-auto space-y-12">
+      <div className={cn(
+        "mx-auto space-y-12 transition-all duration-200",
+        viewport === 'mobile' ? "max-w-[375px]" : "max-w-2xl"
+      )}>
         {/* Top Toolbar */}
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold tracking-tight text-foreground">Company name</h2>
@@ -147,14 +151,18 @@ const LivePreview = () => {
 };
 
 export const Default: Story = {
-  render: () => (
-    <div className="flex h-screen w-full overflow-hidden bg-background">
-      <div className="w-[450px] shrink-0 border-r border-border overflow-y-auto p-6 scrollbar-none">
-        <ThemeEditor />
+  render: () => {
+    const [viewport, setViewport] = React.useState<'desktop' | 'mobile'>('desktop');
+    
+    return (
+      <div className="flex h-screen w-full overflow-hidden bg-background">
+        <div className="w-[450px] shrink-0 border-r border-border overflow-y-auto p-6 scrollbar-none">
+          <ThemeEditor viewport={viewport} onViewportChange={setViewport} />
+        </div>
+        <div className="flex-1 overflow-y-auto scrollbar-none">
+          <LivePreview viewport={viewport} />
+        </div>
       </div>
-      <div className="flex-1 overflow-y-auto scrollbar-none">
-        <LivePreview />
-      </div>
-    </div>
-  ),
+    );
+  },
 };
