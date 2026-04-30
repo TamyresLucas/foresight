@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ThemeEditor } from './ThemeEditor';
 import { TextAnswer } from '../../components/survey-rendering/TextAnswer';
 import { OpenEndAnswer } from '../../components/survey-rendering/OpenEndAnswer';
+import { DateAnswer } from '../../components/survey-rendering/DateAnswer';
 import { SurveyNavigation } from '../../components/survey-rendering/SurveyNavigation';
 import { SurveyCompletionBar } from '../../components/survey-rendering/SurveyCompletionBar';
 import { LanguageSelector } from '../../components/survey-rendering/LanguageSelector';
@@ -24,6 +25,7 @@ type Story = StoryObj;
 const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile' }) => {
   const [textValue, setTextValue] = React.useState('');
   const [openValue, setOpenValue] = React.useState('');
+  const [dateValue, setDateValue] = React.useState('');
   const [lang, setLang] = React.useState('en');
   const [checkedOptions, setCheckedOptions] = React.useState({ a: false, b: false, c: false });
   const [contactMethod, setContactMethod] = React.useState<string>('');
@@ -37,6 +39,7 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
       ? requiredErrorMsg
       : undefined;
   const openError = showError && !openValue ? requiredErrorMsg : undefined;
+  const dateError = showError && !dateValue ? requiredErrorMsg : undefined;
 
   return (
     <div className="w-full min-h-screen bg-muted/20 overflow-y-auto p-12">
@@ -120,6 +123,14 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
             value={openValue}
             onChange={(e) => setOpenValue(e.target.value)}
             error={openError}
+          />
+
+          <DateAnswer
+            label="When did you start your latest project?"
+            required
+            value={dateValue}
+            onChange={(e) => setDateValue(e.target.value)}
+            error={dateError}
           />
 
           <div className="pt-8 border-t border-border-decorative space-y-8">
