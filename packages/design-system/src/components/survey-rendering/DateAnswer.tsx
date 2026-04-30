@@ -24,8 +24,8 @@ const DateAnswer = React.forwardRef<HTMLInputElement, DateAnswerProps>(
     };
 
     return (
-      <div 
-        className="flex flex-col w-full group/survey-input"
+      <div
+        className="flex flex-col w-fit group/survey-input"
         style={{ gap: 'var(--survey-margin)', marginBottom: 'var(--survey-margin)' }}
         onPointerDown={() => setInternalSelected(true)}
         data-selected={isSelected}
@@ -55,7 +55,7 @@ const DateAnswer = React.forwardRef<HTMLInputElement, DateAnswerProps>(
         >
           <div
             className={cn(
-              'flex w-full h-10 px-2 py-1.5 items-center gap-[10px] rounded-lg border bg-transparent transition-all relative',
+              'flex w-fit h-10 px-2 py-1.5 items-center gap-[10px] rounded-lg border bg-transparent transition-all relative',
               'border-survey-border-interactive', // Default
               'group-data-[selected=true]/survey-input:border-survey-border-selected group-data-[selected=true]/survey-input:border-2',
               'group-has-[:focus-visible]/survey-input:border',
