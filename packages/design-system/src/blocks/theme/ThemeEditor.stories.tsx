@@ -10,6 +10,7 @@ import { SurveyCompletionBar } from '../../components/survey-rendering/SurveyCom
 import { LanguageSelector } from '../../components/survey-rendering/LanguageSelector';
 import { CheckboxOption, CheckboxGroup } from '../../components/survey-rendering/Checkbox';
 import { RadioGroup, RadioGroupOption } from '../../components/survey-rendering/RadioGroup';
+import { ChoiceGrid } from '../../components/survey-rendering/ChoiceGrid';
 import { SurveyErrorMessage } from '../../components/survey-rendering/SurveyErrorMessage';
 import { cn } from '../../lib/utils';
 
@@ -31,7 +32,22 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
   const [lang, setLang] = React.useState('en');
   const [checkedOptions, setCheckedOptions] = React.useState({ a: false, b: false, c: false });
   const [contactMethod, setContactMethod] = React.useState<string>('');
+  const [gridValue, setGridValue] = React.useState<Record<string, string>>({});
   const [showError, setShowError] = React.useState(false);
+
+  const gridRows = [
+    { id: 'option-1', label: 'Speed' },
+    { id: 'option-2', label: 'Patience' },
+    { id: 'option-3', label: 'Accuracy' },
+  ];
+
+  const gridColumns = [
+    { value: 'very_satisfied', label: 'Very satisfied' },
+    { value: 'somewhat_satisfied', label: 'Somewhat satisfied' },
+    { value: 'neither', label: 'Neither satisfied or dissatisfied' },
+    { value: 'somewhat_dissatisfied', label: 'Somewhat dissatisfied' },
+    { value: 'very_dissatisfied', label: 'Very dissatisfied' },
+  ];
 
   const requiredErrorMsg = 'This question is required';
   const textError = showError && !textValue ? requiredErrorMsg : undefined;
@@ -43,6 +59,7 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
   const openError = showError && !openValue ? requiredErrorMsg : undefined;
   const dateError = showError && !dateValue ? requiredErrorMsg : undefined;
   const dropdownError = showError && !dropdownValue ? requiredErrorMsg : undefined;
+  const gridError = showError && Object.keys(gridValue).length < gridRows.length ? 'Please answer all rows' : undefined;
 
   return (
     <div className="w-full min-h-screen bg-muted/20 overflow-y-auto p-12">
@@ -127,6 +144,19 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
             onChange={(e) => setOpenValue(e.target.value)}
             error={openError}
           />
+
+          <div className="space-y-4">
+            <label className="text-survey-body font-survey font-survey-regular text-survey-foreground">
+              Please rate your experience with our services:
+            </label>
+            <ChoiceGrid
+              rows={gridRows}
+              columns={gridColumns}
+              value={gridValue}
+              onValueChange={setGridValue}
+              error={gridError}
+            />
+          </div>
 
           <DateAnswer
             label="When did you start your latest project?"

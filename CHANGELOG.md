@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Changed
+- `ChoiceGrid`: Refined component for a cleaner, "Mobile-first" minimalist look while maintaining Desktop naming in Storybook.
+  - Renamed variations to **Desktop** in Storybook for clarity.
+  - Applied `max-w-2xl mx-auto` to the component to match the standard survey page width.
+  - Refactored rendering to use row-level bottom borders only and 0 corner radius.
+  - Updated column headers to use the standard `text-survey-foreground` color token.
+  - Reduced table cell padding from 16px to 8px for a more compact desktop layout.
+  - Standardized radio button size to 16px (w-4 h-4) with a 6px (w-1.5 h-1.5) indicator, matching the standalone `RadioGroup`.
+  - Unified hover states by applying the overlay at the row level instead of the cell level.
+  - Removed selection-state background highlights, keeping the grid backgrounds neutral as per survey standards.
+  - Fixed an issue where the mobile accordion view could change width when opened/closed.
 - `theme-editor`: include `DropdownAnswer` in live preview.
 - Restyled `See Responses` and `Quit` buttons in `SurveyNavigation` to match the `Previous` button's outline style. They now use `border-survey-border-interactive` and `text-foreground` instead of a muted background.
 - Updated `SurveyCompletionBar` layout to align the label ("Survey completion") to the left and the percentage to the right.
@@ -27,7 +37,10 @@ All notable changes to this project will be documented in this file.
 - Added `--brand-question-spacing` and `--survey-question-spacing` tokens that scale with the margin preset (3x `theme.margin`).
 - Applied the new `--survey-question-spacing` token to the vertical gap between question blocks in the `Theme Editor` live preview.
 - Implemented `OpenEndAnswer` component for Survey Rendering:
-... (existing entries)
+  - Added support for label with required indicator, placeholder, and error messages.
+  - Implemented the Foresight concentric focus ring pattern (gray ring on tab focus, blue border on click).
+  - Created comprehensive Storybook stories covering all visual states (Default, Focused, Selected, Error, Interactive).
+  - Exported `OpenEndAnswer` from the main design system index.
 ### Fixed
 - Fixed `DropdownAnswer` focus ring alignment by ensuring the outer wrapper matches the trigger width (`w-fit`) and adding `box-border` to the trigger.
 - Improved Vercel deployment reliability by standardizing the Storybook build command to `npm run build-storybook`.
