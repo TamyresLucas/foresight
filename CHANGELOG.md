@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Changed
+- `theme-editor`: include `DropdownAnswer` in live preview.
 - Restyled `See Responses` and `Quit` buttons in `SurveyNavigation` to match the `Previous` button's outline style. They now use `border-survey-border-interactive` and `text-foreground` instead of a muted background.
 - Updated `SurveyCompletionBar` layout to align the label ("Survey completion") to the left and the percentage to the right.
 - Refactored `OpenEndAnswer`, `TextAnswer`, and `LanguageSelector` to follow the Foresight design pattern for selected and focused states.
@@ -13,6 +14,12 @@ All notable changes to this project will be documented in this file.
   - Updated `LanguageSelector` to use `focus-visible:` classes for dropdown items.
   - Added new "Interactive" stories to `OpenEndAnswer` and `TextAnswer` for behavior validation.
 ### Added
+- survey-rendering: add DropdownPopUp component (standalone listbox using survey design tokens)
+- Implemented `DropdownAnswer` component for Survey Rendering using `@radix-ui/react-select`.
+  - Added support for label with required indicator, placeholder, and error messages.
+  - Implemented the Foresight concentric focus ring pattern (gray ring on tab focus, blue border on click).
+  - Created comprehensive Storybook stories covering all visual states (Default, Focused, Selected, Error, Interactive).
+  - Exported `DropdownAnswer` and `DateAnswer` from the main design system index.
 - Added Desktop/Mobile viewport toggle in `ThemeEditor` UI for visual debugging.
   - Extended `ThemeEditorProps` with `viewport` and `onViewportChange`.
   - Added "Preview Mode" section with `Monitor` and `Smartphone` icons from `lucide-react`.
@@ -22,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Implemented `OpenEndAnswer` component for Survey Rendering:
 ... (existing entries)
 ### Fixed
+- Fixed `DropdownAnswer` focus ring alignment by ensuring the outer wrapper matches the trigger width (`w-fit`) and adding `box-border` to the trigger.
 - Improved Vercel deployment reliability by standardizing the Storybook build command to `npm run build-storybook`.
 - Fixed CSS syntax warnings ("Expected identifier but found whitespace") in `tokens-survey.css` by using intermediate variables for `var()` fallbacks, ensuring compatibility with strict CSS parsers used in Storybook 8 builds.
   - Added multi-line text input (textarea) support with dedicated survey tokens.

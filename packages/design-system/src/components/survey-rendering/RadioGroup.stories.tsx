@@ -72,14 +72,24 @@ export const WithError: Story = {
   ),
 };
 
-export const WithRealOptions: Story = {
+export const WithDisabledOptions: Story = {
   render: (args) => (
-    <RadioGroup {...args} defaultValue="satisfied">
-      <RadioGroupOption value="very-satisfied" label="Very satisfied" />
-      <RadioGroupOption value="satisfied" label="Satisfied" />
-      <RadioGroupOption value="neutral" label="Neutral" />
-      <RadioGroupOption value="dissatisfied" label="Dissatisfied" />
-      <RadioGroupOption value="very-dissatisfied" label="Very dissatisfied" />
+    <RadioGroup {...args}>
+      <RadioGroupOption value="option-1" label="Enabled Option" />
+      <RadioGroupOption value="option-2" label="Disabled Option" disabled />
+      <RadioGroupOption value="option-3" label="Enabled Option" />
+      <RadioGroupOption value="option-4" label="Disabled Option" disabled />
+    </RadioGroup>
+  ),
+};
+
+export const AllDisabled: Story = {
+  render: (args) => (
+    <RadioGroup {...args}>
+      <RadioGroupOption value="option-1" label="Disabled Option 1" disabled />
+      <RadioGroupOption value="option-2" label="Disabled Option 2" disabled />
+      <RadioGroupOption value="option-3" label="Disabled Option 3" disabled />
+      <RadioGroupOption value="option-4" label="Disabled Option 4" disabled />
     </RadioGroup>
   ),
 };

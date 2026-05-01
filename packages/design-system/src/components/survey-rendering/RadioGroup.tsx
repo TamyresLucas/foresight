@@ -39,13 +39,14 @@ export interface RadioGroupOptionProps {
   label: string;
   id?: string;
   focused?: boolean;
+  disabled?: boolean;
   className?: string;
 }
 
 const RadioGroupOption = React.forwardRef<
   HTMLLabelElement,
   RadioGroupOptionProps
->(({ value, label, id, focused = false, className }, ref) => {
+>(({ value, label, id, focused = false, disabled = false, className }, ref) => {
   const itemId = id ?? `survey-option-${value}`;
   const hasError = React.useContext(RadioGroupErrorContext);
   return (
@@ -62,12 +63,14 @@ const RadioGroupOption = React.forwardRef<
         "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-survey-border-interactive has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-survey-background",
         "[&:has([data-state=checked]):has(:focus-visible)]:ring-survey-border-selected",
         hasError && "border-2 border-survey-destructive has-[[data-state=checked]]:border-survey-destructive ring-0 has-[:focus-visible]:ring-0",
+        disabled && "cursor-not-allowed opacity-50",
         className,
       )}
     >
       <RadioGroupPrimitive.Item
         id={itemId}
         value={value}
+        disabled={disabled}
         className={cn(
           "flex-shrink-0 w-4 h-4 rounded-full border-2 transition-colors",
           "border-survey-border-interactive",
@@ -80,7 +83,10 @@ const RadioGroupOption = React.forwardRef<
           <span className="block w-1.5 h-1.5 rounded-full bg-white" />
         </RadioGroupPrimitive.Indicator>
       </RadioGroupPrimitive.Item>
-      <span className="text-survey-foreground text-survey-body font-survey-regular leading-none">
+      <span className={cn(
+        "text-survey-foreground text-survey-body font-survey-regular leading-none",
+        disabled && "text-survey-muted-foreground"
+      )}>
         {label}
       </span>
     </label>

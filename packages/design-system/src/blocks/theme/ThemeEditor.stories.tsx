@@ -4,6 +4,7 @@ import { ThemeEditor } from './ThemeEditor';
 import { TextAnswer } from '../../components/survey-rendering/TextAnswer';
 import { OpenEndAnswer } from '../../components/survey-rendering/OpenEndAnswer';
 import { DateAnswer } from '../../components/survey-rendering/DateAnswer';
+import { DropdownAnswer } from '../../components/survey-rendering/DropdownAnswer';
 import { SurveyNavigation } from '../../components/survey-rendering/SurveyNavigation';
 import { SurveyCompletionBar } from '../../components/survey-rendering/SurveyCompletionBar';
 import { LanguageSelector } from '../../components/survey-rendering/LanguageSelector';
@@ -26,6 +27,7 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
   const [textValue, setTextValue] = React.useState('');
   const [openValue, setOpenValue] = React.useState('');
   const [dateValue, setDateValue] = React.useState('');
+  const [dropdownValue, setDropdownValue] = React.useState<string>('');
   const [lang, setLang] = React.useState('en');
   const [checkedOptions, setCheckedOptions] = React.useState({ a: false, b: false, c: false });
   const [contactMethod, setContactMethod] = React.useState<string>('');
@@ -40,6 +42,7 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
       : undefined;
   const openError = showError && !openValue ? requiredErrorMsg : undefined;
   const dateError = showError && !dateValue ? requiredErrorMsg : undefined;
+  const dropdownError = showError && !dropdownValue ? requiredErrorMsg : undefined;
 
   return (
     <div className="w-full min-h-screen bg-muted/20 overflow-y-auto p-12">
@@ -131,6 +134,21 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
             value={dateValue}
             onChange={(e) => setDateValue(e.target.value)}
             error={dateError}
+          />
+
+          <DropdownAnswer
+            label="What is your preferred contact method?"
+            placeholder="Select answer"
+            required
+            options={[
+              { value: 'email', label: 'Email' },
+              { value: 'phone', label: 'Phone' },
+              { value: 'sms', label: 'SMS' },
+              { value: 'mail', label: 'Mail' },
+            ]}
+            value={dropdownValue}
+            onValueChange={setDropdownValue}
+            error={dropdownError}
           />
 
           <div className="pt-8 border-t border-border-decorative space-y-8">

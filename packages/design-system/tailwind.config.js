@@ -73,6 +73,7 @@ export default {
         survey: {
           primary: "hsl(var(--survey-primary))",
           foreground: "hsl(var(--survey-foreground))",
+          "muted-foreground": "hsl(var(--survey-muted-foreground))",
           background: "hsl(var(--survey-background))",
           "rendering-overlay": "hsl(0 0% 0% / 0.1)",
           "muted-background": "hsl(var(--survey-border-interactive) / 0.2)",

@@ -282,6 +282,7 @@
      without touching defaults. */
 
   --survey-foreground: 0 0% 14%;           /* #232323 */
+  --survey-muted-foreground: 0 0% 46%;     /* #757575 */
   --survey-background: 0 0% 100%;          /* #FFFFFF */
 
   --survey-primary: 233 86% 64%;           /* #5568F2 — reactive brand color */
@@ -308,6 +309,7 @@
 
   /* Survey Rendering Tokens (Dark) */
   --survey-foreground: 210 40% 98%;
+  --survey-muted-foreground: 0 0% 47%;     /* #787878 — min 4.6:1 contrast against #090c0f */
   --survey-background: 210 40% 6%;
   --survey-border-interactive: 210 40% 50%;
   --survey-border-selected: var(--brand-primary-dark);

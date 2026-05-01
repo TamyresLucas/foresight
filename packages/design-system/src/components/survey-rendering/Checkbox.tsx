@@ -34,13 +34,14 @@ export interface CheckboxOptionProps {
   id?: string;
   focused?: boolean;
   error?: boolean;
+  disabled?: boolean;
   checked?: boolean | "indeterminate";
   onCheckedChange?: (checked: boolean | "indeterminate") => void;
   className?: string;
 }
 
 const CheckboxOption = React.forwardRef<HTMLLabelElement, CheckboxOptionProps>(
-  ({ label, id, focused = false, error, checked, onCheckedChange, className }, ref) => {
+  ({ label, id, focused = false, error, disabled = false, checked, onCheckedChange, className }, ref) => {
     const itemId = id ?? `survey-checkbox-${label}`;
     const groupError = React.useContext(CheckboxGroupErrorContext);
     const hasError = error ?? groupError;
@@ -58,6 +59,7 @@ const CheckboxOption = React.forwardRef<HTMLLabelElement, CheckboxOptionProps>(
           "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-survey-border-interactive has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-survey-background",
           "[&:has([data-state=checked]):has(:focus-visible)]:ring-survey-border-selected",
           hasError && "border-2 border-survey-destructive has-[[data-state=checked]]:border-survey-destructive ring-0 has-[:focus-visible]:ring-0",
+          disabled && "cursor-not-allowed opacity-50",
           className,
         )}
       >
@@ -65,6 +67,7 @@ const CheckboxOption = React.forwardRef<HTMLLabelElement, CheckboxOptionProps>(
           id={itemId}
           checked={checked}
           onCheckedChange={onCheckedChange}
+          disabled={disabled}
           className={cn(
             "flex-shrink-0 w-4 h-4 rounded-[4px] border-2 transition-colors grid place-content-center",
             "border-survey-border-interactive",
@@ -77,7 +80,10 @@ const CheckboxOption = React.forwardRef<HTMLLabelElement, CheckboxOptionProps>(
             <Check className="h-3 w-3 stroke-[3]" />
           </CheckboxPrimitive.Indicator>
         </CheckboxPrimitive.Root>
-        <span className="text-survey-foreground text-survey-body font-survey-regular leading-none">
+        <span className={cn(
+          "text-survey-foreground text-survey-body font-survey-regular leading-none",
+          disabled && "text-survey-muted-foreground"
+        )}>
           {label}
         </span>
       </label>
