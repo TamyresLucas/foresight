@@ -60,6 +60,9 @@ export * from "./components/survey/BuildSidebar";
 export * from "./components/survey-rendering/TextAnswer";
 export * from "./components/survey-rendering/OpenEndAnswer";
 export * from "./components/survey-rendering/SurveyNavigation";
+export * from "./components/survey-rendering/DateAnswer";
+export * from "./components/survey-rendering/DropdownAnswer";
+export * from "./components/survey-rendering/DropdownPopUp";
 
 // Theme blocks
 export * from "./blocks/theme/ThemeEditor";
