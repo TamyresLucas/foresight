@@ -3,6 +3,7 @@
 import * as React from "react";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { cn } from "@/lib/utils";
+import { AlertCircle } from "../ui/icons";
 import {
   Accordion,
   AccordionContent,
@@ -161,6 +162,7 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                           key={column.value}
                           column={column}
                           rowId={row.id}
+                          rowValue={values[row.id]}
                           isFocused={focusedRow === row.id && focusedColumn === column.value}
                           disabled={disabled || row.disabled}
                         />
@@ -173,7 +175,10 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
           </div>
         </ChoiceGridErrorContext.Provider>
         {error && (
-          <p className="text-xs font-survey font-survey-regular text-survey-destructive w-full mt-2">
+          <p
+            className="text-xs font-survey font-survey-regular text-survey-destructive w-full md:mt-2"
+            style={{ marginTop: 'var(--survey-margin)' }}
+          >
             {error}
           </p>
         )}
@@ -242,15 +247,18 @@ const ChoiceGridCell = ({
 const ChoiceGridMobileOption = ({
   column,
   rowId,
+  rowValue,
   isFocused,
   disabled,
 }: {
   column: ChoiceGridColumn;
   rowId: string;
+  rowValue?: string;
   isFocused: boolean;
   disabled?: boolean;
 }) => {
   const hasError = React.useContext(ChoiceGridErrorContext);
+  const isRowUnanswered = !rowValue;
   const id = `mobile-${rowId}-${column.value}`;
 
   return (
@@ -265,6 +273,9 @@ const ChoiceGridMobileOption = ({
         disabled && "cursor-not-allowed opacity-50 hover:bg-transparent"
       )}
     >
+      {hasError && isRowUnanswered && (
+        <AlertCircle className="flex-shrink-0 w-4 h-4 text-survey-destructive" />
+      )}
       <RadioGroupPrimitive.Item
         id={id}
         value={column.value}
