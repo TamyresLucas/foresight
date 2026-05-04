@@ -136,8 +136,8 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
           <div className="md:hidden w-full">
             <Accordion type="single" collapsible className="w-full flex flex-col">
               {rows.map((row) => (
-                <AccordionItem 
-                  key={row.id} 
+                <AccordionItem
+                  key={row.id}
                   value={row.id}
                   className={cn(
                     "w-full border-b border-survey-border-muted rounded-none"
@@ -145,11 +145,11 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                 >
                   <AccordionTrigger className={cn(
                     "px-4 py-4 hover:no-underline text-left text-survey-foreground text-survey-body font-survey-regular rounded-none",
-                    (disabled || row.disabled) && "opacity-50"
+                    (disabled || row.disabled) && "opacity-50 cursor-not-allowed"
                   )}>
                     {row.label}
                   </AccordionTrigger>
-                  <AccordionContent className="p-0">
+                  <AccordionContent className="p-0 bg-survey-muted-background">
                     <RadioGroupPrimitive.Root
                       className="flex flex-col p-0"
                       value={values[row.id]}
@@ -163,7 +163,6 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                           rowId={row.id}
                           isFocused={focusedRow === row.id && focusedColumn === column.value}
                           disabled={disabled || row.disabled}
-                          forceHover={forceHover}
                         />
                       ))}
                     </RadioGroupPrimitive.Root>
@@ -196,10 +195,8 @@ interface ChoiceGridCellProps {
 const ChoiceGridCell = ({
   rowId,
   columnValue,
-  isLast,
   isFocused,
   disabled,
-  forceHover,
 }: ChoiceGridCellProps) => {
   const hasError = React.useContext(ChoiceGridErrorContext);
   const cellId = `cell-${rowId}-${columnValue}`;
@@ -247,13 +244,11 @@ const ChoiceGridMobileOption = ({
   rowId,
   isFocused,
   disabled,
-  forceHover,
 }: {
   column: ChoiceGridColumn;
   rowId: string;
   isFocused: boolean;
   disabled?: boolean;
-  forceHover?: boolean;
 }) => {
   const hasError = React.useContext(ChoiceGridErrorContext);
   const id = `mobile-${rowId}-${column.value}`;
@@ -263,12 +258,10 @@ const ChoiceGridMobileOption = ({
       htmlFor={id}
       className={cn(
         "flex items-center gap-3 w-full px-4 py-4 cursor-pointer select-none",
-        "border-b border-survey-border-muted last:border-0 bg-survey-background rounded-none",
-        "transition-colors hover:bg-survey-muted-background",
-        forceHover && "bg-survey-muted-background",
-        "has-[[data-state=checked]]:border-survey-border-selected",
+        "border-b border-survey-border-muted last:border-0 rounded-none",
+        "transition-colors",
         isFocused && "ring-2 ring-survey-border-interactive ring-inset",
-        "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-survey-border-interactive",
+        "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-survey-border-interactive has-[:focus-visible]:ring-inset",
         hasError && "text-survey-destructive",
         disabled && "cursor-not-allowed opacity-50"
       )}
