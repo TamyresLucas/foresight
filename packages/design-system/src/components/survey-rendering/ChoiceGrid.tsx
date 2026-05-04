@@ -72,7 +72,7 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
     return (
       <div
         ref={ref}
-        className={cn("flex flex-col gap-4 w-full max-w-2xl mx-auto font-survey", className)}
+        className={cn("flex flex-col gap-4 w-full max-w-sm md:max-w-2xl mx-auto font-survey", className)}
       >
         <ChoiceGridErrorContext.Provider value={!!error}>
           {/* Desktop View */}
