@@ -149,7 +149,7 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                   )}>
                     {row.label}
                   </AccordionTrigger>
-                  <AccordionContent className="p-0 bg-survey-muted-background">
+                  <AccordionContent className="p-0">
                     <RadioGroupPrimitive.Root
                       className="flex flex-col p-0"
                       value={values[row.id]}
@@ -257,13 +257,12 @@ const ChoiceGridMobileOption = ({
     <label
       htmlFor={id}
       className={cn(
-        "flex items-center gap-3 w-full px-4 py-4 cursor-pointer select-none",
-        "border-b border-survey-border-muted last:border-0 rounded-none",
-        "transition-colors",
+        "flex items-center gap-3 w-full px-4 py-4 cursor-pointer select-none rounded-none",
+        "transition-colors hover:bg-survey-muted-background",
         isFocused && "ring-2 ring-survey-border-interactive ring-inset",
         "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-survey-border-interactive has-[:focus-visible]:ring-inset",
         hasError && "text-survey-destructive",
-        disabled && "cursor-not-allowed opacity-50"
+        disabled && "cursor-not-allowed opacity-50 hover:bg-transparent"
       )}
     >
       <RadioGroupPrimitive.Item
