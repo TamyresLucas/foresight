@@ -144,7 +144,7 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                   )}
                 >
                   <AccordionTrigger className={cn(
-                    "w-full px-4 py-4 hover:no-underline text-left text-survey-foreground text-survey-body font-survey-regular rounded-none",
+                    "px-4 py-4 hover:no-underline text-left text-survey-foreground text-survey-body font-survey-regular rounded-none",
                     (disabled || row.disabled) && "opacity-50 cursor-not-allowed"
                   )}>
                     {row.label}
