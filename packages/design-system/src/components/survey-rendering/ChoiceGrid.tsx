@@ -140,7 +140,7 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                   key={row.id}
                   value={row.id}
                   className={cn(
-                    "w-full border-b border-survey-border-muted rounded-none"
+                    "w-full border-b border-survey-border-muted rounded-none last:border-b-0"
                   )}
                 >
                   <AccordionTrigger className={cn(
