@@ -270,7 +270,6 @@ const ChoiceGridMobileOption = ({
         "transition-colors hover:bg-survey-muted-background",
         isFocused && "ring-2 ring-survey-border-interactive ring-inset",
         "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-survey-border-interactive has-[:focus-visible]:ring-inset",
-        hasError && "text-survey-destructive",
         disabled && "cursor-not-allowed opacity-50 hover:bg-transparent"
       )}
     >
