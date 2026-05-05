@@ -12,7 +12,7 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <div className="w-screen max-w-[390px] md:max-w-2xl mx-auto border border-survey-border-muted rounded-survey-md">
+      <div className="w-screen max-w-[390px] md:max-w-2xl mx-auto">
         <Story />
       </div>
     ),

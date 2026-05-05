@@ -77,7 +77,7 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
       >
         <ChoiceGridErrorContext.Provider value={!!error}>
           {/* Desktop View */}
-          <div className="hidden md:block w-full overflow-x-auto">
+          <div className="hidden md:block w-full overflow-x-auto border border-survey-border-muted rounded-survey-md">
             <table role="grid" className="w-full border-collapse">
               <thead>
                 <tr className="border-b border-survey-border-muted text-survey-foreground text-survey-body font-survey-regular">
@@ -134,8 +134,8 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
           </div>
 
           {/* Mobile View - Accordion */}
-          <div className="md:hidden w-full">
-            <Accordion type="single" collapsible className="w-full flex flex-col">
+          <div className="md:hidden w-full flex flex-col">
+            <Accordion type="single" collapsible className="w-full flex flex-col border border-survey-border-muted rounded-survey-md overflow-hidden">
               {rows.map((row) => (
                 <AccordionItem
                   key={row.id}
@@ -176,7 +176,7 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
         </ChoiceGridErrorContext.Provider>
         {error && (
           <p
-            className="text-xs font-survey font-survey-regular text-survey-destructive w-full md:mt-2"
+            className="text-xs font-survey font-survey-regular text-survey-destructive w-full"
             style={{ marginTop: 'var(--survey-margin)' }}
           >
             {error}
