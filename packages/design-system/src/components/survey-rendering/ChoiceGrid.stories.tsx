@@ -12,7 +12,7 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <div className="w-full max-w-2xl mx-auto p-8">
+      <div className="w-screen max-w-[390px] md:max-w-2xl mx-auto">
         <Story />
       </div>
     ),
@@ -60,7 +60,7 @@ export const DesktopWithError: Story = {
   args: {
     rows: desktopRows,
     columns: desktopColumns,
-    error: 'Please answer all rows',
+    error: 'Please answer all options',
   },
 };
 
@@ -123,4 +123,78 @@ export const DesktopCellStates: Story = {
     rows: [{ id: 'row-1', label: 'Row Label' }],
     columns: [{ value: 'col-1', label: 'Column' }],
   }
+};
+
+// --- Mobile Stories ---
+
+export const MobileDefault: Story = {
+  name: 'Mobile / Default',
+  args: {
+    rows: desktopRows,
+    columns: desktopColumns,
+  },
+  parameters: {
+    viewport: {
+      defaultViewport: 'iphone12',
+    },
+  },
+};
+
+export const MobileSelected: Story = {
+  name: 'Mobile / Selected',
+  args: {
+    rows: desktopRows,
+    columns: desktopColumns,
+    defaultValue: { 'option-1': 'very_satisfied' },
+  },
+  parameters: {
+    viewport: {
+      defaultViewport: 'iphone12',
+    },
+  },
+};
+
+export const MobileWithError: Story = {
+  name: 'Mobile / WithError',
+  args: {
+    rows: desktopRows,
+    columns: desktopColumns,
+    error: 'Please answer all options',
+  },
+  parameters: {
+    viewport: {
+      defaultViewport: 'iphone12',
+    },
+  },
+};
+
+export const MobileDisabled: Story = {
+  name: 'Mobile / Disabled',
+  args: {
+    rows: desktopRows,
+    columns: desktopColumns,
+    disabled: true,
+  },
+  parameters: {
+    viewport: {
+      defaultViewport: 'iphone12',
+    },
+  },
+};
+
+export const MobileRowDisabled: Story = {
+  name: 'Mobile / RowDisabled',
+  args: {
+    rows: [
+      { id: 'option-1', label: 'Option' },
+      { id: 'option-2', label: 'Option', disabled: true },
+      { id: 'option-3', label: 'Option' },
+    ],
+    columns: desktopColumns,
+  },
+  parameters: {
+    viewport: {
+      defaultViewport: 'iphone12',
+    },
+  },
 };

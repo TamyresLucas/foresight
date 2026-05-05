@@ -3,6 +3,7 @@
 import * as React from "react";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { cn } from "@/lib/utils";
+import { AlertCircle } from "../ui/icons";
 import {
   Accordion,
   AccordionContent,
@@ -76,7 +77,7 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
       >
         <ChoiceGridErrorContext.Provider value={!!error}>
           {/* Desktop View */}
-          <div className="hidden md:block w-full overflow-x-auto">
+          <div className="hidden md:block w-full overflow-x-auto border border-survey-border-muted rounded-survey-md">
             <table role="grid" className="w-full border-collapse">
               <thead>
                 <tr className="border-b border-survey-border-muted text-survey-foreground text-survey-body font-survey-regular">
@@ -133,21 +134,26 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
           </div>
 
           {/* Mobile View - Accordion */}
-          <div className="md:hidden w-full">
-            <Accordion type="single" collapsible className="w-full flex flex-col">
+          <div className="md:hidden w-full flex flex-col">
+            <Accordion type="single" collapsible className="w-full flex flex-col border border-survey-border-muted rounded-survey-md overflow-hidden">
               {rows.map((row) => (
-                <AccordionItem 
-                  key={row.id} 
+                <AccordionItem
+                  key={row.id}
                   value={row.id}
                   className={cn(
-                    "w-full border-b border-survey-border-muted rounded-none"
+                    "w-full border-b border-survey-border-muted rounded-none last:border-b-0"
                   )}
                 >
                   <AccordionTrigger className={cn(
                     "px-4 py-4 hover:no-underline text-left text-survey-foreground text-survey-body font-survey-regular rounded-none",
-                    (disabled || row.disabled) && "opacity-50"
+                    (disabled || row.disabled) && "opacity-50 cursor-not-allowed"
                   )}>
-                    {row.label}
+                    <span className="flex items-center gap-2">
+                      {error && !values[row.id] && (
+                        <AlertCircle className="flex-shrink-0 w-4 h-4 text-survey-destructive" />
+                      )}
+                      {row.label}
+                    </span>
                   </AccordionTrigger>
                   <AccordionContent className="p-0">
                     <RadioGroupPrimitive.Root
@@ -163,7 +169,6 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                           rowId={row.id}
                           isFocused={focusedRow === row.id && focusedColumn === column.value}
                           disabled={disabled || row.disabled}
-                          forceHover={forceHover}
                         />
                       ))}
                     </RadioGroupPrimitive.Root>
@@ -174,7 +179,10 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
           </div>
         </ChoiceGridErrorContext.Provider>
         {error && (
-          <p className="text-xs font-survey font-survey-regular text-survey-destructive w-full mt-2">
+          <p
+            className="text-xs font-survey font-survey-regular text-survey-destructive w-full"
+            style={{ marginTop: 'var(--survey-margin)' }}
+          >
             {error}
           </p>
         )}
@@ -196,10 +204,8 @@ interface ChoiceGridCellProps {
 const ChoiceGridCell = ({
   rowId,
   columnValue,
-  isLast,
   isFocused,
   disabled,
-  forceHover,
 }: ChoiceGridCellProps) => {
   const hasError = React.useContext(ChoiceGridErrorContext);
   const cellId = `cell-${rowId}-${columnValue}`;
@@ -247,13 +253,11 @@ const ChoiceGridMobileOption = ({
   rowId,
   isFocused,
   disabled,
-  forceHover,
 }: {
   column: ChoiceGridColumn;
   rowId: string;
   isFocused: boolean;
   disabled?: boolean;
-  forceHover?: boolean;
 }) => {
   const hasError = React.useContext(ChoiceGridErrorContext);
   const id = `mobile-${rowId}-${column.value}`;
@@ -262,15 +266,11 @@ const ChoiceGridMobileOption = ({
     <label
       htmlFor={id}
       className={cn(
-        "flex items-center gap-3 w-full px-4 py-4 cursor-pointer select-none",
-        "border-b border-survey-border-muted last:border-0 bg-survey-background rounded-none",
+        "flex items-center gap-3 w-full px-4 py-4 cursor-pointer select-none rounded-none",
         "transition-colors hover:bg-survey-muted-background",
-        forceHover && "bg-survey-muted-background",
-        "has-[[data-state=checked]]:border-survey-border-selected",
         isFocused && "ring-2 ring-survey-border-interactive ring-inset",
-        "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-survey-border-interactive",
-        hasError && "text-survey-destructive",
-        disabled && "cursor-not-allowed opacity-50"
+        "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-survey-border-interactive has-[:focus-visible]:ring-inset",
+        disabled && "cursor-not-allowed opacity-50 hover:bg-transparent"
       )}
     >
       <RadioGroupPrimitive.Item
@@ -282,7 +282,6 @@ const ChoiceGridMobileOption = ({
           "border-survey-border-interactive",
           "data-[state=checked]:border-survey-border-selected data-[state=checked]:bg-survey-border-selected",
           "focus:outline-none focus-visible:outline-none",
-          hasError && "border-survey-destructive data-[state=checked]:border-survey-destructive data-[state=checked]:bg-survey-destructive",
         )}
       >
         <RadioGroupPrimitive.Indicator className="flex items-center justify-center w-full h-full">
