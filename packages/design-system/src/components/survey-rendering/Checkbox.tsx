@@ -12,9 +12,14 @@ export interface CheckboxGroupProps extends React.HTMLAttributes<HTMLDivElement>
 }
 
 const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps>(
-  ({ className, error, children, ...props }, ref) => {
+  ({ className, error, children, style, ...props }, ref) => {
     return (
-      <div ref={ref} className={cn("flex flex-col gap-2 w-full", className)} {...props}>
+      <div
+        ref={ref}
+        className={cn("flex flex-col gap-2 w-full", className)}
+        style={{ marginBottom: 'var(--survey-margin)', ...style }}
+        {...props}
+      >
         <CheckboxGroupErrorContext.Provider value={!!error}>
           {children}
         </CheckboxGroupErrorContext.Provider>

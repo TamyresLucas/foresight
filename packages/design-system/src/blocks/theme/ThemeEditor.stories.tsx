@@ -110,6 +110,7 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
             <RadioGroup value={contactMethod} onValueChange={setContactMethod} error={radioError}>
               <RadioGroupOption value="email" label="Email" />
               <RadioGroupOption value="phone" label="Phone" />
+              <RadioGroupOption value="sms" label="SMS" />
             </RadioGroup>
           </div>
 
