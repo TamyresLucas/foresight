@@ -148,7 +148,12 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                     "px-4 py-4 hover:no-underline text-left text-survey-foreground text-survey-body font-survey-regular rounded-none",
                     (disabled || row.disabled) && "opacity-50 cursor-not-allowed"
                   )}>
-                    {row.label}
+                    <span className="flex items-center gap-2">
+                      {error && !values[row.id] && (
+                        <AlertCircle className="flex-shrink-0 w-4 h-4 text-survey-destructive" />
+                      )}
+                      {row.label}
+                    </span>
                   </AccordionTrigger>
                   <AccordionContent className="p-0">
                     <RadioGroupPrimitive.Root
@@ -162,7 +167,6 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                           key={column.value}
                           column={column}
                           rowId={row.id}
-                          rowValue={values[row.id]}
                           isFocused={focusedRow === row.id && focusedColumn === column.value}
                           disabled={disabled || row.disabled}
                         />
@@ -247,18 +251,15 @@ const ChoiceGridCell = ({
 const ChoiceGridMobileOption = ({
   column,
   rowId,
-  rowValue,
   isFocused,
   disabled,
 }: {
   column: ChoiceGridColumn;
   rowId: string;
-  rowValue?: string;
   isFocused: boolean;
   disabled?: boolean;
 }) => {
   const hasError = React.useContext(ChoiceGridErrorContext);
-  const isRowUnanswered = !rowValue;
   const id = `mobile-${rowId}-${column.value}`;
 
   return (
@@ -273,9 +274,6 @@ const ChoiceGridMobileOption = ({
         disabled && "cursor-not-allowed opacity-50 hover:bg-transparent"
       )}
     >
-      {hasError && isRowUnanswered && (
-        <AlertCircle className="flex-shrink-0 w-4 h-4 text-survey-destructive" />
-      )}
       <RadioGroupPrimitive.Item
         id={id}
         value={column.value}
