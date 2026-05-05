@@ -155,6 +155,7 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
               value={gridValue}
               onValueChange={setGridValue}
               error={gridError}
+              variant={viewport}
             />
           </div>
 

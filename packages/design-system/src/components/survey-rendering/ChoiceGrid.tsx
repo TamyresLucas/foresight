@@ -33,6 +33,11 @@ export interface ChoiceGridProps {
   error?: string;
   disabled?: boolean;
   className?: string;
+  /**
+   * Force a specific variant regardless of viewport width.
+   * Defaults to 'auto' (responsive via md: breakpoint).
+   */
+  variant?: 'auto' | 'desktop' | 'mobile';
 }
 
 /** @internal - simulation props for Storybook */
@@ -53,8 +58,14 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
       error,
       disabled = false,
       className,
+      variant = 'auto',
       ...rest
     } = props;
+
+    const desktopVisibility =
+      variant === 'desktop' ? 'block' : variant === 'mobile' ? 'hidden' : 'hidden md:block';
+    const mobileVisibility =
+      variant === 'mobile' ? 'block' : variant === 'desktop' ? 'hidden' : 'md:hidden';
 
     // Simulation props for storybook focus testing
     const { focusedRow, focusedColumn, forceHover } = rest as InternalChoiceGridProps;
@@ -77,7 +88,7 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
       >
         <ChoiceGridErrorContext.Provider value={!!error}>
           {/* Desktop View */}
-          <div className="hidden md:block w-full overflow-x-auto">
+          <div className={cn(desktopVisibility, "w-full overflow-x-auto")}>
             <table role="grid" className="w-full border-collapse">
               <thead>
                 <tr className="border-b border-survey-border-muted text-survey-foreground text-survey-body font-survey-regular">
@@ -134,7 +145,7 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
           </div>
 
           {/* Mobile View - Accordion */}
-          <div className="md:hidden w-full flex flex-col">
+          <div className={cn(mobileVisibility, "w-full flex flex-col")}>
             <Accordion type="single" collapsible className="w-full flex flex-col border border-survey-border-muted rounded-survey-md overflow-hidden">
               {rows.map((row) => (
                 <AccordionItem
