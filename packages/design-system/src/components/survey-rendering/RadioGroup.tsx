@@ -16,7 +16,7 @@ const RadioGroup = React.forwardRef<
   RadioGroupProps
 >(({ className, error, ...props }, ref) => {
   return (
-    <div className="flex flex-col gap-2 w-full">
+    <div className="flex flex-col gap-2 w-full" style={{ marginBottom: 'var(--survey-margin)' }}>
       <RadioGroupErrorContext.Provider value={!!error}>
         <RadioGroupPrimitive.Root
           className={cn("flex flex-col gap-2 font-survey w-full", className)}
