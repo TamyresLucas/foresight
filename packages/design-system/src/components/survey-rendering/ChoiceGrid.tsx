@@ -145,7 +145,7 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
           </div>
 
           {/* Mobile View - Accordion */}
-          <div className={cn(mobileVisibility, "w-full flex flex-col")}>
+          <div className={cn(mobileVisibility, "w-full")}>
             <Accordion type="single" collapsible className="w-full flex flex-col border border-survey-border-muted rounded-survey-md overflow-hidden">
               {rows.map((row) => (
                 <AccordionItem
