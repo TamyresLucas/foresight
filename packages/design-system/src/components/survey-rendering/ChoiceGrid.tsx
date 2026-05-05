@@ -282,7 +282,6 @@ const ChoiceGridMobileOption = ({
           "border-survey-border-interactive",
           "data-[state=checked]:border-survey-border-selected data-[state=checked]:bg-survey-border-selected",
           "focus:outline-none focus-visible:outline-none",
-          hasError && "border-survey-destructive data-[state=checked]:border-survey-destructive data-[state=checked]:bg-survey-destructive",
         )}
       >
         <RadioGroupPrimitive.Indicator className="flex items-center justify-center w-full h-full">
