@@ -60,7 +60,7 @@ export const DesktopWithError: Story = {
   args: {
     rows: desktopRows,
     columns: desktopColumns,
-    error: 'Please answer all rows',
+    error: 'Please answer all options',
   },
 };
 
@@ -159,7 +159,7 @@ export const MobileWithError: Story = {
   args: {
     rows: desktopRows,
     columns: desktopColumns,
-    error: 'Please answer all rows',
+    error: 'Please answer all options',
   },
   parameters: {
     viewport: {
