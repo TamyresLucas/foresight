@@ -77,7 +77,7 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
       >
         <ChoiceGridErrorContext.Provider value={!!error}>
           {/* Desktop View */}
-          <div className="hidden md:block w-full overflow-x-auto border border-survey-border-muted rounded-survey-md">
+          <div className="hidden md:block w-full overflow-x-auto">
             <table role="grid" className="w-full border-collapse">
               <thead>
                 <tr className="border-b border-survey-border-muted text-survey-foreground text-survey-body font-survey-regular">
