@@ -259,7 +259,6 @@ const ChoiceGridMobileOption = ({
   isFocused: boolean;
   disabled?: boolean;
 }) => {
-  const hasError = React.useContext(ChoiceGridErrorContext);
   const id = `mobile-${rowId}-${column.value}`;
 
   return (
