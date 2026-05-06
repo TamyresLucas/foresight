@@ -16,20 +16,14 @@ const RadioGroup = React.forwardRef<
   RadioGroupProps
 >(({ className, error, ...props }, ref) => {
   return (
-    <div className="flex flex-col gap-2 w-full" style={{ marginBottom: 'var(--survey-margin)' }}>
-      <RadioGroupErrorContext.Provider value={!!error}>
-        <RadioGroupPrimitive.Root
-          className={cn("flex flex-col gap-2 font-survey w-full", className)}
-          {...props}
-          ref={ref}
-        />
-      </RadioGroupErrorContext.Provider>
-      {error && (
-        <p className="text-xs font-survey font-survey-regular text-survey-destructive w-full">
-          {error}
-        </p>
-      )}
-    </div>
+    <RadioGroupErrorContext.Provider value={!!error}>
+      <RadioGroupPrimitive.Root
+        className={cn("flex flex-col font-survey w-full", className)}
+        style={{ gap: 'var(--survey-margin)' }}
+        {...props}
+        ref={ref}
+      />
+    </RadioGroupErrorContext.Provider>
   );
 });
 RadioGroup.displayName = RadioGroupPrimitive.Root.displayName;
@@ -62,7 +56,7 @@ const RadioGroupOption = React.forwardRef<
         focused && "[&:has([data-state=checked])]:ring-survey-border-selected",
         "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-survey-border-interactive has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-survey-background",
         "[&:has([data-state=checked]):has(:focus-visible)]:ring-survey-border-selected",
-        hasError && "border-2 border-survey-destructive has-[[data-state=checked]]:border-survey-destructive ring-0 has-[:focus-visible]:ring-0",
+        hasError && "border border-survey-destructive has-[[data-state=checked]]:border-survey-destructive ring-0 has-[:focus-visible]:ring-0",
         disabled && "cursor-not-allowed opacity-50",
         className,
       )}
@@ -76,7 +70,6 @@ const RadioGroupOption = React.forwardRef<
           "border-survey-border-interactive",
           "data-[state=checked]:border-survey-border-selected data-[state=checked]:bg-survey-border-selected",
           "focus:outline-none focus-visible:outline-none",
-          hasError && "border-survey-destructive data-[state=checked]:border-survey-destructive data-[state=checked]:bg-survey-destructive",
         )}
       >
         <RadioGroupPrimitive.Indicator className="flex items-center justify-center w-full h-full">

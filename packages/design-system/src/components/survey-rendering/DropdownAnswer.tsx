@@ -12,8 +12,6 @@ export interface DropdownOption {
 }
 
 export interface DropdownAnswerProps {
-  label?: React.ReactNode
-  required?: boolean
   options: DropdownOption[]
   placeholder?: string // default: "Select answer"
   value?: string
@@ -29,8 +27,6 @@ export interface DropdownAnswerProps {
 const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
   (
     {
-      label,
-      required = false,
       options,
       placeholder = 'Select answer',
       value,
@@ -56,31 +52,17 @@ const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
     return (
       <div
         className="flex flex-col w-fit group/survey-input"
-        style={{ gap: 'var(--survey-margin)', marginBottom: 'var(--survey-margin)' }}
         onPointerDown={handlePointerDown}
         data-selected={isSelected}
       >
-        {/* Label */}
-        {label && (
-          <label className="text-survey-body font-survey-regular font-survey text-survey-foreground w-full">
-            {label}
-            {required && <span className="text-survey-destructive ml-0.5">*</span>}
-          </label>
-        )}
-
-        {/* 
-          Multi-layered concentric focus frame.
-          Activated by 'focused' prop (for Storybook) OR browser :focus-visible (tab navigation).
-          Click triggers 'selected' state (blue border).
-        */}
         <div
           className={cn(
-            'rounded-[calc(var(--radius)+2px)] p-[2px] border-2 w-fit transition-all bg-transparent',
-            'border-transparent', // Default state
-            'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-survey-border-interactive',
-            focused && 'border-survey-border-interactive',
-            focused && isSelected && 'border-survey-border-selected',
-            error && 'border-transparent group-has-[:focus-visible]/survey-input:border-transparent',
+            'rounded-[calc(var(--radius)+2px)] w-fit transition-all bg-transparent',
+            !error && 'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:p-[2px]',
+            !error && 'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-2',
+            !error && 'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-survey-border-interactive',
+            focused && !error && 'p-[2px] border-2 border-survey-border-interactive',
+            focused && isSelected && !error && 'border-survey-border-selected',
           )}
         >
           <SelectPrimitive.Root
@@ -95,11 +77,11 @@ const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
               ref={ref}
               className={cn(
                 'flex w-fit min-w-[280px] box-border h-10 px-2 py-1.5 items-center justify-between gap-[10px] rounded-lg border bg-transparent transition-all outline-none',
-                'border-survey-border-interactive', // Default
+                'border-survey-border-interactive',
                 'group-data-[selected=true]/survey-input:border-survey-border-selected group-data-[selected=true]/survey-input:border-2',
                 'group-has-[:focus-visible]/survey-input:border',
                 focused && 'border',
-                error && 'border-2 border-survey-destructive',
+                error && 'border border-survey-destructive',
                 className,
               )}
               {...props}
@@ -109,9 +91,9 @@ const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
               </span>
               <SelectPrimitive.Icon asChild>
                 {open ? (
-                  <ChevronUp size={18} className="text-survey-foreground flex-shrink-0" />
+                  <ChevronUp size={18} className="flex-shrink-0 text-survey-foreground" />
                 ) : (
-                  <ChevronDown size={18} className="text-survey-foreground flex-shrink-0" />
+                  <ChevronDown size={18} className="flex-shrink-0 text-survey-foreground" />
                 )}
               </SelectPrimitive.Icon>
             </SelectPrimitive.Trigger>
@@ -138,13 +120,6 @@ const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
             </SelectPrimitive.Portal>
           </SelectPrimitive.Root>
         </div>
-
-        {/* Error message */}
-        {error && (
-          <p className="text-xs font-survey font-survey-regular text-survey-destructive w-full">
-            {error}
-          </p>
-        )}
       </div>
     )
   },

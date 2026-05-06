@@ -37,6 +37,17 @@ export const WithError: Story = {
   args: { label: 'Option', error: true },
 };
 
+export const GroupDefault: Story = {
+  args: { label: 'Option' },
+  render: () => (
+    <CheckboxGroup>
+      <CheckboxOption label="Option" />
+      <CheckboxOption label="Option" />
+      <CheckboxOption label="Option" />
+    </CheckboxGroup>
+  ),
+};
+
 export const GroupWithError: Story = {
   args: { label: 'Option' },
   render: () => (

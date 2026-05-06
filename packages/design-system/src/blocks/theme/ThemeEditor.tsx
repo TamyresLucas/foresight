@@ -59,8 +59,8 @@ const RADIUS_OPTIONS = [
 
 const MARGIN_OPTIONS = [
   { value: '8px', label: 'Tight (8px)' },
-  { value: '16px', label: 'Compact (16px)' },
-  { value: '24px', label: 'Cozy (24px)' },
+  { value: '12px', label: 'Compact (12px)' },
+  { value: '16px', label: 'Cozy (16px)' },
 ];
 
 interface ThemeEditorProps {
