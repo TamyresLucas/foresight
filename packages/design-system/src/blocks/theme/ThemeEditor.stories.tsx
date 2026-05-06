@@ -12,6 +12,8 @@ import { CheckboxOption, CheckboxGroup } from '../../components/survey-rendering
 import { RadioGroup, RadioGroupOption } from '../../components/survey-rendering/RadioGroup';
 import { ChoiceGrid } from '../../components/survey-rendering/ChoiceGrid';
 import { SurveyErrorMessage } from '../../components/survey-rendering/SurveyErrorMessage';
+import { QuestionText } from '../../components/survey-rendering/QuestionText';
+import { QuestionField } from '../../components/survey-rendering/QuestionField';
 import { cn } from '../../lib/utils';
 
 const meta: Meta = {
@@ -59,7 +61,9 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
   const openError = showError && !openValue ? requiredErrorMsg : undefined;
   const dateError = showError && !dateValue ? requiredErrorMsg : undefined;
   const dropdownError = showError && !dropdownValue ? requiredErrorMsg : undefined;
-  const gridError = showError && Object.keys(gridValue).length < gridRows.length ? 'Please answer all rows' : undefined;
+  const gridError = showError && Object.keys(gridValue).length === 0 ? 'Please answer all rows' : undefined;
+
+  const hasAnyError = !!(textError || radioError || checkboxError || openError || dateError || dropdownError || gridError);
 
   return (
     <div className="w-full min-h-screen bg-muted/20 overflow-y-auto p-12">
@@ -80,7 +84,7 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
         <SurveyCompletionBar value={35} variant="basic" />
 
         {/* Error Message */}
-        {showError && <SurveyErrorMessage />}
+        {hasAnyError && <SurveyErrorMessage />}
 
         {/* Header */}
         <div className="space-y-2">
@@ -94,30 +98,27 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
 
         {/* Questions */}
         <div className="flex flex-col" style={{ gap: 'var(--survey-question-spacing, 48px)' }}>
-          <TextAnswer
-            label="What is your primary area of focus?"
-            placeholder="e.g. Design, Engineering, Product..."
-            required
-            value={textValue}
-            onChange={(e) => setTextValue(e.target.value)}
-            error={textError}
-          />
+          <QuestionField>
+            <QuestionText label="What is your primary area of focus?" required error={textError} />
+            <TextAnswer
+              placeholder="e.g. Design, Engineering, Product..."
+              value={textValue}
+              onChange={(e) => setTextValue(e.target.value)}
+              error={textError}
+            />
+          </QuestionField>
 
-          <div className="space-y-4">
-            <label className="text-survey-body font-survey font-survey-regular text-survey-foreground">
-              Select your preferred contact method:
-            </label>
+          <QuestionField>
+            <QuestionText label="Select your preferred contact method:" error={radioError} />
             <RadioGroup value={contactMethod} onValueChange={setContactMethod} error={radioError}>
               <RadioGroupOption value="email" label="Email" />
               <RadioGroupOption value="phone" label="Phone" />
               <RadioGroupOption value="sms" label="SMS" />
             </RadioGroup>
-          </div>
+          </QuestionField>
 
-          <div className="space-y-4">
-            <label className="text-survey-body font-survey font-survey-regular text-survey-foreground">
-              Which features are most important to you?
-            </label>
+          <QuestionField>
+            <QuestionText label="Which features are most important to you?" error={checkboxError} />
             <CheckboxGroup error={checkboxError}>
               <CheckboxOption
                 label="Real-time collaboration"
@@ -135,21 +136,20 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
                 onCheckedChange={(val) => setCheckedOptions(p => ({ ...p, c: !!val }))}
               />
             </CheckboxGroup>
-          </div>
+          </QuestionField>
 
-          <OpenEndAnswer
-            label="Could you provide more detail on your latest project?"
-            placeholder="Tell us about the challenges and outcomes..."
-            required
-            value={openValue}
-            onChange={(e) => setOpenValue(e.target.value)}
-            error={openError}
-          />
+          <QuestionField>
+            <QuestionText label="Could you provide more detail on your latest project?" required error={openError} />
+            <OpenEndAnswer
+              placeholder="Tell us about the challenges and outcomes..."
+              value={openValue}
+              onChange={(e) => setOpenValue(e.target.value)}
+              error={openError}
+            />
+          </QuestionField>
 
-          <div className="space-y-4">
-            <label className="text-survey-body font-survey font-survey-regular text-survey-foreground">
-              Please rate your experience with our services:
-            </label>
+          <QuestionField>
+            <QuestionText label="Please rate your experience with our services:" error={gridError} />
             <ChoiceGrid
               rows={gridRows}
               columns={gridColumns}
@@ -158,30 +158,32 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
               error={gridError}
               variant={viewport}
             />
-          </div>
+          </QuestionField>
 
-          <DateAnswer
-            label="When did you start your latest project?"
-            required
-            value={dateValue}
-            onChange={(e) => setDateValue(e.target.value)}
-            error={dateError}
-          />
+          <QuestionField>
+            <QuestionText label="When did you start your latest project?" required error={dateError} />
+            <DateAnswer
+              value={dateValue}
+              onChange={(e) => setDateValue(e.target.value)}
+              error={dateError}
+            />
+          </QuestionField>
 
-          <DropdownAnswer
-            label="What is your preferred contact method?"
-            placeholder="Select answer"
-            required
-            options={[
-              { value: 'email', label: 'Email' },
-              { value: 'phone', label: 'Phone' },
-              { value: 'sms', label: 'SMS' },
-              { value: 'mail', label: 'Mail' },
-            ]}
-            value={dropdownValue}
-            onValueChange={setDropdownValue}
-            error={dropdownError}
-          />
+          <QuestionField>
+            <QuestionText label="What is your preferred contact method?" required error={dropdownError} />
+            <DropdownAnswer
+              placeholder="Select answer"
+              options={[
+                { value: 'email', label: 'Email' },
+                { value: 'phone', label: 'Phone' },
+                { value: 'sms', label: 'SMS' },
+                { value: 'mail', label: 'Mail' },
+              ]}
+              value={dropdownValue}
+              onValueChange={setDropdownValue}
+              error={dropdownError}
+            />
+          </QuestionField>
 
           <div className="pt-8 border-t border-border-decorative space-y-8">
             <SurveyNavigation

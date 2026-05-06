@@ -16,18 +16,13 @@ const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps>(
     return (
       <div
         ref={ref}
-        className={cn("flex flex-col gap-2 w-full", className)}
-        style={{ marginBottom: 'var(--survey-margin)', ...style }}
+        className={cn("flex flex-col w-full", className)}
+        style={{ gap: 'var(--survey-margin)', ...style }}
         {...props}
       >
         <CheckboxGroupErrorContext.Provider value={!!error}>
           {children}
         </CheckboxGroupErrorContext.Provider>
-        {error && (
-          <p className="text-xs font-survey font-survey-regular text-survey-destructive w-full">
-            {error}
-          </p>
-        )}
       </div>
     );
   }
@@ -63,7 +58,7 @@ const CheckboxOption = React.forwardRef<HTMLLabelElement, CheckboxOptionProps>(
           focused && "[&:has([data-state=checked])]:ring-survey-border-selected",
           "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-survey-border-interactive has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-survey-background",
           "[&:has([data-state=checked]):has(:focus-visible)]:ring-survey-border-selected",
-          hasError && "border-2 border-survey-destructive has-[[data-state=checked]]:border-survey-destructive ring-0 has-[:focus-visible]:ring-0",
+          hasError && "border border-survey-destructive has-[[data-state=checked]]:border-survey-destructive ring-0 has-[:focus-visible]:ring-0",
           disabled && "cursor-not-allowed opacity-50",
           className,
         )}
@@ -78,7 +73,6 @@ const CheckboxOption = React.forwardRef<HTMLLabelElement, CheckboxOptionProps>(
             "border-survey-border-interactive",
             "data-[state=checked]:border-survey-border-selected data-[state=checked]:bg-survey-border-selected",
             "focus:outline-none focus-visible:outline-none",
-            hasError && "border-survey-destructive data-[state=checked]:border-survey-destructive data-[state=checked]:bg-survey-destructive",
           )}
         >
           <CheckboxPrimitive.Indicator className="flex items-center justify-center text-white">

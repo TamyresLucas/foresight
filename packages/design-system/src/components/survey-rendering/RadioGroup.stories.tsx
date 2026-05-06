@@ -12,6 +12,9 @@ const meta = {
       </div>
     ),
   ],
+  argTypes: {
+    error: { control: 'text' },
+  },
 } satisfies Meta<typeof RadioGroup>;
 
 export default meta;

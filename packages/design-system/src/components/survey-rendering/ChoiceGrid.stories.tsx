@@ -61,6 +61,7 @@ export const DesktopWithError: Story = {
     rows: desktopRows,
     columns: desktopColumns,
     error: 'Please answer all options',
+    variant: 'desktop',
   },
 };
 

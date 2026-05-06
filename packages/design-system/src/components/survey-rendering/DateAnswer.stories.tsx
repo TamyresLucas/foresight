@@ -13,8 +13,6 @@ const meta = {
     ),
   ],
   argTypes: {
-    label: { control: 'text' },
-    required: { control: 'boolean' },
     focused: { control: 'boolean' },
     selected: { control: 'boolean' },
     error: { control: 'text' },
@@ -24,7 +22,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'DateAnswer component for survey rendering. Displays a native date input field with support for focused and selected states, optional labels, validation errors, and required field indicators.',
+          'DateAnswer component for survey rendering. Displays a native date input field with support for focused and selected states. Compose with QuestionText (and optionally QuestionField) for the question label and error message.',
       },
     },
   },
@@ -33,58 +31,26 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  args: {
-    label: 'Date question with optional custom validation',
-    required: true,
-  },
-};
+export const Default: Story = {};
 
 export const Focused: Story = {
-  args: {
-    label: 'Date question with optional custom validation',
-    required: true,
-    focused: true,
-  },
+  args: { focused: true },
 };
 
 export const Selected: Story = {
-  args: {
-    label: 'Date question with optional custom validation',
-    required: true,
-    selected: true,
-  },
+  args: { selected: true },
 };
 
 export const SelectedAndFocused: Story = {
-  args: {
-    label: 'Date question with optional custom validation',
-    required: true,
-    selected: true,
-    focused: true,
-  },
+  args: { selected: true, focused: true },
 };
 
 export const WithError: Story = {
-  args: {
-    label: 'Date question with optional custom validation',
-    required: true,
-    error: 'This question is required',
-  },
+  args: { error: 'This question is required' },
 };
 
 export const WithValue: Story = {
-  args: {
-    label: 'Date question with optional custom validation',
-    required: true,
-    defaultValue: '2025-03-27',
-    focused: true,
-  },
+  args: { defaultValue: '2025-03-27', focused: true },
 };
 
-export const Interactive: Story = {
-  args: {
-    label: 'Interactive (click or tab to test)',
-    required: true,
-  },
-};
+export const Interactive: Story = {};

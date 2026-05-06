@@ -85,7 +85,6 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
       <div
         ref={ref}
         className={cn("flex flex-col gap-4 w-full max-w-2xl mx-auto font-survey", className)}
-        style={{ marginBottom: 'var(--survey-margin)' }}
       >
         <ChoiceGridErrorContext.Provider value={!!error}>
           {/* Desktop View */}
@@ -114,7 +113,8 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                     disabled={disabled || row.disabled}
                   >
                     <tr className={cn(
-                      "group/row border-b border-survey-border-muted transition-colors hover:bg-survey-muted-background/10",
+                      "group/row border-b transition-colors hover:bg-survey-muted-background/10",
+                      error ? "border-survey-destructive" : "border-survey-border-muted",
                       forceHover && "bg-survey-muted-background/10"
                     )}>
                       <th
@@ -147,13 +147,14 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
 
           {/* Mobile View - Accordion */}
           <div className={cn(mobileVisibility, "w-full")}>
-            <Accordion type="single" collapsible className="w-full flex flex-col border border-survey-border-muted rounded-survey-md overflow-hidden">
+            <Accordion type="single" collapsible className={cn("w-full flex flex-col rounded-survey-md overflow-hidden border", error ? "border-survey-destructive" : "border-survey-border-muted")}>
               {rows.map((row) => (
                 <AccordionItem
                   key={row.id}
                   value={row.id}
                   className={cn(
-                    "w-full border-b border-survey-border-muted rounded-none last:border-b-0"
+                    "w-full rounded-none last:border-b-0 border-b",
+                    error ? "border-survey-destructive" : "border-survey-border-muted"
                   )}
                 >
                   <AccordionTrigger className={cn(
@@ -190,14 +191,6 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
             </Accordion>
           </div>
         </ChoiceGridErrorContext.Provider>
-        {error && (
-          <p
-            className="text-xs font-survey font-survey-regular text-survey-destructive w-full"
-            style={{ marginTop: 'var(--survey-margin)' }}
-          >
-            {error}
-          </p>
-        )}
       </div>
     );
   }
@@ -219,7 +212,6 @@ const ChoiceGridCell = ({
   isFocused,
   disabled,
 }: ChoiceGridCellProps) => {
-  const hasError = React.useContext(ChoiceGridErrorContext);
   const cellId = `cell-${rowId}-${columnValue}`;
 
   return (
@@ -248,7 +240,6 @@ const ChoiceGridCell = ({
             "border-survey-border-interactive",
             "data-[state=checked]:border-survey-border-selected data-[state=checked]:bg-survey-border-selected",
             "focus:outline-none focus-visible:outline-none",
-            hasError && "border-survey-destructive data-[state=checked]:border-survey-destructive data-[state=checked]:bg-survey-destructive",
           )}
         >
           <RadioGroupPrimitive.Indicator className="flex items-center justify-center w-full h-full">
