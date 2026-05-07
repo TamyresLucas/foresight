@@ -286,6 +286,7 @@
   --survey-background: 0 0% 100%;          /* #FFFFFF */
 
   --survey-primary: 233 86% 64%;           /* #5568F2 — reactive brand color */
+  --survey-primary-foreground: 0 0% 100%;  /* white — overridden via applyTheme based on contrast */
   --survey-border-interactive: 0 0% 54%;   /* #8A8A8A — default input border */
   --survey-muted-background: 0 0% 54%;     /* #8A8A8A — used with opacity for muted actions */
   --survey-border-selected: 233 86% 64%;   /* #5568F2 — selected state */
@@ -296,10 +297,12 @@
 
   --survey-radius-sm: 8px;
   --survey-radius-md: 12px;
+  --survey-day-radius: var(--survey-radius-md); /* overridden to 9999px by applyTheme when the "Round" preset is selected */
 
   --survey-font-family: "Open Sans", sans-serif;
   --survey-font-size-body: 16px;
   --survey-font-weight-regular: 400;
+  --survey-font-weight-semibold: 600;
 }
 
 /* Dark Mode */

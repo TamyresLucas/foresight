@@ -63,6 +63,7 @@ export * from "./components/survey-rendering/SurveyNavigation";
 export * from "./components/survey-rendering/DateAnswer";
 export * from "./components/survey-rendering/DropdownAnswer";
 export * from "./components/survey-rendering/DropdownPopUp";
+export { Calendar as SurveyCalendar, type CalendarProps } from "./components/survey-rendering/Calendar";
 
 // Theme blocks
 export * from "./blocks/theme/ThemeEditor";

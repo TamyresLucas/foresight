@@ -14,6 +14,7 @@ export default {
       },
       fontWeight: {
         "survey-regular": "var(--survey-font-weight-regular)",
+        "survey-semibold": "var(--survey-font-weight-semibold)",
       },
       colors: {
         border: "hsl(var(--border))",
@@ -72,6 +73,7 @@ export default {
         },
         survey: {
           primary: "hsl(var(--survey-primary))",
+          "primary-foreground": "hsl(var(--survey-primary-foreground))",
           foreground: "hsl(var(--survey-foreground))",
           "muted-foreground": "hsl(var(--survey-muted-foreground))",
           background: "hsl(var(--survey-background))",
