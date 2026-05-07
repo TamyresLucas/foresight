@@ -1,0 +1,6 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build-storybook",
+  "installCommand": "npm ci --legacy-peer-deps",
+  "outputDirectory": "storybook-static"
+}
