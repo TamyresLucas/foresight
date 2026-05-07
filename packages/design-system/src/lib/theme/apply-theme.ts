@@ -176,7 +176,9 @@ export function applyTheme(theme: Theme, scope: HTMLElement = document.documentE
 
     // Survey Rendering Tokens (Reactive)
     '--survey-primary': toHslChannels(finalPrimary),
+    '--survey-primary-foreground': toHslChannels(finalPrimaryFg),
     '--survey-destructive': toHslChannels(finalDestructive),
+    '--survey-destructive-foreground': toHslChannels(finalDestructiveFg),
     '--survey-border-selected': toHslChannels(finalPrimary),
     '--survey-border-accent': toHslChannels(finalSecondary),
     '--survey-font-family': `"${theme.body.fontFamily}", sans-serif`,
@@ -184,6 +186,9 @@ export function applyTheme(theme: Theme, scope: HTMLElement = document.documentE
     '--survey-font-weight-regular': theme.body.fontWeight,
     '--survey-radius-md': theme.radius || '0.5rem',
     '--survey-radius-sm': `calc(${theme.radius || '0.5rem'} - 2px)`,
+    // When the user picks the "Round" preset (1rem), the day cell becomes a
+    // perfect circle. Otherwise it follows the chosen radius.
+    '--survey-day-radius': theme.radius === '1rem' ? '9999px' : (theme.radius || '0.5rem'),
     '--survey-margin': theme.margin || '8px',
     '--survey-question-spacing': `calc(${theme.margin || '8px'} * 3)`,
   };
