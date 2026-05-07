@@ -2,5 +2,5 @@
   "version": 2,
   "buildCommand": "NODE_OPTIONS=--max-old-space-size=4096 npx turbo run build-storybook --filter=@foresight/design-system",
   "installCommand": "npm ci --legacy-peer-deps",
-  "outputDirectory": "packages/design-system/storybook-static"
+  "outputDirectory": "storybook-static"
 }
