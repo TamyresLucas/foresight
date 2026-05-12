@@ -33,13 +33,13 @@ const DropZone = React.forwardRef<HTMLDivElement, DropZoneProps>(
         }}
         {...props}
       >
-        <span className="text-survey-body font-survey-semibold font-survey text-survey-foreground text-center">
+        <span className="text-survey-body font-survey-semibold font-survey text-survey-foreground text-left">
           {label}
         </span>
         {children ? (
           children
         ) : (
-          <span className="text-xs font-survey text-survey-foreground/60 text-center">
+          <span className="text-xs font-survey text-survey-foreground/60 text-left">
             Drag cards here
           </span>
         )}
