@@ -66,6 +66,7 @@ export * from "./components/survey-rendering/DropdownPopUp";
 export { Calendar as SurveyCalendar, type CalendarProps } from "./components/survey-rendering/Calendar";
 export { TimePicker, type TimePickerProps, type TimeValue } from "./components/survey-rendering/TimePicker";
 export { Card as SurveyCard, cardVariants as surveyCardVariants, type CardProps as SurveyCardProps } from "./components/survey-rendering/Card";
+export { DropZone, type DropZoneProps } from "./components/survey-rendering/DropZone";
 
 // Theme blocks
 export * from "./blocks/theme/ThemeEditor";
