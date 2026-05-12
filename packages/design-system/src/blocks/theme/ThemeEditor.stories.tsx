@@ -11,6 +11,7 @@ import { SurveyCompletionBar } from '../../components/survey-rendering/SurveyCom
 import { LanguageSelector } from '../../components/survey-rendering/LanguageSelector';
 import { CheckboxOption, CheckboxGroup } from '../../components/survey-rendering/Checkbox';
 import { RadioGroup, RadioGroupOption } from '../../components/survey-rendering/RadioGroup';
+import { NPS } from '../../components/survey-rendering/NPS';
 import { ChoiceGrid } from '../../components/survey-rendering/ChoiceGrid';
 import { SurveyErrorMessage } from '../../components/survey-rendering/SurveyErrorMessage';
 import { QuestionText } from '../../components/survey-rendering/QuestionText';
@@ -36,6 +37,7 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
   const [lang, setLang] = React.useState('en');
   const [checkedOptions, setCheckedOptions] = React.useState({ a: false, b: false, c: false });
   const [contactMethod, setContactMethod] = React.useState<string>('');
+  const [npsValue, setNpsValue] = React.useState<string>('');
   const [gridValue, setGridValue] = React.useState<Record<string, string>>({});
   const [showError, setShowError] = React.useState(false);
 
@@ -63,9 +65,10 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
   const openError = showError && !openValue ? requiredErrorMsg : undefined;
   const dateError = showError && !dateValue ? requiredErrorMsg : undefined;
   const dropdownError = showError && !dropdownValue ? requiredErrorMsg : undefined;
+  const npsError = showError && !npsValue ? requiredErrorMsg : undefined;
   const gridError = showError && Object.keys(gridValue).length === 0 ? 'Please answer all rows' : undefined;
 
-  const hasAnyError = !!(textError || radioError || checkboxError || openError || dateError || dropdownError || gridError);
+  const hasAnyError = !!(textError || radioError || checkboxError || openError || dateError || dropdownError || npsError || gridError);
 
   return (
     <div className="w-full min-h-screen bg-muted/20 overflow-y-auto p-12">
@@ -117,6 +120,11 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
               <RadioGroupOption value="phone" label="Phone" />
               <RadioGroupOption value="sms" label="SMS" />
             </RadioGroup>
+          </QuestionField>
+
+          <QuestionField>
+            <QuestionText label="How likely are you to recommend us?" error={npsError} />
+            <NPS value={npsValue} onValueChange={setNpsValue} error={npsError} />
           </QuestionField>
 
           <QuestionField>
