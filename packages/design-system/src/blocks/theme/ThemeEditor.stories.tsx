@@ -13,6 +13,7 @@ import { CheckboxOption, CheckboxGroup } from '../../components/survey-rendering
 import { RadioGroup, RadioGroupOption } from '../../components/survey-rendering/RadioGroup';
 import { NPS } from '../../components/survey-rendering/NPS';
 import { ChoiceGrid } from '../../components/survey-rendering/ChoiceGrid';
+import { CardSort, type CardSortValue } from '../../components/survey-rendering/CardSort';
 import { SurveyErrorMessage } from '../../components/survey-rendering/SurveyErrorMessage';
 import { QuestionText } from '../../components/survey-rendering/QuestionText';
 import { QuestionField } from '../../components/survey-rendering/QuestionField';
@@ -39,6 +40,7 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
   const [contactMethod, setContactMethod] = React.useState<string>('');
   const [npsValue, setNpsValue] = React.useState<string>('');
   const [gridValue, setGridValue] = React.useState<Record<string, string>>({});
+  const [cardSortValue, setCardSortValue] = React.useState<CardSortValue>({});
   const [showError, setShowError] = React.useState(false);
 
   const gridRows = [
@@ -201,6 +203,21 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
               value={dropdownValue}
               onValueChange={setDropdownValue}
               error={dropdownError}
+            />
+          </QuestionField>
+
+          <QuestionField>
+            <QuestionText label="How would you categorize these products?" />
+            <CardSort
+              items={[
+                { id: 'apple', label: 'Apple' },
+                { id: 'banana', label: 'Banana' },
+                { id: 'cherry', label: 'Cherry' },
+                { id: 'date', label: 'Date' },
+              ]}
+              choiceLabels={['Like', 'Dislike']}
+              value={cardSortValue}
+              onChange={setCardSortValue}
             />
           </QuestionField>
 
