@@ -73,7 +73,7 @@ function TimeInput({ value: controlledValue, onCommit, error, disabled, ...props
       }}
       disabled={disabled}
       className={cn(
-        'w-12 h-8 text-center rounded-survey-md border bg-transparent',
+        'w-12 h-10 text-center rounded-survey-md border bg-transparent',
         'text-survey-body font-survey-regular text-survey-foreground',
         'outline-none transition-all hover:bg-survey-muted-background',
         'focus-visible:outline-none',
