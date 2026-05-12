@@ -22,7 +22,7 @@ export interface TimePickerProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const triggerClass = cn(
-  'inline-flex w-fit h-8 items-center justify-between gap-1 px-2 py-1',
+  'inline-flex w-fit h-10 items-center justify-between gap-1 px-2 py-1.5',
   'rounded-survey-md border border-survey-border-interactive bg-transparent',
   'text-survey-body font-survey-regular text-survey-foreground',
   'outline-none transition-colors hover:bg-survey-muted-background',
