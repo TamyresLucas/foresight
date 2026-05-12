@@ -20,7 +20,7 @@ const DropZone = React.forwardRef<HTMLDivElement, DropZoneProps>(
       <div
         ref={ref}
         className={cn(
-          "inline-flex flex-col items-stretch min-w-28 min-h-28 border border-survey-border-interactive",
+          "inline-flex flex-col items-stretch border border-survey-border-interactive",
           className,
         )}
         style={{
