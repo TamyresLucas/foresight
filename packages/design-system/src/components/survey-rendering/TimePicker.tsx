@@ -1,9 +1,10 @@
 'use client'
 
 import * as React from 'react'
-import * as SelectPrimitive from '@radix-ui/react-select'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import * as PopoverPrimitive from '@radix-ui/react-popover'
+import { AlertCircle, ChevronDown, ChevronUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { DropdownPopUp } from './DropdownPopUp'
 
 export type TimeValue = { hour: number; minute: number; period: 'AM' | 'PM' }
 
@@ -25,69 +26,126 @@ const triggerClass = cn(
   'rounded-survey-md border border-survey-border-interactive bg-transparent',
   'text-survey-body font-survey-regular text-survey-foreground',
   'outline-none transition-colors hover:bg-survey-muted-background',
-  'focus-visible:border-survey-border-selected',
+  'data-[state=open]:border-survey-border-selected',
+  'focus-visible:outline-none',
+  'focus-visible:ring-2 focus-visible:ring-survey-border-interactive',
+  'focus-visible:ring-offset-2 focus-visible:ring-offset-survey-background',
+  'data-[state=open]:focus-visible:ring-survey-border-selected',
 )
 
-const contentClass = cn(
-  'z-50 max-h-[240px] min-w-[var(--radix-select-trigger-width)] overflow-hidden',
-  'rounded-survey-md border border-survey-border-muted bg-survey-background',
-  'font-survey shadow-sm',
-)
+// ─── TimeInput ───────────────────────────────────────────────────────────────
+// Uses local display state so the user can type freely; commits to parent on blur.
 
-const itemClass = cn(
-  'relative flex w-full cursor-pointer select-none items-center',
-  'rounded-sm py-2 px-3 text-survey-body font-survey-regular text-survey-foreground outline-none',
-  'data-[highlighted]:bg-survey-muted-background',
-  'data-[state=checked]:font-bold data-[state=checked]:text-survey-primary',
-  'data-[disabled]:opacity-50 data-[disabled]:text-survey-muted-foreground data-[disabled]:cursor-not-allowed',
-)
+interface TimeInputProps {
+  value: string
+  onCommit: (raw: string) => void
+  error?: boolean
+  disabled?: boolean
+  'aria-label'?: string
+  inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode']
+  maxLength?: number
+}
 
-const inputClass = cn(
-  'w-12 h-8 text-center rounded-survey-md border border-survey-border-interactive bg-transparent',
-  'text-survey-body font-survey-regular text-survey-foreground',
-  'outline-none transition-colors hover:bg-survey-muted-background',
-  'focus-visible:border-survey-border-selected',
-  'placeholder:text-survey-muted-foreground',
-)
+function TimeInput({ value: controlledValue, onCommit, error, disabled, ...props }: TimeInputProps) {
+  const [localValue, setLocalValue] = React.useState(controlledValue)
+  const [isPointerActive, setIsPointerActive] = React.useState(false)
+  const [isFocused, setIsFocused] = React.useState(false)
+
+  // Keep display in sync with controlled value when not actively editing
+  React.useEffect(() => {
+    if (!isFocused) setLocalValue(controlledValue)
+  }, [controlledValue, isFocused])
+
+  const isSelected = isPointerActive
+  const isKeyboardFocused = isFocused && !isPointerActive
+
+  return (
+    <input
+      type="text"
+      value={localValue}
+      onChange={(e) => setLocalValue(e.target.value.replace(/\D/g, ''))}
+      onPointerDown={() => setIsPointerActive(true)}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => {
+        setIsPointerActive(false)
+        setIsFocused(false)
+        onCommit(localValue)
+      }}
+      disabled={disabled}
+      className={cn(
+        'w-12 h-8 text-center rounded-survey-md border bg-transparent',
+        'text-survey-body font-survey-regular text-survey-foreground',
+        'outline-none transition-all hover:bg-survey-muted-background',
+        'focus-visible:outline-none',
+        'placeholder:text-survey-muted-foreground',
+        // default
+        !error && !isSelected && 'border-survey-border-interactive',
+        // selected (pointer click)
+        !error && isSelected && 'border-2 border-survey-border-selected',
+        // keyboard focused (not selected)
+        !error && isKeyboardFocused && 'ring-2 ring-survey-border-interactive ring-offset-2 ring-offset-survey-background',
+        // error
+        error && 'border-survey-destructive',
+      )}
+      {...props}
+    />
+  )
+}
+
+// ─── PeriodSelect ─────────────────────────────────────────────────────────────
+
+const periodOptions = [
+  { value: 'AM', label: 'AM' },
+  { value: 'PM', label: 'PM' },
+]
 
 type PeriodSelectProps = {
   value: 'AM' | 'PM'
   onValueChange: (value: 'AM' | 'PM') => void
+  error?: boolean
 }
 
-function PeriodSelect({ value, onValueChange }: PeriodSelectProps) {
+function PeriodSelect({ value, onValueChange, error }: PeriodSelectProps) {
   const [open, setOpen] = React.useState(false)
-  const options = [
-    { value: 'AM', label: 'AM' },
-    { value: 'PM', label: 'PM' },
-  ]
 
   return (
-    <SelectPrimitive.Root value={value} onValueChange={onValueChange} open={open} onOpenChange={setOpen}>
-      <SelectPrimitive.Trigger aria-label="AM/PM" className={triggerClass}>
-        <SelectPrimitive.Value />
-        <SelectPrimitive.Icon asChild>
-          {open ? (
-            <ChevronUp size={16} className="flex-shrink-0 text-survey-foreground" />
-          ) : (
-            <ChevronDown size={16} className="flex-shrink-0 text-survey-foreground" />
-          )}
-        </SelectPrimitive.Icon>
-      </SelectPrimitive.Trigger>
-      <SelectPrimitive.Portal>
-        <SelectPrimitive.Content position="popper" sideOffset={4} className={contentClass}>
-          <SelectPrimitive.Viewport className="p-1">
-            {options.map((opt) => (
-              <SelectPrimitive.Item key={opt.value} value={opt.value} className={itemClass}>
-                <SelectPrimitive.ItemText>{opt.label}</SelectPrimitive.ItemText>
-              </SelectPrimitive.Item>
-            ))}
-          </SelectPrimitive.Viewport>
-        </SelectPrimitive.Content>
-      </SelectPrimitive.Portal>
-    </SelectPrimitive.Root>
+    <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
+      <PopoverPrimitive.Trigger
+        aria-label="AM/PM"
+        data-state={open ? 'open' : 'closed'}
+        className={cn(triggerClass, error && !open && 'border-survey-destructive')}
+      >
+        {value}
+        {open ? (
+          <ChevronUp size={16} className="flex-shrink-0 text-survey-foreground" />
+        ) : (
+          <ChevronDown size={16} className="flex-shrink-0 text-survey-foreground" />
+        )}
+      </PopoverPrimitive.Trigger>
+      <PopoverPrimitive.Portal>
+        <PopoverPrimitive.Content
+          sideOffset={4}
+          align="start"
+          className="z-50"
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
+          <DropdownPopUp
+            options={periodOptions}
+            selectedValue={value}
+            showCheckmark={false}
+            className="min-w-fit w-fit"
+            onSelect={(v) => {
+              onValueChange(v as 'AM' | 'PM')
+              setOpen(false)
+            }}
+          />
+        </PopoverPrimitive.Content>
+      </PopoverPrimitive.Portal>
+    </PopoverPrimitive.Root>
   )
 }
+
+// ─── TimeField ────────────────────────────────────────────────────────────────
 
 interface TimeFieldProps {
   value: TimeValue
@@ -101,65 +159,47 @@ function TimeField({ value, onChange, disabled, error }: TimeFieldProps) {
   const clampMinute = (m: number) => Math.max(0, Math.min(59, m))
   const padZero = (n: number) => String(n).padStart(2, '0')
 
-  const handleHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const h = parseInt(e.target.value, 10) || 0
-    onChange({ ...value, hour: clampHour(h) })
+  const handleHourCommit = (raw: string) => {
+    const h = parseInt(raw, 10)
+    onChange({ ...value, hour: clampHour(isNaN(h) ? value.hour : h) })
   }
 
-  const handleHourBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const h = parseInt(e.target.value, 10) || 1
-    e.target.value = padZero(clampHour(h))
-    onChange({ ...value, hour: clampHour(h) })
-  }
-
-  const handleMinuteChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const m = parseInt(e.target.value, 10) || 0
-    onChange({ ...value, minute: clampMinute(m) })
-  }
-
-  const handleMinuteBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const m = parseInt(e.target.value, 10) || 0
-    e.target.value = padZero(clampMinute(m))
-    onChange({ ...value, minute: clampMinute(m) })
+  const handleMinuteCommit = (raw: string) => {
+    const m = parseInt(raw, 10)
+    onChange({ ...value, minute: clampMinute(isNaN(m) ? value.minute : m) })
   }
 
   const handlePeriodChange = (p: 'AM' | 'PM') => {
     onChange({ ...value, period: p })
   }
 
-  const borderClass = error ? 'border-survey-border-error' : ''
-
   return (
     <div className="flex items-center gap-2">
-      <input
-        type="text"
-        inputMode="numeric"
-        maxLength={2}
+      <TimeInput
         value={padZero(value.hour)}
-        onChange={handleHourChange}
-        onBlur={handleHourBlur}
+        onCommit={handleHourCommit}
         disabled={disabled}
         aria-label="Hour"
-        className={cn(inputClass, borderClass)}
-      />
-      <span aria-hidden className="text-survey-foreground">
-        :
-      </span>
-      <input
-        type="text"
         inputMode="numeric"
         maxLength={2}
+        error={error}
+      />
+      <span aria-hidden className="text-survey-foreground">:</span>
+      <TimeInput
         value={padZero(value.minute)}
-        onChange={handleMinuteChange}
-        onBlur={handleMinuteBlur}
+        onCommit={handleMinuteCommit}
         disabled={disabled}
         aria-label="Minute"
-        className={cn(inputClass, borderClass)}
+        inputMode="numeric"
+        maxLength={2}
+        error={error}
       />
-      <PeriodSelect value={value.period} onValueChange={handlePeriodChange} />
+      <PeriodSelect value={value.period} onValueChange={handlePeriodChange} error={error} />
     </div>
   )
 }
+
+// ─── TimePicker ───────────────────────────────────────────────────────────────
 
 const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
   (
@@ -180,7 +220,9 @@ const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
     ref,
   ) => {
     const [internalValue, setInternalValue] = React.useState<TimeValue | { from?: TimeValue; to?: TimeValue }>(
-      defaultValue || (mode === 'single' ? { hour: 12, minute: 0, period: 'AM' } : { from: { hour: 12, minute: 0, period: 'AM' }, to: { hour: 12, minute: 0, period: 'AM' } }),
+      defaultValue || (mode === 'single'
+        ? { hour: 12, minute: 0, period: 'AM' }
+        : { from: { hour: 12, minute: 0, period: 'AM' }, to: { hour: 12, minute: 0, period: 'AM' } }),
     )
 
     const currentValue = value !== undefined ? value : internalValue
@@ -203,7 +245,8 @@ const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
         >
           <TimeField value={singleValue} onChange={handleChange} disabled={disabled} error={!!error} />
           {error && (
-            <p role="alert" className="text-survey-error text-survey-body-sm font-survey-regular">
+            <p role="alert" className="flex items-center gap-1 text-survey-body-sm font-survey-regular text-survey-destructive">
+              <AlertCircle size={14} aria-hidden className="flex-shrink-0" />
               {error}
             </p>
           )}
@@ -243,7 +286,8 @@ const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
           />
         </div>
         {error && (
-          <p role="alert" className="text-survey-error text-survey-body-sm font-survey-regular">
+          <p role="alert" className="flex items-center gap-1 text-survey-body-sm font-survey-regular text-survey-destructive">
+            <AlertCircle size={14} aria-hidden className="flex-shrink-0" />
             {error}
           </p>
         )}

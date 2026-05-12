@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { TimePicker, type TimePickerProps, type TimeValue } from './TimePicker'
 
 const ThemedFrame = ({
@@ -152,6 +152,103 @@ export const RangePresetCorporate: Story = {
     return (
       <ThemedFrame preset="corporate">
         <TimePicker mode="range" value={value} onChange={(e) => setValue(e.target.value)} />
+      </ThemedFrame>
+    )
+  },
+}
+
+const ForceFocusStyle = () => (
+  <style>{`
+    [data-force-focus] input:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px hsl(var(--survey-background)), 0 0 0 4px hsl(var(--survey-border-interactive));
+    }
+    [data-force-focus] [aria-label="AM/PM"]:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px hsl(var(--survey-background)), 0 0 0 4px hsl(var(--survey-border-interactive));
+    }
+    [data-force-focus] [aria-label="AM/PM"][data-state="open"] {
+      border-color: hsl(var(--survey-border-selected));
+    }
+    [data-force-focus] [aria-label="AM/PM"][data-state="open"]:focus {
+      box-shadow: 0 0 0 2px hsl(var(--survey-background)), 0 0 0 4px hsl(var(--survey-border-selected));
+    }
+  `}</style>
+)
+
+export const Focused: Story = {
+  name: 'Focused (hour input)',
+  render: () => {
+    const containerRef = useRef<HTMLDivElement>(null)
+    const [value, setValue] = useState<TimeValue>({ hour: 10, minute: 30, period: 'AM' })
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        const hourInput = containerRef.current?.querySelector('input[aria-label="Hour"]') as HTMLElement
+        hourInput?.focus()
+      }, 100)
+      return () => clearTimeout(timer)
+    }, [])
+
+    return (
+      <ThemedFrame>
+        <ForceFocusStyle />
+        <div ref={containerRef} data-force-focus>
+          <TimePicker mode="single" value={value} onChange={(e) => setValue(e.target.value as TimeValue)} />
+        </div>
+      </ThemedFrame>
+    )
+  },
+}
+
+export const FocusedAmPm: Story = {
+  name: 'Focused (AM/PM trigger)',
+  render: () => {
+    const containerRef = useRef<HTMLDivElement>(null)
+    const [value, setValue] = useState<TimeValue>({ hour: 10, minute: 30, period: 'AM' })
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        const trigger = containerRef.current?.querySelector('[aria-label="AM/PM"]') as HTMLElement
+        trigger?.focus()
+      }, 100)
+      return () => clearTimeout(timer)
+    }, [])
+
+    return (
+      <ThemedFrame>
+        <ForceFocusStyle />
+        <div ref={containerRef} data-force-focus>
+          <TimePicker mode="single" value={value} onChange={(e) => setValue(e.target.value as TimeValue)} />
+        </div>
+      </ThemedFrame>
+    )
+  },
+}
+
+export const FocusedAndSelectedAmPm: Story = {
+  name: 'Focused + Selected (AM/PM open)',
+  render: () => {
+    const containerRef = useRef<HTMLDivElement>(null)
+    const [value, setValue] = useState<TimeValue>({ hour: 10, minute: 30, period: 'AM' })
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        const trigger = containerRef.current?.querySelector('[aria-label="AM/PM"]') as HTMLElement
+        if (trigger) {
+          trigger.focus()
+          trigger.click()
+        }
+      }, 100)
+      return () => clearTimeout(timer)
+    }, [])
+
+    return (
+      <ThemedFrame>
+        <ForceFocusStyle />
+        <div ref={containerRef} data-force-focus>
+          <TimePicker mode="single" value={value} onChange={(e) => setValue(e.target.value as TimeValue)} />
+        </div>
       </ThemedFrame>
     )
   },

@@ -160,3 +160,210 @@ export const WithBrandOverride: Story = {
     )
   },
 }
+
+const ForceFocusStyle = () => (
+  <style>{`
+    [data-force-focus] .rdp-button:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px hsl(var(--survey-background)), 0 0 0 4px hsl(var(--survey-border-interactive));
+    }
+    [data-force-focus] .rdp-button[aria-selected="true"]:focus {
+      box-shadow: 0 0 0 2px hsl(var(--survey-background)), 0 0 0 4px hsl(var(--survey-border-selected));
+    }
+    [data-force-focus] [aria-label="Select month"]:focus,
+    [data-force-focus] [aria-label="Select year"]:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px hsl(var(--survey-background)), 0 0 0 4px hsl(var(--survey-border-interactive));
+    }
+    [data-force-focus] [aria-label="Select month"][data-state="open"]:focus,
+    [data-force-focus] [aria-label="Select year"][data-state="open"]:focus {
+      box-shadow: 0 0 0 2px hsl(var(--survey-background)), 0 0 0 4px hsl(var(--survey-border-selected));
+    }
+    [data-force-focus] [aria-label="Previous month"]:focus,
+    [data-force-focus] [aria-label="Next month"]:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px hsl(var(--survey-background)), 0 0 0 4px hsl(var(--survey-border-interactive));
+    }
+  `}</style>
+)
+
+export const Focused: Story = {
+  name: 'Focused (unselected day)',
+  render: () => {
+    const containerRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        const days = containerRef.current?.querySelectorAll('.rdp-button')
+        const unselected = Array.from(days || []).find(
+          (b) => b.getAttribute('aria-selected') !== 'true' && !b.hasAttribute('disabled') && /^\d+$/.test(b.textContent?.trim() || ''),
+        ) as HTMLElement
+        unselected?.focus()
+      }, 100)
+      return () => clearTimeout(timer)
+    }, [])
+
+    return (
+      <ThemedFrame>
+        <ForceFocusStyle />
+        <div ref={containerRef} data-force-focus>
+          <Calendar mode="single" />
+        </div>
+      </ThemedFrame>
+    )
+  },
+}
+
+export const FocusedAndSelected: Story = {
+  name: 'Focused + Selected day',
+  render: () => {
+    const containerRef = useRef<HTMLDivElement>(null)
+    const [selected, setSelected] = useState<Date | undefined>(new Date())
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        const days = containerRef.current?.querySelectorAll('.rdp-button')
+        const selectedDay = Array.from(days || []).find(
+          (b) => b.getAttribute('aria-selected') === 'true',
+        ) as HTMLElement
+        selectedDay?.focus()
+      }, 100)
+      return () => clearTimeout(timer)
+    }, [])
+
+    return (
+      <ThemedFrame>
+        <ForceFocusStyle />
+        <div ref={containerRef} data-force-focus>
+          <Calendar mode="single" selected={selected} onSelect={setSelected} />
+        </div>
+      </ThemedFrame>
+    )
+  },
+}
+
+export const FocusedNavButton: Story = {
+  name: 'Focused (nav button)',
+  render: () => {
+    const containerRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        const prevBtn = containerRef.current?.querySelector('[aria-label="Previous month"]') as HTMLElement
+        prevBtn?.focus()
+      }, 100)
+      return () => clearTimeout(timer)
+    }, [])
+
+    return (
+      <ThemedFrame>
+        <ForceFocusStyle />
+        <div ref={containerRef} data-force-focus>
+          <Calendar mode="single" />
+        </div>
+      </ThemedFrame>
+    )
+  },
+}
+
+export const FocusedMonthDropdown: Story = {
+  name: 'Focused (month dropdown)',
+  render: () => {
+    const containerRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        const trigger = containerRef.current?.querySelector('[aria-label="Select month"]') as HTMLElement
+        trigger?.focus()
+      }, 100)
+      return () => clearTimeout(timer)
+    }, [])
+
+    return (
+      <ThemedFrame>
+        <ForceFocusStyle />
+        <div ref={containerRef} data-force-focus>
+          <Calendar mode="single" />
+        </div>
+      </ThemedFrame>
+    )
+  },
+}
+
+export const FocusedAndSelectedMonthDropdown: Story = {
+  name: 'Focused + Selected (month dropdown open)',
+  render: () => {
+    const containerRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        const trigger = containerRef.current?.querySelector('[aria-label="Select month"]') as HTMLElement
+        if (trigger) {
+          trigger.focus()
+          trigger.click()
+        }
+      }, 100)
+      return () => clearTimeout(timer)
+    }, [])
+
+    return (
+      <ThemedFrame>
+        <ForceFocusStyle />
+        <div ref={containerRef} data-force-focus>
+          <Calendar mode="single" />
+        </div>
+      </ThemedFrame>
+    )
+  },
+}
+
+export const FocusedYearDropdown: Story = {
+  name: 'Focused (year dropdown)',
+  render: () => {
+    const containerRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        const trigger = containerRef.current?.querySelector('[aria-label="Select year"]') as HTMLElement
+        trigger?.focus()
+      }, 100)
+      return () => clearTimeout(timer)
+    }, [])
+
+    return (
+      <ThemedFrame>
+        <ForceFocusStyle />
+        <div ref={containerRef} data-force-focus>
+          <Calendar mode="single" />
+        </div>
+      </ThemedFrame>
+    )
+  },
+}
+
+export const FocusedAndSelectedYearDropdown: Story = {
+  name: 'Focused + Selected (year dropdown open)',
+  render: () => {
+    const containerRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        const trigger = containerRef.current?.querySelector('[aria-label="Select year"]') as HTMLElement
+        if (trigger) {
+          trigger.focus()
+          trigger.click()
+        }
+      }, 100)
+      return () => clearTimeout(timer)
+    }, [])
+
+    return (
+      <ThemedFrame>
+        <ForceFocusStyle />
+        <div ref={containerRef} data-force-focus>
+          <Calendar mode="single" />
+        </div>
+      </ThemedFrame>
+    )
+  },
+}

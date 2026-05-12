@@ -16,7 +16,11 @@ const triggerClass = cn(
   'rounded-survey-md border border-survey-border-interactive bg-transparent',
   'text-survey-body font-survey-regular text-survey-foreground',
   'outline-none transition-colors hover:bg-survey-muted-background',
-  'focus-visible:border-survey-border-selected',
+  'data-[state=open]:border-survey-border-selected',
+  'focus-visible:outline-none',
+  'focus-visible:ring-2 focus-visible:ring-survey-border-interactive',
+  'focus-visible:ring-offset-2 focus-visible:ring-offset-survey-background',
+  'data-[state=open]:focus-visible:ring-survey-border-selected',
 )
 
 const contentClass = cn(
@@ -29,7 +33,9 @@ const itemClass = cn(
   'relative flex w-full cursor-pointer select-none items-center',
   'rounded-sm py-2 px-3 text-survey-body font-survey-regular text-survey-foreground outline-none',
   'data-[highlighted]:bg-survey-muted-background',
+  'data-[highlighted]:ring-2 data-[highlighted]:ring-survey-border-interactive data-[highlighted]:ring-inset',
   'data-[state=checked]:font-bold data-[state=checked]:text-survey-primary',
+  'data-[highlighted][data-state=checked]:ring-survey-border-selected',
   'data-[disabled]:opacity-50 data-[disabled]:text-survey-muted-foreground data-[disabled]:cursor-not-allowed',
 )
 
@@ -37,6 +43,9 @@ const navButtonClass = cn(
   'h-7 w-7 inline-flex items-center justify-center bg-transparent p-0',
   'rounded-survey-sm border border-survey-border-interactive',
   'text-survey-foreground hover:bg-survey-muted-background',
+  'focus-visible:outline-none',
+  'focus-visible:ring-2 focus-visible:ring-survey-border-interactive',
+  'focus-visible:ring-offset-2 focus-visible:ring-offset-survey-background',
   'disabled:opacity-50 disabled:cursor-not-allowed',
 )
 
@@ -204,11 +213,15 @@ function Calendar({
           'rounded-[var(--survey-day-radius)] text-survey-foreground',
           'hover:bg-survey-muted-background',
           'aria-selected:opacity-100',
+          'focus-visible:outline-none',
+          'focus-visible:ring-2 focus-visible:ring-survey-border-interactive',
+          'focus-visible:ring-offset-2 focus-visible:ring-offset-survey-background',
         ),
         day_selected: cn(
           'bg-survey-primary text-survey-primary-foreground font-survey-semibold',
           'hover:bg-survey-primary hover:text-survey-primary-foreground',
-          'focus:bg-survey-primary focus:text-survey-primary-foreground',
+          'focus-visible:bg-survey-primary focus-visible:text-survey-primary-foreground',
+          'focus-visible:ring-survey-border-selected',
         ),
         day_today: 'text-survey-foreground',
         day_outside: 'day-outside text-survey-muted-foreground',
