@@ -5,6 +5,7 @@ import { TextAnswer } from '../../components/survey-rendering/TextAnswer';
 import { OpenEndAnswer } from '../../components/survey-rendering/OpenEndAnswer';
 import { DateAnswer } from '../../components/survey-rendering/DateAnswer';
 import { DropdownAnswer } from '../../components/survey-rendering/DropdownAnswer';
+import { TimePicker, type TimeValue } from '../../components/survey-rendering/TimePicker';
 import { SurveyNavigation } from '../../components/survey-rendering/SurveyNavigation';
 import { SurveyCompletionBar } from '../../components/survey-rendering/SurveyCompletionBar';
 import { LanguageSelector } from '../../components/survey-rendering/LanguageSelector';
@@ -31,6 +32,7 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
   const [openValue, setOpenValue] = React.useState('');
   const [dateValue, setDateValue] = React.useState('');
   const [dropdownValue, setDropdownValue] = React.useState<string>('');
+  const [timeValue, setTimeValue] = React.useState<TimeValue>({ hour: 2, minute: 30, period: 'PM' });
   const [lang, setLang] = React.useState('en');
   const [checkedOptions, setCheckedOptions] = React.useState({ a: false, b: false, c: false });
   const [contactMethod, setContactMethod] = React.useState<string>('');
@@ -166,6 +168,15 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
               value={dateValue}
               onChange={(e) => setDateValue(e.target.value)}
               error={dateError}
+            />
+          </QuestionField>
+
+          <QuestionField>
+            <QuestionText label="What time would you prefer to be contacted?" />
+            <TimePicker
+              mode="single"
+              value={timeValue}
+              onChange={(e) => setTimeValue(e.target.value as TimeValue)}
             />
           </QuestionField>
 

@@ -16,6 +16,7 @@ export interface DropdownPopUpProps extends Omit<React.HTMLAttributes<HTMLDivEle
   onSelect?: (value: string) => void;
   emptyMessage?: string; // default: "No options"
   maxHeight?: number;    // default: 240
+  showCheckmark?: boolean; // default: true
 }
 
 const DropdownPopUp = React.forwardRef<HTMLDivElement, DropdownPopUpProps>(
@@ -26,6 +27,7 @@ const DropdownPopUp = React.forwardRef<HTMLDivElement, DropdownPopUpProps>(
       onSelect,
       emptyMessage = 'No options',
       maxHeight = 240,
+      showCheckmark = true,
       className,
       ...props
     },
@@ -119,7 +121,7 @@ const DropdownPopUp = React.forwardRef<HTMLDivElement, DropdownPopUpProps>(
                   )}
                 >
                   <span>{option.label}</span>
-                  {isSelected && <Check size={16} className="text-survey-primary" />}
+                  {showCheckmark && isSelected && <Check size={16} className="text-survey-primary" />}
                 </div>
               );
             })
