@@ -20,7 +20,7 @@ const DropZone = React.forwardRef<HTMLDivElement, DropZoneProps>(
       <div
         ref={ref}
         className={cn(
-          "inline-flex flex-col items-stretch min-w-28 min-h-28 border border-survey-border-interactive",
+          "inline-flex flex-col items-stretch min-w-28 border border-survey-border-interactive",
           className,
         )}
         style={{
@@ -33,10 +33,20 @@ const DropZone = React.forwardRef<HTMLDivElement, DropZoneProps>(
         }}
         {...props}
       >
-        <span className="text-survey-body font-survey-semibold font-survey text-survey-foreground text-center">
-          {label}
-        </span>
-        {children}
+        <div style={{ paddingLeft: "4px", paddingRight: "4px" }}>
+          <span className="text-survey-body font-survey-semibold font-survey text-survey-foreground text-left">
+            {label}
+          </span>
+        </div>
+        {children ? (
+          children
+        ) : (
+          <div style={{ padding: "4px" }}>
+            <span className="text-xs font-survey text-survey-foreground/60 text-left">
+              Drag cards here
+            </span>
+          </div>
+        )}
       </div>
     );
   },
