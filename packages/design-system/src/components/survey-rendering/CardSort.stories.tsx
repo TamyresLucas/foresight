@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { Card } from "./Card";
 import { CardSort } from "./CardSort";
 
 const meta = {
@@ -58,4 +59,13 @@ export const WithGroups: Story = {
     ],
     sourceGroups: ["Group 1", "Group 2"],
   },
+};
+
+export const DraggedCard: StoryObj = {
+  render: () => (
+    <div className="flex gap-4 items-start">
+      <Card size="md" dragged>Dragged</Card>
+      <Card size="md">Default</Card>
+    </div>
+  ),
 };

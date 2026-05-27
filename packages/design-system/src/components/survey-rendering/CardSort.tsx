@@ -105,6 +105,7 @@ const CardSort = React.forwardRef<HTMLDivElement, CardSortProps>(
       [current, commit, items, choiceLabels],
     );
 
+    const [draggedId, setDraggedId] = React.useState<string | null>(null);
     const [dragOverZone, setDragOverZone] = React.useState<CardSortZone | null>(
       null,
     );
@@ -114,6 +115,11 @@ const CardSort = React.forwardRef<HTMLDivElement, CardSortProps>(
       e.dataTransfer.setData(DATA_TRANSFER_TYPE, id);
       e.dataTransfer.setData("text/plain", id);
       e.dataTransfer.effectAllowed = "move";
+      setDraggedId(id);
+    };
+
+    const handleDragEnd = () => {
+      setDraggedId(null);
     };
 
     const handleDragOver =
@@ -137,6 +143,7 @@ const CardSort = React.forwardRef<HTMLDivElement, CardSortProps>(
           e.dataTransfer.getData(DATA_TRANSFER_TYPE) ||
           e.dataTransfer.getData("text/plain");
         setDragOverZone(null);
+        setDraggedId(null);
         if (!id) return;
         moveItem(id, zone);
       };
@@ -156,7 +163,9 @@ const CardSort = React.forwardRef<HTMLDivElement, CardSortProps>(
         shape={cardShape}
         size={cardSize}
         draggable
+        dragged={draggedId === it.id}
         onDragStart={handleDragStart(it.id)}
+        onDragEnd={handleDragEnd}
         onKeyDown={handleCardKeyDown(it.id)}
         className="w-full h-auto min-h-0 p-2 justify-start text-left cursor-grab active:cursor-grabbing"
       >

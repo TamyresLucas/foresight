@@ -34,6 +34,7 @@ export interface CardProps
     VariantProps<typeof cardVariants> {
   selected?: boolean;
   focused?: boolean;
+  dragged?: boolean;
   width?: number | string;
   height?: number | string;
   aspectRatio?: number | string;
@@ -48,6 +49,7 @@ const Card = React.forwardRef<HTMLButtonElement, CardProps>(
       size,
       selected = false,
       focused = false,
+      dragged = false,
       width,
       height,
       aspectRatio,
@@ -64,11 +66,13 @@ const Card = React.forwardRef<HTMLButtonElement, CardProps>(
       <button
         ref={ref}
         type="button"
-        data-state={selected ? "selected" : "default"}
+        data-state={dragged ? "dragged" : selected ? "selected" : "default"}
         data-focused={focused ? "true" : undefined}
         aria-pressed={selected}
         className={cn(
           cardVariants({ shape, size }),
+          dragged &&
+            "bg-survey-primary text-survey-primary-foreground hover:bg-survey-primary hover:text-survey-primary-foreground",
           focused &&
             cn(
               "ring-2 ring-offset-2 ring-offset-survey-background",
