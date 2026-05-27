@@ -61,11 +61,22 @@ export const WithGroups: Story = {
   },
 };
 
-export const DraggedCard: StoryObj = {
+export const DragStates: StoryObj = {
   render: () => (
-    <div className="flex gap-4 items-start">
-      <Card size="md" dragged>Dragged</Card>
-      <Card size="md">Default</Card>
+    <div className="flex flex-col gap-4">
+      <p className="text-sm text-survey-foreground font-survey">
+        Drag a card to see the primary-colored ghost and empty placeholder.
+      </p>
+      <div className="flex gap-4 items-start">
+        <Card size="md">Normal card</Card>
+        <Card size="md" dragged>Placeholder (invisible)</Card>
+        <Card
+          size="md"
+          className="bg-survey-primary text-survey-primary-foreground border-survey-primary"
+        >
+          Drag ghost preview
+        </Card>
+      </div>
     </div>
   ),
 };

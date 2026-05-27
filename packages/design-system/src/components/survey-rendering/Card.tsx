@@ -72,7 +72,7 @@ const Card = React.forwardRef<HTMLButtonElement, CardProps>(
         className={cn(
           cardVariants({ shape, size }),
           dragged &&
-            "bg-survey-primary text-survey-primary-foreground hover:bg-survey-primary hover:text-survey-primary-foreground",
+            "opacity-0",
           focused &&
             cn(
               "ring-2 ring-offset-2 ring-offset-survey-background",

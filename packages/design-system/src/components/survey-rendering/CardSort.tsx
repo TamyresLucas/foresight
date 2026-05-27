@@ -111,15 +111,40 @@ const CardSort = React.forwardRef<HTMLDivElement, CardSortProps>(
     );
     const [announcement, setAnnouncement] = React.useState("");
 
+    const dragGhostRef = React.useRef<HTMLDivElement | null>(null);
+
     const handleDragStart = (id: string) => (e: React.DragEvent) => {
       e.dataTransfer.setData(DATA_TRANSFER_TYPE, id);
       e.dataTransfer.setData("text/plain", id);
       e.dataTransfer.effectAllowed = "move";
+
+      const target = e.currentTarget as HTMLElement;
+      const rect = target.getBoundingClientRect();
+      const ghost = target.cloneNode(true) as HTMLDivElement;
+      ghost.style.width = `${rect.width}px`;
+      ghost.style.height = `${rect.height}px`;
+      ghost.style.position = "fixed";
+      ghost.style.top = "-9999px";
+      ghost.style.left = "-9999px";
+      ghost.style.opacity = "1";
+      ghost.style.pointerEvents = "none";
+      ghost.style.backgroundColor = "hsl(var(--survey-primary))";
+      ghost.style.color = "hsl(var(--survey-primary-foreground))";
+      ghost.style.borderColor = "hsl(var(--survey-primary))";
+      document.body.appendChild(ghost);
+      e.dataTransfer.setDragImage(ghost, rect.width / 2, rect.height / 2);
+      dragGhostRef.current = ghost;
+
       setDraggedId(id);
     };
 
     const handleDragEnd = () => {
       setDraggedId(null);
+      setDragOverZone(null);
+      if (dragGhostRef.current) {
+        dragGhostRef.current.remove();
+        dragGhostRef.current = null;
+      }
     };
 
     const handleDragOver =
@@ -157,6 +182,20 @@ const CardSort = React.forwardRef<HTMLDivElement, CardSortProps>(
         moveItem(id, nextZone);
       };
 
+    const showDropIndicator = (zone: CardSortZone) =>
+      draggedId !== null && dragOverZone === zone;
+
+    const dropIndicator = (
+      <div
+        key="drop-indicator"
+        className="w-full rounded-survey-md border-2 border-dashed border-survey-border-muted flex items-center justify-center p-2"
+      >
+        <span className="text-survey-foreground font-survey text-survey-body">
+          Drop here
+        </span>
+      </div>
+    );
+
     const renderCard = (it: CardSortItem) => (
       <Card
         key={it.id}
@@ -188,14 +227,17 @@ const CardSort = React.forwardRef<HTMLDivElement, CardSortProps>(
           onDragLeave={handleDragLeave(zone)}
           onDrop={handleDrop(zone)}
         >
-          {zoneItems.length === 0 ? (
+          {zoneItems.length === 0 && !showDropIndicator(zone) ? (
             <div style={{ padding: "4px" }}>
               <span className="text-xs font-survey text-survey-foreground/60 text-left">
                 Drag cards here
               </span>
             </div>
           ) : (
-            zoneItems.map(renderCard)
+            <>
+              {zoneItems.map(renderCard)}
+              {showDropIndicator(zone) && dropIndicator}
+            </>
           )}
         </DropZone>
       );
@@ -249,6 +291,7 @@ const CardSort = React.forwardRef<HTMLDivElement, CardSortProps>(
                 );
               })
             : sourceItems.map(renderCard)}
+          {showDropIndicator("source") && dropIndicator}
         </div>
       );
     };
