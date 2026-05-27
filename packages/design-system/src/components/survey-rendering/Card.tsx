@@ -7,11 +7,11 @@ import { cn } from "@/lib/utils";
 const cardVariants = cva(
   cn(
     "inline-flex items-center justify-center text-center select-none cursor-pointer",
-    "rounded-survey-md border border-survey-border-muted bg-survey-background",
+    "rounded-survey-md border border-survey-border-interactive bg-survey-background",
     "text-survey-foreground font-survey-regular",
     "transition-colors hover:bg-survey-muted-background",
     "focus:outline-none focus-visible:outline-none",
-    "data-[state=selected]:border-2 data-[state=selected]:border-survey-border-selected",
+    "data-[state=selected]:border-2 data-[state=selected]:border-survey-border-interactive",
   ),
   {
     variants: {

@@ -133,6 +133,7 @@ const DateAnswer = React.forwardRef<HTMLButtonElement, DateAnswerProps>(
               mode="single"
               selected={selectedDate}
               onSelect={handleSelect}
+              defaultMonth={selectedDate ?? new Date()}
               initialFocus
             />
           </PopoverContent>
