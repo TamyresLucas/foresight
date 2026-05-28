@@ -14,6 +14,7 @@ import { RadioGroup, RadioGroupOption } from '../../components/survey-rendering/
 import { NPS } from '../../components/survey-rendering/NPS';
 import { ChoiceGrid } from '../../components/survey-rendering/ChoiceGrid';
 import { CardSort, type CardSortValue } from '../../components/survey-rendering/CardSort';
+import { NumericRanking, type NumericRankingValue } from '../../components/survey-rendering/NumericRanking';
 import { SurveyErrorMessage } from '../../components/survey-rendering/SurveyErrorMessage';
 import { QuestionText } from '../../components/survey-rendering/QuestionText';
 import { QuestionField } from '../../components/survey-rendering/QuestionField';
@@ -41,6 +42,7 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
   const [npsValue, setNpsValue] = React.useState<string>('');
   const [gridValue, setGridValue] = React.useState<Record<string, string>>({});
   const [cardSortValue, setCardSortValue] = React.useState<CardSortValue>({});
+  const [numericRankingValue, setNumericRankingValue] = React.useState<NumericRankingValue>({});
   const [showError, setShowError] = React.useState(false);
 
   const gridRows = [
@@ -218,6 +220,19 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
               choiceLabels={['Like', 'Dislike']}
               value={cardSortValue}
               onChange={setCardSortValue}
+            />
+          </QuestionField>
+
+          <QuestionField>
+            <QuestionText label="Rank the following in order of importance:" />
+            <NumericRanking
+              items={[
+                { value: 'speed', label: 'Speed' },
+                { value: 'quality', label: 'Quality' },
+                { value: 'cost', label: 'Cost' },
+              ]}
+              value={numericRankingValue}
+              onChange={setNumericRankingValue}
             />
           </QuestionField>
 
