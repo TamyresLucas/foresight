@@ -291,7 +291,6 @@ const CardSort = React.forwardRef<HTMLDivElement, CardSortProps>(
                 );
               })
             : sourceItems.map(renderCard)}
-          {showDropIndicator("source") && dropIndicator}
         </div>
       );
     };
@@ -304,8 +303,13 @@ const CardSort = React.forwardRef<HTMLDivElement, CardSortProps>(
         {...props}
       >
         {renderSourceColumn()}
-        {renderChoiceZone("choice1", choiceLabels[0])}
-        {renderChoiceZone("choice2", choiceLabels[1])}
+        <div
+          className="flex flex-col sm:contents flex-1"
+          style={{ gap: "var(--survey-margin, 8px)" }}
+        >
+          {renderChoiceZone("choice1", choiceLabels[0])}
+          {renderChoiceZone("choice2", choiceLabels[1])}
+        </div>
         <span
           aria-live="polite"
           className="sr-only"
