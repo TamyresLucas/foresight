@@ -68,6 +68,7 @@ export { TimePicker, type TimePickerProps, type TimeValue } from "./components/s
 export { Card as SurveyCard, cardVariants as surveyCardVariants, type CardProps as SurveyCardProps } from "./components/survey-rendering/Card";
 export { DropZone, type DropZoneProps } from "./components/survey-rendering/DropZone";
 export { CardSort, type CardSortProps, type CardSortItem, type CardSortValue, type CardSortZone } from "./components/survey-rendering/CardSort";
+export { NumericRanking, NumericRankingInput, type NumericRankingProps, type NumericRankingItem, type NumericRankingValue } from "./components/survey-rendering/NumericRanking";
 
 // Theme blocks
 export * from "./blocks/theme/ThemeEditor";
