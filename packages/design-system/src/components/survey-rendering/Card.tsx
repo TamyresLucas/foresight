@@ -6,26 +6,42 @@ import { cn } from "@/lib/utils";
 
 const cardVariants = cva(
   cn(
-    "inline-flex items-center justify-center text-center select-none cursor-pointer",
+    "inline-flex select-none cursor-pointer",
     "rounded-survey-md border border-survey-border-interactive bg-survey-background",
     "text-survey-foreground font-survey-regular",
-    "transition-colors hover:bg-survey-muted-background",
+    "transition-colors",
     "focus:outline-none focus-visible:outline-none",
     "data-[state=selected]:border-2 data-[state=selected]:border-survey-border-selected",
   ),
   {
     variants: {
+      variant: {
+        statement: "items-center justify-center text-center hover:bg-survey-muted-background",
+        image: "overflow-clip",
+        imageStatement: "flex-col items-stretch overflow-clip shadow-sm",
+      },
       shape: {
         square: "aspect-square",
         rectangle: "",
       },
       size: {
-        sm: "min-w-20 min-h-20 p-3 text-survey-body",
-        md: "min-w-28 min-h-28 p-4 text-survey-body",
-        lg: "min-w-36 min-h-36 p-5 text-survey-body",
+        sm: "",
+        md: "",
+        lg: "",
       },
     },
-    defaultVariants: { shape: "rectangle", size: "md" },
+    compoundVariants: [
+      { variant: "statement", size: "sm", className: "min-w-20 min-h-20 p-3 text-survey-body" },
+      { variant: "statement", size: "md", className: "min-w-28 min-h-28 p-4 text-survey-body" },
+      { variant: "statement", size: "lg", className: "min-w-36 min-h-36 p-5 text-survey-body" },
+      { variant: "image", size: "sm", className: "min-w-20 min-h-20" },
+      { variant: "image", size: "md", className: "min-w-28 min-h-28" },
+      { variant: "image", size: "lg", className: "min-w-36 min-h-36" },
+      { variant: "imageStatement", size: "sm", className: "min-w-20" },
+      { variant: "imageStatement", size: "md", className: "min-w-28" },
+      { variant: "imageStatement", size: "lg", className: "min-w-36" },
+    ],
+    defaultVariants: { variant: "statement", shape: "rectangle", size: "md" },
   },
 );
 
@@ -38,6 +54,8 @@ export interface CardProps
   width?: number | string;
   height?: number | string;
   aspectRatio?: number | string;
+  imageSrc?: string;
+  imageAlt?: string;
   children?: React.ReactNode;
 }
 
@@ -45,6 +63,7 @@ const Card = React.forwardRef<HTMLButtonElement, CardProps>(
   (
     {
       className,
+      variant = "statement",
       shape,
       size,
       selected = false,
@@ -53,6 +72,8 @@ const Card = React.forwardRef<HTMLButtonElement, CardProps>(
       width,
       height,
       aspectRatio,
+      imageSrc,
+      imageAlt = "",
       style,
       children,
       ...props
@@ -70,9 +91,8 @@ const Card = React.forwardRef<HTMLButtonElement, CardProps>(
         data-focused={focused ? "true" : undefined}
         aria-pressed={selected}
         className={cn(
-          cardVariants({ shape, size }),
-          dragged &&
-            "opacity-0",
+          cardVariants({ variant, shape, size }),
+          dragged && "opacity-0",
           focused &&
             cn(
               "ring-2 ring-offset-2 ring-offset-survey-background",
@@ -89,7 +109,30 @@ const Card = React.forwardRef<HTMLButtonElement, CardProps>(
         style={{ width, height, aspectRatio, ...style }}
         {...props}
       >
-        {children}
+        {variant === "image" && imageSrc && (
+          <img
+            alt={imageAlt}
+            src={imageSrc}
+            className="size-full object-cover pointer-events-none"
+          />
+        )}
+        {variant === "imageStatement" && (
+          <>
+            <div className="relative w-full bg-survey-muted-background flex-1 min-h-0">
+              {imageSrc && (
+                <img
+                  alt={imageAlt}
+                  src={imageSrc}
+                  className="absolute inset-0 size-full object-cover pointer-events-none"
+                />
+              )}
+            </div>
+            <div className="w-full bg-survey-background px-4 py-3 text-center text-survey-body text-survey-foreground shrink-0">
+              {children}
+            </div>
+          </>
+        )}
+        {variant === "statement" && children}
       </button>
     );
   },

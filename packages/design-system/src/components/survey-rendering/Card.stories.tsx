@@ -17,6 +17,8 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+// --- Statement (default) ---
+
 export const Default: Story = {
   args: { children: 'Option' },
 };
@@ -56,6 +58,124 @@ export const Group: Story = {
       <Card>Option A</Card>
       <Card selected>Option B</Card>
       <Card>Option C</Card>
+    </div>
+  ),
+};
+
+// --- Image Only ---
+
+export const ImageOnly: Story = {
+  args: {
+    variant: 'image',
+    imageSrc: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=300&fit=crop',
+    imageAlt: 'Green sofa',
+    width: 200,
+    height: 200,
+  },
+};
+
+export const ImageOnlySelected: Story = {
+  args: {
+    variant: 'image',
+    imageSrc: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=300&fit=crop',
+    imageAlt: 'Green sofa',
+    selected: true,
+    width: 200,
+    height: 200,
+  },
+};
+
+export const ImageOnlySquare: Story = {
+  args: {
+    variant: 'image',
+    shape: 'square',
+    imageSrc: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=300&fit=crop',
+    imageAlt: 'Green sofa',
+    width: 200,
+  },
+};
+
+export const ImageOnlyGroup: Story = {
+  render: () => (
+    <div className="flex flex-wrap gap-3">
+      <Card variant="image" imageSrc="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=300&fit=crop" imageAlt="Sofa" width={160} height={160} />
+      <Card variant="image" imageSrc="https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=300&h=300&fit=crop" imageAlt="Chair" width={160} height={160} selected />
+      <Card variant="image" imageSrc="https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=300&h=300&fit=crop" imageAlt="Desk" width={160} height={160} />
+    </div>
+  ),
+};
+
+// --- Image + Statement ---
+
+export const ImageStatement: Story = {
+  args: {
+    variant: 'imageStatement',
+    imageSrc: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=300&fit=crop',
+    imageAlt: 'Green sofa',
+    children: 'Armchair',
+    width: 257,
+    height: 311,
+  },
+};
+
+export const ImageStatementSelected: Story = {
+  args: {
+    variant: 'imageStatement',
+    imageSrc: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=300&fit=crop',
+    imageAlt: 'Green sofa',
+    children: 'Armchair',
+    selected: true,
+    width: 257,
+    height: 311,
+  },
+};
+
+export const ImageStatementLongText: Story = {
+  args: {
+    variant: 'imageStatement',
+    imageSrc: 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=300&h=300&fit=crop',
+    imageAlt: 'Chair',
+    children: 'A French fry is a thinly sliced strip of potato that is deep-fried until crispy and golden.',
+    width: 257,
+    height: 480,
+  },
+};
+
+export const ImageStatementGroup: Story = {
+  render: () => (
+    <div className="flex flex-wrap gap-3">
+      <Card variant="imageStatement" imageSrc="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=300&fit=crop" imageAlt="Sofa" width={200} height={260}>
+        Sofa
+      </Card>
+      <Card variant="imageStatement" imageSrc="https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=300&h=300&fit=crop" imageAlt="Chair" width={200} height={260} selected>
+        Chair
+      </Card>
+      <Card variant="imageStatement" imageSrc="https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=300&h=300&fit=crop" imageAlt="Desk" width={200} height={260}>
+        Desk
+      </Card>
+    </div>
+  ),
+};
+
+// --- All Variants Side by Side ---
+
+export const AllVariants: Story = {
+  render: () => (
+    <div className="flex flex-wrap items-start gap-4">
+      <div className="flex flex-col gap-2 items-center">
+        <span className="text-xs text-muted-foreground">Statement</span>
+        <Card variant="statement" width={160} height={160}>Option A</Card>
+      </div>
+      <div className="flex flex-col gap-2 items-center">
+        <span className="text-xs text-muted-foreground">Image</span>
+        <Card variant="image" imageSrc="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=300&fit=crop" imageAlt="Sofa" width={160} height={160} />
+      </div>
+      <div className="flex flex-col gap-2 items-center">
+        <span className="text-xs text-muted-foreground">Image + Statement</span>
+        <Card variant="imageStatement" imageSrc="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=300&fit=crop" imageAlt="Sofa" width={200} height={260}>
+          Armchair
+        </Card>
+      </div>
     </div>
   ),
 };
