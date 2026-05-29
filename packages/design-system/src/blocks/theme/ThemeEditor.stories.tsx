@@ -16,6 +16,7 @@ import { ChoiceGrid } from '../../components/survey-rendering/ChoiceGrid';
 import { CardSort, type CardSortValue } from '../../components/survey-rendering/CardSort';
 import { NumericRanking, type NumericRankingValue } from '../../components/survey-rendering/NumericRanking';
 import { RunningTotal, type RunningTotalValue } from '../../components/survey-rendering/RunningTotal';
+import { DragAndDrop, type DragAndDropValue } from '../../components/survey-rendering/DragAndDrop';
 import { SurveyErrorMessage } from '../../components/survey-rendering/SurveyErrorMessage';
 import { QuestionText } from '../../components/survey-rendering/QuestionText';
 import { QuestionField } from '../../components/survey-rendering/QuestionField';
@@ -45,6 +46,7 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
   const [cardSortValue, setCardSortValue] = React.useState<CardSortValue>({});
   const [numericRankingValue, setNumericRankingValue] = React.useState<NumericRankingValue>({});
   const [runningTotalValue, setRunningTotalValue] = React.useState<RunningTotalValue>({});
+  const [dragAndDropValue, setDragAndDropValue] = React.useState<DragAndDropValue>([]);
   const [showError, setShowError] = React.useState(false);
 
   const gridRows = [
@@ -236,6 +238,21 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
               columns={[{ value: 'col1', label: 'Column 1' }]}
               value={runningTotalValue}
               onChange={setRunningTotalValue}
+            />
+          </QuestionField>
+
+          <QuestionField>
+            <QuestionText label="Rank these items by dragging them into order:" />
+            <DragAndDrop
+              items={[
+                { id: 'design', label: 'Design' },
+                { id: 'performance', label: 'Performance' },
+                { id: 'usability', label: 'Usability' },
+                { id: 'reliability', label: 'Reliability' },
+              ]}
+              dropZoneLabel="Order of preference"
+              value={dragAndDropValue}
+              onChange={setDragAndDropValue}
             />
           </QuestionField>
 
