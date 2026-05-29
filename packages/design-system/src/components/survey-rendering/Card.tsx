@@ -127,7 +127,7 @@ const Card = React.forwardRef<HTMLButtonElement, CardProps>(
                 />
               )}
             </div>
-            <div className="w-full bg-survey-background px-4 py-3 text-center text-survey-body text-survey-foreground shrink-0">
+            <div className="flex min-h-12 w-full items-center justify-center bg-survey-background px-4 py-3 text-center text-survey-body text-survey-foreground shrink-0">
               {children}
             </div>
           </>

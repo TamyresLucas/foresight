@@ -71,6 +71,7 @@ export { CardSort, type CardSortProps, type CardSortItem, type CardSortValue, ty
 export { NumericRanking, NumericRankingInput, type NumericRankingProps, type NumericRankingItem, type NumericRankingValue } from "./components/survey-rendering/NumericRanking";
 export { RunningTotal, RunningTotalInput, type RunningTotalProps, type RunningTotalRow, type RunningTotalColumn, type RunningTotalValue } from "./components/survey-rendering/RunningTotal";
 export { DragAndDrop, type DragAndDropProps, type DragAndDropItem, type DragAndDropValue } from "./components/survey-rendering/DragAndDrop";
+export { Carousel, type CarouselProps, type CarouselItem } from "./components/survey-rendering/Carousel";
 
 // Theme blocks
 export * from "./blocks/theme/ThemeEditor";
