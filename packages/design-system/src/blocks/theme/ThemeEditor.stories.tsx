@@ -15,6 +15,7 @@ import { NPS } from '../../components/survey-rendering/NPS';
 import { ChoiceGrid } from '../../components/survey-rendering/ChoiceGrid';
 import { CardSort, type CardSortValue } from '../../components/survey-rendering/CardSort';
 import { NumericRanking, type NumericRankingValue } from '../../components/survey-rendering/NumericRanking';
+import { RunningTotal, type RunningTotalValue } from '../../components/survey-rendering/RunningTotal';
 import { SurveyErrorMessage } from '../../components/survey-rendering/SurveyErrorMessage';
 import { QuestionText } from '../../components/survey-rendering/QuestionText';
 import { QuestionField } from '../../components/survey-rendering/QuestionField';
@@ -43,6 +44,7 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
   const [gridValue, setGridValue] = React.useState<Record<string, string>>({});
   const [cardSortValue, setCardSortValue] = React.useState<CardSortValue>({});
   const [numericRankingValue, setNumericRankingValue] = React.useState<NumericRankingValue>({});
+  const [runningTotalValue, setRunningTotalValue] = React.useState<RunningTotalValue>({});
   const [showError, setShowError] = React.useState(false);
 
   const gridRows = [
@@ -220,6 +222,20 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
               choiceLabels={['Like', 'Dislike']}
               value={cardSortValue}
               onChange={setCardSortValue}
+            />
+          </QuestionField>
+
+          <QuestionField>
+            <QuestionText label="Allocation or constant-sum question using numeric values" />
+            <RunningTotal
+              rows={[
+                { value: 'row1', label: 'Row 1' },
+                { value: 'row2', label: 'Row 2' },
+                { value: 'row3', label: 'Row 3' },
+              ]}
+              columns={[{ value: 'col1', label: 'Column 1' }]}
+              value={runningTotalValue}
+              onChange={setRunningTotalValue}
             />
           </QuestionField>
 

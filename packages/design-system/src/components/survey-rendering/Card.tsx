@@ -11,7 +11,7 @@ const cardVariants = cva(
     "text-survey-foreground font-survey-regular",
     "transition-colors hover:bg-survey-muted-background",
     "focus:outline-none focus-visible:outline-none",
-    "data-[state=selected]:border-2 data-[state=selected]:border-survey-border-interactive",
+    "data-[state=selected]:border-2 data-[state=selected]:border-survey-border-selected",
   ),
   {
     variants: {

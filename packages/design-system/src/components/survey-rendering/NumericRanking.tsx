@@ -69,7 +69,7 @@ const NumericRankingInput = React.forwardRef<
             type="text"
             inputMode="numeric"
             className={cn(
-              'w-full bg-transparent text-center text-survey-body font-survey-regular focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 text-survey-foreground font-survey',
+              'w-full bg-transparent text-left text-survey-body font-survey-regular focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 text-survey-foreground font-survey',
               className,
             )}
             ref={ref}
