@@ -5,7 +5,8 @@
       "name": "Storybook",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "storybook", "--workspace=packages/design-system"],
-      "port": 6007
+      "port": 6007,
+      "autoPort": true
     },
     {
       "name": "Vite Dev (design-system)",

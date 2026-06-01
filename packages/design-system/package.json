@@ -25,7 +25,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext ts,tsx --fix",
     "type-check": "tsc --noEmit",
-    "storybook": "storybook dev -p 6007",
+    "storybook": "storybook dev -p ${PORT:-6007}",
     "build-storybook": "storybook build"
   },
   "keywords": [
