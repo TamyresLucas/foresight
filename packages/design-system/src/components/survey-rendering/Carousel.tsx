@@ -4,6 +4,7 @@ import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Card, type CardProps } from "./Card";
+import { Bullet } from "./Bullet";
 
 export interface CarouselItem {
   id: string;
@@ -11,6 +12,8 @@ export interface CarouselItem {
   imageSrc?: string;
   imageAlt?: string;
   variant?: CardProps["variant"];
+  /** Marks the slide as answered, showing a checkmark on its bullet. */
+  answered?: boolean;
 }
 
 export interface CarouselProps
@@ -261,21 +264,15 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
             </button>
 
             <div className="flex gap-2" role="tablist" aria-label="Carousel slides">
-              {items.map((_, i) => (
-                <button
-                  key={i}
-                  type="button"
+              {items.map((item, i) => (
+                <Bullet
+                  key={item.id}
+                  selected={i === current}
+                  answered={item.answered ?? false}
                   role="tab"
                   aria-selected={i === current}
                   aria-label={`Slide ${i + 1}`}
                   onClick={() => goTo(i)}
-                  className={cn(
-                    "shrink-0 size-4 rounded-full transition-colors",
-                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-survey-border-interactive focus-visible:ring-offset-2 focus-visible:ring-offset-survey-background",
-                    i === current
-                      ? "bg-survey-primary"
-                      : "border border-survey-border-interactive hover:bg-survey-muted-background",
-                  )}
                 />
               ))}
             </div>
