@@ -19,12 +19,19 @@ export interface CarouselProps
   index?: number;
   defaultIndex?: number;
   onIndexChange?: (index: number) => void;
-  navigation?: "counter";
+  navigation?: "counter" | "bullets";
   cardVariant?: CardProps["variant"];
   cardHeight?: number;
   /** Width of the visible sliver of the previous/next cards, in px. */
   peek?: number;
   gap?: number;
+  /**
+   * Minimum slide image height as a fraction of the slide width. The image
+   * always fills the width and keeps its ratio (never cropped); shorter/wider
+   * images are floored to this height and centered with background bands top &
+   * bottom. Taller images grow the slide freely. Default 2/3 (3:2).
+   */
+  minHeightRatio?: number;
   previousLabel?: string;
   nextLabel?: string;
 }
@@ -41,6 +48,7 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
       cardHeight = 360,
       peek = 24,
       gap = 16,
+      minHeightRatio = 2 / 3,
       previousLabel = "Previous",
       nextLabel = "Next",
       className,
@@ -104,7 +112,7 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
     return (
       <div
         ref={ref}
-        className={cn("flex flex-col items-stretch font-survey", className)}
+        className={cn("flex w-full flex-col items-stretch font-survey", className)}
         {...props}
       >
         <div
@@ -116,7 +124,7 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
           onKeyDown={handleKeyDown}
         >
           <div
-            className="flex items-stretch transition-transform duration-300 ease-out"
+            className="flex items-center transition-transform duration-300 ease-out"
             style={{
               gap: `${gap}px`,
               transform: `translateX(${offset}px)`,
@@ -125,8 +133,19 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
             {items.map((item, i) => {
               const isActive = i === current;
               const variant = item.variant ?? cardVariant;
-              const needsHeight =
-                variant === "image" || variant === "imageStatement";
+              const isImageVariant = variant === "image";
+              const isImageStatement = variant === "imageStatement";
+              // Pure image variant keeps a fixed height. imageStatement fills
+              // the width and keeps its ratio (never cropped); a minimum-height
+              // floor (fraction of the width) keeps short/wide images from
+              // becoming too short, while taller images grow the slide. Each
+              // slide keeps its own height and the row centers them, so the
+              // carousel height equals the tallest visible slide.
+              const fixedHeight = isImageVariant ? cardHeight : undefined;
+              const minImageHeight =
+                isImageStatement && cardWidth > 0
+                  ? minHeightRatio * cardWidth
+                  : undefined;
               return (
                 <div
                   key={item.id}
@@ -142,22 +161,34 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
                       variant={variant}
                       imageSrc={item.imageSrc}
                       imageAlt={item.imageAlt}
-                      height={needsHeight ? cardHeight : undefined}
+                      height={fixedHeight}
+                      minImageHeight={minImageHeight}
                       tabIndex={0}
-                      className="w-full cursor-default"
+                      className="w-full cursor-default shadow-lg"
                     >
                       {item.label}
                     </Card>
                   ) : (
                     <Card
                       variant={variant}
-                      height={needsHeight ? cardHeight : undefined}
+                      // Placeholder reserves each slide's true fill-width height
+                      // via a hidden image (`blank`), so the peeks stay aligned
+                      // while the content stays concealed.
+                      imageSrc={isImageVariant ? undefined : item.imageSrc}
+                      imageAlt={item.imageAlt}
+                      height={fixedHeight}
+                      minImageHeight={minImageHeight}
+                      blank
                       disabled
                       aria-hidden
                       tabIndex={-1}
                       className={cn(
-                        "w-full h-full cursor-default",
-                        variant === "image" && "bg-survey-muted-background",
+                        // Out-of-focus peek slides use the muted border token,
+                        // matching the outer border of multiple-choice options,
+                        // and drop the default shadow so the focused slide's
+                        // drop shadow reads clearly.
+                        "w-full cursor-default border-survey-border-muted shadow-none",
+                        isImageVariant && "bg-survey-muted-background",
                       )}
                     />
                   )}
@@ -176,7 +207,7 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
               aria-label={previousLabel}
               style={{ borderRadius: "var(--component-button-radius)" }}
               className={cn(
-                "flex items-center justify-center p-1.5 text-survey-muted-foreground transition-colors",
+                "flex items-center justify-center p-1.5 text-survey-foreground transition-colors",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-survey-border-interactive",
                 atStart
                   ? "opacity-0 pointer-events-none"
@@ -200,7 +231,63 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
               aria-label={nextLabel}
               style={{ borderRadius: "var(--component-button-radius)" }}
               className={cn(
-                "flex items-center justify-center p-1.5 text-survey-muted-foreground transition-colors",
+                "flex items-center justify-center p-1.5 text-survey-foreground transition-colors",
+                "focus:outline-none focus-visible:ring-2 focus-visible:ring-survey-border-interactive",
+                atEnd ? "opacity-0 pointer-events-none" : "hover:bg-survey-muted-background",
+              )}
+            >
+              <ChevronRight className="size-4" />
+            </button>
+          </div>
+        )}
+
+        {navigation === "bullets" && (
+          <div className="flex items-center justify-center gap-4 self-center py-2 mt-4">
+            <button
+              type="button"
+              onClick={() => goTo(current - 1)}
+              disabled={atStart}
+              aria-label={previousLabel}
+              style={{ borderRadius: "var(--component-button-radius)" }}
+              className={cn(
+                "flex items-center justify-center p-1.5 text-survey-foreground transition-colors",
+                "focus:outline-none focus-visible:ring-2 focus-visible:ring-survey-border-interactive",
+                atStart
+                  ? "opacity-0 pointer-events-none"
+                  : "hover:bg-survey-muted-background",
+              )}
+            >
+              <ChevronLeft className="size-4" />
+            </button>
+
+            <div className="flex gap-2" role="tablist" aria-label="Carousel slides">
+              {items.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  role="tab"
+                  aria-selected={i === current}
+                  aria-label={`Slide ${i + 1}`}
+                  onClick={() => goTo(i)}
+                  className={cn(
+                    "shrink-0 size-4 rounded-full transition-colors",
+                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-survey-border-interactive focus-visible:ring-offset-2 focus-visible:ring-offset-survey-background",
+                    i === current
+                      ? "bg-survey-primary"
+                      : "border border-survey-border-interactive hover:bg-survey-muted-background",
+                  )}
+                />
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => goTo(current + 1)}
+              disabled={atEnd}
+              aria-label={nextLabel}
+              style={{ borderRadius: "var(--component-button-radius)" }}
+              className={cn(
+                "flex items-center justify-center p-1.5 text-survey-foreground transition-colors",
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-survey-border-interactive",
                 atEnd ? "opacity-0 pointer-events-none" : "hover:bg-survey-muted-background",
               )}

@@ -51,11 +51,24 @@ export interface CardProps
   selected?: boolean;
   focused?: boolean;
   dragged?: boolean;
+  /**
+   * Reserve the image's layout space but hide its pixels. Used for blank
+   * carousel peek cards so each placeholder keeps the natural height of its
+   * own image (fill-width) without revealing the content.
+   */
+  blank?: boolean;
   width?: number | string;
   height?: number | string;
   aspectRatio?: number | string;
   imageSrc?: string;
   imageAlt?: string;
+  /**
+   * Minimum height (px) for the `imageStatement` image area. The image always
+   * fills the width and keeps its ratio (never cropped); this floors short/wide
+   * images, which then sit centered with muted background bands top & bottom.
+   * Taller images grow the box past this value.
+   */
+  minImageHeight?: number;
   children?: React.ReactNode;
 }
 
@@ -69,11 +82,13 @@ const Card = React.forwardRef<HTMLButtonElement, CardProps>(
       selected = false,
       focused = false,
       dragged = false,
+      blank = false,
       width,
       height,
       aspectRatio,
       imageSrc,
       imageAlt = "",
+      minImageHeight,
       style,
       children,
       ...props
@@ -118,15 +133,39 @@ const Card = React.forwardRef<HTMLButtonElement, CardProps>(
         )}
         {variant === "imageStatement" && (
           <>
-            <div className="relative w-full bg-survey-muted-background flex-1 min-h-0">
-              {imageSrc && (
-                <img
-                  alt={imageAlt}
-                  src={imageSrc}
-                  className="absolute inset-0 size-full object-cover pointer-events-none"
-                />
-              )}
-            </div>
+            {height === undefined ? (
+              // Fill-width mode: the image always fills the width and keeps its
+              // ratio (never cropped). `minImageHeight` floors short/wide images
+              // — they sit centered with muted background bands top & bottom —
+              // while taller images grow the box freely.
+              <div
+                className="relative flex w-full items-center justify-center bg-survey-muted-background"
+                style={{ minHeight: minImageHeight }}
+              >
+                {imageSrc && (
+                  <img
+                    alt={blank ? "" : imageAlt}
+                    src={imageSrc}
+                    aria-hidden={blank || undefined}
+                    className={cn(
+                      "block w-full h-auto pointer-events-none",
+                      blank && "invisible",
+                    )}
+                  />
+                )}
+              </div>
+            ) : (
+              // Fixed-height mode: the image fills a fixed-height area (cropped).
+              <div className="relative w-full bg-survey-muted-background flex-1 min-h-0">
+                {imageSrc && (
+                  <img
+                    alt={imageAlt}
+                    src={imageSrc}
+                    className="absolute inset-0 size-full object-cover pointer-events-none"
+                  />
+                )}
+              </div>
+            )}
             <div className="flex min-h-12 w-full items-center justify-center bg-survey-background px-4 py-3 text-center text-survey-body text-survey-foreground shrink-0">
               {children}
             </div>

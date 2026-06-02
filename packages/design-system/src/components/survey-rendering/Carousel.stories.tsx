@@ -7,7 +7,7 @@ const meta = {
   tags: ["autodocs"],
   decorators: [
     (Story) => (
-      <div className="w-[320px] p-4">
+      <div className="w-full max-w-2xl p-8">
         <Story />
       </div>
     ),
@@ -17,40 +17,42 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+// Naturally landscape source photos (no cropping) so the rendered slide height
+// stays under 500px at the story width (image always fills the width).
 const items = [
   {
     id: "armchair",
     label: "Armchair",
     imageSrc:
-      "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=400",
-    imageAlt: "Yellow armchair",
+      "https://images.pexels.com/photos/32710106/pexels-photo-32710106.jpeg?auto=compress&cs=tinysrgb&w=600",
+    imageAlt: "Armchair in warm light",
   },
   {
     id: "fries",
     label: "French Fries",
     imageSrc:
-      "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400",
+      "https://images.unsplash.com/photo-1518013431117-eb1465fa5752?w=600",
     imageAlt: "French fries",
   },
   {
     id: "sushi",
     label: "Sushi",
     imageSrc:
-      "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=400",
+      "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600",
     imageAlt: "Sushi platter",
   },
   {
     id: "coffee",
     label: "Coffee",
     imageSrc:
-      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400",
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600",
     imageAlt: "Cup of coffee",
   },
   {
     id: "macaroon",
     label: "Macaroon",
     imageSrc:
-      "https://images.unsplash.com/photo-1569864358642-9d1684040f43?w=400",
+      "https://images.unsplash.com/photo-1569864358642-9d1684040f43?w=600",
     imageAlt: "Macaroons",
   },
 ];
@@ -67,5 +69,20 @@ export const StatementCards: Story = {
     items: items.map((it) => ({ ...it, imageSrc: undefined })),
     cardVariant: "statement",
     navigation: "counter",
+  },
+};
+
+export const BulletNavigation: Story = {
+  args: {
+    items,
+    navigation: "bullets",
+  },
+};
+
+export const BulletNavigationStatementCards: Story = {
+  args: {
+    items: items.map((it) => ({ ...it, imageSrc: undefined })),
+    cardVariant: "statement",
+    navigation: "bullets",
   },
 };
