@@ -72,6 +72,7 @@ export { NumericRanking, NumericRankingInput, type NumericRankingProps, type Num
 export { RunningTotal, RunningTotalInput, type RunningTotalProps, type RunningTotalRow, type RunningTotalColumn, type RunningTotalValue } from "./components/survey-rendering/RunningTotal";
 export { DragAndDrop, type DragAndDropProps, type DragAndDropItem, type DragAndDropValue } from "./components/survey-rendering/DragAndDrop";
 export { Carousel, type CarouselProps, type CarouselItem } from "./components/survey-rendering/Carousel";
+export { Bullet, type BulletProps } from "./components/survey-rendering/Bullet";
 
 // Theme blocks
 export * from "./blocks/theme/ThemeEditor";
