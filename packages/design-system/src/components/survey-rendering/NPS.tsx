@@ -15,6 +15,10 @@ export interface NPSProps {
   className?: string;
   children?: React.ReactNode;
   name?: string;
+  /** Anchor label shown under the low end of the scale, e.g. "Very unlikely". */
+  leftLabel?: React.ReactNode;
+  /** Anchor label shown under the high end of the scale, e.g. "Very likely". */
+  rightLabel?: React.ReactNode;
 }
 
 const NPS = React.forwardRef<HTMLDivElement, NPSProps>(
@@ -28,6 +32,8 @@ const NPS = React.forwardRef<HTMLDivElement, NPSProps>(
       className,
       children,
       name,
+      leftLabel,
+      rightLabel,
     },
     ref,
   ) => {
@@ -61,21 +67,30 @@ const NPS = React.forwardRef<HTMLDivElement, NPSProps>(
         return <NPSOption key={v} value={v} />;
       });
 
+    const hasLabels = leftLabel != null || rightLabel != null;
+
     return (
       <NPSErrorContext.Provider value={!!error}>
         <NPSContext.Provider value={contextValue}>
-          <div
-            ref={ref}
-            role="radiogroup"
-            aria-invalid={!!error || undefined}
-            className={cn("grid font-survey w-full", className)}
-            style={{
-              gap: "4px",
-              gridTemplateColumns: "repeat(10, minmax(0, 1fr))",
-            }}
-            data-name={name}
-          >
-            {options}
+          <div ref={ref} className={cn("flex flex-col font-survey w-full", className)}>
+            <div
+              role="radiogroup"
+              aria-invalid={!!error || undefined}
+              className="grid w-full"
+              style={{
+                gap: "4px",
+                gridTemplateColumns: "repeat(10, minmax(0, 1fr))",
+              }}
+              data-name={name}
+            >
+              {options}
+            </div>
+            {hasLabels && (
+              <div className="mt-2 flex items-start justify-between gap-4 text-survey-body text-survey-muted-foreground">
+                <span className="text-left">{leftLabel}</span>
+                <span className="text-right">{rightLabel}</span>
+              </div>
+            )}
           </div>
         </NPSContext.Provider>
       </NPSErrorContext.Provider>

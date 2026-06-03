@@ -64,6 +64,24 @@ export const CounterNavigation: Story = {
   },
 };
 
+/** Pure image cards: the photo fills a fixed-height slide with no border. */
+export const ImageCards: Story = {
+  args: {
+    items,
+    cardVariant: "image",
+    navigation: "counter",
+  },
+};
+
+/** Combined cards: image on top with a statement bar beneath, framed by a border. */
+export const ImageStatementCards: Story = {
+  args: {
+    items,
+    cardVariant: "imageStatement",
+    navigation: "counter",
+  },
+};
+
 export const StatementCards: Story = {
   args: {
     items: items.map((it) => ({ ...it, imageSrc: undefined })),

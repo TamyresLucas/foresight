@@ -17,7 +17,7 @@ const cardVariants = cva(
     variants: {
       variant: {
         statement: "items-center justify-center text-center hover:bg-survey-muted-background",
-        image: "overflow-clip",
+        image: "flex-col items-stretch overflow-clip",
         imageStatement: "flex-col items-stretch overflow-clip shadow-sm",
       },
       shape: {
@@ -124,12 +124,35 @@ const Card = React.forwardRef<HTMLButtonElement, CardProps>(
         style={{ width, height, aspectRatio, ...style }}
         {...props}
       >
-        {variant === "image" && imageSrc && (
-          <img
-            alt={imageAlt}
-            src={imageSrc}
-            className="size-full object-cover pointer-events-none"
-          />
+        {variant === "image" && (
+          height !== undefined ? (
+            // Fixed-height mode: image fills the full card area (cropped).
+            imageSrc && (
+              <img
+                alt={imageAlt}
+                src={imageSrc}
+                className="size-full object-cover pointer-events-none"
+              />
+            )
+          ) : (
+            // Fill-width mode: image keeps its ratio, card grows to fit.
+            <div
+              className="relative flex w-full items-center justify-center bg-survey-muted-background"
+              style={{ minHeight: minImageHeight }}
+            >
+              {imageSrc && (
+                <img
+                  alt={blank ? "" : imageAlt}
+                  src={imageSrc}
+                  aria-hidden={blank || undefined}
+                  className={cn(
+                    "block w-full h-auto pointer-events-none",
+                    blank && "invisible",
+                  )}
+                />
+              )}
+            </div>
+          )
         )}
         {variant === "imageStatement" && (
           <>

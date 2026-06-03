@@ -27,6 +27,9 @@ const Bullet = React.forwardRef<HTMLButtonElement, BulletProps>(
           // Selected dots fill with primary; answered but unselected sit on
           // the page background; unanswered dots stay transparent.
           selected ? "bg-survey-primary" : answered && "bg-survey-background",
+          // Unselected dots take the shared survey hover-grey background token
+          // on hover, matching nav buttons and choice options.
+          !selected && "hover:bg-survey-muted-background",
           // Selection is shown as a 2px primary-colored outline (no offset ring).
           // Every unselected dot keeps the thinner focus-slide border.
           selected

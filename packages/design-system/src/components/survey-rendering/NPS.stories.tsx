@@ -50,6 +50,12 @@ export const FocusedAndSelected: Story = {
   ),
 };
 
+export const WithLabels: Story = {
+  render: (args) => (
+    <NPS {...args} leftLabel="Very unlikely" rightLabel="Very likely" />
+  ),
+};
+
 export const WithError: Story = {
   render: (args) => <NPS {...args} error="This question is required" />,
 };

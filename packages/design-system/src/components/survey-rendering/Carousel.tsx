@@ -48,7 +48,7 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
       onIndexChange,
       navigation = "counter",
       cardVariant = "imageStatement",
-      cardHeight = 360,
+      cardHeight: _cardHeight = 360,
       peek = 24,
       gap = 16,
       minHeightRatio = 2 / 3,
@@ -127,7 +127,7 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
           onKeyDown={handleKeyDown}
         >
           <div
-            className="flex items-center transition-transform duration-300 ease-out"
+            className="flex items-center transition-transform duration-500 ease-in-out py-6"
             style={{
               gap: `${gap}px`,
               transform: `translateX(${offset}px)`,
@@ -144,9 +144,10 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
               // becoming too short, while taller images grow the slide. Each
               // slide keeps its own height and the row centers them, so the
               // carousel height equals the tallest visible slide.
-              const fixedHeight = isImageVariant ? cardHeight : undefined;
+              // All variants use fill-width / ratio-preserving mode; no fixed height.
+              const fixedHeight = undefined;
               const minImageHeight =
-                isImageStatement && cardWidth > 0
+                (isImageStatement || isImageVariant) && cardWidth > 0
                   ? minHeightRatio * cardWidth
                   : undefined;
               return (
@@ -167,31 +168,33 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
                       height={fixedHeight}
                       minImageHeight={minImageHeight}
                       tabIndex={0}
-                      className="w-full cursor-default shadow-lg"
+                      className={cn(
+                        "w-full cursor-default shadow-lg",
+                        // Grey is always the base layer; only the img fades.
+                        (isImageVariant || isImageStatement) && "bg-survey-muted-background",
+                        "[&_img]:opacity-100 [&_img]:transition-opacity [&_img]:duration-500 [&_img]:ease-in-out",
+                        isImageVariant && "border-0",
+                      )}
                     >
                       {item.label}
                     </Card>
                   ) : (
                     <Card
                       variant={variant}
-                      // Placeholder reserves each slide's true fill-width height
-                      // via a hidden image (`blank`), so the peeks stay aligned
-                      // while the content stays concealed.
-                      imageSrc={isImageVariant ? undefined : item.imageSrc}
+                      // Always pass imageSrc so the img element stays in the DOM
+                      // and CSS opacity can transition smoothly from 0 → 1.
+                      imageSrc={item.imageSrc}
                       imageAlt={item.imageAlt}
                       height={fixedHeight}
                       minImageHeight={minImageHeight}
-                      blank
                       disabled
                       aria-hidden
                       tabIndex={-1}
                       className={cn(
-                        // Out-of-focus peek slides use the muted border token,
-                        // matching the outer border of multiple-choice options,
-                        // and drop the default shadow so the focused slide's
-                        // drop shadow reads clearly.
                         "w-full cursor-default border-survey-border-muted shadow-none",
-                        isImageVariant && "bg-survey-muted-background",
+                        (isImageVariant || isImageStatement) && "bg-survey-muted-background",
+                        "[&_img]:opacity-0 [&_img]:transition-opacity [&_img]:duration-500 [&_img]:ease-in-out",
+                        isImageVariant && "border-0",
                       )}
                     />
                   )}
