@@ -28,6 +28,7 @@ import {
   SelectSeparator,
 } from '../../components/ui/select';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../../components/ui/card';
+import { Checkbox } from '../../components/ui/checkbox';
 
 const FONT_OPTIONS = [
   'Inter',
@@ -57,6 +58,25 @@ const RADIUS_OPTIONS = [
   { value: '1rem', label: 'Round (16px)' },
 ];
 
+export const QUESTION_TYPE_OPTIONS: { id: string; label: string }[] = [
+  { id: 'text-input',       label: 'Text Input' },
+  { id: 'radio',            label: 'Radio Button' },
+  { id: 'nps',              label: 'NPS' },
+  { id: 'checkbox',         label: 'Checkbox' },
+  { id: 'open-end',         label: 'Open End' },
+  { id: 'choice-grid',      label: 'Choice Grid' },
+  { id: 'date',             label: 'Date & Time' },
+  { id: 'time',             label: 'Time Picker' },
+  { id: 'dropdown',         label: 'Dropdown' },
+  { id: 'card-sort',        label: 'Card Sort' },
+  { id: 'running-total',    label: 'Running Total' },
+  { id: 'drag-drop',        label: 'Drag and Drop' },
+  { id: 'numeric-ranking',  label: 'Numeric Ranking' },
+  { id: 'carousel-question', label: 'Carousel Question' },
+];
+
+const ALL_QUESTION_TYPE_IDS = QUESTION_TYPE_OPTIONS.map(q => q.id);
+
 const MARGIN_OPTIONS = [
   { value: '8px', label: 'Tight (8px)' },
   { value: '12px', label: 'Compact (12px)' },
@@ -69,16 +89,38 @@ interface ThemeEditorProps {
   onDelete?: (themeId: string) => void;
   viewport?: 'desktop' | 'mobile';
   onViewportChange?: (viewport: 'desktop' | 'mobile') => void;
+  /** Controlled list of question type ids shown in the preview. Defaults to all visible. */
+  visibleQuestionTypes?: string[];
+  onVisibleQuestionTypesChange?: (types: string[]) => void;
 }
 
-export function ThemeEditor({ 
-  initialTheme = FORESIGHT_DEFAULT, 
+export function ThemeEditor({
+  initialTheme = FORESIGHT_DEFAULT,
   onSave,
   onDelete,
   viewport = 'desktop',
-  onViewportChange
+  onViewportChange,
+  visibleQuestionTypes: visibleProp,
+  onVisibleQuestionTypesChange,
 }: ThemeEditorProps) {
   const [availableThemes, setAvailableThemes] = React.useState<Theme[]>([]);
+  const isVisibilityControlled = visibleProp !== undefined;
+  const [internalVisible, setInternalVisible] = React.useState<string[]>(ALL_QUESTION_TYPE_IDS);
+  const visibleQuestionTypes = isVisibilityControlled ? visibleProp : internalVisible;
+
+  const toggleQuestionType = React.useCallback((id: string, checked: boolean) => {
+    const next = checked
+      ? [...visibleQuestionTypes, id]
+      : visibleQuestionTypes.filter(t => t !== id);
+    if (!isVisibilityControlled) setInternalVisible(next);
+    onVisibleQuestionTypesChange?.(next);
+  }, [visibleQuestionTypes, isVisibilityControlled, onVisibleQuestionTypesChange]);
+
+  const toggleAll = React.useCallback((checked: boolean) => {
+    const next = checked ? ALL_QUESTION_TYPE_IDS : [];
+    if (!isVisibilityControlled) setInternalVisible(next);
+    onVisibleQuestionTypesChange?.(next);
+  }, [isVisibilityControlled, onVisibleQuestionTypesChange]);
   
   const { control, handleSubmit, watch, reset, setValue } = useForm<Theme>({
     resolver: zodResolver(ThemeSchema),
@@ -409,6 +451,36 @@ export function ThemeEditor({
                 )}
               />
             </div>
+          </div>
+        </div>
+        <SelectSeparator className="my-2" />
+
+        {/* Preview Questions */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Preview Questions</h3>
+            <button
+              type="button"
+              onClick={() => toggleAll(visibleQuestionTypes.length < ALL_QUESTION_TYPE_IDS.length)}
+              className="text-xs text-primary hover:underline"
+            >
+              {visibleQuestionTypes.length < ALL_QUESTION_TYPE_IDS.length ? 'Select all' : 'Deselect all'}
+            </button>
+          </div>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-2.5">
+            {QUESTION_TYPE_OPTIONS.map(({ id, label }) => {
+              const checked = visibleQuestionTypes.includes(id);
+              return (
+                <label key={id} className="flex items-center gap-2 cursor-pointer select-none">
+                  <Checkbox
+                    checked={checked}
+                    onCheckedChange={(val) => toggleQuestionType(id, !!val)}
+                    id={`qt-${id}`}
+                  />
+                  <span className="text-sm text-foreground leading-none">{label}</span>
+                </label>
+              );
+            })}
           </div>
         </div>
       </CardContent>

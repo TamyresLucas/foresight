@@ -1,6 +1,6 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { ThemeEditor } from './ThemeEditor';
+import { ThemeEditor, QUESTION_TYPE_OPTIONS } from './ThemeEditor';
 import { TextAnswer } from '../../components/survey-rendering/TextAnswer';
 import { OpenEndAnswer } from '../../components/survey-rendering/OpenEndAnswer';
 import { DateAnswer } from '../../components/survey-rendering/DateAnswer';
@@ -17,6 +17,7 @@ import { CardSort, type CardSortValue } from '../../components/survey-rendering/
 import { NumericRanking, type NumericRankingValue } from '../../components/survey-rendering/NumericRanking';
 import { RunningTotal, type RunningTotalValue } from '../../components/survey-rendering/RunningTotal';
 import { DragAndDrop, type DragAndDropValue } from '../../components/survey-rendering/DragAndDrop';
+import { CarouselQuestion, type CarouselQuestionValue } from '../../components/survey-rendering/CarouselQuestion';
 import { SurveyErrorMessage } from '../../components/survey-rendering/SurveyErrorMessage';
 import { QuestionText } from '../../components/survey-rendering/QuestionText';
 import { QuestionField } from '../../components/survey-rendering/QuestionField';
@@ -32,7 +33,16 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile' }) => {
+const ALL_IDS = QUESTION_TYPE_OPTIONS.map(q => q.id);
+
+const LivePreview = ({
+  viewport = 'desktop',
+  visibleQuestionTypes = ALL_IDS,
+}: {
+  viewport?: 'desktop' | 'mobile';
+  visibleQuestionTypes?: string[];
+}) => {
+  const show = (id: string) => visibleQuestionTypes.includes(id);
   const [textValue, setTextValue] = React.useState('');
   const [openValue, setOpenValue] = React.useState('');
   const [dateValue, setDateValue] = React.useState('');
@@ -47,6 +57,7 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
   const [numericRankingValue, setNumericRankingValue] = React.useState<NumericRankingValue>({});
   const [runningTotalValue, setRunningTotalValue] = React.useState<RunningTotalValue>({});
   const [dragAndDropValue, setDragAndDropValue] = React.useState<DragAndDropValue>([]);
+  const [carouselNpsValue, setCarouselNpsValue] = React.useState<CarouselQuestionValue>({});
   const [showError, setShowError] = React.useState(false);
 
   const gridRows = [
@@ -111,163 +122,223 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
 
         {/* Questions */}
         <div className="flex flex-col" style={{ gap: 'var(--survey-question-spacing, 48px)' }}>
-          <QuestionField>
-            <QuestionText label="What is your primary area of focus?" required error={textError} />
-            <TextAnswer
-              placeholder="e.g. Design, Engineering, Product..."
-              value={textValue}
-              onChange={(e) => setTextValue(e.target.value)}
-              error={textError}
-            />
-          </QuestionField>
-
-          <QuestionField>
-            <QuestionText label="Select your preferred contact method:" error={radioError} />
-            <RadioGroup value={contactMethod} onValueChange={setContactMethod} error={radioError}>
-              <RadioGroupOption value="email" label="Email" />
-              <RadioGroupOption value="phone" label="Phone" />
-              <RadioGroupOption value="sms" label="SMS" />
-            </RadioGroup>
-          </QuestionField>
-
-          <QuestionField>
-            <QuestionText label="How likely are you to recommend us?" error={npsError} />
-            <NPS value={npsValue} onValueChange={setNpsValue} error={npsError} />
-          </QuestionField>
-
-          <QuestionField>
-            <QuestionText label="Which features are most important to you?" error={checkboxError} />
-            <CheckboxGroup error={checkboxError}>
-              <CheckboxOption
-                label="Real-time collaboration"
-                checked={checkedOptions.a}
-                onCheckedChange={(val) => setCheckedOptions(p => ({ ...p, a: !!val }))}
+          {show('text-input') && (
+            <QuestionField>
+              <QuestionText label="What is your primary area of focus?" required error={textError} />
+              <TextAnswer
+                placeholder="e.g. Design, Engineering, Product..."
+                value={textValue}
+                onChange={(e) => setTextValue(e.target.value)}
+                error={textError}
               />
-              <CheckboxOption
-                label="Advanced analytics"
-                checked={checkedOptions.b}
-                onCheckedChange={(val) => setCheckedOptions(p => ({ ...p, b: !!val }))}
+            </QuestionField>
+          )}
+
+          {show('radio') && (
+            <QuestionField>
+              <QuestionText label="Select your preferred contact method:" error={radioError} />
+              <RadioGroup value={contactMethod} onValueChange={setContactMethod} error={radioError}>
+                <RadioGroupOption value="email" label="Email" />
+                <RadioGroupOption value="phone" label="Phone" />
+                <RadioGroupOption value="sms" label="SMS" />
+              </RadioGroup>
+            </QuestionField>
+          )}
+
+          {show('nps') && (
+            <QuestionField>
+              <QuestionText label="How likely are you to recommend us?" error={npsError} />
+              <NPS value={npsValue} onValueChange={setNpsValue} error={npsError} />
+            </QuestionField>
+          )}
+
+          {show('checkbox') && (
+            <QuestionField>
+              <QuestionText label="Which features are most important to you?" error={checkboxError} />
+              <CheckboxGroup error={checkboxError}>
+                <CheckboxOption
+                  label="Real-time collaboration"
+                  checked={checkedOptions.a}
+                  onCheckedChange={(val) => setCheckedOptions(p => ({ ...p, a: !!val }))}
+                />
+                <CheckboxOption
+                  label="Advanced analytics"
+                  checked={checkedOptions.b}
+                  onCheckedChange={(val) => setCheckedOptions(p => ({ ...p, b: !!val }))}
+                />
+                <CheckboxOption
+                  label="Custom integrations"
+                  checked={checkedOptions.c}
+                  onCheckedChange={(val) => setCheckedOptions(p => ({ ...p, c: !!val }))}
+                />
+              </CheckboxGroup>
+            </QuestionField>
+          )}
+
+          {show('open-end') && (
+            <QuestionField>
+              <QuestionText label="Could you provide more detail on your latest project?" required error={openError} />
+              <OpenEndAnswer
+                placeholder="Tell us about the challenges and outcomes..."
+                value={openValue}
+                onChange={(e) => setOpenValue(e.target.value)}
+                error={openError}
               />
-              <CheckboxOption
-                label="Custom integrations"
-                checked={checkedOptions.c}
-                onCheckedChange={(val) => setCheckedOptions(p => ({ ...p, c: !!val }))}
+            </QuestionField>
+          )}
+
+          {show('choice-grid') && (
+            <QuestionField>
+              <QuestionText label="Please rate your experience with our services:" error={gridError} />
+              <ChoiceGrid
+                rows={gridRows}
+                columns={gridColumns}
+                value={gridValue}
+                onValueChange={setGridValue}
+                error={gridError}
+                variant={viewport}
               />
-            </CheckboxGroup>
-          </QuestionField>
+            </QuestionField>
+          )}
 
-          <QuestionField>
-            <QuestionText label="Could you provide more detail on your latest project?" required error={openError} />
-            <OpenEndAnswer
-              placeholder="Tell us about the challenges and outcomes..."
-              value={openValue}
-              onChange={(e) => setOpenValue(e.target.value)}
-              error={openError}
-            />
-          </QuestionField>
+          {show('date') && (
+            <QuestionField>
+              <QuestionText label="When did you start your latest project?" required error={dateError} />
+              <DateAnswer
+                value={dateValue}
+                onChange={(e) => setDateValue(e.target.value)}
+                error={dateError}
+              />
+            </QuestionField>
+          )}
 
-          <QuestionField>
-            <QuestionText label="Please rate your experience with our services:" error={gridError} />
-            <ChoiceGrid
-              rows={gridRows}
-              columns={gridColumns}
-              value={gridValue}
-              onValueChange={setGridValue}
-              error={gridError}
-              variant={viewport}
-            />
-          </QuestionField>
+          {show('time') && (
+            <QuestionField>
+              <QuestionText label="What time would you prefer to be contacted?" />
+              <TimePicker
+                mode="single"
+                value={timeValue}
+                onChange={(e) => setTimeValue(e.target.value as TimeValue)}
+              />
+            </QuestionField>
+          )}
 
-          <QuestionField>
-            <QuestionText label="When did you start your latest project?" required error={dateError} />
-            <DateAnswer
-              value={dateValue}
-              onChange={(e) => setDateValue(e.target.value)}
-              error={dateError}
-            />
-          </QuestionField>
+          {show('dropdown') && (
+            <QuestionField>
+              <QuestionText label="What is your preferred contact method?" required error={dropdownError} />
+              <DropdownAnswer
+                placeholder="Select answer"
+                options={[
+                  { value: 'email', label: 'Email' },
+                  { value: 'phone', label: 'Phone' },
+                  { value: 'sms', label: 'SMS' },
+                  { value: 'mail', label: 'Mail' },
+                ]}
+                value={dropdownValue}
+                onValueChange={setDropdownValue}
+                error={dropdownError}
+              />
+            </QuestionField>
+          )}
 
-          <QuestionField>
-            <QuestionText label="What time would you prefer to be contacted?" />
-            <TimePicker
-              mode="single"
-              value={timeValue}
-              onChange={(e) => setTimeValue(e.target.value as TimeValue)}
-            />
-          </QuestionField>
+          {show('card-sort') && (
+            <QuestionField>
+              <QuestionText label="How would you categorize these products?" />
+              <CardSort
+                items={[
+                  { id: 'apple', label: 'Apple' },
+                  { id: 'banana', label: 'Banana' },
+                  { id: 'cherry', label: 'Cherry' },
+                  { id: 'date', label: 'Date' },
+                ]}
+                choiceLabels={['Like', 'Dislike']}
+                value={cardSortValue}
+                onChange={setCardSortValue}
+              />
+            </QuestionField>
+          )}
 
-          <QuestionField>
-            <QuestionText label="What is your preferred contact method?" required error={dropdownError} />
-            <DropdownAnswer
-              placeholder="Select answer"
-              options={[
-                { value: 'email', label: 'Email' },
-                { value: 'phone', label: 'Phone' },
-                { value: 'sms', label: 'SMS' },
-                { value: 'mail', label: 'Mail' },
-              ]}
-              value={dropdownValue}
-              onValueChange={setDropdownValue}
-              error={dropdownError}
-            />
-          </QuestionField>
+          {show('running-total') && (
+            <QuestionField>
+              <QuestionText label="Allocation or constant-sum question using numeric values" />
+              <RunningTotal
+                rows={[
+                  { value: 'row1', label: 'Row 1' },
+                  { value: 'row2', label: 'Row 2' },
+                  { value: 'row3', label: 'Row 3' },
+                ]}
+                columns={[{ value: 'col1', label: 'Column 1' }]}
+                value={runningTotalValue}
+                onChange={setRunningTotalValue}
+              />
+            </QuestionField>
+          )}
 
-          <QuestionField>
-            <QuestionText label="How would you categorize these products?" />
-            <CardSort
-              items={[
-                { id: 'apple', label: 'Apple' },
-                { id: 'banana', label: 'Banana' },
-                { id: 'cherry', label: 'Cherry' },
-                { id: 'date', label: 'Date' },
-              ]}
-              choiceLabels={['Like', 'Dislike']}
-              value={cardSortValue}
-              onChange={setCardSortValue}
-            />
-          </QuestionField>
+          {show('drag-drop') && (
+            <QuestionField>
+              <QuestionText label="Rank these items by dragging them into order:" />
+              <DragAndDrop
+                items={[
+                  { id: 'design', label: 'Design' },
+                  { id: 'performance', label: 'Performance' },
+                  { id: 'usability', label: 'Usability' },
+                  { id: 'reliability', label: 'Reliability' },
+                ]}
+                dropZoneLabel="Order of preference"
+                value={dragAndDropValue}
+                onChange={setDragAndDropValue}
+              />
+            </QuestionField>
+          )}
 
-          <QuestionField>
-            <QuestionText label="Allocation or constant-sum question using numeric values" />
-            <RunningTotal
-              rows={[
-                { value: 'row1', label: 'Row 1' },
-                { value: 'row2', label: 'Row 2' },
-                { value: 'row3', label: 'Row 3' },
-              ]}
-              columns={[{ value: 'col1', label: 'Column 1' }]}
-              value={runningTotalValue}
-              onChange={setRunningTotalValue}
-            />
-          </QuestionField>
+          {show('numeric-ranking') && (
+            <QuestionField>
+              <QuestionText label="Rank the following in order of importance:" />
+              <NumericRanking
+                items={[
+                  { value: 'speed', label: 'Speed' },
+                  { value: 'quality', label: 'Quality' },
+                  { value: 'cost', label: 'Cost' },
+                ]}
+                value={numericRankingValue}
+                onChange={setNumericRankingValue}
+              />
+            </QuestionField>
+          )}
 
-          <QuestionField>
-            <QuestionText label="Rank these items by dragging them into order:" />
-            <DragAndDrop
-              items={[
-                { id: 'design', label: 'Design' },
-                { id: 'performance', label: 'Performance' },
-                { id: 'usability', label: 'Usability' },
-                { id: 'reliability', label: 'Reliability' },
-              ]}
-              dropZoneLabel="Order of preference"
-              value={dragAndDropValue}
-              onChange={setDragAndDropValue}
-            />
-          </QuestionField>
-
-          <QuestionField>
-            <QuestionText label="Rank the following in order of importance:" />
-            <NumericRanking
-              items={[
-                { value: 'speed', label: 'Speed' },
-                { value: 'quality', label: 'Quality' },
-                { value: 'cost', label: 'Cost' },
-              ]}
-              value={numericRankingValue}
-              onChange={setNumericRankingValue}
-            />
-          </QuestionField>
+          {show('carousel-question') && (
+            <QuestionField>
+              <QuestionText label="How likely are you to recommend each of these?" />
+              <CarouselQuestion
+                answerType="nps"
+                npsLeftLabel="Very unlikely"
+                npsRightLabel="Very likely"
+                items={[
+                  {
+                    id: 'armchair',
+                    label: 'Armchair',
+                    imageSrc: 'https://images.pexels.com/photos/32710106/pexels-photo-32710106.jpeg?auto=compress&cs=tinysrgb&w=600',
+                    imageAlt: 'Armchair in warm light',
+                  },
+                  {
+                    id: 'fries',
+                    label: 'French Fries',
+                    imageSrc: 'https://images.unsplash.com/photo-1518013431117-eb1465fa5752?w=600',
+                    imageAlt: 'French fries',
+                  },
+                  {
+                    id: 'sushi',
+                    label: 'Sushi',
+                    imageSrc: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600',
+                    imageAlt: 'Sushi platter',
+                  },
+                ]}
+                value={carouselNpsValue}
+                onValueChange={setCarouselNpsValue}
+                navigation="bullets"
+              />
+            </QuestionField>
+          )}
 
           <div className="pt-8 border-t border-border-decorative space-y-8">
             <SurveyNavigation
@@ -300,14 +371,20 @@ const LivePreview = ({ viewport = 'desktop' }: { viewport?: 'desktop' | 'mobile'
 export const Default: Story = {
   render: () => {
     const [viewport, setViewport] = React.useState<'desktop' | 'mobile'>('desktop');
-    
+    const [visibleQuestionTypes, setVisibleQuestionTypes] = React.useState<string[]>(ALL_IDS);
+
     return (
       <div className="flex h-screen w-full overflow-hidden bg-background">
         <div className="w-[450px] shrink-0 border-r border-border overflow-y-auto p-6 scrollbar-none">
-          <ThemeEditor viewport={viewport} onViewportChange={setViewport} />
+          <ThemeEditor
+            viewport={viewport}
+            onViewportChange={setViewport}
+            visibleQuestionTypes={visibleQuestionTypes}
+            onVisibleQuestionTypesChange={setVisibleQuestionTypes}
+          />
         </div>
         <div className="flex-1 overflow-y-auto scrollbar-none">
-          <LivePreview viewport={viewport} />
+          <LivePreview viewport={viewport} visibleQuestionTypes={visibleQuestionTypes} />
         </div>
       </div>
     );
