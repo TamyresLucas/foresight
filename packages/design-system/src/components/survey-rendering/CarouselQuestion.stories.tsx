@@ -137,19 +137,17 @@ export const Controlled: Story = {
 };
 
 /**
- * Height-band demo: maxSlideHeight=400, minSlideHeight=220.
- * The portrait (338×450) hits the max and the card narrows to hug it —
- * no crop, no letterbox. Landscape images stay within the band.
+ * Tighter height cap (max 280px) to show the hugging behaviour on portrait
+ * images: the card narrows to keep the image ratio — no crop, no letterbox.
  */
-export const WithHeightBand: Story = {
+export const TightHeightCap: Story = {
   args: {
     items,
     answerType: "nps",
     navigation: "bullets",
     npsLeftLabel: "Very unlikely",
     npsRightLabel: "Very likely",
-    maxSlideHeight: 400,
-    minSlideHeight: 220,
+    maxSlideHeight: 280,
   },
 };
 

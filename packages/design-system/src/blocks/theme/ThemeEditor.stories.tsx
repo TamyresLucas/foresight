@@ -22,7 +22,7 @@ import { SurveyErrorMessage } from '../../components/survey-rendering/SurveyErro
 import { QuestionText } from '../../components/survey-rendering/QuestionText';
 import { QuestionField } from '../../components/survey-rendering/QuestionField';
 import { Description } from '../../components/survey-rendering/Description';
-import { cn } from '../../lib/utils';
+import { DeviceFrame } from '../../components/ui/device-frame';
 
 const meta: Meta = {
   title: 'Survey Rendering/Theme/ThemeEditor',
@@ -90,12 +90,8 @@ const LivePreview = ({
 
   const hasAnyError = !!(textError || radioError || checkboxError || openError || dateError || dropdownError || npsError || gridError);
 
-  return (
-    <div className="w-full min-h-screen bg-muted/20 overflow-y-auto p-12">
-      <div className={cn(
-        "mx-auto space-y-12 transition-all duration-200",
-        viewport === 'mobile' ? "max-w-[375px]" : "max-w-2xl"
-      )}>
+  const surveyContent = (
+    <>
         {/* Top Toolbar */}
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold tracking-tight text-foreground">Company name</h2>
@@ -340,8 +336,6 @@ const LivePreview = ({
                 value={carouselNpsValue}
                 onValueChange={setCarouselNpsValue}
                 navigation="bullets"
-                maxSlideHeight={400}
-                minSlideHeight={220}
               />
             </QuestionField>
           )}
@@ -369,6 +363,19 @@ const LivePreview = ({
             </div>
           </div>
         </div>
+    </>
+  );
+
+  return viewport === 'mobile' ? (
+    <div className="w-full min-h-screen bg-muted/20 overflow-y-auto flex justify-center py-8">
+      <DeviceFrame screenClassName="px-4 py-6">
+        <div className="space-y-12">{surveyContent}</div>
+      </DeviceFrame>
+    </div>
+  ) : (
+    <div className="w-full min-h-screen bg-muted/20 overflow-y-auto p-12">
+      <div className="mx-auto max-w-2xl space-y-12 transition-all duration-200">
+        {surveyContent}
       </div>
     </div>
   );

@@ -18,6 +18,7 @@ export * from "./components/ui/breadcrumb";
 export * from "./components/ui/checkbox";
 export * from "./components/ui/collapsible";
 export * from "./components/ui/color-picker";
+export * from "./components/ui/device-frame";
 export * from "./components/ui/command";
 export * from "./components/ui/dialog";
 export * from "./components/ui/drawer";

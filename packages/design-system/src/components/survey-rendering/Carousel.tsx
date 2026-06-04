@@ -23,6 +23,29 @@ export interface CarouselItem {
   imageHeight?: number;
 }
 
+/**
+ * ## Slide sizing rules
+ *
+ * Slides are sized by **height first, width second** — the opposite of a
+ * typical fluid layout. This ensures images always render at their true aspect
+ * ratio with no cropping, distortion, or letterboxing.
+ *
+ * 1. **Height band** — every slide height is clamped to
+ *    [`minSlideHeight`, `maxSlideHeight`] (defaults 220–400 px).
+ * 2. **Width follows height** — given the clamped height and the image's
+ *    natural aspect ratio, the card width is computed as `width = height × ratio`.
+ *    The card narrows or widens to exactly hug the image.
+ * 3. **Viewport ceiling** — `cardWidth` (viewport minus peek/gap on both sides)
+ *    is a hard upper bound on width. If an extremely wide image would exceed it
+ *    at `minSlideHeight`, the width is capped and the height dips slightly below
+ *    the minimum — still no crop or letterbox.
+ * 4. **Statement strip** — for `imageStatement` cards the strip height is
+ *    measured at runtime and subtracted from the band before the image box is
+ *    computed, so the *total* card height (image + strip) stays within the band.
+ *
+ * Override `minSlideHeight`/`maxSlideHeight` per instance when you need a
+ * tighter or looser band — all other sizing behaviour follows automatically.
+ */
 export interface CarouselProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
   items: CarouselItem[];
@@ -36,25 +59,14 @@ export interface CarouselProps
   peek?: number;
   gap?: number;
   /**
-   * Minimum slide height as a fraction of the slide width. Used when
-   * `minSlideHeight` (px) is not provided. Default 2/3 (3:2 landscape floor).
-   */
-  minHeightRatio?: number;
-  /**
-   * Maximum slide height as a fraction of the slide width. Used when
-   * `maxSlideHeight` (px) is not provided. Default 4/3 (3:4 portrait ceiling).
-   */
-  maxHeightRatio?: number;
-  /**
-   * Minimum total slide height in px (takes precedence over `minHeightRatio`).
-   * For `imageStatement` cards the statement strip height is subtracted so the
-   * image area respects this total.
+   * Minimum total slide height in px. The card width is derived from this and
+   * the image's natural aspect ratio so images keep their true proportions —
+   * no crop, no distortion, no letterbox. Defaults to 220.
    */
   minSlideHeight?: number;
   /**
-   * Maximum total slide height in px (takes precedence over `maxHeightRatio`).
-   * Images taller than this are scaled down; the card narrows to hug the image
-   * (no crop, no letterbox). Statement strip height is accounted for.
+   * Maximum total slide height in px. Images taller than this are scaled down;
+   * the card narrows to hug the image. Defaults to 400.
    */
   maxSlideHeight?: number;
   previousLabel?: string;
@@ -73,10 +85,8 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
       cardHeight: _cardHeight = 360,
       peek = 24,
       gap = 16,
-      minHeightRatio = 2 / 3,
-      maxHeightRatio = 4 / 3,
-      minSlideHeight,
-      maxSlideHeight,
+      minSlideHeight = 220,
+      maxSlideHeight = 400,
       previousLabel = "Previous",
       nextLabel = "Next",
       className,
@@ -120,14 +130,24 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
     const atStart = current <= 0;
     const atEnd = current >= items.length - 1;
 
-    // The widest a card may be: the viewport minus a symmetric sliver (peek +
-    // gap) on both sides, so a full-width card still leaves a peek of its
-    // neighbours. Height-capped (hugged) cards are narrower and peek more.
-    const cardWidth = Math.max(0, viewportWidth - 2 * (peek + gap));
+    // On narrow containers the default peek + gap together can eat enough of
+    // the slot that a portrait image's fill-height falls *within* the height
+    // band — so the card fills the slot instead of narrowing to hug the image.
+    // We scale peek and gap down proportionally when the container is narrow
+    // so the effective card slot is always wide enough for the height cap to
+    // engage, keeping the hugging behaviour consistent at any container width.
+    const isNarrow = viewportWidth > 0 && viewportWidth < 480;
+    const effectivePeek = isNarrow ? Math.min(peek, 12) : peek;
+    const effectiveGap = isNarrow ? Math.min(gap, 8) : gap;
 
-    // Resolve min/max slide height band. px values win over ratio-of-width.
-    const minH = minSlideHeight ?? minHeightRatio * cardWidth;
-    const maxH = Math.max(minH, maxSlideHeight ?? maxHeightRatio * cardWidth);
+    // The widest a card may be: the viewport minus a symmetric sliver
+    // (effectivePeek + effectiveGap) on both sides, so a full-width card still
+    // leaves a peek of its neighbours. Height-capped (hugged) cards are
+    // narrower and peek more.
+    const cardWidth = Math.max(0, viewportWidth - 2 * (effectivePeek + effectiveGap));
+
+    const minH = minSlideHeight;
+    const maxH = Math.max(minH, maxSlideHeight);
 
     // Self-sizing is active for image variants once the viewport is measured.
     const selfSizingActive = cardWidth > 0;
@@ -208,7 +228,7 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
             ref={trackRef}
             className="relative flex items-center transition-transform duration-500 ease-in-out py-6"
             style={{
-              gap: `${gap}px`,
+              gap: `${effectiveGap}px`,
               transform: `translateX(${offset}px)`,
             }}
           >

@@ -109,17 +109,14 @@ export const BulletNavigationStatementCards: Story = {
 };
 
 /**
- * Height-band demo: maxSlideHeight=360, minSlideHeight=220.
- * The portrait card (338×450) is taller than the max so it scales down and
- * the card narrows to hug it — no crop, no letterbox. Landscape images
- * stay within the band and fill the slot width.
+ * Tighter height cap (max 300px) to show the hugging behaviour on portrait
+ * images: the card narrows to keep the image ratio — no crop, no letterbox.
  */
-export const HeightBand: Story = {
+export const TightHeightCap: Story = {
   args: {
     items,
     cardVariant: "imageStatement",
     navigation: "counter",
-    maxSlideHeight: 360,
-    minSlideHeight: 220,
+    maxSlideHeight: 300,
   },
 };

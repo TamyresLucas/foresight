@@ -24,8 +24,6 @@ export interface CarouselQuestionProps
     | "cardHeight"
     | "peek"
     | "gap"
-    | "minHeightRatio"
-    | "maxHeightRatio"
     | "minSlideHeight"
     | "maxSlideHeight"
     | "previousLabel"
@@ -92,11 +90,6 @@ const CarouselQuestion = React.forwardRef<HTMLDivElement, CarouselQuestionProps>
       disabled = false,
       className,
       navigation = "bullets",
-      // Default to the same capped slide sizing the Theme Editor preview uses,
-      // so every CarouselQuestion variant gets consistent, height-bounded slides
-      // (overridable per instance).
-      minSlideHeight = 220,
-      maxSlideHeight = 400,
       ...carouselProps
     },
     ref,
@@ -201,8 +194,6 @@ const CarouselQuestion = React.forwardRef<HTMLDivElement, CarouselQuestionProps>
           index={current}
           onIndexChange={goTo}
           navigation={navigation}
-          minSlideHeight={minSlideHeight}
-          maxSlideHeight={maxSlideHeight}
           {...carouselProps}
         />
 
