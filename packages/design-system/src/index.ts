@@ -80,6 +80,7 @@ export {
   type CarouselQuestionValue,
 } from "./components/survey-rendering/CarouselQuestion";
 export { Bullet, type BulletProps } from "./components/survey-rendering/Bullet";
+export { Description, type DescriptionProps } from "./components/survey-rendering/Description";
 
 // Theme blocks
 export * from "./blocks/theme/ThemeEditor";

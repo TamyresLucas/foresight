@@ -17,43 +17,46 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Naturally landscape source photos (no cropping) so the rendered slide height
-// stays under 500px at the story width (image always fills the width).
 const items = [
   {
-    id: "armchair",
-    label: "Armchair",
-    imageSrc:
-      "https://images.pexels.com/photos/32710106/pexels-photo-32710106.jpeg?auto=compress&cs=tinysrgb&w=600",
-    imageAlt: "Armchair in warm light",
+    id: "portrait",
+    label: "Portrait",
+    imageSrc: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?h=450&w=338&fit=crop",
+    imageAlt: "Portrait of a person smiling",
+    imageWidth: 338,
+    imageHeight: 450,
   },
   {
     id: "fries",
     label: "French Fries",
-    imageSrc:
-      "https://images.unsplash.com/photo-1518013431117-eb1465fa5752?w=600",
+    imageSrc: "https://images.unsplash.com/photo-1518013431117-eb1465fa5752?w=600",
     imageAlt: "French fries",
+    imageWidth: 600,
+    imageHeight: 400,
   },
   {
     id: "sushi",
     label: "Sushi",
-    imageSrc:
-      "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600",
+    imageSrc: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600",
     imageAlt: "Sushi platter",
+    imageWidth: 600,
+    imageHeight: 400,
   },
   {
     id: "coffee",
     label: "Coffee",
-    imageSrc:
-      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600",
+    imageSrc: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600",
     imageAlt: "Cup of coffee",
+    imageWidth: 600,
+    imageHeight: 400,
   },
   {
     id: "macaroon",
     label: "Macaroon",
-    imageSrc:
-      "https://images.unsplash.com/photo-1569864358642-9d1684040f43?w=600",
+    imageSrc: "https://images.unsplash.com/photo-1569864358642-9d1684040f43?w=600",
     imageAlt: "Macaroons",
+    imageWidth: 600,
+    imageHeight: 400,
   },
 ];
 
@@ -102,5 +105,21 @@ export const BulletNavigationStatementCards: Story = {
     items: items.map((it) => ({ ...it, imageSrc: undefined })),
     cardVariant: "statement",
     navigation: "bullets",
+  },
+};
+
+/**
+ * Height-band demo: maxSlideHeight=360, minSlideHeight=220.
+ * The portrait card (338×450) is taller than the max so it scales down and
+ * the card narrows to hug it — no crop, no letterbox. Landscape images
+ * stay within the band and fill the slot width.
+ */
+export const HeightBand: Story = {
+  args: {
+    items,
+    cardVariant: "imageStatement",
+    navigation: "counter",
+    maxSlideHeight: 360,
+    minSlideHeight: 220,
   },
 };

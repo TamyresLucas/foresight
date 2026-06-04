@@ -21,6 +21,7 @@ import { CarouselQuestion, type CarouselQuestionValue } from '../../components/s
 import { SurveyErrorMessage } from '../../components/survey-rendering/SurveyErrorMessage';
 import { QuestionText } from '../../components/survey-rendering/QuestionText';
 import { QuestionField } from '../../components/survey-rendering/QuestionField';
+import { Description } from '../../components/survey-rendering/Description';
 import { cn } from '../../lib/utils';
 
 const meta: Meta = {
@@ -110,18 +111,15 @@ const LivePreview = ({
         {/* Error Message */}
         {hasAnyError && <SurveyErrorMessage />}
 
-        {/* Header */}
-        <div className="space-y-2">
-          <h1 className="text-[length:var(--brand-font-size-header)] font-[family-name:var(--brand-font-header)] font-[number:var(--brand-font-weight-header)] leading-tight text-foreground">
-            Description title
-          </h1>
-          <p className="text-muted-foreground text-survey-body font-survey font-survey-regular">
-            Rich Text placeholder for displaying information to the respondent
-          </p>
-        </div>
-
         {/* Questions */}
         <div className="flex flex-col" style={{ gap: 'var(--survey-question-spacing, 48px)' }}>
+          {show('description') && (
+            <Description
+              title="Description title"
+              description="Rich Text placeholder for displaying information to the respondent"
+            />
+          )}
+
           {show('text-input') && (
             <QuestionField>
               <QuestionText label="What is your primary area of focus?" required error={textError} />
@@ -315,27 +313,35 @@ const LivePreview = ({
                 npsRightLabel="Very likely"
                 items={[
                   {
-                    id: 'armchair',
-                    label: 'Armchair',
-                    imageSrc: 'https://images.pexels.com/photos/32710106/pexels-photo-32710106.jpeg?auto=compress&cs=tinysrgb&w=600',
-                    imageAlt: 'Armchair in warm light',
+                    id: 'portrait',
+                    label: 'Portrait',
+                    imageSrc: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?h=450&w=338&fit=crop',
+                    imageAlt: 'Portrait of a person smiling',
+                    imageWidth: 338,
+                    imageHeight: 450,
                   },
                   {
                     id: 'fries',
                     label: 'French Fries',
                     imageSrc: 'https://images.unsplash.com/photo-1518013431117-eb1465fa5752?w=600',
                     imageAlt: 'French fries',
+                    imageWidth: 600,
+                    imageHeight: 400,
                   },
                   {
                     id: 'sushi',
                     label: 'Sushi',
                     imageSrc: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600',
                     imageAlt: 'Sushi platter',
+                    imageWidth: 600,
+                    imageHeight: 400,
                   },
                 ]}
                 value={carouselNpsValue}
                 onValueChange={setCarouselNpsValue}
                 navigation="bullets"
+                maxSlideHeight={400}
+                minSlideHeight={220}
               />
             </QuestionField>
           )}

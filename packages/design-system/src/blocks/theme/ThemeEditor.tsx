@@ -59,6 +59,7 @@ const RADIUS_OPTIONS = [
 ];
 
 export const QUESTION_TYPE_OPTIONS: { id: string; label: string }[] = [
+  { id: 'description',      label: 'Description' },
   { id: 'text-input',       label: 'Text Input' },
   { id: 'radio',            label: 'Radio Button' },
   { id: 'nps',              label: 'NPS' },

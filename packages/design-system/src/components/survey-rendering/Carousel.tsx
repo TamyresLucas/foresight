@@ -6,6 +6,9 @@ import { cn } from "@/lib/utils";
 import { Card, type CardProps } from "./Card";
 import { Bullet } from "./Bullet";
 
+// Max full-size bullets shown at once; extra slides collapse into a "more" dot.
+const MAX_VISIBLE_BULLETS = 6;
+
 export interface CarouselItem {
   id: string;
   label?: React.ReactNode;
@@ -14,6 +17,10 @@ export interface CarouselItem {
   variant?: CardProps["variant"];
   /** Marks the slide as answered, showing a checkmark on its bullet. */
   answered?: boolean;
+  /** Declared natural image width — skips onLoad measurement, prevents layout shift. */
+  imageWidth?: number;
+  /** Declared natural image height — skips onLoad measurement, prevents layout shift. */
+  imageHeight?: number;
 }
 
 export interface CarouselProps
@@ -29,12 +36,27 @@ export interface CarouselProps
   peek?: number;
   gap?: number;
   /**
-   * Minimum slide image height as a fraction of the slide width. The image
-   * always fills the width and keeps its ratio (never cropped); shorter/wider
-   * images are floored to this height and centered with background bands top &
-   * bottom. Taller images grow the slide freely. Default 2/3 (3:2).
+   * Minimum slide height as a fraction of the slide width. Used when
+   * `minSlideHeight` (px) is not provided. Default 2/3 (3:2 landscape floor).
    */
   minHeightRatio?: number;
+  /**
+   * Maximum slide height as a fraction of the slide width. Used when
+   * `maxSlideHeight` (px) is not provided. Default 4/3 (3:4 portrait ceiling).
+   */
+  maxHeightRatio?: number;
+  /**
+   * Minimum total slide height in px (takes precedence over `minHeightRatio`).
+   * For `imageStatement` cards the statement strip height is subtracted so the
+   * image area respects this total.
+   */
+  minSlideHeight?: number;
+  /**
+   * Maximum total slide height in px (takes precedence over `maxHeightRatio`).
+   * Images taller than this are scaled down; the card narrows to hug the image
+   * (no crop, no letterbox). Statement strip height is accounted for.
+   */
+  maxSlideHeight?: number;
   previousLabel?: string;
   nextLabel?: string;
 }
@@ -52,6 +74,9 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
       peek = 24,
       gap = 16,
       minHeightRatio = 2 / 3,
+      maxHeightRatio = 4 / 3,
+      minSlideHeight,
+      maxSlideHeight,
       previousLabel = "Previous",
       nextLabel = "Next",
       className,
@@ -79,6 +104,7 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
     );
 
     const viewportRef = React.useRef<HTMLDivElement | null>(null);
+    const trackRef = React.useRef<HTMLDivElement | null>(null);
     const [viewportWidth, setViewportWidth] = React.useState(0);
 
     React.useEffect(() => {
@@ -94,13 +120,41 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
     const atStart = current <= 0;
     const atEnd = current >= items.length - 1;
 
-    // Each card fills the viewport minus a symmetric sliver (peek + gap) on
-    // both sides, so the previous/next cards always peek by `peek` px.
+    // The widest a card may be: the viewport minus a symmetric sliver (peek +
+    // gap) on both sides, so a full-width card still leaves a peek of its
+    // neighbours. Height-capped (hugged) cards are narrower and peek more.
     const cardWidth = Math.max(0, viewportWidth - 2 * (peek + gap));
 
-    // Center the active card within the viewport, leaving symmetric peeks.
-    const offset =
-      viewportWidth / 2 - cardWidth / 2 - current * (cardWidth + gap);
+    // Resolve min/max slide height band. px values win over ratio-of-width.
+    const minH = minSlideHeight ?? minHeightRatio * cardWidth;
+    const maxH = Math.max(minH, maxSlideHeight ?? maxHeightRatio * cardWidth);
+
+    // Self-sizing is active for image variants once the viewport is measured.
+    const selfSizingActive = cardWidth > 0;
+
+    // Cards now hug their images, so slide widths vary. Center the active slide
+    // by measuring its actual position (offsetLeft is transform-independent)
+    // rather than assuming uniform slot widths.
+    const [offset, setOffset] = React.useState(0);
+
+    const recenter = React.useCallback(() => {
+      const track = trackRef.current;
+      if (!track || viewportWidth === 0) return;
+      const active = track.children[current] as HTMLElement | undefined;
+      if (!active) return;
+      setOffset(viewportWidth / 2 - active.offsetLeft - active.offsetWidth / 2);
+    }, [current, viewportWidth]);
+
+    // Recenter on navigation / resize, and whenever a slide resizes (e.g. an
+    // image finishes loading and the card hugs to its measured ratio).
+    React.useLayoutEffect(() => {
+      const track = trackRef.current;
+      if (!track) return;
+      recenter();
+      const observer = new ResizeObserver(() => recenter());
+      for (const child of Array.from(track.children)) observer.observe(child);
+      return () => observer.disconnect();
+    }, [recenter, items.length]);
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
       if (e.key === "ArrowLeft") {
@@ -111,6 +165,30 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
         goTo(current + 1);
       }
     };
+
+    // Windowed bullet navigation: when there are more slides than the bullets
+    // can show at once, cap the full-size bullets to a sliding window centered
+    // on the active slide and show a smaller "more" dot on each side that still
+    // has hidden slides — so it's clear there are slides beyond what's visible.
+    const bulletsOverflow = items.length > MAX_VISIBLE_BULLETS;
+    const bulletWindowStart = bulletsOverflow
+      ? clamp(
+          current - Math.floor(MAX_VISIBLE_BULLETS / 2),
+          0,
+          items.length - MAX_VISIBLE_BULLETS,
+        )
+      : 0;
+    const bulletWindowEnd = bulletsOverflow
+      ? bulletWindowStart + MAX_VISIBLE_BULLETS
+      : items.length;
+    const hasBulletsBefore = bulletWindowStart > 0;
+    const hasBulletsAfter = bulletWindowEnd < items.length;
+    const moreDotClass = cn(
+      "inline-flex shrink-0 size-2 rounded-full bg-survey-border-interactive transition-colors",
+      "hover:bg-survey-muted-foreground",
+      "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+      "focus-visible:ring-offset-survey-background focus-visible:ring-survey-border-interactive",
+    );
 
     return (
       <div
@@ -127,7 +205,8 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
           onKeyDown={handleKeyDown}
         >
           <div
-            className="flex items-center transition-transform duration-500 ease-in-out py-6"
+            ref={trackRef}
+            className="relative flex items-center transition-transform duration-500 ease-in-out py-6"
             style={{
               gap: `${gap}px`,
               transform: `translateX(${offset}px)`,
@@ -138,18 +217,8 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
               const variant = item.variant ?? cardVariant;
               const isImageVariant = variant === "image";
               const isImageStatement = variant === "imageStatement";
-              // Pure image variant keeps a fixed height. imageStatement fills
-              // the width and keeps its ratio (never cropped); a minimum-height
-              // floor (fraction of the width) keeps short/wide images from
-              // becoming too short, while taller images grow the slide. Each
-              // slide keeps its own height and the row centers them, so the
-              // carousel height equals the tallest visible slide.
-              // All variants use fill-width / ratio-preserving mode; no fixed height.
-              const fixedHeight = undefined;
-              const minImageHeight =
-                (isImageStatement || isImageVariant) && cardWidth > 0
-                  ? minHeightRatio * cardWidth
-                  : undefined;
+              const usesBand = selfSizingActive && (isImageVariant || isImageStatement);
+
               return (
                 <div
                   key={item.id}
@@ -157,20 +226,25 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
                   aria-roledescription="slide"
                   aria-label={`${i + 1} of ${items.length}`}
                   aria-hidden={!isActive}
-                  className="shrink-0"
-                  style={{ width: `${cardWidth}px` }}
+                  // Self-sizing slides hug their card (width follows the image);
+                  // other variants keep the full slot width.
+                  className="shrink-0 flex justify-center"
+                  style={usesBand ? undefined : { width: `${cardWidth}px` }}
                 >
                   {isActive ? (
                     <Card
                       variant={variant}
                       imageSrc={item.imageSrc}
                       imageAlt={item.imageAlt}
-                      height={fixedHeight}
-                      minImageHeight={minImageHeight}
+                      availableWidth={usesBand ? cardWidth : undefined}
+                      slideMinHeight={usesBand ? minH : undefined}
+                      slideMaxHeight={usesBand ? maxH : undefined}
+                      imageWidth={item.imageWidth}
+                      imageHeight={item.imageHeight}
                       tabIndex={0}
                       className={cn(
-                        "w-full cursor-default shadow-lg",
-                        // Grey is always the base layer; only the img fades.
+                        "cursor-default shadow-lg",
+                        !usesBand && "w-full",
                         (isImageVariant || isImageStatement) && "bg-survey-muted-background",
                         "[&_img]:opacity-100 [&_img]:transition-opacity [&_img]:duration-500 [&_img]:ease-in-out",
                         isImageVariant && "border-0",
@@ -181,17 +255,19 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
                   ) : (
                     <Card
                       variant={variant}
-                      // Always pass imageSrc so the img element stays in the DOM
-                      // and CSS opacity can transition smoothly from 0 → 1.
                       imageSrc={item.imageSrc}
                       imageAlt={item.imageAlt}
-                      height={fixedHeight}
-                      minImageHeight={minImageHeight}
+                      availableWidth={usesBand ? cardWidth : undefined}
+                      slideMinHeight={usesBand ? minH : undefined}
+                      slideMaxHeight={usesBand ? maxH : undefined}
+                      imageWidth={item.imageWidth}
+                      imageHeight={item.imageHeight}
                       disabled
                       aria-hidden
                       tabIndex={-1}
                       className={cn(
-                        "w-full cursor-default border-survey-border-muted shadow-none",
+                        "cursor-default border-survey-border-muted shadow-none",
+                        !usesBand && "w-full",
                         (isImageVariant || isImageStatement) && "bg-survey-muted-background",
                         "[&_img]:opacity-0 [&_img]:transition-opacity [&_img]:duration-500 [&_img]:ease-in-out",
                         isImageVariant && "border-0",
@@ -266,18 +342,37 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
               <ChevronLeft className="size-4" />
             </button>
 
-            <div className="flex gap-2" role="tablist" aria-label="Carousel slides">
-              {items.map((item, i) => (
-                <Bullet
-                  key={item.id}
-                  selected={i === current}
-                  answered={item.answered ?? false}
-                  role="tab"
-                  aria-selected={i === current}
-                  aria-label={`Slide ${i + 1}`}
-                  onClick={() => goTo(i)}
+            <div className="flex items-center gap-2" role="tablist" aria-label="Carousel slides">
+              {hasBulletsBefore && (
+                <button
+                  type="button"
+                  aria-label="Go to first slide"
+                  onClick={() => goTo(0)}
+                  className={moreDotClass}
                 />
-              ))}
+              )}
+              {items.slice(bulletWindowStart, bulletWindowEnd).map((item, idx) => {
+                const i = bulletWindowStart + idx;
+                return (
+                  <Bullet
+                    key={item.id}
+                    selected={i === current}
+                    answered={item.answered ?? false}
+                    role="tab"
+                    aria-selected={i === current}
+                    aria-label={`Slide ${i + 1}`}
+                    onClick={() => goTo(i)}
+                  />
+                );
+              })}
+              {hasBulletsAfter && (
+                <button
+                  type="button"
+                  aria-label="Go to last slide"
+                  onClick={() => goTo(items.length - 1)}
+                  className={moreDotClass}
+                />
+              )}
             </div>
 
             <button

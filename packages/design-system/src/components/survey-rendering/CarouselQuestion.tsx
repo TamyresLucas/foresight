@@ -25,6 +25,9 @@ export interface CarouselQuestionProps
     | "peek"
     | "gap"
     | "minHeightRatio"
+    | "maxHeightRatio"
+    | "minSlideHeight"
+    | "maxSlideHeight"
     | "previousLabel"
     | "nextLabel"
   > {
@@ -56,6 +59,11 @@ export interface CarouselQuestionProps
    */
   advanceOnAnswer?: boolean;
   /**
+   * Delay (ms) before auto-advancing after a selection, so the chosen answer is
+   * first shown in its selected state. Defaults to 500.
+   */
+  advanceDelayMs?: number;
+  /**
    * Marks the answer inputs invalid (red borders). The error *message* is shown
    * above the question text via `SurveyErrorMessage`, not rendered here.
    */
@@ -79,10 +87,16 @@ const CarouselQuestion = React.forwardRef<HTMLDivElement, CarouselQuestionProps>
       defaultIndex = 0,
       onIndexChange,
       advanceOnAnswer = true,
+      advanceDelayMs = 500,
       error,
       disabled = false,
       className,
       navigation = "bullets",
+      // Default to the same capped slide sizing the Theme Editor preview uses,
+      // so every CarouselQuestion variant gets consistent, height-bounded slides
+      // (overridable per instance).
+      minSlideHeight = 220,
+      maxSlideHeight = 400,
       ...carouselProps
     },
     ref,
@@ -109,13 +123,27 @@ const CarouselQuestion = React.forwardRef<HTMLDivElement, CarouselQuestionProps>
       Math.max(0, items.length - 1),
     );
 
+    // Pending auto-advance timer; lets the chosen answer stay visible in its
+    // selected state for `advanceDelayMs` before moving to the next slide.
+    const advanceTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+    const clearAdvanceTimer = React.useCallback(() => {
+      if (advanceTimerRef.current !== null) {
+        clearTimeout(advanceTimerRef.current);
+        advanceTimerRef.current = null;
+      }
+    }, []);
+    // Cancel a pending advance if the component unmounts.
+    React.useEffect(() => clearAdvanceTimer, [clearAdvanceTimer]);
+
     const goTo = React.useCallback(
       (next: number) => {
+        // Any navigation (manual or auto) cancels a pending auto-advance.
+        clearAdvanceTimer();
         const target = clamp(next, 0, Math.max(0, items.length - 1));
         if (!isIndexControlled) setInternalIndex(target);
         onIndexChange?.(target);
       },
-      [isIndexControlled, onIndexChange, items.length],
+      [isIndexControlled, onIndexChange, items.length, clearAdvanceTimer],
     );
 
     const handleSelect = React.useCallback(
@@ -124,16 +152,32 @@ const CarouselQuestion = React.forwardRef<HTMLDivElement, CarouselQuestionProps>
         if (!isValueControlled) setInternalValue(next);
         onValueChange?.(next);
 
-        if (advanceOnAnswer) {
+        if (!advanceOnAnswer) return;
+
+        // Re-answering resets the timer so the latest choice shows for the full
+        // delay before advancing.
+        clearAdvanceTimer();
+        advanceTimerRef.current = setTimeout(() => {
+          advanceTimerRef.current = null;
           // Jump to the next still-unanswered slide so answering flows forward.
           const nextUnanswered = items.findIndex(
             (it, i) => i > current && next[it.id] === undefined,
           );
           if (nextUnanswered !== -1) goTo(nextUnanswered);
           else if (current < items.length - 1) goTo(current + 1);
-        }
+        }, advanceDelayMs);
       },
-      [answers, isValueControlled, onValueChange, advanceOnAnswer, items, current, goTo],
+      [
+        answers,
+        isValueControlled,
+        onValueChange,
+        advanceOnAnswer,
+        advanceDelayMs,
+        items,
+        current,
+        goTo,
+        clearAdvanceTimer,
+      ],
     );
 
     const carouselItems = React.useMemo<CarouselItem[]>(
@@ -157,6 +201,8 @@ const CarouselQuestion = React.forwardRef<HTMLDivElement, CarouselQuestionProps>
           index={current}
           onIndexChange={goTo}
           navigation={navigation}
+          minSlideHeight={minSlideHeight}
+          maxSlideHeight={maxSlideHeight}
           {...carouselProps}
         />
 
