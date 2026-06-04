@@ -301,7 +301,7 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
         </div>
 
         {navigation === "counter" && (
-          <div className="flex items-center justify-between gap-4 self-center w-48 py-2 mt-4">
+          <div className="flex items-center justify-between gap-4 self-center w-48 py-2 ">
             <button
               type="button"
               onClick={() => goTo(current - 1)}
@@ -344,7 +344,7 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
         )}
 
         {navigation === "bullets" && (
-          <div className="flex items-center justify-center gap-4 self-center py-2 mt-4">
+          <div className="flex items-center justify-center gap-4 self-center py-2 ">
             <button
               type="button"
               onClick={() => goTo(current - 1)}
