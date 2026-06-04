@@ -15,6 +15,7 @@ import { NPS } from '../../components/survey-rendering/NPS';
 import { ChoiceGrid } from '../../components/survey-rendering/ChoiceGrid';
 import { CardSort, type CardSortValue } from '../../components/survey-rendering/CardSort';
 import { NumericRanking, type NumericRankingValue } from '../../components/survey-rendering/NumericRanking';
+import { StarRating, type StarRatingValue } from '../../components/survey-rendering/StarRating';
 import { RunningTotal, type RunningTotalValue } from '../../components/survey-rendering/RunningTotal';
 import { DragAndDrop, type DragAndDropValue } from '../../components/survey-rendering/DragAndDrop';
 import { CarouselQuestion, type CarouselQuestionValue } from '../../components/survey-rendering/CarouselQuestion';
@@ -56,6 +57,7 @@ const LivePreview = ({
   const [gridValue, setGridValue] = React.useState<Record<string, string>>({});
   const [cardSortValue, setCardSortValue] = React.useState<CardSortValue>({});
   const [numericRankingValue, setNumericRankingValue] = React.useState<NumericRankingValue>({});
+  const [starRatingValue, setStarRatingValue] = React.useState<StarRatingValue>({});
   const [runningTotalValue, setRunningTotalValue] = React.useState<RunningTotalValue>({});
   const [dragAndDropValue, setDragAndDropValue] = React.useState<DragAndDropValue>([]);
   const [carouselNpsValue, setCarouselNpsValue] = React.useState<CarouselQuestionValue>({});
@@ -296,6 +298,21 @@ const LivePreview = ({
                 ]}
                 value={numericRankingValue}
                 onChange={setNumericRankingValue}
+              />
+            </QuestionField>
+          )}
+
+          {show('star-rating') && (
+            <QuestionField>
+              <QuestionText label="Numeric answers question using stars to rate items" />
+              <StarRating
+                items={[
+                  { value: 'r1', label: 'Rating 1' },
+                  { value: 'r2', label: 'Rating 2' },
+                  { value: 'r3', label: 'Rating 3' },
+                ]}
+                value={starRatingValue}
+                onChange={setStarRatingValue}
               />
             </QuestionField>
           )}

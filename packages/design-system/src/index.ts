@@ -70,6 +70,7 @@ export { Card as SurveyCard, cardVariants as surveyCardVariants, type CardProps 
 export { DropZone, type DropZoneProps } from "./components/survey-rendering/DropZone";
 export { CardSort, type CardSortProps, type CardSortItem, type CardSortValue, type CardSortZone } from "./components/survey-rendering/CardSort";
 export { NumericRanking, NumericRankingInput, type NumericRankingProps, type NumericRankingItem, type NumericRankingValue } from "./components/survey-rendering/NumericRanking";
+export { StarRating, type StarRatingProps, type StarRatingItem, type StarRatingValue } from "./components/survey-rendering/StarRating";
 export { RunningTotal, RunningTotalInput, type RunningTotalProps, type RunningTotalRow, type RunningTotalColumn, type RunningTotalValue } from "./components/survey-rendering/RunningTotal";
 export { DragAndDrop, type DragAndDropProps, type DragAndDropItem, type DragAndDropValue } from "./components/survey-rendering/DragAndDrop";
 export { Carousel, type CarouselProps, type CarouselItem } from "./components/survey-rendering/Carousel";
