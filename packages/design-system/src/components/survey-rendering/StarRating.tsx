@@ -92,6 +92,7 @@ const StarRating = React.forwardRef<HTMLDivElement, StarRatingProps>(
               <div
                 role="radiogroup"
                 aria-label={item.label}
+                aria-invalid={!!error || undefined}
                 className="flex items-center gap-2"
                 onMouseLeave={() => clearHover(item.value)}
               >

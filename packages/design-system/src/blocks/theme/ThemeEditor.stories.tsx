@@ -89,8 +89,9 @@ const LivePreview = ({
   const dropdownError = showError && !dropdownValue ? requiredErrorMsg : undefined;
   const npsError = showError && !npsValue ? requiredErrorMsg : undefined;
   const gridError = showError && Object.keys(gridValue).length === 0 ? 'Please answer all rows' : undefined;
+  const starRatingError = showError && Object.keys(starRatingValue).length === 0 ? 'Please rate all items' : undefined;
 
-  const hasAnyError = !!(textError || radioError || checkboxError || openError || dateError || dropdownError || npsError || gridError);
+  const hasAnyError = !!(textError || radioError || checkboxError || openError || dateError || dropdownError || npsError || gridError || starRatingError);
 
   const surveyContent = (
     <>
@@ -304,7 +305,7 @@ const LivePreview = ({
 
           {show('star-rating') && (
             <QuestionField>
-              <QuestionText label="Numeric answers question using stars to rate items" />
+              <QuestionText label="Numeric answers question using stars to rate items" error={starRatingError} />
               <StarRating
                 items={[
                   { value: 'r1', label: 'Rating 1' },
@@ -313,6 +314,7 @@ const LivePreview = ({
                 ]}
                 value={starRatingValue}
                 onChange={setStarRatingValue}
+                error={starRatingError}
               />
             </QuestionField>
           )}
