@@ -16,6 +16,7 @@ import { ChoiceGrid } from '../../components/survey-rendering/ChoiceGrid';
 import { CardSort, type CardSortValue } from '../../components/survey-rendering/CardSort';
 import { NumericRanking, type NumericRankingValue } from '../../components/survey-rendering/NumericRanking';
 import { StarRating, type StarRatingValue } from '../../components/survey-rendering/StarRating';
+import { SurveySlider, type SliderValue as SurveySliderValue } from '../../components/survey-rendering/Slider';
 import { RunningTotal, type RunningTotalValue } from '../../components/survey-rendering/RunningTotal';
 import { DragAndDrop, type DragAndDropValue } from '../../components/survey-rendering/DragAndDrop';
 import { CarouselQuestion, type CarouselQuestionValue } from '../../components/survey-rendering/CarouselQuestion';
@@ -58,6 +59,8 @@ const LivePreview = ({
   const [cardSortValue, setCardSortValue] = React.useState<CardSortValue>({});
   const [numericRankingValue, setNumericRankingValue] = React.useState<NumericRankingValue>({});
   const [starRatingValue, setStarRatingValue] = React.useState<StarRatingValue>({});
+  const [sliderValue, setSliderValue] = React.useState<SurveySliderValue>([50]);
+  const [sliderRangeValue, setSliderRangeValue] = React.useState<SurveySliderValue>([30, 70]);
   const [runningTotalValue, setRunningTotalValue] = React.useState<RunningTotalValue>({});
   const [dragAndDropValue, setDragAndDropValue] = React.useState<DragAndDropValue>([]);
   const [carouselNpsValue, setCarouselNpsValue] = React.useState<CarouselQuestionValue>({});
@@ -315,6 +318,35 @@ const LivePreview = ({
                 value={starRatingValue}
                 onChange={setStarRatingValue}
                 error={starRatingError}
+              />
+            </QuestionField>
+          )}
+
+          {show('slider') && (
+            <QuestionField>
+              <QuestionText label="On a scale from 0 to 100, how satisfied are you?" />
+              <SurveySlider
+                min={0}
+                max={100}
+                showValue
+                minLabel="Not satisfied"
+                maxLabel="Very satisfied"
+                value={sliderValue}
+                onChange={setSliderValue}
+              />
+            </QuestionField>
+          )}
+
+          {show('slider') && (
+            <QuestionField>
+              <QuestionText label="What price range are you comfortable with?" />
+              <SurveySlider
+                range
+                min={0}
+                max={100}
+                showValue
+                value={sliderRangeValue}
+                onChange={setSliderRangeValue}
               />
             </QuestionField>
           )}
