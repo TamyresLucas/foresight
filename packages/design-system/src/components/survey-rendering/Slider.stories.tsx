@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { userEvent, within } from '@storybook/test';
 import { SurveySlider } from './Slider';
 
 const meta = {
@@ -94,5 +95,25 @@ export const Disabled: Story = {
   args: {
     defaultValue: [40],
     disabled: true,
+  },
+};
+
+export const Focused: Story = {
+  args: {
+    defaultValue: [50],
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Keyboard-focused picker. The focused state is intentionally identical to the selected state: the picker keeps the brand selected border with no extra focus ring. (Focus is keyboard-only — view this in the Canvas tab to see the picker focused via Tab.)',
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    // Ensure the picker is present, then move keyboard focus to it via Tab so
+    // the :focus-visible state engages (focus is keyboard-only).
+    await within(canvasElement).findByRole('slider');
+    await userEvent.tab();
   },
 };
