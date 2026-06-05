@@ -73,6 +73,8 @@ export const QUESTION_TYPE_OPTIONS: { id: string; label: string }[] = [
   { id: 'running-total',    label: 'Running Total' },
   { id: 'drag-drop',        label: 'Drag and Drop' },
   { id: 'numeric-ranking',  label: 'Numeric Ranking' },
+  { id: 'star-rating',      label: 'Star Rating' },
+  { id: 'slider',           label: 'Slider' },
   { id: 'carousel-question', label: 'Carousel Question' },
 ];
 

@@ -8,7 +8,8 @@ import { DropdownPopUp } from './DropdownPopUp'
 
 export type TimeValue = { hour: number; minute: number; period: 'AM' | 'PM' }
 
-export interface TimePickerProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface TimePickerProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'value' | 'defaultValue' | 'onChange'> {
   mode?: 'single' | 'range'
   value?: TimeValue | { from?: TimeValue; to?: TimeValue }
   defaultValue?: TimePickerProps['value']

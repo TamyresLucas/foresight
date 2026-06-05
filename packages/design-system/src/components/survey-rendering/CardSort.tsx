@@ -182,6 +182,26 @@ const CardSort = React.forwardRef<HTMLDivElement, CardSortProps>(
         moveItem(id, nextZone);
       };
 
+    const containerRef = React.useRef<HTMLDivElement>(null);
+    React.useImperativeHandle(ref, () => containerRef.current!);
+
+    // Detect component width to switch layout. Below 480px the zones stack
+    // vertically so the component works correctly inside narrow containers
+    // (e.g. a phone mockup) regardless of the page viewport width.
+    const [stacked, setStacked] = React.useState(false);
+    React.useLayoutEffect(() => {
+      const node = containerRef.current;
+      if (!node) return;
+      // Read width immediately — ResizeObserver fires asynchronously so we
+      // can't rely on it for the initial render.
+      setStacked(node.offsetWidth < 480);
+      const obs = new ResizeObserver(([entry]) => {
+        setStacked(entry.contentRect.width < 480);
+      });
+      obs.observe(node);
+      return () => obs.disconnect();
+    }, []);
+
     const showDropIndicator = (zone: CardSortZone) =>
       draggedId !== null && dragOverZone === zone;
 
@@ -297,14 +317,14 @@ const CardSort = React.forwardRef<HTMLDivElement, CardSortProps>(
 
     return (
       <div
-        ref={ref}
-        className={cn("flex w-full font-survey", className)}
+        ref={containerRef}
+        className={cn("flex flex-row w-full font-survey", className)}
         style={{ gap: "var(--survey-margin, 8px)" }}
         {...props}
       >
         {renderSourceColumn()}
         <div
-          className="flex flex-col sm:contents flex-1"
+          className={cn("flex flex-col flex-1", !stacked && "contents")}
           style={{ gap: "var(--survey-margin, 8px)" }}
         >
           {renderChoiceZone("choice1", choiceLabels[0])}

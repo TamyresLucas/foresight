@@ -15,6 +15,8 @@ import { NPS } from '../../components/survey-rendering/NPS';
 import { ChoiceGrid } from '../../components/survey-rendering/ChoiceGrid';
 import { CardSort, type CardSortValue } from '../../components/survey-rendering/CardSort';
 import { NumericRanking, type NumericRankingValue } from '../../components/survey-rendering/NumericRanking';
+import { StarRating, type StarRatingValue } from '../../components/survey-rendering/StarRating';
+import { SurveySlider, type SliderValue as SurveySliderValue } from '../../components/survey-rendering/Slider';
 import { RunningTotal, type RunningTotalValue } from '../../components/survey-rendering/RunningTotal';
 import { DragAndDrop, type DragAndDropValue } from '../../components/survey-rendering/DragAndDrop';
 import { CarouselQuestion, type CarouselQuestionValue } from '../../components/survey-rendering/CarouselQuestion';
@@ -22,7 +24,7 @@ import { SurveyErrorMessage } from '../../components/survey-rendering/SurveyErro
 import { QuestionText } from '../../components/survey-rendering/QuestionText';
 import { QuestionField } from '../../components/survey-rendering/QuestionField';
 import { Description } from '../../components/survey-rendering/Description';
-import { cn } from '../../lib/utils';
+import { DeviceFrame } from '../../components/ui/device-frame';
 
 const meta: Meta = {
   title: 'Survey Rendering/Theme/ThemeEditor',
@@ -56,6 +58,9 @@ const LivePreview = ({
   const [gridValue, setGridValue] = React.useState<Record<string, string>>({});
   const [cardSortValue, setCardSortValue] = React.useState<CardSortValue>({});
   const [numericRankingValue, setNumericRankingValue] = React.useState<NumericRankingValue>({});
+  const [starRatingValue, setStarRatingValue] = React.useState<StarRatingValue>({});
+  const [sliderValue, setSliderValue] = React.useState<SurveySliderValue>([50]);
+  const [sliderRangeValue, setSliderRangeValue] = React.useState<SurveySliderValue>([30, 70]);
   const [runningTotalValue, setRunningTotalValue] = React.useState<RunningTotalValue>({});
   const [dragAndDropValue, setDragAndDropValue] = React.useState<DragAndDropValue>([]);
   const [carouselNpsValue, setCarouselNpsValue] = React.useState<CarouselQuestionValue>({});
@@ -87,15 +92,12 @@ const LivePreview = ({
   const dropdownError = showError && !dropdownValue ? requiredErrorMsg : undefined;
   const npsError = showError && !npsValue ? requiredErrorMsg : undefined;
   const gridError = showError && Object.keys(gridValue).length === 0 ? 'Please answer all rows' : undefined;
+  const starRatingError = showError && Object.keys(starRatingValue).length === 0 ? 'Please rate all items' : undefined;
 
-  const hasAnyError = !!(textError || radioError || checkboxError || openError || dateError || dropdownError || npsError || gridError);
+  const hasAnyError = !!(textError || radioError || checkboxError || openError || dateError || dropdownError || npsError || gridError || starRatingError);
 
-  return (
-    <div className="w-full min-h-screen bg-muted/20 overflow-y-auto p-12">
-      <div className={cn(
-        "mx-auto space-y-12 transition-all duration-200",
-        viewport === 'mobile' ? "max-w-[375px]" : "max-w-2xl"
-      )}>
+  const surveyContent = (
+    <>
         {/* Top Toolbar */}
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold tracking-tight text-foreground">Company name</h2>
@@ -304,6 +306,51 @@ const LivePreview = ({
             </QuestionField>
           )}
 
+          {show('star-rating') && (
+            <QuestionField>
+              <QuestionText label="Numeric answers question using stars to rate items" error={starRatingError} />
+              <StarRating
+                items={[
+                  { value: 'r1', label: 'Rating 1' },
+                  { value: 'r2', label: 'Rating 2' },
+                  { value: 'r3', label: 'Rating 3' },
+                ]}
+                value={starRatingValue}
+                onChange={setStarRatingValue}
+                error={starRatingError}
+              />
+            </QuestionField>
+          )}
+
+          {show('slider') && (
+            <QuestionField>
+              <QuestionText label="On a scale from 0 to 100, how satisfied are you?" />
+              <SurveySlider
+                min={0}
+                max={100}
+                showValue
+                minLabel="Not satisfied"
+                maxLabel="Very satisfied"
+                value={sliderValue}
+                onChange={setSliderValue}
+              />
+            </QuestionField>
+          )}
+
+          {show('slider') && (
+            <QuestionField>
+              <QuestionText label="What price range are you comfortable with?" />
+              <SurveySlider
+                range
+                min={0}
+                max={100}
+                showValue
+                value={sliderRangeValue}
+                onChange={setSliderRangeValue}
+              />
+            </QuestionField>
+          )}
+
           {show('carousel-question') && (
             <QuestionField>
               <QuestionText label="How likely are you to recommend each of these?" />
@@ -340,8 +387,6 @@ const LivePreview = ({
                 value={carouselNpsValue}
                 onValueChange={setCarouselNpsValue}
                 navigation="bullets"
-                maxSlideHeight={400}
-                minSlideHeight={220}
               />
             </QuestionField>
           )}
@@ -369,6 +414,19 @@ const LivePreview = ({
             </div>
           </div>
         </div>
+    </>
+  );
+
+  return viewport === 'mobile' ? (
+    <div className="w-full min-h-screen bg-muted/20 overflow-y-auto flex justify-center py-8">
+      <DeviceFrame screenClassName="px-4 py-6">
+        <div className="space-y-12">{surveyContent}</div>
+      </DeviceFrame>
+    </div>
+  ) : (
+    <div className="w-full min-h-screen bg-muted/20 overflow-y-auto p-12">
+      <div className="mx-auto max-w-2xl space-y-12 transition-all duration-200">
+        {surveyContent}
       </div>
     </div>
   );

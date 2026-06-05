@@ -18,6 +18,7 @@ export * from "./components/ui/breadcrumb";
 export * from "./components/ui/checkbox";
 export * from "./components/ui/collapsible";
 export * from "./components/ui/color-picker";
+export * from "./components/ui/device-frame";
 export * from "./components/ui/command";
 export * from "./components/ui/dialog";
 export * from "./components/ui/drawer";
@@ -69,6 +70,8 @@ export { Card as SurveyCard, cardVariants as surveyCardVariants, type CardProps 
 export { DropZone, type DropZoneProps } from "./components/survey-rendering/DropZone";
 export { CardSort, type CardSortProps, type CardSortItem, type CardSortValue, type CardSortZone } from "./components/survey-rendering/CardSort";
 export { NumericRanking, NumericRankingInput, type NumericRankingProps, type NumericRankingItem, type NumericRankingValue } from "./components/survey-rendering/NumericRanking";
+export { StarRating, type StarRatingProps, type StarRatingItem, type StarRatingValue } from "./components/survey-rendering/StarRating";
+export { SurveySlider, type SliderProps as SurveySliderProps, type SliderValue as SurveySliderValue } from "./components/survey-rendering/Slider";
 export { RunningTotal, RunningTotalInput, type RunningTotalProps, type RunningTotalRow, type RunningTotalColumn, type RunningTotalValue } from "./components/survey-rendering/RunningTotal";
 export { DragAndDrop, type DragAndDropProps, type DragAndDropItem, type DragAndDropValue } from "./components/survey-rendering/DragAndDrop";
 export { Carousel, type CarouselProps, type CarouselItem } from "./components/survey-rendering/Carousel";
