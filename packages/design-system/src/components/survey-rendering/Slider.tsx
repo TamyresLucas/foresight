@@ -92,10 +92,20 @@ const SurveySlider = React.forwardRef<
                 range ? (i === 0 ? 'Minimum value' : 'Maximum value') : 'Value'
               }
               className={cn(
-                'relative block h-4 w-4 rounded-full border-2 bg-survey-background transition-colors',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-survey-border-selected focus-visible:ring-offset-2 focus-visible:ring-offset-survey-background',
+                'relative block h-4 w-4 rounded-full border-2 bg-survey-background outline-none transition-[box-shadow,border-color] focus:outline-none',
                 error ? 'border-survey-destructive' : 'border-survey-border-selected',
-                disabled ? 'cursor-not-allowed' : 'cursor-pointer',
+                disabled
+                  ? 'cursor-not-allowed'
+                  : cn(
+                      'cursor-pointer',
+                      // Hover, focused, and selected (clicked) states show a soft
+                      // outer halo at 30% of the survey primary token around the
+                      // picker. Using :focus (not :focus-visible) means a mouse
+                      // click also shows it and it persists until blur. The
+                      // default state (idle) shows only the inner border.
+                      'hover:ring-8 hover:ring-[hsl(var(--survey-primary)_/_0.3)]',
+                      'focus:border-survey-border-selected focus:ring-8 focus:ring-[hsl(var(--survey-primary)_/_0.3)]',
+                    ),
               )}
             >
               {showValue && (
