@@ -20,6 +20,7 @@ import { SurveySlider, type SliderValue as SurveySliderValue } from '../../compo
 import { RunningTotal, type RunningTotalValue } from '../../components/survey-rendering/RunningTotal';
 import { DragAndDrop, type DragAndDropValue } from '../../components/survey-rendering/DragAndDrop';
 import { CarouselQuestion, type CarouselQuestionValue } from '../../components/survey-rendering/CarouselQuestion';
+import { SurveyLookupTable, type LookupTableValue, type LookupTableColumn, type LookupTableRow } from '../../components/survey-rendering/LookupTable';
 import { SurveyErrorMessage } from '../../components/survey-rendering/SurveyErrorMessage';
 import { QuestionText } from '../../components/survey-rendering/QuestionText';
 import { QuestionField } from '../../components/survey-rendering/QuestionField';
@@ -64,7 +65,30 @@ const LivePreview = ({
   const [runningTotalValue, setRunningTotalValue] = React.useState<RunningTotalValue>({});
   const [dragAndDropValue, setDragAndDropValue] = React.useState<DragAndDropValue>([]);
   const [carouselNpsValue, setCarouselNpsValue] = React.useState<CarouselQuestionValue>({});
+  const [lookupTableValue, setLookupTableValue] = React.useState<LookupTableValue>([]);
   const [showError, setShowError] = React.useState(false);
+
+  const lookupTableColumns: LookupTableColumn[] = [
+    { id: 'status', label: 'Status' },
+    { id: 'email', label: 'Email', sortable: true },
+    { id: 'amount', label: 'Amount', sortable: true, align: 'right' },
+  ];
+  // 13 rows across 3 pages (default page size is 5) to demonstrate pagination.
+  const lookupTableRows: LookupTableRow[] = [
+    { id: 'lt1', data: { status: 'Success', email: 'ken99@example.com', amount: '$316.00' } },
+    { id: 'lt2', data: { status: 'Success', email: 'abe45@example.com', amount: '$242.00' } },
+    { id: 'lt3', data: { status: 'Processing', email: 'monserrat44@example.com', amount: '$837.00' } },
+    { id: 'lt4', data: { status: 'Success', email: 'silas22@example.com', amount: '$874.00' } },
+    { id: 'lt5', data: { status: 'Failed', email: 'carmella@example.com', amount: '$721.00' } },
+    { id: 'lt6', data: { status: 'Success', email: 'jason78@example.com', amount: '$129.00' } },
+    { id: 'lt7', data: { status: 'Processing', email: 'noah12@example.com', amount: '$540.00' } },
+    { id: 'lt8', data: { status: 'Success', email: 'mia34@example.com', amount: '$612.00' } },
+    { id: 'lt9', data: { status: 'Failed', email: 'liam90@example.com', amount: '$058.00' } },
+    { id: 'lt10', data: { status: 'Success', email: 'olivia21@example.com', amount: '$733.00' } },
+    { id: 'lt11', data: { status: 'Processing', email: 'lucas55@example.com', amount: '$921.00' } },
+    { id: 'lt12', data: { status: 'Success', email: 'emma47@example.com', amount: '$284.00' } },
+    { id: 'lt13', data: { status: 'Failed', email: 'sophia63@example.com', amount: '$476.00' } },
+  ];
 
   const gridRows = [
     { id: 'option-1', label: 'Speed' },
@@ -387,6 +411,20 @@ const LivePreview = ({
                 value={carouselNpsValue}
                 onValueChange={setCarouselNpsValue}
                 navigation="bullets"
+              />
+            </QuestionField>
+          )}
+
+          {show('lookup-table') && (
+            <QuestionField>
+              <QuestionText label="Select the transactions you'd like to review:" />
+              <SurveyLookupTable
+                columns={lookupTableColumns}
+                rows={lookupTableRows}
+                filterColumnId="email"
+                filterPlaceholder="Filter emails…"
+                value={lookupTableValue}
+                onChange={setLookupTableValue}
               />
             </QuestionField>
           )}

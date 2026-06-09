@@ -58,7 +58,6 @@ const CheckboxOption = React.forwardRef<HTMLLabelElement, CheckboxOptionProps>(
           focused && "[&:has([data-state=checked])]:ring-survey-border-selected",
           "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-survey-border-interactive has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-survey-background",
           "[&:has([data-state=checked]):has(:focus-visible)]:ring-survey-border-selected",
-          hasError && "border border-survey-destructive has-[[data-state=checked]]:border-survey-destructive ring-0 has-[:focus-visible]:ring-0",
           disabled && "cursor-not-allowed opacity-50",
           className,
         )}
@@ -70,7 +69,7 @@ const CheckboxOption = React.forwardRef<HTMLLabelElement, CheckboxOptionProps>(
           disabled={disabled}
           className={cn(
             "flex-shrink-0 w-4 h-4 rounded-[4px] border-2 transition-colors grid place-content-center",
-            "border-survey-border-interactive",
+            hasError ? "border-survey-destructive" : "border-survey-border-interactive",
             "data-[state=checked]:border-survey-border-selected data-[state=checked]:bg-survey-border-selected",
             "focus:outline-none focus-visible:outline-none",
           )}
