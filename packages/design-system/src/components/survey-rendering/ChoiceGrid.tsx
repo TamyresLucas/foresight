@@ -11,8 +11,6 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 
-const ChoiceGridErrorContext = React.createContext<boolean>(false);
-
 export interface ChoiceGridColumn {
   value: string;
   label: string;
@@ -86,7 +84,6 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
         ref={ref}
         className={cn("flex flex-col gap-4 w-full max-w-2xl mx-auto font-survey", className)}
       >
-        <ChoiceGridErrorContext.Provider value={!!error}>
           {/* Desktop View */}
           <div className={cn(desktopVisibility, "w-full overflow-x-auto")}>
             <table role="grid" className="w-full border-collapse">
@@ -113,8 +110,7 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                     disabled={disabled || row.disabled}
                   >
                     <tr className={cn(
-                      "group/row border-b transition-colors hover:bg-survey-muted-background/10",
-                      error ? "border-survey-destructive" : "border-survey-border-muted",
+                      "group/row border-b border-survey-border-muted transition-colors hover:bg-survey-muted-background/10",
                       forceHover && "bg-survey-muted-background/10"
                     )}>
                       <th
@@ -136,6 +132,7 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                           isFocused={focusedRow === row.id && focusedColumn === column.value}
                           disabled={disabled || row.disabled}
                           forceHover={forceHover}
+                          hasError={!!error && !values[row.id]}
                         />
                       ))}
                     </tr>
@@ -147,14 +144,13 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
 
           {/* Mobile View - Accordion */}
           <div className={cn(mobileVisibility, "w-full")}>
-            <Accordion type="single" collapsible className={cn("w-full flex flex-col rounded-survey-md overflow-hidden border", error ? "border-survey-destructive" : "border-survey-border-muted")}>
+            <Accordion type="single" collapsible className={cn("w-full flex flex-col rounded-survey-md overflow-hidden border border-survey-border-muted")}>
               {rows.map((row) => (
                 <AccordionItem
                   key={row.id}
                   value={row.id}
                   className={cn(
-                    "w-full rounded-none last:border-b-0 border-b",
-                    error ? "border-survey-destructive" : "border-survey-border-muted"
+                    "w-full rounded-none last:border-b-0 border-b border-survey-border-muted"
                   )}
                 >
                   <AccordionTrigger className={cn(
@@ -182,6 +178,7 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                           rowId={row.id}
                           isFocused={focusedRow === row.id && focusedColumn === column.value}
                           disabled={disabled || row.disabled}
+                          hasError={!!error && !values[row.id]}
                         />
                       ))}
                     </RadioGroupPrimitive.Root>
@@ -190,7 +187,6 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
               ))}
             </Accordion>
           </div>
-        </ChoiceGridErrorContext.Provider>
       </div>
     );
   }
@@ -204,6 +200,7 @@ interface ChoiceGridCellProps {
   isFocused: boolean;
   disabled?: boolean;
   forceHover?: boolean;
+  hasError?: boolean;
 }
 
 const ChoiceGridCell = ({
@@ -211,6 +208,7 @@ const ChoiceGridCell = ({
   columnValue,
   isFocused,
   disabled,
+  hasError,
 }: ChoiceGridCellProps) => {
   const cellId = `cell-${rowId}-${columnValue}`;
 
@@ -237,7 +235,7 @@ const ChoiceGridCell = ({
           aria-labelledby={`label-${rowId}`}
           className={cn(
             "flex-shrink-0 w-4 h-4 rounded-full border-2 transition-colors",
-            "border-survey-border-interactive",
+            hasError ? "border-survey-destructive" : "border-survey-border-interactive",
             "data-[state=checked]:border-survey-border-selected data-[state=checked]:bg-survey-border-selected",
             "focus:outline-none focus-visible:outline-none",
           )}
@@ -256,11 +254,13 @@ const ChoiceGridMobileOption = ({
   rowId,
   isFocused,
   disabled,
+  hasError,
 }: {
   column: ChoiceGridColumn;
   rowId: string;
   isFocused: boolean;
   disabled?: boolean;
+  hasError?: boolean;
 }) => {
   const id = `mobile-${rowId}-${column.value}`;
 
@@ -281,7 +281,7 @@ const ChoiceGridMobileOption = ({
         disabled={disabled}
         className={cn(
           "flex-shrink-0 w-4 h-4 rounded-full border-2 transition-colors",
-          "border-survey-border-interactive",
+          hasError ? "border-survey-destructive" : "border-survey-border-interactive",
           "data-[state=checked]:border-survey-border-selected data-[state=checked]:bg-survey-border-selected",
           "focus:outline-none focus-visible:outline-none",
         )}

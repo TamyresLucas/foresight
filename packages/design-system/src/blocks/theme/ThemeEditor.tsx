@@ -76,6 +76,7 @@ export const QUESTION_TYPE_OPTIONS: { id: string; label: string }[] = [
   { id: 'star-rating',      label: 'Star Rating' },
   { id: 'slider',           label: 'Slider' },
   { id: 'carousel-question', label: 'Carousel Question' },
+  { id: 'lookup-table',     label: 'Lookup Table' },
 ];
 
 const ALL_QUESTION_TYPE_IDS = QUESTION_TYPE_OPTIONS.map(q => q.id);
