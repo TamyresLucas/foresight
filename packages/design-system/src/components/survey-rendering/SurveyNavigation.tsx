@@ -86,7 +86,7 @@ const SurveyNavigation = React.forwardRef<HTMLDivElement, SurveyNavigationProps>
               onClick={onPrevious}
               style={{ borderRadius: 'var(--component-button-radius)' }}
               className={cn(
-                "border border-survey-primary text-survey-primary h-10 px-6 hover:bg-transparent flex items-center gap-2 transition-all focus-visible:outline-none",
+                "border border-survey-primary text-survey-primary text-survey-body h-10 px-6 hover:bg-transparent flex items-center gap-2 transition-all focus-visible:outline-none",
                 hoverOverlayClass
               )}
             >
@@ -106,7 +106,7 @@ const SurveyNavigation = React.forwardRef<HTMLDivElement, SurveyNavigationProps>
                   onClick={onSeeResponses}
                   style={{ borderRadius: 'var(--component-button-radius)' }}
                   className={cn(
-                    "border border-survey-border-interactive text-foreground h-10 px-6 hover:bg-transparent transition-all focus-visible:outline-none",
+                    "border border-survey-border-interactive text-foreground text-survey-body h-10 px-6 hover:bg-transparent transition-all focus-visible:outline-none",
                     hoverOverlayClass
                   )}
                 >
@@ -120,7 +120,7 @@ const SurveyNavigation = React.forwardRef<HTMLDivElement, SurveyNavigationProps>
                   onClick={onQuit}
                   style={{ borderRadius: 'var(--component-button-radius)' }}
                   className={cn(
-                    "border border-survey-border-interactive text-foreground h-10 px-6 hover:bg-transparent flex items-center gap-2 transition-all focus-visible:outline-none",
+                    "border border-survey-border-interactive text-foreground text-survey-body h-10 px-6 hover:bg-transparent flex items-center gap-2 transition-all focus-visible:outline-none",
                     hoverOverlayClass
                   )}
                 >
@@ -139,7 +139,7 @@ const SurveyNavigation = React.forwardRef<HTMLDivElement, SurveyNavigationProps>
               onClick={onNext}
               style={{ borderRadius: 'var(--component-button-radius)' }}
               className={cn(
-                "bg-survey-primary text-primary-foreground h-10 px-8 shadow-sm hover:bg-survey-primary flex items-center gap-2 transition-all border-none focus-visible:outline-none",
+                "bg-survey-primary text-primary-foreground text-survey-body h-10 px-8 shadow-sm hover:bg-survey-primary flex items-center gap-2 transition-all border-none focus-visible:outline-none",
                 hoverOverlayClass
               )}
             >
@@ -153,7 +153,7 @@ const SurveyNavigation = React.forwardRef<HTMLDivElement, SurveyNavigationProps>
               onClick={onSubmit}
               style={{ borderRadius: 'var(--component-button-radius)' }}
               className={cn(
-                "bg-survey-primary text-primary-foreground h-10 px-8 shadow-sm hover:bg-survey-primary transition-all border-none focus-visible:outline-none",
+                "bg-survey-primary text-primary-foreground text-survey-body h-10 px-8 shadow-sm hover:bg-survey-primary transition-all border-none focus-visible:outline-none",
                 hoverOverlayClass
               )}
             >

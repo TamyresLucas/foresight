@@ -87,7 +87,7 @@ const SurveyFilterTabs = React.forwardRef<HTMLDivElement, FilterTabsProps>(
                 // Fill the control height and center the label; pull each tab's
                 // underline down 1px so its 2px border sits over the
                 // container's horizontal rule.
-                'flex items-center -mb-px border-b-2 border-transparent px-0.5 text-survey-body transition-colors disabled:cursor-not-allowed',
+                'flex items-center -mb-px border-b-2 border-transparent px-0.5 font-survey text-survey-body transition-colors disabled:cursor-not-allowed',
                 active
                   ? 'border-survey-foreground font-survey-semibold text-survey-foreground'
                   : 'font-survey-regular text-survey-muted-foreground hover:text-survey-foreground',

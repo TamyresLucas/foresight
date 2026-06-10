@@ -85,6 +85,14 @@ export const WithRowActions: Story = {
   },
 };
 
+export const WithAddChoice: Story = {
+  args: {
+    defaultValue: ['r1'],
+    pageSize: 3,
+    onAddChoice: () => console.log('Add choice'),
+  },
+};
+
 export const WithError: Story = {
   args: {
     error: 'Please select at least one row',
