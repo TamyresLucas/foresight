@@ -2,7 +2,7 @@ import { type Theme } from './schema';
 
 export const FORESIGHT_DEFAULT: Theme = {
   id: 'foresight-default',
-  name: 'Foresight Default',
+  name: 'Clarity',
   primary: '#485AE3',
   secondary: '#008563',
   destructive: '#CF455C',
@@ -15,7 +15,7 @@ export const FORESIGHT_DEFAULT: Theme = {
   },
   body: {
     fontFamily: 'Inter',
-    fontSize: '16px',
+    fontSize: '14px',
     fontWeight: '400',
   },
   navigation: {

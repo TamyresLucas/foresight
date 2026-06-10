@@ -14,7 +14,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Check, ChevronLeft, ChevronRight, Search } from '../ui/icons';
+import { Check, ChevronLeft, ChevronRight, Plus, Search } from '../ui/icons';
 import {
   Table,
   TableBody,
@@ -67,6 +67,10 @@ export interface LookupTableProps {
   pageSize?: number;
   /** Per-row action items shown in the trailing `···` menu. Receives the row. */
   rowActions?: (row: LookupTableRow) => TableRowAction[];
+  /** When provided, renders an "Add choice" button on the right of the footer. */
+  onAddChoice?: () => void;
+  /** Label for the add-choice button. */
+  addChoiceLabel?: string;
   error?: string;
   disabled?: boolean;
   className?: string;
@@ -177,6 +181,8 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
       filterPlaceholder = 'Filter…',
       pageSize = 5,
       rowActions,
+      onAddChoice,
+      addChoiceLabel = 'Add choice',
       error,
       disabled = false,
       className,
@@ -385,7 +391,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
                   {headerGroup.headers.map((header) => (
                     <TableHead
                       key={header.id}
-                      className="h-11 px-4 align-middle text-survey-muted-foreground font-survey-semibold text-survey-body [&:has([role=checkbox])]:pr-0"
+                      className="h-11 px-4 align-middle font-survey text-survey-body font-survey-semibold text-survey-foreground [&:has([role=checkbox])]:pr-0"
                     >
                       {header.isPlaceholder
                         ? null
@@ -446,16 +452,18 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
           </span>
         )}
 
-        {/* Footer: selection count + pagination */}
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <span className="text-survey-muted-foreground font-survey-regular text-survey-body">
+        {/* Footer: selection count (left) · pagination (center) · add choice
+            (right). A 3-column grid keeps the pagination truly centered
+            regardless of the side content widths. */}
+        <div className="grid grid-cols-3 items-center gap-2">
+          <span className="justify-self-start text-survey-muted-foreground font-survey-regular text-survey-body">
             {selectedCount} of {rows.length} row(s) selected.
           </span>
           {/* Pagination is only shown when there is more than one page. Each
               chevron only appears when there is a page to move to in that
               direction. */}
-          {pageCount > 1 && (
-            <div className="flex items-center gap-2">
+          {pageCount > 1 ? (
+            <div className="flex items-center justify-self-center gap-2">
               {canPreviousPage && (
                 <button
                   type="button"
@@ -490,6 +498,28 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
                 </button>
               )}
             </div>
+          ) : (
+            <span />
+          )}
+
+          {onAddChoice ? (
+            <button
+              type="button"
+              onClick={onAddChoice}
+              disabled={disabled}
+              className={cn(
+                'flex h-9 items-center justify-self-end gap-2 rounded-survey-md border border-survey-border-interactive bg-survey-background px-3',
+                // Size tracks the survey theme (text-survey-body); weight stays
+                // medium to match the other survey action buttons.
+                'text-survey-body font-medium text-survey-foreground transition-colors',
+                'hover:bg-survey-muted-background disabled:cursor-not-allowed disabled:opacity-50',
+              )}
+            >
+              <Plus className="h-4 w-4" />
+              {addChoiceLabel}
+            </button>
+          ) : (
+            <span />
           )}
         </div>
       </div>

@@ -425,6 +425,7 @@ const LivePreview = ({
                 filterPlaceholder="Filter emails…"
                 value={lookupTableValue}
                 onChange={setLookupTableValue}
+                onAddChoice={() => {}}
               />
             </QuestionField>
           )}

@@ -466,7 +466,7 @@ export function ThemeEditor({
             <button
               type="button"
               onClick={() => toggleAll(visibleQuestionTypes.length < ALL_QUESTION_TYPE_IDS.length)}
-              className="text-xs text-primary hover:underline"
+              className="text-survey-body text-primary hover:underline"
             >
               {visibleQuestionTypes.length < ALL_QUESTION_TYPE_IDS.length ? 'Select all' : 'Deselect all'}
             </button>
@@ -499,7 +499,7 @@ export function ThemeEditor({
             </Button>
           )}
         </div>
-        <Button onClick={handleSubmit(onFormSubmit)} className="flex-1 max-w-[120px]">
+        <Button onClick={handleSubmit(onFormSubmit)} className="flex-1 max-w-[120px] text-survey-body">
           <Save className="h-4 w-4 mr-2" />
           Save
         </Button>
