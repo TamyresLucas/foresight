@@ -301,7 +301,10 @@ const DragAndDrop = React.forwardRef<HTMLDivElement, DragAndDropProps>(
           className="flex-1 flex flex-col items-stretch min-w-28 border border-transparent"
           style={{
             borderRadius: "calc(var(--survey-radius-md, 12px) + 8px)",
-            padding: "var(--survey-margin, 8px)",
+            paddingTop: "var(--survey-margin, 8px)",
+            paddingRight: "var(--survey-margin, 8px)",
+            paddingBottom: "var(--survey-margin, 8px)",
+            paddingLeft: 0,
             gap: "var(--survey-margin, 8px)",
           }}
           onDragOver={handleSourceDragOver}

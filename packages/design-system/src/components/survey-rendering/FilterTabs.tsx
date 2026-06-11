@@ -88,6 +88,8 @@ const SurveyFilterTabs = React.forwardRef<HTMLDivElement, FilterTabsProps>(
                 // underline down 1px so its 2px border sits over the
                 // container's horizontal rule.
                 'flex items-center -mb-px border-b-2 border-transparent px-0.5 font-survey text-survey-body transition-colors disabled:cursor-not-allowed',
+                // Outer focus border shown on keyboard (tab) navigation.
+                'rounded-[2px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-survey-border-interactive focus-visible:ring-offset-2 focus-visible:ring-offset-survey-background',
                 active
                   ? 'border-survey-foreground font-survey-semibold text-survey-foreground'
                   : 'font-survey-regular text-survey-muted-foreground hover:text-survey-foreground',

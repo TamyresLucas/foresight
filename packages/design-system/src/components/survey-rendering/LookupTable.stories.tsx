@@ -1,3 +1,4 @@
+import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { SurveyLookupTable, type LookupTableColumn, type LookupTableRow } from './LookupTable';
 
@@ -5,6 +6,24 @@ const columns: LookupTableColumn[] = [
   { id: 'status', label: 'Status' },
   { id: 'email', label: 'Email', sortable: true },
   { id: 'amount', label: 'Amount', sortable: true, align: 'right' },
+];
+
+// Columns annotated with editor formats for the add-choice draft row: Status
+// uses a dropdown, Email a free-text input, Amount a (right-aligned) text input.
+const editableColumns: LookupTableColumn[] = [
+  {
+    id: 'status',
+    label: 'Status',
+    format: 'dropdown',
+    editPlaceholder: 'Select status',
+    options: [
+      { value: 'Success', label: 'Success' },
+      { value: 'Processing', label: 'Processing' },
+      { value: 'Failed', label: 'Failed' },
+    ],
+  },
+  { id: 'email', label: 'Email', sortable: true, format: 'text', editPlaceholder: 'name@example.com' },
+  { id: 'amount', label: 'Amount', sortable: true, align: 'right', format: 'text', editPlaceholder: '$0.00' },
 ];
 
 const rows: LookupTableRow[] = [
@@ -90,6 +109,31 @@ export const WithAddChoice: Story = {
     defaultValue: ['r1'],
     pageSize: 3,
     onAddChoice: () => console.log('Add choice'),
+  },
+};
+
+export const WithAddChoiceEditing: Story = {
+  args: {
+    columns: editableColumns,
+    pageSize: 3,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Clicking "Add choice" inserts an empty draft row on the current page (pushing that page\'s last row to the next page) with a text input or dropdown per column, and swaps the footer to a tertiary Cancel and a primary Confirm. Confirm appends the assembled row.',
+      },
+    },
+  },
+  render: (args) => {
+    const [rows, setRows] = React.useState<LookupTableRow[]>(args.rows ?? []);
+    return (
+      <SurveyLookupTable
+        {...args}
+        rows={rows}
+        onAddRow={(row) => setRows((prev) => [...prev, row])}
+      />
+    );
   },
 };
 
