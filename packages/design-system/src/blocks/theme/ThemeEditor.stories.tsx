@@ -68,13 +68,25 @@ const LivePreview = ({
   const [lookupTableValue, setLookupTableValue] = React.useState<LookupTableValue>([]);
   const [showError, setShowError] = React.useState(false);
 
+  // Status uses a dropdown editor in the add-choice draft row; Email and Amount
+  // use text inputs (Amount right-aligned).
   const lookupTableColumns: LookupTableColumn[] = [
-    { id: 'status', label: 'Status' },
-    { id: 'email', label: 'Email', sortable: true },
-    { id: 'amount', label: 'Amount', sortable: true, align: 'right' },
+    {
+      id: 'status',
+      label: 'Status',
+      format: 'dropdown',
+      editPlaceholder: 'Select status',
+      options: [
+        { value: 'Success', label: 'Success' },
+        { value: 'Processing', label: 'Processing' },
+        { value: 'Failed', label: 'Failed' },
+      ],
+    },
+    { id: 'email', label: 'Email', sortable: true, format: 'text', editPlaceholder: 'name@example.com' },
+    { id: 'amount', label: 'Amount', sortable: true, align: 'right', format: 'text', editPlaceholder: '$0.00' },
   ];
-  // 13 rows across 3 pages (default page size is 5) to demonstrate pagination.
-  const lookupTableRows: LookupTableRow[] = [
+  // 13 rows across 2 pages (page size is 10) to demonstrate pagination.
+  const [lookupTableRows, setLookupTableRows] = React.useState<LookupTableRow[]>([
     { id: 'lt1', data: { status: 'Success', email: 'ken99@example.com', amount: '$316.00' } },
     { id: 'lt2', data: { status: 'Success', email: 'abe45@example.com', amount: '$242.00' } },
     { id: 'lt3', data: { status: 'Processing', email: 'monserrat44@example.com', amount: '$837.00' } },
@@ -88,7 +100,7 @@ const LivePreview = ({
     { id: 'lt11', data: { status: 'Processing', email: 'lucas55@example.com', amount: '$921.00' } },
     { id: 'lt12', data: { status: 'Success', email: 'emma47@example.com', amount: '$284.00' } },
     { id: 'lt13', data: { status: 'Failed', email: 'sophia63@example.com', amount: '$476.00' } },
-  ];
+  ]);
 
   const gridRows = [
     { id: 'option-1', label: 'Speed' },
@@ -425,7 +437,7 @@ const LivePreview = ({
                 filterPlaceholder="Filter emails…"
                 value={lookupTableValue}
                 onChange={setLookupTableValue}
-                onAddChoice={() => {}}
+                onAddRow={(row) => setLookupTableRows((prev) => [...prev, row])}
               />
             </QuestionField>
           )}

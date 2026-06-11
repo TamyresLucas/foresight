@@ -73,7 +73,7 @@ export { NumericRanking, NumericRankingInput, type NumericRankingProps, type Num
 export { StarRating, type StarRatingProps, type StarRatingItem, type StarRatingValue } from "./components/survey-rendering/StarRating";
 export { SurveySlider, type SliderProps as SurveySliderProps, type SliderValue as SurveySliderValue } from "./components/survey-rendering/Slider";
 export { RunningTotal, RunningTotalInput, type RunningTotalProps, type RunningTotalRow, type RunningTotalColumn, type RunningTotalValue } from "./components/survey-rendering/RunningTotal";
-export { SurveyLookupTable, type LookupTableProps, type LookupTableColumn, type LookupTableRow, type LookupTableValue } from "./components/survey-rendering/LookupTable";
+export { SurveyLookupTable, type LookupTableProps, type LookupTableColumn, type LookupTableColumnFormat, type LookupTableColumnOption, type LookupTableRow, type LookupTableValue } from "./components/survey-rendering/LookupTable";
 export { SurveyFilterTabs, type FilterTabsProps, type FilterTabItem } from "./components/survey-rendering/FilterTabs";
 export { DragAndDrop, type DragAndDropProps, type DragAndDropItem, type DragAndDropValue } from "./components/survey-rendering/DragAndDrop";
 export { Carousel, type CarouselProps, type CarouselItem } from "./components/survey-rendering/Carousel";

@@ -2,9 +2,11 @@
 
 import * as React from 'react';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
+import * as SelectPrimitive from '@radix-ui/react-select';
 import {
   type ColumnDef,
   type ColumnFiltersState,
+  type PaginationState,
   type RowSelectionState,
   type SortingState,
   flexRender,
@@ -14,7 +16,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Check, ChevronLeft, ChevronRight, Plus, Search } from '../ui/icons';
+import { Check, ChevronDown, ChevronLeft, ChevronRight, Plus, Search } from '../ui/icons';
 import {
   Table,
   TableBody,
@@ -27,6 +29,19 @@ import { TableRowActions, type TableRowAction } from '../ui/table-row-actions';
 import { SurveyFilterTabs, type FilterTabItem } from './FilterTabs';
 import { cn } from '@/lib/utils';
 
+/** Option for a `dropdown`-format column's editor in the add-choice draft row. */
+export interface LookupTableColumnOption {
+  value: string;
+  label: string;
+}
+
+/**
+ * Value format of a column's editor in the add-choice draft row.
+ * - `text` (default): a free-text input.
+ * - `dropdown`: a select bound to the column's `options`.
+ */
+export type LookupTableColumnFormat = 'text' | 'dropdown';
+
 /** A single column definition for the lookup table. */
 export interface LookupTableColumn {
   /** Key into each row's `data` object. */
@@ -37,6 +52,12 @@ export interface LookupTableColumn {
   sortable?: boolean;
   /** Right-align the cell + header (e.g. for numeric/amount columns). */
   align?: 'left' | 'right';
+  /** Editor format used for this column in the add-choice draft row. Defaults to `text`. */
+  format?: LookupTableColumnFormat;
+  /** Options for a `dropdown`-format column's editor. */
+  options?: LookupTableColumnOption[];
+  /** Placeholder for this column's editor in the add-choice draft row. */
+  editPlaceholder?: string;
 }
 
 /** A single row. `id` must be unique — it is what `value`/`onChange` track. */
@@ -67,14 +88,39 @@ export interface LookupTableProps {
   pageSize?: number;
   /** Per-row action items shown in the trailing `···` menu. Receives the row. */
   rowActions?: (row: LookupTableRow) => TableRowAction[];
-  /** When provided, renders an "Add choice" button on the right of the footer. */
+  /**
+   * Sink for rows added via the inline "Add choice" editor. When provided, the
+   * assembled draft row is passed here on Confirm (typically appended to `rows`).
+   * Takes precedence over `onAddChoice` as the Confirm handler.
+   */
+  onAddRow?: (row: LookupTableRow) => void;
+  /**
+   * Renders the "Add choice" button and enables the inline edit flow. Clicking
+   * "Add choice" inserts an empty draft row on the current page (pushing that
+   * page's last row to the next page) with a text input or dropdown per column,
+   * and swaps the footer to Cancel / Confirm. On Confirm, this is invoked when
+   * `onAddRow` is not provided. The button also appears when only `onAddRow`
+   * is set.
+   */
   onAddChoice?: () => void;
   /** Label for the add-choice button. */
   addChoiceLabel?: string;
+  /** Label for the confirm button shown while adding a choice. */
+  confirmLabel?: string;
+  /** Label for the cancel button shown while adding a choice. */
+  cancelLabel?: string;
   error?: string;
   disabled?: boolean;
   className?: string;
 }
+
+/**
+ * Outer focus border shown on keyboard (tab) navigation — a 2px
+ * `survey-border-interactive` ring offset 2px from the control, sitting over
+ * the survey background. Shared by the footer's pagination and action buttons.
+ */
+const FOCUS_RING =
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-survey-border-interactive focus-visible:ring-offset-2 focus-visible:ring-offset-survey-background';
 
 /** Checkbox styled with survey tokens (the shared ui Checkbox uses platform tokens). */
 const SurveyCheckbox = React.forwardRef<
@@ -86,7 +132,8 @@ const SurveyCheckbox = React.forwardRef<
     className={cn(
       'grid place-content-center peer h-4 w-4 shrink-0 rounded-[4px] border transition-colors',
       'border-survey-border-interactive ring-offset-survey-background',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--survey-primary)_/_0.3)]',
+      // Outer focus border shown on keyboard (tab) navigation.
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-survey-border-interactive focus-visible:ring-offset-2',
       'disabled:cursor-not-allowed disabled:opacity-50',
       'data-[state=checked]:bg-survey-border-selected data-[state=checked]:text-survey-primary-foreground data-[state=checked]:border-survey-border-selected',
       'aria-[invalid=true]:border-survey-destructive',
@@ -169,6 +216,87 @@ const FILTER_TABS: FilterTabItem[] = [
   { id: 'not-selected', label: 'Not selected' },
 ];
 
+/** Stable id for the inline draft row so the table never remounts it. */
+const DRAFT_ROW_ID = '__lookup_draft__';
+
+/** Compact text input used for `text`-format columns in the draft row. */
+const DraftTextInput: React.FC<{
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  align?: 'left' | 'right';
+  disabled?: boolean;
+  error?: boolean;
+}> = ({ value, onChange, placeholder, align, disabled, error }) => (
+  <input
+    type="text"
+    value={value}
+    onChange={(e) => onChange(e.target.value)}
+    placeholder={placeholder}
+    disabled={disabled}
+    aria-invalid={error || undefined}
+    className={cn(
+      'flex h-9 w-full min-w-0 rounded-survey-md border border-survey-border-interactive bg-transparent px-2',
+      'text-survey-body font-survey-regular text-survey-foreground transition-colors',
+      'placeholder:text-survey-muted-foreground',
+      'focus-visible:outline-none focus-visible:border-survey-border-selected',
+      'disabled:cursor-not-allowed disabled:opacity-50',
+      error && 'border-2 border-survey-destructive placeholder:text-survey-destructive',
+      align === 'right' && 'text-right tabular-nums',
+    )}
+  />
+);
+
+/** Compact select used for `dropdown`-format columns in the draft row. */
+const DraftSelect: React.FC<{
+  value: string;
+  onChange: (value: string) => void;
+  options: LookupTableColumnOption[];
+  placeholder?: string;
+  align?: 'left' | 'right';
+  disabled?: boolean;
+  error?: boolean;
+}> = ({ value, onChange, options, placeholder = 'Select…', align, disabled, error }) => (
+  <SelectPrimitive.Root value={value || undefined} onValueChange={onChange} disabled={disabled}>
+    <SelectPrimitive.Trigger
+      aria-invalid={error || undefined}
+      className={cn(
+        'flex h-9 w-full min-w-0 items-center justify-between gap-2 rounded-survey-md border border-survey-border-interactive bg-transparent px-2',
+        'text-survey-body font-survey-regular text-survey-foreground transition-colors outline-none',
+        'focus-visible:border-survey-border-selected',
+        'disabled:cursor-not-allowed disabled:opacity-50',
+        '[&>span]:truncate data-[placeholder]:[&>span]:text-survey-muted-foreground',
+        error && 'border-2 border-survey-destructive data-[placeholder]:[&>span]:text-survey-destructive',
+        align === 'right' && 'text-right',
+      )}
+    >
+      <SelectPrimitive.Value placeholder={placeholder} />
+      <SelectPrimitive.Icon asChild>
+        <ChevronDown className="h-4 w-4 shrink-0 text-survey-muted-foreground" />
+      </SelectPrimitive.Icon>
+    </SelectPrimitive.Trigger>
+    <SelectPrimitive.Portal>
+      <SelectPrimitive.Content
+        position="popper"
+        sideOffset={4}
+        className="z-50 min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-survey-md border border-survey-border-muted bg-survey-background font-survey shadow-sm"
+      >
+        <SelectPrimitive.Viewport className="p-1">
+          {options.map((option) => (
+            <SelectPrimitive.Item
+              key={option.value}
+              value={option.value}
+              className="relative flex w-full cursor-pointer select-none items-center rounded-sm py-2 px-3 text-survey-body font-survey-regular text-survey-foreground outline-none data-[highlighted]:bg-survey-muted-background data-[state=checked]:font-bold data-[state=checked]:text-survey-primary"
+            >
+              <SelectPrimitive.ItemText>{option.label}</SelectPrimitive.ItemText>
+            </SelectPrimitive.Item>
+          ))}
+        </SelectPrimitive.Viewport>
+      </SelectPrimitive.Content>
+    </SelectPrimitive.Portal>
+  </SelectPrimitive.Root>
+);
+
 const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
   (
     {
@@ -179,10 +307,13 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
       onChange,
       filterColumnId,
       filterPlaceholder = 'Filter…',
-      pageSize = 5,
+      pageSize = 10,
       rowActions,
+      onAddRow,
       onAddChoice,
       addChoiceLabel = 'Add choice',
+      confirmLabel = 'Confirm',
+      cancelLabel = 'Cancel',
       error,
       disabled = false,
       className,
@@ -207,6 +338,71 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [selectionFilter, setSelectionFilter] = React.useState<SelectionFilter>('all');
+
+    // Inline add-choice editor. Available whenever an add-choice callback is
+    // provided (`onAddRow` or `onAddChoice`); clicking "Add choice" enters edit
+    // mode and inserts a draft row. The draft row's id is stable so the table
+    // never remounts it (preserving input focus across keystrokes) while the
+    // editor binds directly to `draft` state.
+    const canEdit = !!onAddRow || !!onAddChoice;
+    const [editing, setEditing] = React.useState(false);
+    const [draft, setDraft] = React.useState<Record<string, string>>({});
+    // Column ids whose draft value failed the "required" check on Confirm.
+    const [draftErrors, setDraftErrors] = React.useState<Record<string, boolean>>({});
+    const newRowSeq = React.useRef(0);
+
+    const setDraftField = (id: string, next: string) => {
+      setDraft((d) => ({ ...d, [id]: next }));
+      // Clear the field's error as soon as it has content again.
+      if (next.trim()) setDraftErrors((e) => (e[id] ? { ...e, [id]: false } : e));
+    };
+
+    // Pagination is controlled so the draft can be inserted relative to the
+    // current page before the table re-paginates.
+    const [pagination, setPagination] = React.useState<PaginationState>({
+      pageIndex: 0,
+      pageSize,
+    });
+    React.useEffect(() => {
+      setPagination((p) => (p.pageSize === pageSize ? p : { ...p, pageSize }));
+    }, [pageSize]);
+
+    const startEditing = () => {
+      setDraft({});
+      setDraftErrors({});
+      setEditing(true);
+    };
+    const cancelEditing = () => {
+      setEditing(false);
+      setDraft({});
+      setDraftErrors({});
+    };
+    const confirmEditing = () => {
+      // Every column is required: any empty field puts that field in an error
+      // state and blocks leaving edit mode.
+      const errors = columns.reduce<Record<string, boolean>>((acc, col) => {
+        if (!(draft[col.id] ?? '').trim()) acc[col.id] = true;
+        return acc;
+      }, {});
+      if (Object.keys(errors).length > 0) {
+        setDraftErrors(errors);
+        return;
+      }
+
+      newRowSeq.current += 1;
+      if (onAddRow) {
+        onAddRow({
+          id: `lookup-new-${Date.now()}-${newRowSeq.current}`,
+          data: { ...draft },
+        });
+      } else {
+        // No row sink provided — just notify that a choice was confirmed.
+        onAddChoice?.();
+      }
+      setEditing(false);
+      setDraft({});
+      setDraftErrors({});
+    };
 
     const emitSelection = (next: RowSelectionState) => {
       if (value === undefined) setInternalSelection(next);
@@ -301,12 +497,31 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
       return [selectColumn, ...dataColumns, ...actionColumn];
     }, [columns, rowActions, disabled, error]);
 
+    // While editing, splice a stable, empty draft row into the data at the end
+    // of the current page. The table then re-paginates: the draft lands on the
+    // current page and that page's former last row is pushed to the next page,
+    // keeping each page at no more than `pageSize` rows. The draft's `data` is
+    // intentionally empty (the editor binds to `draft` state, not row data) so
+    // the row object identity is stable and the inputs keep focus while typing.
+    const data = React.useMemo(() => {
+      if (!editing) return rows;
+      const insertAt = Math.min(
+        (pagination.pageIndex + 1) * pagination.pageSize - 1,
+        rows.length,
+      );
+      const next = rows.slice();
+      next.splice(insertAt, 0, { id: DRAFT_ROW_ID, data: {} });
+      return next;
+    }, [editing, rows, pagination.pageIndex, pagination.pageSize]);
+
     const table = useReactTable({
-      data: rows,
+      data,
       columns: tableColumns,
-      state: { rowSelection, sorting, columnFilters },
+      state: { rowSelection, sorting, columnFilters, pagination },
       getRowId: (row) => row.id,
-      enableRowSelection: !disabled,
+      // The draft row is never part of the answer, so it can't be selected.
+      enableRowSelection: disabled ? false : (row) => row.id !== DRAFT_ROW_ID,
+      enableSortingRemoval: true,
       onRowSelectionChange: (updater) => {
         const next =
           typeof updater === 'function' ? updater(rowSelection) : updater;
@@ -314,20 +529,27 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
       },
       onSortingChange: setSorting,
       onColumnFiltersChange: setColumnFilters,
+      onPaginationChange: setPagination,
       getCoreRowModel: getCoreRowModel(),
       getFilteredRowModel: getFilteredRowModel(),
       getSortedRowModel: getSortedRowModel(),
       getPaginationRowModel: getPaginationRowModel(),
-      initialState: { pagination: { pageSize } },
     });
 
     // Apply the selection-state tab filter on top of the (sorted, text-filtered)
     // row model. This is presentation-only and does not affect the answer.
     const pageRows = table.getRowModel().rows.filter((row) => {
+      // The draft row always stays visible regardless of the selection filter.
+      if (row.id === DRAFT_ROW_ID) return true;
       if (selectionFilter === 'selected') return row.getIsSelected();
       if (selectionFilter === 'not-selected') return !row.getIsSelected();
       return true;
     });
+
+    const columnsById = React.useMemo(
+      () => new Map(columns.map((col) => [col.id, col])),
+      [columns],
+    );
 
     const selectedCount = Object.values(rowSelection).filter(Boolean).length;
     const colSpan = tableColumns.length;
@@ -406,32 +628,72 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
             </TableHeader>
             <TableBody>
               {pageRows.length ? (
-                pageRows.map((row, i) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() ? 'selected' : undefined}
-                    className={cn(
-                      'border-b border-survey-border-muted transition-colors',
-                      // Zebra striping: alternate rows use the hover token
-                      // (survey-muted-background = border-interactive / 0.2) at
-                      // 30% of its opacity (0.06).
-                      i % 2 === 1 && 'bg-[hsl(var(--survey-border-interactive)_/_0.06)]',
-                      !disabled && 'hover:bg-survey-muted-background',
-                    )}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell
-                        key={cell.id}
-                        className="px-4 py-3 align-middle text-survey-foreground font-survey-regular text-survey-body [&:has([role=checkbox])]:pr-0"
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
+                pageRows.map((row, i) =>
+                  row.id === DRAFT_ROW_ID ? (
+                    <TableRow
+                      key={row.id}
+                      className={cn(
+                        'border-b border-survey-border-muted transition-colors',
+                        i % 2 === 1 && 'bg-[hsl(var(--survey-border-interactive)_/_0.06)]',
+                      )}
+                    >
+                      {row.getVisibleCells().map((cell) => {
+                        const col = columnsById.get(cell.column.id);
+                        return (
+                          <TableCell
+                            key={cell.id}
+                            className="px-4 py-2 align-middle text-survey-foreground font-survey-regular text-survey-body [&:has([role=checkbox])]:pr-0"
+                          >
+                            {col &&
+                              (col.format === 'dropdown' ? (
+                                <DraftSelect
+                                  value={draft[col.id] ?? ''}
+                                  onChange={(next) => setDraftField(col.id, next)}
+                                  options={col.options ?? []}
+                                  placeholder={col.editPlaceholder}
+                                  align={col.align}
+                                  error={!!draftErrors[col.id]}
+                                />
+                              ) : (
+                                <DraftTextInput
+                                  value={draft[col.id] ?? ''}
+                                  onChange={(next) => setDraftField(col.id, next)}
+                                  placeholder={col.editPlaceholder ?? col.label}
+                                  align={col.align}
+                                  error={!!draftErrors[col.id]}
+                                />
+                              ))}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  ) : (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() ? 'selected' : undefined}
+                      className={cn(
+                        'border-b border-survey-border-muted transition-colors',
+                        // Zebra striping: alternate rows use the hover token
+                        // (survey-muted-background = border-interactive / 0.2) at
+                        // 30% of its opacity (0.06).
+                        i % 2 === 1 && 'bg-[hsl(var(--survey-border-interactive)_/_0.06)]',
+                        !disabled && 'hover:bg-survey-muted-background',
+                      )}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell
+                          key={cell.id}
+                          className="px-4 py-3 align-middle text-survey-foreground font-survey-regular text-survey-body [&:has([role=checkbox])]:pr-0"
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ),
+                )
               ) : (
                 <TableRow>
                   <TableCell
@@ -474,6 +736,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
                     'flex h-9 w-9 items-center justify-center rounded-survey-md border border-survey-border-interactive bg-survey-background',
                     'text-survey-foreground transition-colors',
                     'hover:bg-survey-muted-background disabled:cursor-not-allowed disabled:opacity-50',
+                    FOCUS_RING,
                   )}
                 >
                   <ChevronLeft className="h-5 w-5" />
@@ -492,6 +755,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
                     'flex h-9 w-9 items-center justify-center rounded-survey-md border border-survey-border-interactive bg-survey-background',
                     'text-survey-foreground transition-colors',
                     'hover:bg-survey-muted-background disabled:cursor-not-allowed disabled:opacity-50',
+                    FOCUS_RING,
                   )}
                 >
                   <ChevronRight className="h-5 w-5" />
@@ -502,10 +766,41 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
             <span />
           )}
 
-          {onAddChoice ? (
+          {canEdit && editing ? (
+            // Edit mode: tertiary Cancel on the left, primary Confirm on the right.
+            <div className="flex items-center justify-self-end gap-2">
+              <button
+                type="button"
+                onClick={cancelEditing}
+                disabled={disabled}
+                className={cn(
+                  'flex h-9 items-center gap-2 rounded-survey-md bg-transparent px-3',
+                  'text-survey-body font-medium text-survey-foreground transition-colors',
+                  'hover:bg-survey-muted-background disabled:cursor-not-allowed disabled:opacity-50',
+                  FOCUS_RING,
+                )}
+              >
+                {cancelLabel}
+              </button>
+              <button
+                type="button"
+                onClick={confirmEditing}
+                disabled={disabled}
+                // Same visual style as the "Add choice" button.
+                className={cn(
+                  'flex h-9 items-center gap-2 rounded-survey-md border border-survey-border-interactive bg-survey-background px-3',
+                  'text-survey-body font-medium text-survey-foreground transition-colors',
+                  'hover:bg-survey-muted-background disabled:cursor-not-allowed disabled:opacity-50',
+                  FOCUS_RING,
+                )}
+              >
+                {confirmLabel}
+              </button>
+            </div>
+          ) : canEdit ? (
             <button
               type="button"
-              onClick={onAddChoice}
+              onClick={startEditing}
               disabled={disabled}
               className={cn(
                 'flex h-9 items-center justify-self-end gap-2 rounded-survey-md border border-survey-border-interactive bg-survey-background px-3',
@@ -513,6 +808,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
                 // medium to match the other survey action buttons.
                 'text-survey-body font-medium text-survey-foreground transition-colors',
                 'hover:bg-survey-muted-background disabled:cursor-not-allowed disabled:opacity-50',
+                FOCUS_RING,
               )}
             >
               <Plus className="h-4 w-4" />
