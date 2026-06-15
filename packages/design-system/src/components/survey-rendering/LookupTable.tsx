@@ -107,6 +107,8 @@ export interface LookupTableProps {
   addChoiceLabel?: string;
   /** Label for the confirm button shown while adding a choice. */
   confirmLabel?: string;
+  /** Label for the transient success state shown for 2s after a choice is confirmed. */
+  confirmedLabel?: string;
   /** Label for the cancel button shown while adding a choice. */
   cancelLabel?: string;
   error?: string;
@@ -313,6 +315,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
       onAddChoice,
       addChoiceLabel = 'Add choice',
       confirmLabel = 'Confirm',
+      confirmedLabel = 'Confirmed',
       cancelLabel = 'Cancel',
       error,
       disabled = false,
@@ -350,6 +353,22 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
     // Column ids whose draft value failed the "required" check on Confirm.
     const [draftErrors, setDraftErrors] = React.useState<Record<string, boolean>>({});
     const newRowSeq = React.useRef(0);
+
+    // Transient success state: after a successful Confirm the add-choice button is
+    // replaced by a "Confirmed" badge for 2s, then reverts.
+    const [justConfirmed, setJustConfirmed] = React.useState(false);
+    const confirmedTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+    React.useEffect(
+      () => () => {
+        if (confirmedTimer.current) clearTimeout(confirmedTimer.current);
+      },
+      [],
+    );
+
+    // Id of a newly confirmed row awaiting auto-select + page navigation. The
+    // parent appends the row to `rows` on a later render, so we stash the id and
+    // act once it actually lands in the data (see the effect after `table`).
+    const pendingSelectId = React.useRef<string | null>(null);
 
     const setDraftField = (id: string, next: string) => {
       setDraft((d) => ({ ...d, [id]: next }));
@@ -391,10 +410,11 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
 
       newRowSeq.current += 1;
       if (onAddRow) {
-        onAddRow({
-          id: `lookup-new-${Date.now()}-${newRowSeq.current}`,
-          data: { ...draft },
-        });
+        const newId = `lookup-new-${Date.now()}-${newRowSeq.current}`;
+        // Remember the id so we can auto-select the row and page to it once the
+        // parent appends it to `rows`.
+        pendingSelectId.current = newId;
+        onAddRow({ id: newId, data: { ...draft } });
       } else {
         // No row sink provided — just notify that a choice was confirmed.
         onAddChoice?.();
@@ -402,6 +422,11 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
       setEditing(false);
       setDraft({});
       setDraftErrors({});
+
+      // Show a 2s "Confirmed" success state in place of the Add-choice button.
+      setJustConfirmed(true);
+      if (confirmedTimer.current) clearTimeout(confirmedTimer.current);
+      confirmedTimer.current = setTimeout(() => setJustConfirmed(false), 2000);
     };
 
     const emitSelection = (next: RowSelectionState) => {
@@ -519,6 +544,11 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
       columns: tableColumns,
       state: { rowSelection, sorting, columnFilters, pagination },
       getRowId: (row) => row.id,
+      // Pagination is controlled and we navigate to a freshly added row
+      // ourselves; TanStack's default auto-reset would otherwise clobber that
+      // by snapping back to page 0 whenever `data` changes. Page resets we do
+      // want (on text-filter changes) are handled explicitly below.
+      autoResetPageIndex: false,
       // The draft row is never part of the answer, so it can't be selected.
       enableRowSelection: disabled ? false : (row) => row.id !== DRAFT_ROW_ID,
       enableSortingRemoval: true,
@@ -528,13 +558,43 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
         emitSelection(next);
       },
       onSortingChange: setSorting,
-      onColumnFiltersChange: setColumnFilters,
+      onColumnFiltersChange: (updater) => {
+        setColumnFilters(updater);
+        // Auto-reset is off (see above), so reset to the first page on filter
+        // changes ourselves to avoid stranding the user on a now-empty page.
+        setPagination((p) => (p.pageIndex === 0 ? p : { ...p, pageIndex: 0 }));
+      },
       onPaginationChange: setPagination,
       getCoreRowModel: getCoreRowModel(),
       getFilteredRowModel: getFilteredRowModel(),
       getSortedRowModel: getSortedRowModel(),
       getPaginationRowModel: getPaginationRowModel(),
     });
+
+    // After a confirmed add, once the new row lands in `rows`, select it and
+    // page the table to wherever it sorts/filters to — so the respondent sees
+    // their new choice checked and on-screen alongside the "Confirmed" state.
+    // Ref-guarded so it only fires for a freshly added row.
+    React.useEffect(() => {
+      const id = pendingSelectId.current;
+      if (!id || !rows.some((row) => row.id === id)) return;
+      pendingSelectId.current = null;
+
+      // A "Not selected" tab would hide the row the moment we select it.
+      if (selectionFilter === 'not-selected') setSelectionFilter('all');
+      // Select the new row, preserving any existing selection.
+      emitSelection({ ...rowSelection, [id]: true });
+      // Jump to the page the new row occupies in the sorted/filtered order.
+      const ordered = table.getSortedRowModel().rows;
+      const index = ordered.findIndex((row) => row.id === id);
+      if (index >= 0) {
+        const targetPage = Math.floor(index / pagination.pageSize);
+        setPagination((p) =>
+          p.pageIndex === targetPage ? p : { ...p, pageIndex: targetPage },
+        );
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [rows]);
 
     // Apply the selection-state tab filter on top of the (sorted, text-filtered)
     // row model. This is presentation-only and does not affect the answer.
@@ -796,6 +856,22 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
               >
                 {confirmLabel}
               </button>
+            </div>
+          ) : canEdit && justConfirmed ? (
+            // Transient success state: solid brand-secondary (teal) fill, white label +
+            // check. Referenced via the brand token directly so it stays teal inside the
+            // survey theme scope (where the generic --secondary token resolves to grey).
+            <div
+              role="status"
+              aria-live="polite"
+              className={cn(
+                'flex h-9 items-center justify-self-end gap-2 rounded-survey-md px-3',
+                'bg-[hsl(var(--brand-secondary))] text-[hsl(var(--brand-secondary-foreground))]',
+                'text-survey-body font-medium transition-colors',
+              )}
+            >
+              <Check className="h-4 w-4" />
+              {confirmedLabel}
             </div>
           ) : canEdit ? (
             <button
