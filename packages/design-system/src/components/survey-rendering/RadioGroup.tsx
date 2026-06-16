@@ -49,8 +49,9 @@ const RadioGroupOption = React.forwardRef<
       htmlFor={itemId}
       className={cn(
         "flex items-center gap-3 w-full px-4 py-3 cursor-pointer select-none",
-        "rounded-survey-md border border-survey-border-muted bg-survey-background",
+        "rounded-survey-md border bg-survey-background",
         "transition-colors hover:bg-survey-muted-background",
+        hasError ? "border-survey-destructive" : "border-survey-border-muted",
         "has-[[data-state=checked]]:border-2 has-[[data-state=checked]]:border-survey-border-selected",
         focused && "ring-2 ring-survey-border-interactive ring-offset-2 ring-offset-survey-background",
         focused && "[&:has([data-state=checked])]:ring-survey-border-selected",
@@ -66,7 +67,7 @@ const RadioGroupOption = React.forwardRef<
         disabled={disabled}
         className={cn(
           "flex-shrink-0 w-4 h-4 rounded-full border-2 transition-colors",
-          hasError ? "border-survey-destructive" : "border-survey-border-interactive",
+          "border-survey-border-interactive",
           "data-[state=checked]:border-survey-border-selected data-[state=checked]:bg-survey-border-selected",
           "focus:outline-none focus-visible:outline-none",
         )}
