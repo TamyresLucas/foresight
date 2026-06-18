@@ -234,9 +234,10 @@ const ChoiceGridCell = ({
           value={columnValue}
           disabled={disabled}
           aria-labelledby={`label-${rowId}`}
+          aria-invalid={hasError || undefined}
           className={cn(
             "flex-shrink-0 w-4 h-4 rounded-full border-2 transition-colors",
-            hasError ? "border-survey-destructive" : "border-survey-border-interactive",
+            "border-survey-border-interactive",
             "data-[state=checked]:border-survey-border-selected data-[state=checked]:bg-survey-border-selected",
             "focus:outline-none focus-visible:outline-none",
           )}
@@ -280,9 +281,10 @@ const ChoiceGridMobileOption = ({
         id={id}
         value={column.value}
         disabled={disabled}
+        aria-invalid={hasError || undefined}
         className={cn(
           "flex-shrink-0 w-4 h-4 rounded-full border-2 transition-colors",
-          hasError ? "border-survey-destructive" : "border-survey-border-interactive",
+          "border-survey-border-interactive",
           "data-[state=checked]:border-survey-border-selected data-[state=checked]:bg-survey-border-selected",
           "focus:outline-none focus-visible:outline-none",
         )}

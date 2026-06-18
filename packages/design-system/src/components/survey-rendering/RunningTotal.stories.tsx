@@ -71,7 +71,7 @@ export const MultipleColumns: Story = {
 
 export const WithError: Story = {
   args: {
-    error: 'Total must equal 100',
+    error: 'This question is required',
   },
 };
 

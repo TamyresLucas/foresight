@@ -73,6 +73,7 @@ function TimeInput({ value: controlledValue, onCommit, error, disabled, ...props
         onCommit(localValue)
       }}
       disabled={disabled}
+      aria-invalid={error || undefined}
       className={cn(
         'w-12 h-10 text-center rounded-survey-md border bg-transparent',
         'text-survey-body font-survey-regular text-survey-foreground',
@@ -80,13 +81,11 @@ function TimeInput({ value: controlledValue, onCommit, error, disabled, ...props
         'focus-visible:outline-none',
         'placeholder:text-survey-muted-foreground',
         // default
-        !error && !isSelected && 'border-survey-border-interactive',
+        !isSelected && 'border-survey-border-interactive',
         // selected (pointer click)
-        !error && isSelected && 'border-2 border-survey-border-selected',
+        isSelected && 'border-2 border-survey-border-selected',
         // keyboard focused (not selected)
-        !error && isKeyboardFocused && 'ring-2 ring-survey-border-interactive ring-offset-2 ring-offset-survey-background',
-        // error
-        error && 'border-survey-destructive',
+        isKeyboardFocused && 'ring-2 ring-survey-border-interactive ring-offset-2 ring-offset-survey-background',
       )}
       {...props}
     />
@@ -113,8 +112,9 @@ function PeriodSelect({ value, onValueChange, error }: PeriodSelectProps) {
     <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
       <PopoverPrimitive.Trigger
         aria-label="AM/PM"
+        aria-invalid={error || undefined}
         data-state={open ? 'open' : 'closed'}
-        className={cn(triggerClass, error && !open && 'border-survey-destructive')}
+        className={triggerClass}
       >
         {value}
         {open ? (

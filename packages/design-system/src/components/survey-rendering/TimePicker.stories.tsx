@@ -84,7 +84,7 @@ export const WithError: Story = {
           mode="single"
           value={value}
           onChange={(e) => setValue(e.target.value as TimeValue)}
-          error="Please enter a valid time"
+          error="This question is required"
         />
       </ThemedFrame>
     )
@@ -114,7 +114,7 @@ export const RangeWithError: Story = {
           mode="range"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          error="End time must be after start time"
+          error="This question is required"
         />
       </ThemedFrame>
     )

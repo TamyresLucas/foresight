@@ -48,11 +48,11 @@ const NumericRankingInput = React.forwardRef<
       <div
         className={cn(
           'rounded-[calc(var(--radius)+2px)] transition-all bg-transparent',
-          !error && 'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:p-[2px]',
-          !error && 'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-2',
-          !error && 'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-survey-border-interactive',
-          focused && !error && 'p-[2px] border-2 border-survey-border-interactive',
-          focused && isSelected && !error && 'border-survey-border-selected',
+          'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:p-[2px]',
+          'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-2',
+          'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-survey-border-interactive',
+          focused && 'p-[2px] border-2 border-survey-border-interactive',
+          focused && isSelected && 'border-survey-border-selected',
         )}
       >
         <div
@@ -62,12 +62,12 @@ const NumericRankingInput = React.forwardRef<
             'group-data-[selected=true]/survey-input:border-survey-border-selected group-data-[selected=true]/survey-input:border-2',
             'group-has-[:focus-visible]/survey-input:border',
             focused && 'border',
-            error && 'border border-survey-destructive',
           )}
         >
           <input
             type="text"
             inputMode="numeric"
+            aria-invalid={error || undefined}
             className={cn(
               'w-full bg-transparent text-left text-survey-body font-survey-regular focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 text-survey-foreground font-survey',
               className,

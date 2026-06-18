@@ -93,7 +93,7 @@ const SurveySlider = React.forwardRef<
               }
               className={cn(
                 'relative block h-4 w-4 rounded-full border-2 bg-survey-background outline-none transition-[box-shadow,border-color] focus:outline-none',
-                error ? 'border-survey-destructive' : 'border-survey-border-selected',
+                'border-survey-border-selected',
                 disabled
                   ? 'cursor-not-allowed'
                   : cn(
