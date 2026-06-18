@@ -32,8 +32,9 @@ export interface ChoiceGridProps {
   disabled?: boolean;
   className?: string;
   /**
-   * Force a specific variant regardless of viewport width.
-   * Defaults to 'auto' (responsive via md: breakpoint).
+   * Force a specific variant regardless of width.
+   * Defaults to 'auto' (responsive to the component's own width via an
+   * `@lg` container query, so it adapts inside fixed-width device frames too).
    */
   variant?: 'auto' | 'desktop' | 'mobile';
 }
@@ -61,9 +62,9 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
     } = props;
 
     const desktopVisibility =
-      variant === 'desktop' ? 'block' : variant === 'mobile' ? 'hidden' : 'hidden md:block';
+      variant === 'desktop' ? 'block' : variant === 'mobile' ? 'hidden' : 'hidden @lg:block';
     const mobileVisibility =
-      variant === 'mobile' ? 'block' : variant === 'desktop' ? 'hidden' : 'md:hidden';
+      variant === 'mobile' ? 'block' : variant === 'desktop' ? 'hidden' : '@lg:hidden';
 
     // Simulation props for storybook focus testing
     const { focusedRow, focusedColumn, forceHover } = rest as InternalChoiceGridProps;
@@ -82,7 +83,7 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
     return (
       <div
         ref={ref}
-        className={cn("flex flex-col gap-4 w-full max-w-2xl mx-auto font-survey", className)}
+        className={cn("@container flex flex-col gap-4 w-full max-w-2xl mx-auto font-survey", className)}
       >
           {/* Desktop View */}
           <div className={cn(desktopVisibility, "w-full overflow-x-auto")}>
