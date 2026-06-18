@@ -60,6 +60,13 @@ const LivePreview = ({
   const [cardSortValue, setCardSortValue] = React.useState<CardSortValue>({});
   const [numericRankingValue, setNumericRankingValue] = React.useState<NumericRankingValue>({});
   const [starRatingValue, setStarRatingValue] = React.useState<StarRatingValue>({});
+  // Rating 2 is optional (shows an X reset once scored); the others are
+  // mandatory (marked with a red asterisk and validated per item).
+  const starRatingItems = [
+    { value: 'r1', label: 'Rating 1' },
+    { value: 'r2', label: 'Rating 2 (optional)', optional: true },
+    { value: 'r3', label: 'Rating 3' },
+  ];
   const [sliderValue, setSliderValue] = React.useState<SurveySliderValue>([50]);
   const [sliderRangeValue, setSliderRangeValue] = React.useState<SurveySliderValue>([30, 70]);
   const [runningTotalValue, setRunningTotalValue] = React.useState<RunningTotalValue>({});
@@ -128,7 +135,10 @@ const LivePreview = ({
   const dropdownError = showError && !dropdownValue ? requiredErrorMsg : undefined;
   const npsError = showError && !npsValue ? requiredErrorMsg : undefined;
   const gridError = showError && Object.keys(gridValue).length === 0 ? 'Please answer all rows' : undefined;
-  const starRatingError = showError && Object.keys(starRatingValue).length === 0 ? 'Please rate all items' : undefined;
+  const starRatingError =
+    showError && starRatingItems.some((it) => !it.optional && !starRatingValue[it.value])
+      ? 'Please rate all required items'
+      : undefined;
 
   const hasAnyError = !!(textError || radioError || checkboxError || openError || dateError || dropdownError || npsError || gridError || starRatingError);
 
@@ -346,11 +356,7 @@ const LivePreview = ({
             <QuestionField>
               <QuestionText label="Numeric answers question using stars to rate items" error={starRatingError} />
               <StarRating
-                items={[
-                  { value: 'r1', label: 'Rating 1' },
-                  { value: 'r2', label: 'Rating 2' },
-                  { value: 'r3', label: 'Rating 3' },
-                ]}
+                items={starRatingItems}
                 value={starRatingValue}
                 onChange={setStarRatingValue}
                 error={starRatingError}

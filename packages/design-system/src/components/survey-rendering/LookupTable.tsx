@@ -16,7 +16,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Check, ChevronDown, ChevronLeft, ChevronRight, Plus, Search } from '../ui/icons';
+import { Check, ChevronDown, ChevronLeft, ChevronRight, FirstPage, LastPage, Plus, Search } from '../ui/icons';
 import {
   Table,
   TableBody,
@@ -124,6 +124,18 @@ export interface LookupTableProps {
 const FOCUS_RING =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-survey-border-interactive focus-visible:ring-offset-2 focus-visible:ring-offset-survey-background';
 
+// Frozen row-selection column. `sticky left-0` keeps it in place while the rest
+// of the table scrolls horizontally; the opaque `bg-survey-background` masks the
+// cells sliding underneath. Because the row zebra (border-interactive / 0.06)
+// and hover (/ 0.2) tints live on the <tr> behind the cell's own opaque
+// background, they are re-applied here as gradient overlays so the frozen cell
+// stays seamless with its row (whether or not the table is scrolled).
+const STICKY_SELECT_BASE = 'sticky left-0 bg-survey-background';
+const STICKY_SELECT_ZEBRA =
+  '[background-image:linear-gradient(hsl(var(--survey-border-interactive)_/_0.06),hsl(var(--survey-border-interactive)_/_0.06))]';
+const STICKY_SELECT_HOVER =
+  'group-hover:[background-image:linear-gradient(hsl(var(--survey-border-interactive)_/_0.2),hsl(var(--survey-border-interactive)_/_0.2))]';
+
 /** Checkbox styled with survey tokens (the shared ui Checkbox uses platform tokens). */
 const SurveyCheckbox = React.forwardRef<
   React.ElementRef<typeof CheckboxPrimitive.Root>,
@@ -170,7 +182,7 @@ const SearchInput = React.forwardRef<
 
   return (
     <div
-      className={cn('flex flex-col w-full max-w-[16rem] group/survey-input', className)}
+      className={cn('flex flex-col w-full group/survey-input', className)}
       onPointerDown={() => setSelected(true)}
       data-selected={selected}
     >
@@ -622,7 +634,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
       <div
         ref={ref}
         className={cn(
-          'flex w-full flex-col font-survey text-survey-body',
+          '@container flex w-full flex-col font-survey text-survey-body',
           disabled && 'opacity-60',
           className,
         )}
@@ -632,7 +644,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
         {/* Toolbar: text filter + selection-state tabs. The rule runs the full
             table width. Items align to the bottom so the active tab's underline
             overlaps the divider, while the search bar keeps a 4px gap above it. */}
-        <div className="flex flex-wrap items-end justify-between gap-2 border-b border-survey-border-muted">
+        <div className="flex items-end gap-2 @lg:gap-4">
           {filterColumnId ? (
             <SearchInput
               value={(table.getColumn(filterColumnId)?.getFilterValue() as string) ?? ''}
@@ -641,20 +653,66 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
               }
               placeholder={filterPlaceholder}
               disabled={disabled}
-              className="mb-1"
+              className="flex-1"
             />
           ) : (
-            <span />
+            <span className="flex-1" />
           )}
 
-          <SurveyFilterTabs
-            tabs={FILTER_TABS}
-            value={selectionFilter}
-            onValueChange={(next) => setSelectionFilter(next as SelectionFilter)}
-            disabled={disabled}
-            aria-label="Filter rows by selection"
-            className="border-b-0"
-          />
+          {/* Mobile: compact dropdown */}
+          <div className="@lg:hidden shrink-0">
+            <SelectPrimitive.Root
+              value={selectionFilter}
+              onValueChange={(next) => setSelectionFilter(next as SelectionFilter)}
+              disabled={disabled}
+            >
+              <SelectPrimitive.Trigger
+                aria-label="Filter rows by selection"
+                className={cn(
+                  'flex h-10 shrink-0 items-center gap-2 rounded-survey-md border border-survey-border-interactive bg-survey-background px-3',
+                  'text-survey-body font-survey-regular text-survey-foreground transition-colors outline-none',
+                  'focus-visible:border-survey-border-selected disabled:cursor-not-allowed disabled:opacity-50',
+                  FOCUS_RING,
+                )}
+              >
+                <SelectPrimitive.Value />
+                <SelectPrimitive.Icon asChild>
+                  <ChevronDown className="h-4 w-4 shrink-0 text-survey-muted-foreground" />
+                </SelectPrimitive.Icon>
+              </SelectPrimitive.Trigger>
+              <SelectPrimitive.Portal>
+                <SelectPrimitive.Content
+                  position="popper"
+                  sideOffset={4}
+                  className="z-50 min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-survey-md border border-survey-border-muted bg-survey-background font-survey shadow-sm"
+                >
+                  <SelectPrimitive.Viewport className="p-1">
+                    {FILTER_TABS.map((tab) => (
+                      <SelectPrimitive.Item
+                        key={tab.id}
+                        value={tab.id}
+                        className="relative flex w-full cursor-pointer select-none items-center rounded-sm py-2 px-3 text-survey-body font-survey-regular text-survey-foreground outline-none data-[highlighted]:bg-survey-muted-background data-[state=checked]:font-bold data-[state=checked]:text-survey-primary"
+                      >
+                        <SelectPrimitive.ItemText>{tab.label}</SelectPrimitive.ItemText>
+                      </SelectPrimitive.Item>
+                    ))}
+                  </SelectPrimitive.Viewport>
+                </SelectPrimitive.Content>
+              </SelectPrimitive.Portal>
+            </SelectPrimitive.Root>
+          </div>
+
+          {/* Desktop: underlined tabs */}
+          <div className="hidden @lg:block shrink-0">
+            <SurveyFilterTabs
+              tabs={FILTER_TABS}
+              value={selectionFilter}
+              onValueChange={(next) => setSelectionFilter(next as SelectionFilter)}
+              disabled={disabled}
+              aria-label="Filter rows by selection"
+              className=""
+            />
+          </div>
         </div>
 
         {/* Table surface */}
@@ -673,7 +731,11 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
                   {headerGroup.headers.map((header) => (
                     <TableHead
                       key={header.id}
-                      className="h-11 px-4 align-middle font-survey text-survey-body font-survey-semibold text-survey-foreground [&:has([role=checkbox])]:pr-0"
+                      className={cn(
+                        'h-11 px-4 align-middle font-survey text-survey-body font-survey-semibold text-survey-foreground [&:has([role=checkbox])]:pr-0',
+                        header.column.id === '__select__' &&
+                          cn(STICKY_SELECT_BASE, 'z-20'),
+                      )}
                     >
                       {header.isPlaceholder
                         ? null
@@ -702,7 +764,15 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
                         return (
                           <TableCell
                             key={cell.id}
-                            className="px-4 py-2 align-middle text-survey-foreground font-survey-regular text-survey-body [&:has([role=checkbox])]:pr-0"
+                            className={cn(
+                              'px-4 py-2 align-middle text-survey-foreground font-survey-regular text-survey-body [&:has([role=checkbox])]:pr-0',
+                              cell.column.id === '__select__' &&
+                                cn(
+                                  STICKY_SELECT_BASE,
+                                  'z-10',
+                                  i % 2 === 1 && STICKY_SELECT_ZEBRA,
+                                ),
+                            )}
                           >
                             {col &&
                               (col.format === 'dropdown' ? (
@@ -732,7 +802,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
                       key={row.id}
                       data-state={row.getIsSelected() ? 'selected' : undefined}
                       className={cn(
-                        'border-b border-survey-border-muted transition-colors',
+                        'group border-b border-survey-border-muted transition-colors',
                         // Zebra striping: alternate rows use the hover token
                         // (survey-muted-background = border-interactive / 0.2) at
                         // 30% of its opacity (0.06).
@@ -743,7 +813,16 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
                       {row.getVisibleCells().map((cell) => (
                         <TableCell
                           key={cell.id}
-                          className="px-4 py-3 align-middle text-survey-foreground font-survey-regular text-survey-body [&:has([role=checkbox])]:pr-0"
+                          className={cn(
+                            'px-4 py-3 align-middle text-survey-foreground font-survey-regular text-survey-body [&:has([role=checkbox])]:pr-0',
+                            cell.column.id === '__select__' &&
+                              cn(
+                                STICKY_SELECT_BASE,
+                                'z-10',
+                                i % 2 === 1 && STICKY_SELECT_ZEBRA,
+                                !disabled && STICKY_SELECT_HOVER,
+                              ),
+                          )}
                         >
                           {flexRender(
                             cell.column.columnDef.cell,
@@ -774,53 +853,106 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
           </span>
         )}
 
-        {/* Footer: selection count (left) · pagination (center) · add choice
-            (right). A 3-column grid keeps the pagination truly centered
-            regardless of the side content widths. */}
-        <div className="grid grid-cols-3 items-center gap-2">
-          <span className="justify-self-start text-survey-muted-foreground font-survey-regular text-survey-body">
-            {selectedCount} of {rows.length} row(s) selected.
+        {/* Footer. Wide container: a 3-column grid keeps the pagination truly
+            centered (selection count left · pagination center · add choice
+            right). Narrow container: the count stacks on its own row above a
+            single row holding the pagination and add-choice button. */}
+        <div className="flex flex-col gap-2 @lg:grid @lg:grid-cols-3 @lg:items-center">
+          <span className="@lg:justify-self-start text-survey-muted-foreground font-survey-regular text-survey-body">
+            {selectedCount} of {rows.length} selected.
           </span>
-          {/* Pagination is only shown when there is more than one page. Each
-              chevron only appears when there is a page to move to in that
-              direction. */}
+          {/* On the narrow layout this groups pagination + add-choice onto one
+              row; @lg:contents dissolves it so both become direct grid cells. */}
+          <div className="flex items-center justify-between gap-2 @lg:contents">
+          {/* Pagination is only shown when there is more than one page. */}
           {pageCount > 1 ? (
-            <div className="flex items-center justify-self-center gap-2">
-              {canPreviousPage && (
-                <button
-                  type="button"
-                  onClick={() => table.previousPage()}
-                  disabled={disabled}
-                  aria-label="Previous page"
-                  className={cn(
-                    'flex h-9 w-9 items-center justify-center rounded-survey-md border border-survey-border-interactive bg-survey-background',
-                    'text-survey-foreground transition-colors',
-                    'hover:bg-survey-muted-background disabled:cursor-not-allowed disabled:opacity-50',
-                    FOCUS_RING,
-                  )}
-                >
-                  <ChevronLeft className="h-5 w-5" />
-                </button>
-              )}
-              <span className="px-1 text-survey-foreground font-survey-regular text-survey-body tabular-nums">
-                {pageIndex + 1}/{pageCount}
-              </span>
-              {canNextPage && (
-                <button
-                  type="button"
-                  onClick={() => table.nextPage()}
-                  disabled={disabled}
-                  aria-label="Next page"
-                  className={cn(
-                    'flex h-9 w-9 items-center justify-center rounded-survey-md border border-survey-border-interactive bg-survey-background',
-                    'text-survey-foreground transition-colors',
-                    'hover:bg-survey-muted-background disabled:cursor-not-allowed disabled:opacity-50',
-                    FOCUS_RING,
-                  )}
-                >
-                  <ChevronRight className="h-5 w-5" />
-                </button>
-              )}
+            <div className="flex items-center justify-self-center gap-1">
+              {/* First page */}
+              <button
+                type="button"
+                onClick={() => table.firstPage()}
+                disabled={disabled || !canPreviousPage}
+                aria-label="First page"
+                className={cn(
+                  'flex h-9 w-9 items-center justify-center rounded-survey-md border border-survey-border-interactive bg-survey-background',
+                  'text-survey-foreground transition-colors',
+                  'hover:bg-survey-muted-background disabled:cursor-not-allowed disabled:opacity-50',
+                  FOCUS_RING,
+                )}
+              >
+                <FirstPage className="h-5 w-5" />
+              </button>
+              {/* Previous page */}
+              <button
+                type="button"
+                onClick={() => table.previousPage()}
+                disabled={disabled || !canPreviousPage}
+                aria-label="Previous page"
+                className={cn(
+                  'flex h-9 w-9 items-center justify-center rounded-survey-md border border-survey-border-interactive bg-survey-background',
+                  'text-survey-foreground transition-colors',
+                  'hover:bg-survey-muted-background disabled:cursor-not-allowed disabled:opacity-50',
+                  FOCUS_RING,
+                )}
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              {/* Page number buttons — show up to 5 pages around the current page */}
+              {(() => {
+                const window = 1;
+                const start = Math.max(0, Math.min(pageIndex - window, pageCount - 3));
+                const end = Math.min(pageCount - 1, Math.max(pageIndex + window, 2));
+                return Array.from({ length: end - start + 1 }, (_, i) => start + i).map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => table.setPageIndex(p)}
+                    disabled={disabled}
+                    aria-label={`Page ${p + 1}`}
+                    aria-current={p === pageIndex ? 'page' : undefined}
+                    className={cn(
+                      'flex h-9 w-9 items-center justify-center rounded-survey-md border text-survey-body tabular-nums transition-colors',
+                      'disabled:cursor-not-allowed',
+                      p === pageIndex
+                        ? 'border-2 border-survey-border-selected bg-survey-background text-survey-foreground font-survey-semibold'
+                        : 'border-survey-border-interactive bg-survey-background text-survey-foreground font-survey-regular hover:bg-survey-muted-background',
+                      FOCUS_RING,
+                    )}
+                  >
+                    {p + 1}
+                  </button>
+                ));
+              })()}
+              {/* Next page */}
+              <button
+                type="button"
+                onClick={() => table.nextPage()}
+                disabled={disabled || !canNextPage}
+                aria-label="Next page"
+                className={cn(
+                  'flex h-9 w-9 items-center justify-center rounded-survey-md border border-survey-border-interactive bg-survey-background',
+                  'text-survey-foreground transition-colors',
+                  'hover:bg-survey-muted-background disabled:cursor-not-allowed disabled:opacity-50',
+                  FOCUS_RING,
+                )}
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+              {/* Last page */}
+              <button
+                type="button"
+                onClick={() => table.lastPage()}
+                disabled={disabled || !canNextPage}
+                aria-label="Last page"
+                className={cn(
+                  'flex h-9 w-9 items-center justify-center rounded-survey-md border border-survey-border-interactive bg-survey-background',
+                  'text-survey-foreground transition-colors',
+                  'hover:bg-survey-muted-background disabled:cursor-not-allowed disabled:opacity-50',
+                  FOCUS_RING,
+                )}
+              >
+                <LastPage className="h-5 w-5" />
+              </button>
             </div>
           ) : (
             <span />
@@ -878,8 +1010,11 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
               type="button"
               onClick={startEditing}
               disabled={disabled}
+              aria-label={addChoiceLabel}
               className={cn(
-                'flex h-9 items-center justify-self-end gap-2 rounded-survey-md border border-survey-border-interactive bg-survey-background px-3',
+                // Icon-only square button in the narrow (container) layout;
+                // expands to an icon + label button once the container is wide.
+                'flex h-9 w-9 @lg:w-auto items-center justify-center justify-self-end gap-2 rounded-survey-md border border-survey-border-interactive bg-survey-background px-0 @lg:px-3',
                 // Size tracks the survey theme (text-survey-body); weight stays
                 // medium to match the other survey action buttons.
                 'text-survey-body font-medium text-survey-foreground transition-colors',
@@ -888,11 +1023,12 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
               )}
             >
               <Plus className="h-4 w-4" />
-              {addChoiceLabel}
+              <span className="hidden @lg:inline">{addChoiceLabel}</span>
             </button>
           ) : (
             <span />
           )}
+          </div>
         </div>
       </div>
     );

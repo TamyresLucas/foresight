@@ -163,3 +163,5 @@ export const ProgressActivity = createIcon("progress_activity");
 export const Pin = createIcon("pin");
 export const FormatListNumbered = createIcon("format_list_numbered");
 export const AttachMoney = createIcon("attach_money");
+export const FirstPage = createIcon("first_page");
+export const LastPage = createIcon("last_page");
