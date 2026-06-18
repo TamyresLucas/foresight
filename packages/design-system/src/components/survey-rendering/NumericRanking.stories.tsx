@@ -48,7 +48,7 @@ export const WithValues: Story = {
 
 export const WithError: Story = {
   args: {
-    error: 'Please rank all items',
+    error: 'This question is required',
   },
 };
 

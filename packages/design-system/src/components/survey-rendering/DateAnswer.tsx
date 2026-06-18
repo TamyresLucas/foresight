@@ -88,11 +88,11 @@ const DateAnswer = React.forwardRef<HTMLButtonElement, DateAnswerProps>(
           <div
             className={cn(
               'rounded-[calc(var(--radius)+2px)] w-full transition-all bg-transparent',
-              !error && 'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:p-[2px]',
-              !error && 'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-2',
-              !error && 'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-survey-border-interactive',
-              focused && !error && 'p-[2px] border-2 border-survey-border-interactive',
-              focused && isSelected && !error && 'border-survey-border-selected',
+              'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:p-[2px]',
+              'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-2',
+              'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-survey-border-interactive',
+              focused && 'p-[2px] border-2 border-survey-border-interactive',
+              focused && isSelected && 'border-survey-border-selected',
             )}
           >
             <PopoverTrigger asChild>
@@ -100,6 +100,7 @@ const DateAnswer = React.forwardRef<HTMLButtonElement, DateAnswerProps>(
                 ref={ref}
                 type="button"
                 disabled={disabled}
+                aria-invalid={error ? true : undefined}
                 onBlur={(e) => {
                   // Don't reset selected when focus moves into the popover
                   if (!open) setInternalSelected(false);
@@ -112,7 +113,6 @@ const DateAnswer = React.forwardRef<HTMLButtonElement, DateAnswerProps>(
                   'group-data-[selected=true]/survey-input:border-survey-border-selected group-data-[selected=true]/survey-input:border-2',
                   'group-has-[:focus-visible]/survey-input:border',
                   focused && 'border',
-                  error && 'border border-survey-destructive',
                   className,
                 )}
                 {...props}

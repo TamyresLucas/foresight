@@ -102,7 +102,7 @@ export const WithError: Story = {
       <QuestionText
         label="How do you feel about each item?"
         required
-        error="Please rate every item before continuing."
+        error="This question is required"
       />
       <CarouselQuestion {...args} />
     </div>
@@ -111,7 +111,7 @@ export const WithError: Story = {
     items,
     answerType: "radio",
     options: ratingOptions,
-    error: "Please rate every item before continuing.",
+    error: "This question is required",
   },
 };
 

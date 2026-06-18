@@ -138,10 +138,9 @@ const NPSOption = React.forwardRef<HTMLButtonElement, NPSOptionProps>(
           if (!isDisabled) ctx.onSelect(value);
         }}
         style={{ minWidth: 0, minHeight: "2.75rem" }}
+        aria-invalid={hasError || undefined}
         className={cn(
           "w-full text-survey-body",
-          hasError &&
-            "border-survey-destructive data-[state=selected]:border-survey-destructive",
           isDisabled && "cursor-not-allowed opacity-50",
           className,
         )}

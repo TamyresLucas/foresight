@@ -60,7 +60,7 @@ export const WithError: Story = {
     },
   },
   args: {
-    error: 'Please rate all items',
+    error: 'This question is required',
   },
 };
 
@@ -81,7 +81,7 @@ export const RequiredValidation: Story = {
       { value: 'r3', label: 'Rating 3' },
     ],
     defaultValue: { r1: 4 },
-    error: 'Please rate all required items',
+    error: 'This question is required',
   },
 };
 

@@ -150,7 +150,6 @@ const SurveyCheckbox = React.forwardRef<
       'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-survey-border-interactive focus-visible:ring-offset-2',
       'disabled:cursor-not-allowed disabled:opacity-50',
       'data-[state=checked]:bg-survey-border-selected data-[state=checked]:text-survey-primary-foreground data-[state=checked]:border-survey-border-selected',
-      'aria-[invalid=true]:border-survey-destructive',
       className,
     )}
     {...props}
@@ -255,7 +254,7 @@ const DraftTextInput: React.FC<{
       'placeholder:text-survey-muted-foreground',
       'focus-visible:outline-none focus-visible:border-survey-border-selected',
       'disabled:cursor-not-allowed disabled:opacity-50',
-      error && 'border-2 border-survey-destructive placeholder:text-survey-destructive',
+      error && 'placeholder:text-survey-destructive',
       align === 'right' && 'text-right tabular-nums',
     )}
   />
@@ -280,7 +279,7 @@ const DraftSelect: React.FC<{
         'focus-visible:border-survey-border-selected',
         'disabled:cursor-not-allowed disabled:opacity-50',
         '[&>span]:truncate data-[placeholder]:[&>span]:text-survey-muted-foreground',
-        error && 'border-2 border-survey-destructive data-[placeholder]:[&>span]:text-survey-destructive',
+        error && 'data-[placeholder]:[&>span]:text-survey-destructive',
         align === 'right' && 'text-right',
       )}
     >
@@ -815,10 +814,15 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
                           key={cell.id}
                           className={cn(
                             'px-4 py-3 align-middle text-survey-foreground font-survey-regular text-survey-body [&:has([role=checkbox])]:pr-0',
+                            // Selected row: text turns semibold so the chosen row stands out.
+                            'group-data-[state=selected]:font-survey-semibold',
                             cell.column.id === '__select__' &&
                               cn(
                                 STICKY_SELECT_BASE,
                                 'z-10',
+                                // Selected row: bold left border in the primary color. Painted as an
+                                // inset shadow on the sticky cell so it sits above its own background.
+                                'group-data-[state=selected]:shadow-[inset_2px_0_0_0_hsl(var(--survey-primary))]',
                                 i % 2 === 1 && STICKY_SELECT_ZEBRA,
                                 !disabled && STICKY_SELECT_HOVER,
                               ),
@@ -914,7 +918,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
                       'flex h-9 w-9 items-center justify-center rounded-survey-md border text-survey-body tabular-nums transition-colors',
                       'disabled:cursor-not-allowed',
                       p === pageIndex
-                        ? 'border-2 border-survey-border-selected bg-survey-background text-survey-foreground font-survey-semibold'
+                        ? 'border-2 border-survey-border-selected bg-survey-background text-survey-foreground font-survey-regular'
                         : 'border-survey-border-interactive bg-survey-background text-survey-foreground font-survey-regular hover:bg-survey-muted-background',
                       FOCUS_RING,
                     )}

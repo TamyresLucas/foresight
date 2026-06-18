@@ -196,7 +196,6 @@ const StarRating = React.forwardRef<HTMLDivElement, StarRatingProps>(
                         filled
                           ? 'text-survey-border-selected'
                           : 'text-survey-border-interactive',
-                        itemHasError && !filled && 'text-survey-destructive',
                         disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
                       )}
                     >

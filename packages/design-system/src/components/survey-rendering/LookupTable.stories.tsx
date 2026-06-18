@@ -139,7 +139,7 @@ export const WithAddChoiceEditing: Story = {
 
 export const WithError: Story = {
   args: {
-    error: 'Please select at least one row',
+    error: 'This question is required',
   },
 };
 

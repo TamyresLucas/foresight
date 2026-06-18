@@ -68,7 +68,6 @@ const LivePreview = ({
     { value: 'r3', label: 'Rating 3' },
   ];
   const [sliderValue, setSliderValue] = React.useState<SurveySliderValue>([50]);
-  const [sliderRangeValue, setSliderRangeValue] = React.useState<SurveySliderValue>([30, 70]);
   const [runningTotalValue, setRunningTotalValue] = React.useState<RunningTotalValue>({});
   const [dragAndDropValue, setDragAndDropValue] = React.useState<DragAndDropValue>([]);
   const [carouselNpsValue, setCarouselNpsValue] = React.useState<CarouselQuestionValue>({});
@@ -375,20 +374,6 @@ const LivePreview = ({
                 maxLabel="Very satisfied"
                 value={sliderValue}
                 onChange={setSliderValue}
-              />
-            </QuestionField>
-          )}
-
-          {show('slider') && (
-            <QuestionField>
-              <QuestionText label="What price range are you comfortable with?" />
-              <SurveySlider
-                range
-                min={0}
-                max={100}
-                showValue
-                value={sliderRangeValue}
-                onChange={setSliderRangeValue}
               />
             </QuestionField>
           )}

@@ -58,11 +58,11 @@ const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
         <div
           className={cn(
             'rounded-[calc(var(--radius)+2px)] w-fit transition-all bg-transparent',
-            !error && 'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:p-[2px]',
-            !error && 'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-2',
-            !error && 'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-survey-border-interactive',
-            focused && !error && 'p-[2px] border-2 border-survey-border-interactive',
-            focused && isSelected && !error && 'border-survey-border-selected',
+            'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:p-[2px]',
+            'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-2',
+            'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-survey-border-interactive',
+            focused && 'p-[2px] border-2 border-survey-border-interactive',
+            focused && isSelected && 'border-survey-border-selected',
           )}
         >
           <SelectPrimitive.Root
@@ -75,13 +75,13 @@ const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
           >
             <SelectPrimitive.Trigger
               ref={ref}
+              aria-invalid={error ? true : undefined}
               className={cn(
                 'flex w-fit min-w-[280px] box-border h-10 px-2 py-1.5 items-center justify-between gap-[10px] rounded-lg border bg-transparent transition-all outline-none',
                 'border-survey-border-interactive',
                 'group-data-[selected=true]/survey-input:border-survey-border-selected group-data-[selected=true]/survey-input:border-2',
                 'group-has-[:focus-visible]/survey-input:border',
                 focused && 'border',
-                error && 'border border-survey-destructive',
                 className,
               )}
               {...props}

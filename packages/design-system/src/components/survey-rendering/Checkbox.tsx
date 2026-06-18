@@ -53,7 +53,7 @@ const CheckboxOption = React.forwardRef<HTMLLabelElement, CheckboxOptionProps>(
           "flex items-center gap-3 w-full px-4 py-3 cursor-pointer select-none",
           "rounded-survey-md border bg-survey-background",
           "transition-colors hover:bg-survey-muted-background",
-          hasError ? "border-survey-destructive" : "border-survey-border-muted",
+          "border-survey-border-muted",
           "has-[[data-state=checked]]:border-2 has-[[data-state=checked]]:border-survey-border-selected",
           focused && "ring-2 ring-survey-border-interactive ring-offset-2 ring-offset-survey-background",
           focused && "[&:has([data-state=checked])]:ring-survey-border-selected",
@@ -68,6 +68,7 @@ const CheckboxOption = React.forwardRef<HTMLLabelElement, CheckboxOptionProps>(
           checked={checked}
           onCheckedChange={onCheckedChange}
           disabled={disabled}
+          aria-invalid={hasError || undefined}
           className={cn(
             "flex-shrink-0 w-4 h-4 rounded-[4px] border-2 transition-colors grid place-content-center",
             "border-survey-border-interactive",

@@ -87,7 +87,7 @@ export const WithError: Story = {
     // Dragging the picker to choose a value clears the error (the parent
     // controls the `error` prop, as with the other question types).
     defaultValue: [0],
-    error: 'Please choose a value',
+    error: 'This question is required',
   },
 };
 
