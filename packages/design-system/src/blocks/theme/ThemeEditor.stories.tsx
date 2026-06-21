@@ -13,6 +13,7 @@ import { CheckboxOption, CheckboxGroup } from '../../components/survey-rendering
 import { RadioGroup, RadioGroupOption } from '../../components/survey-rendering/RadioGroup';
 import { NPS } from '../../components/survey-rendering/NPS';
 import { ChoiceGrid } from '../../components/survey-rendering/ChoiceGrid';
+import { HybridGrid, type HybridGridColumn, type HybridGridValue } from '../../components/survey-rendering/HybridGrid';
 import { CardSort, type CardSortValue } from '../../components/survey-rendering/CardSort';
 import { NumericRanking, type NumericRankingValue } from '../../components/survey-rendering/NumericRanking';
 import { StarRating, type StarRatingValue } from '../../components/survey-rendering/StarRating';
@@ -58,6 +59,7 @@ const LivePreview = ({
   const [contactMethod, setContactMethod] = React.useState<string>('');
   const [npsValue, setNpsValue] = React.useState<string>('');
   const [gridValue, setGridValue] = React.useState<Record<string, string>>({});
+  const [hybridGridValue, setHybridGridValue] = React.useState<HybridGridValue>({});
   const [cardSortValue, setCardSortValue] = React.useState<CardSortValue>({});
   const [numericRankingValue, setNumericRankingValue] = React.useState<NumericRankingValue>({});
   const [starRatingValue, setStarRatingValue] = React.useState<StarRatingValue>({});
@@ -129,6 +131,36 @@ const LivePreview = ({
     { value: 'very_dissatisfied', label: 'Very dissatisfied' },
   ];
 
+  const hybridGridRows = [
+    { id: 'hg-row-1', label: 'Row 1' },
+    { id: 'hg-row-2', label: 'Row 2' },
+    { id: 'hg-row-3', label: 'Row 3' },
+  ];
+
+  const hybridGridColumns: HybridGridColumn[] = [
+    { id: 'comment', type: 'text', label: 'Comment', placeholder: 'Type an answer…' },
+    {
+      id: 'tags',
+      type: 'checkbox',
+      label: 'Tags',
+      choices: [
+        { value: 'choice-1', label: 'Choice 1' },
+        { value: 'choice-2', label: 'Choice 2' },
+        { value: 'choice-3', label: 'Choice 3' },
+      ],
+    },
+    {
+      id: 'priority',
+      type: 'dropdown',
+      label: 'Priority',
+      options: [
+        { value: 'low', label: 'Low' },
+        { value: 'medium', label: 'Medium' },
+        { value: 'high', label: 'High' },
+      ],
+    },
+  ];
+
   const requiredErrorMsg = 'This question is required';
   const textError = showError && !textValue ? requiredErrorMsg : undefined;
   const radioError = showError && !contactMethod ? requiredErrorMsg : undefined;
@@ -141,12 +173,13 @@ const LivePreview = ({
   const dropdownError = showError && !dropdownValue ? requiredErrorMsg : undefined;
   const npsError = showError && !npsValue ? requiredErrorMsg : undefined;
   const gridError = showError && Object.keys(gridValue).length === 0 ? 'Please answer all rows' : undefined;
+  const hybridGridError = showError && Object.keys(hybridGridValue).length === 0 ? 'Please answer all rows' : undefined;
   const starRatingError =
     showError && starRatingItems.some((it) => !it.optional && !starRatingValue[it.value])
       ? 'Please rate all required items'
       : undefined;
 
-  const hasAnyError = !!(textError || radioError || checkboxError || openError || dateError || dropdownError || npsError || gridError || starRatingError);
+  const hasAnyError = !!(textError || radioError || checkboxError || openError || dateError || dropdownError || npsError || gridError || hybridGridError || starRatingError);
 
   const surveyContent = (
     <>
@@ -248,6 +281,20 @@ const LivePreview = ({
                 value={gridValue}
                 onValueChange={setGridValue}
                 error={gridError}
+                variant={viewport}
+              />
+            </QuestionField>
+          )}
+
+          {show('hybrid-grid') && (
+            <QuestionField>
+              <QuestionText label="Tell us more about each area:" error={hybridGridError} />
+              <HybridGrid
+                rows={hybridGridRows}
+                columns={hybridGridColumns}
+                value={hybridGridValue}
+                onValueChange={setHybridGridValue}
+                error={hybridGridError}
                 variant={viewport}
               />
             </QuestionField>

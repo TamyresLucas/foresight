@@ -24,6 +24,8 @@ export interface DropdownAnswerProps {
   focused?: boolean // simula foco para Storybook
   error?: string
   className?: string
+  /** Fill the parent's width instead of sizing to the content (e.g. inside a grid cell). */
+  fullWidth?: boolean
 }
 
 const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
@@ -39,6 +41,7 @@ const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
       focused = false,
       error,
       className,
+      fullWidth = false,
       ...props
     },
     ref,
@@ -71,13 +74,14 @@ const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
     return (
       <div
         ref={wrapperRef}
-        className="flex flex-col w-fit group/survey-input"
+        className={cn('flex flex-col group/survey-input', fullWidth ? 'w-full' : 'w-fit')}
         onPointerDown={handlePointerDown}
         data-selected={isSelected}
       >
         <div
           className={cn(
-            'rounded-[calc(var(--radius)+2px)] w-fit transition-all bg-transparent',
+            'rounded-[calc(var(--radius)+2px)] transition-all bg-transparent',
+            fullWidth ? 'w-full' : 'w-fit',
             'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:p-[2px]',
             'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-2',
             'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-survey-border-interactive',
@@ -97,7 +101,8 @@ const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
               ref={ref}
               aria-invalid={error ? true : undefined}
               className={cn(
-                'flex w-fit min-w-[280px] box-border h-10 px-2 py-1.5 items-center justify-between gap-[10px] rounded-lg border bg-transparent transition-all outline-none',
+                'flex box-border h-10 px-2 py-1.5 items-center justify-between gap-[10px] rounded-lg border bg-transparent transition-all outline-none',
+                fullWidth ? 'w-full min-w-0' : 'w-fit min-w-[280px]',
                 'border-survey-border-interactive',
                 'group-data-[selected=true]/survey-input:border-survey-border-selected group-data-[selected=true]/survey-input:border-2',
                 'group-has-[:focus-visible]/survey-input:border',
