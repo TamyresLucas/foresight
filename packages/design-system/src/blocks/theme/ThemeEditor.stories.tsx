@@ -13,6 +13,7 @@ import { CheckboxOption, CheckboxGroup } from '../../components/survey-rendering
 import { RadioGroup, RadioGroupOption } from '../../components/survey-rendering/RadioGroup';
 import { NPS } from '../../components/survey-rendering/NPS';
 import { ChoiceGrid } from '../../components/survey-rendering/ChoiceGrid';
+import { HybridGrid, type HybridGridColumn, type HybridGridValue } from '../../components/survey-rendering/HybridGrid';
 import { CardSort, type CardSortValue } from '../../components/survey-rendering/CardSort';
 import { NumericRanking, type NumericRankingValue } from '../../components/survey-rendering/NumericRanking';
 import { StarRating, type StarRatingValue } from '../../components/survey-rendering/StarRating';
@@ -21,6 +22,7 @@ import { RunningTotal, type RunningTotalValue } from '../../components/survey-re
 import { DragAndDrop, type DragAndDropValue } from '../../components/survey-rendering/DragAndDrop';
 import { CarouselQuestion, type CarouselQuestionValue } from '../../components/survey-rendering/CarouselQuestion';
 import { SurveyLookupTable, type LookupTableValue, type LookupTableColumn, type LookupTableRow } from '../../components/survey-rendering/LookupTable';
+import { TextHighlighter, type TextHighlightValue, type TextHighlightNotes } from '../../components/survey-rendering/TextHighlighter';
 import { SurveyErrorMessage } from '../../components/survey-rendering/SurveyErrorMessage';
 import { QuestionText } from '../../components/survey-rendering/QuestionText';
 import { QuestionField } from '../../components/survey-rendering/QuestionField';
@@ -57,6 +59,7 @@ const LivePreview = ({
   const [contactMethod, setContactMethod] = React.useState<string>('');
   const [npsValue, setNpsValue] = React.useState<string>('');
   const [gridValue, setGridValue] = React.useState<Record<string, string>>({});
+  const [hybridGridValue, setHybridGridValue] = React.useState<HybridGridValue>({});
   const [cardSortValue, setCardSortValue] = React.useState<CardSortValue>({});
   const [numericRankingValue, setNumericRankingValue] = React.useState<NumericRankingValue>({});
   const [starRatingValue, setStarRatingValue] = React.useState<StarRatingValue>({});
@@ -72,6 +75,12 @@ const LivePreview = ({
   const [dragAndDropValue, setDragAndDropValue] = React.useState<DragAndDropValue>([]);
   const [carouselNpsValue, setCarouselNpsValue] = React.useState<CarouselQuestionValue>({});
   const [lookupTableValue, setLookupTableValue] = React.useState<LookupTableValue>([]);
+  const [highlightValue, setHighlightValue] = React.useState<TextHighlightValue>({});
+  const [highlightNotes, setHighlightNotes] = React.useState<TextHighlightNotes>({});
+  const highlightCategories = [
+    { id: 'like', label: 'Like', question: 'What do you like about this statement?' },
+    { id: 'dislike', label: 'Dislike', question: 'What do you dislike about this statement?' },
+  ];
   const [showError, setShowError] = React.useState(false);
 
   // Status uses a dropdown editor in the add-choice draft row; Email and Amount
@@ -122,6 +131,36 @@ const LivePreview = ({
     { value: 'very_dissatisfied', label: 'Very dissatisfied' },
   ];
 
+  const hybridGridRows = [
+    { id: 'hg-row-1', label: 'Row 1' },
+    { id: 'hg-row-2', label: 'Row 2' },
+    { id: 'hg-row-3', label: 'Row 3' },
+  ];
+
+  const hybridGridColumns: HybridGridColumn[] = [
+    { id: 'comment', type: 'text', label: 'Comment', placeholder: 'Type an answer…' },
+    {
+      id: 'tags',
+      type: 'checkbox',
+      label: 'Tags',
+      choices: [
+        { value: 'choice-1', label: 'Choice 1' },
+        { value: 'choice-2', label: 'Choice 2' },
+        { value: 'choice-3', label: 'Choice 3' },
+      ],
+    },
+    {
+      id: 'priority',
+      type: 'dropdown',
+      label: 'Priority',
+      options: [
+        { value: 'low', label: 'Low' },
+        { value: 'medium', label: 'Medium' },
+        { value: 'high', label: 'High' },
+      ],
+    },
+  ];
+
   const requiredErrorMsg = 'This question is required';
   const textError = showError && !textValue ? requiredErrorMsg : undefined;
   const radioError = showError && !contactMethod ? requiredErrorMsg : undefined;
@@ -134,12 +173,13 @@ const LivePreview = ({
   const dropdownError = showError && !dropdownValue ? requiredErrorMsg : undefined;
   const npsError = showError && !npsValue ? requiredErrorMsg : undefined;
   const gridError = showError && Object.keys(gridValue).length === 0 ? 'Please answer all rows' : undefined;
+  const hybridGridError = showError && Object.keys(hybridGridValue).length === 0 ? 'Please answer all rows' : undefined;
   const starRatingError =
     showError && starRatingItems.some((it) => !it.optional && !starRatingValue[it.value])
       ? 'Please rate all required items'
       : undefined;
 
-  const hasAnyError = !!(textError || radioError || checkboxError || openError || dateError || dropdownError || npsError || gridError || starRatingError);
+  const hasAnyError = !!(textError || radioError || checkboxError || openError || dateError || dropdownError || npsError || gridError || hybridGridError || starRatingError);
 
   const surveyContent = (
     <>
@@ -241,6 +281,20 @@ const LivePreview = ({
                 value={gridValue}
                 onValueChange={setGridValue}
                 error={gridError}
+                variant={viewport}
+              />
+            </QuestionField>
+          )}
+
+          {show('hybrid-grid') && (
+            <QuestionField>
+              <QuestionText label="Tell us more about each area:" error={hybridGridError} />
+              <HybridGrid
+                rows={hybridGridRows}
+                columns={hybridGridColumns}
+                value={hybridGridValue}
+                onValueChange={setHybridGridValue}
+                error={hybridGridError}
                 variant={viewport}
               />
             </QuestionField>
@@ -429,6 +483,21 @@ const LivePreview = ({
                 value={lookupTableValue}
                 onChange={setLookupTableValue}
                 onAddRow={(row) => setLookupTableRows((prev) => [...prev, row])}
+              />
+            </QuestionField>
+          )}
+
+          {show('text-highlighter') && (
+            <QuestionField>
+              <QuestionText label="Highlight the parts of this response you like or dislike:" />
+              <TextHighlighter
+                text="Our new checkout flow makes it faster to complete a purchase, and most testers said the redesigned cart felt clean and modern. The one-click reorder feature was a clear favourite and saved people a lot of time. That said, some users found the shipping options confusing, and the mandatory account creation step caused several people to abandon their cart before paying. A few also mentioned that the confirmation screen loaded slowly on mobile."
+                categories={highlightCategories}
+                withTextAnswer
+                value={highlightValue}
+                onChange={setHighlightValue}
+                notes={highlightNotes}
+                onNotesChange={setHighlightNotes}
               />
             </QuestionField>
           )}

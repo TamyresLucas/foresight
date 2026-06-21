@@ -71,9 +71,11 @@ export { DropZone, type DropZoneProps } from "./components/survey-rendering/Drop
 export { CardSort, type CardSortProps, type CardSortItem, type CardSortValue, type CardSortZone } from "./components/survey-rendering/CardSort";
 export { NumericRanking, NumericRankingInput, type NumericRankingProps, type NumericRankingItem, type NumericRankingValue } from "./components/survey-rendering/NumericRanking";
 export { StarRating, type StarRatingProps, type StarRatingItem, type StarRatingValue } from "./components/survey-rendering/StarRating";
+export { TextHighlighter, type TextHighlighterProps, type TextHighlighterFreeformProps, type TextHighlighterSegmentsProps, type TextHighlightPart, type TextHighlightCategory, type TextHighlightValue, type TextHighlightNotes } from "./components/survey-rendering/TextHighlighter";
 export { SurveySlider, type SliderProps as SurveySliderProps, type SliderValue as SurveySliderValue } from "./components/survey-rendering/Slider";
 export { RunningTotal, RunningTotalInput, type RunningTotalProps, type RunningTotalRow, type RunningTotalColumn, type RunningTotalValue } from "./components/survey-rendering/RunningTotal";
 export { SurveyLookupTable, type LookupTableProps, type LookupTableColumn, type LookupTableColumnFormat, type LookupTableColumnOption, type LookupTableRow, type LookupTableValue } from "./components/survey-rendering/LookupTable";
+export { HybridGrid, type HybridGridProps, type HybridGridRow, type HybridGridColumn, type HybridGridTextColumn, type HybridGridCheckboxColumn, type HybridGridDropdownColumn, type HybridGridCellValue, type HybridGridValue } from "./components/survey-rendering/HybridGrid";
 export { SurveyFilterTabs, type FilterTabsProps, type FilterTabItem } from "./components/survey-rendering/FilterTabs";
 export { DragAndDrop, type DragAndDropProps, type DragAndDropItem, type DragAndDropValue } from "./components/survey-rendering/DragAndDrop";
 export { Carousel, type CarouselProps, type CarouselItem } from "./components/survey-rendering/Carousel";

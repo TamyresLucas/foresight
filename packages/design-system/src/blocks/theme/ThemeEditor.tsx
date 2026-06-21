@@ -66,6 +66,7 @@ export const QUESTION_TYPE_OPTIONS: { id: string; label: string }[] = [
   { id: 'checkbox',         label: 'Checkbox' },
   { id: 'open-end',         label: 'Open End' },
   { id: 'choice-grid',      label: 'Choice Grid' },
+  { id: 'hybrid-grid',      label: 'Hybrid Grid' },
   { id: 'date',             label: 'Date & Time' },
   { id: 'time',             label: 'Time Picker' },
   { id: 'dropdown',         label: 'Dropdown' },
@@ -77,6 +78,7 @@ export const QUESTION_TYPE_OPTIONS: { id: string; label: string }[] = [
   { id: 'slider',           label: 'Slider' },
   { id: 'carousel-question', label: 'Carousel Question' },
   { id: 'lookup-table',     label: 'Lookup Table' },
+  { id: 'text-highlighter', label: 'Text Highlighter' },
 ];
 
 const ALL_QUESTION_TYPE_IDS = QUESTION_TYPE_OPTIONS.map(q => q.id);
