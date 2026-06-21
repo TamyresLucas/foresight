@@ -9,6 +9,8 @@ export interface DropdownOption {
   value: string
   label: string
   disabled?: boolean
+  /** Optional swatch color; when set, a colored dot is shown before the label. */
+  color?: string
 }
 
 export interface DropdownAnswerProps {
@@ -44,13 +46,31 @@ const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
     const [internalSelected, setInternalSelected] = React.useState(false)
     const [open, setOpen] = React.useState(false)
     const isSelected = selected ?? internalSelected
+    const wrapperRef = React.useRef<HTMLDivElement>(null)
 
     const handlePointerDown = () => {
       setInternalSelected(true)
     }
 
+    // When uncontrolled, return to the default state once the user clicks away.
+    // Clicks inside the trigger or the open option list (rendered in a Radix
+    // portal) keep it selected; anything else resets it.
+    React.useEffect(() => {
+      if (selected !== undefined || !internalSelected) return
+      const handlePointerDownOutside = (event: PointerEvent) => {
+        const target = event.target as HTMLElement | null
+        if (wrapperRef.current?.contains(target)) return
+        if (target?.closest('[data-radix-popper-content-wrapper]')) return
+        setInternalSelected(false)
+      }
+      document.addEventListener('pointerdown', handlePointerDownOutside)
+      return () =>
+        document.removeEventListener('pointerdown', handlePointerDownOutside)
+    }, [internalSelected, selected])
+
     return (
       <div
+        ref={wrapperRef}
         className="flex flex-col w-fit group/survey-input"
         onPointerDown={handlePointerDown}
         data-selected={isSelected}
@@ -112,6 +132,13 @@ const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
                       disabled={option.disabled}
                       className="relative flex w-full cursor-pointer select-none items-center rounded-sm py-2 px-3 text-survey-body font-survey-regular text-survey-foreground outline-none data-[highlighted]:bg-survey-muted-background data-[state=checked]:font-bold data-[state=checked]:text-survey-primary data-[disabled]:opacity-50 data-[disabled]:text-survey-muted-foreground data-[disabled]:cursor-not-allowed"
                     >
+                      {option.color && (
+                        <span
+                          aria-hidden="true"
+                          className="mr-2 h-2.5 w-2.5 flex-shrink-0 rounded-full"
+                          style={{ backgroundColor: option.color }}
+                        />
+                      )}
                       <SelectPrimitive.ItemText>{option.label}</SelectPrimitive.ItemText>
                     </SelectPrimitive.Item>
                   ))}

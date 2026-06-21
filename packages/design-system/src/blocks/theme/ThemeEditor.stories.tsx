@@ -21,6 +21,7 @@ import { RunningTotal, type RunningTotalValue } from '../../components/survey-re
 import { DragAndDrop, type DragAndDropValue } from '../../components/survey-rendering/DragAndDrop';
 import { CarouselQuestion, type CarouselQuestionValue } from '../../components/survey-rendering/CarouselQuestion';
 import { SurveyLookupTable, type LookupTableValue, type LookupTableColumn, type LookupTableRow } from '../../components/survey-rendering/LookupTable';
+import { TextHighlighter, type TextHighlightValue, type TextHighlightNotes } from '../../components/survey-rendering/TextHighlighter';
 import { SurveyErrorMessage } from '../../components/survey-rendering/SurveyErrorMessage';
 import { QuestionText } from '../../components/survey-rendering/QuestionText';
 import { QuestionField } from '../../components/survey-rendering/QuestionField';
@@ -72,6 +73,12 @@ const LivePreview = ({
   const [dragAndDropValue, setDragAndDropValue] = React.useState<DragAndDropValue>([]);
   const [carouselNpsValue, setCarouselNpsValue] = React.useState<CarouselQuestionValue>({});
   const [lookupTableValue, setLookupTableValue] = React.useState<LookupTableValue>([]);
+  const [highlightValue, setHighlightValue] = React.useState<TextHighlightValue>({});
+  const [highlightNotes, setHighlightNotes] = React.useState<TextHighlightNotes>({});
+  const highlightCategories = [
+    { id: 'like', label: 'Like', question: 'What do you like about this statement?' },
+    { id: 'dislike', label: 'Dislike', question: 'What do you dislike about this statement?' },
+  ];
   const [showError, setShowError] = React.useState(false);
 
   // Status uses a dropdown editor in the add-choice draft row; Email and Amount
@@ -429,6 +436,21 @@ const LivePreview = ({
                 value={lookupTableValue}
                 onChange={setLookupTableValue}
                 onAddRow={(row) => setLookupTableRows((prev) => [...prev, row])}
+              />
+            </QuestionField>
+          )}
+
+          {show('text-highlighter') && (
+            <QuestionField>
+              <QuestionText label="Highlight the parts of this response you like or dislike:" />
+              <TextHighlighter
+                text="Our new checkout flow makes it faster to complete a purchase, and most testers said the redesigned cart felt clean and modern. The one-click reorder feature was a clear favourite and saved people a lot of time. That said, some users found the shipping options confusing, and the mandatory account creation step caused several people to abandon their cart before paying. A few also mentioned that the confirmation screen loaded slowly on mobile."
+                categories={highlightCategories}
+                withTextAnswer
+                value={highlightValue}
+                onChange={setHighlightValue}
+                notes={highlightNotes}
+                onNotesChange={setHighlightNotes}
               />
             </QuestionField>
           )}
