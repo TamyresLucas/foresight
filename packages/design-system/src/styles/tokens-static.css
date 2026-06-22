@@ -16,6 +16,11 @@
   --brand-destructive-border: 349 42% 80%;
 
   --brand-radius: 0.5rem;
+  /* Button radius preset. apply-theme overrides this inline at runtime (incl.
+     the 9999px "Round" ratio); this static default keeps buttons that use
+     rounded-[var(--component-button-radius)] from collapsing to 0 when no theme
+     is applied (e.g. standalone stories). */
+  --component-button-radius: var(--brand-radius);
   --brand-font-sans: "Inter", system-ui, sans-serif;
   --brand-font-heading: "Outfit", sans-serif;
   --brand-font-body: "Inter", system-ui, sans-serif;

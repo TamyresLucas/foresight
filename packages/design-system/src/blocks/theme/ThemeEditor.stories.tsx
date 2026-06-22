@@ -14,6 +14,7 @@ import { RadioGroup, RadioGroupOption } from '../../components/survey-rendering/
 import { NPS } from '../../components/survey-rendering/NPS';
 import { ChoiceGrid } from '../../components/survey-rendering/ChoiceGrid';
 import { HybridGrid, type HybridGridColumn, type HybridGridValue } from '../../components/survey-rendering/HybridGrid';
+import { FileUpload, type FileUploadFile } from '../../components/survey-rendering/FileUpload';
 import { CardSort, type CardSortValue } from '../../components/survey-rendering/CardSort';
 import { NumericRanking, type NumericRankingValue } from '../../components/survey-rendering/NumericRanking';
 import { StarRating, type StarRatingValue } from '../../components/survey-rendering/StarRating';
@@ -60,6 +61,7 @@ const LivePreview = ({
   const [npsValue, setNpsValue] = React.useState<string>('');
   const [gridValue, setGridValue] = React.useState<Record<string, string>>({});
   const [hybridGridValue, setHybridGridValue] = React.useState<HybridGridValue>({});
+  const [fileUploadFiles, setFileUploadFiles] = React.useState<FileUploadFile[]>([]);
   const [cardSortValue, setCardSortValue] = React.useState<CardSortValue>({});
   const [numericRankingValue, setNumericRankingValue] = React.useState<NumericRankingValue>({});
   const [starRatingValue, setStarRatingValue] = React.useState<StarRatingValue>({});
@@ -498,6 +500,30 @@ const LivePreview = ({
                 onChange={setHighlightValue}
                 notes={highlightNotes}
                 onNotesChange={setHighlightNotes}
+              />
+            </QuestionField>
+          )}
+
+          {show('file-upload') && (
+            <QuestionField>
+              <QuestionText label="Allow a respondent to upload a file to the server" />
+              <FileUpload
+                files={fileUploadFiles}
+                onFilesAdded={(added) =>
+                  setFileUploadFiles((prev) => [
+                    ...prev,
+                    ...added.map((f, i) => ({
+                      id: `${f.name}-${Date.now()}-${i}`,
+                      name: f.name,
+                      size: f.size,
+                      progress: 0,
+                      previewUrl: f.type.startsWith('image/') ? URL.createObjectURL(f) : undefined,
+                    })),
+                  ])
+                }
+                onFileRemove={(id) =>
+                  setFileUploadFiles((prev) => prev.filter((f) => f.id !== id))
+                }
               />
             </QuestionField>
           )}

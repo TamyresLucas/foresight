@@ -41,7 +41,7 @@ const itemClass = cn(
 
 const navButtonClass = cn(
   'h-7 w-7 inline-flex items-center justify-center bg-transparent p-0',
-  'rounded-survey-sm border border-survey-border-interactive',
+  'rounded-[var(--component-button-radius)] border border-survey-border-interactive',
   'text-survey-foreground hover:bg-survey-muted-background',
   'focus-visible:outline-none',
   'focus-visible:ring-2 focus-visible:ring-survey-border-interactive',

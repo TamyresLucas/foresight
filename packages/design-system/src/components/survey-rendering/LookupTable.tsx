@@ -16,7 +16,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Check, ChevronDown, ChevronLeft, ChevronRight, FirstPage, LastPage, Plus, Search } from '../ui/icons';
+import { Check, ChevronDown, ChevronLeft, ChevronRight, FirstPage, LastPage, Plus, Search, X } from '../ui/icons';
 import {
   Table,
   TableBody,
@@ -878,7 +878,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
                 disabled={disabled || !canPreviousPage}
                 aria-label="First page"
                 className={cn(
-                  'flex h-9 w-9 items-center justify-center rounded-survey-md border border-survey-border-interactive bg-survey-background',
+                  'flex h-9 w-9 items-center justify-center rounded-[var(--component-button-radius)] border border-survey-border-interactive bg-survey-background',
                   'text-survey-foreground transition-colors',
                   'hover:bg-survey-muted-background disabled:cursor-not-allowed disabled:opacity-50',
                   FOCUS_RING,
@@ -893,7 +893,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
                 disabled={disabled || !canPreviousPage}
                 aria-label="Previous page"
                 className={cn(
-                  'flex h-9 w-9 items-center justify-center rounded-survey-md border border-survey-border-interactive bg-survey-background',
+                  'flex h-9 w-9 items-center justify-center rounded-[var(--component-button-radius)] border border-survey-border-interactive bg-survey-background',
                   'text-survey-foreground transition-colors',
                   'hover:bg-survey-muted-background disabled:cursor-not-allowed disabled:opacity-50',
                   FOCUS_RING,
@@ -915,7 +915,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
                     aria-label={`Page ${p + 1}`}
                     aria-current={p === pageIndex ? 'page' : undefined}
                     className={cn(
-                      'flex h-9 w-9 items-center justify-center rounded-survey-md border text-survey-body tabular-nums transition-colors',
+                      'flex h-9 w-9 items-center justify-center rounded-[var(--component-button-radius)] border text-survey-body tabular-nums transition-colors',
                       'disabled:cursor-not-allowed',
                       p === pageIndex
                         ? 'border-2 border-survey-border-selected bg-survey-background text-survey-foreground font-survey-regular'
@@ -934,7 +934,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
                 disabled={disabled || !canNextPage}
                 aria-label="Next page"
                 className={cn(
-                  'flex h-9 w-9 items-center justify-center rounded-survey-md border border-survey-border-interactive bg-survey-background',
+                  'flex h-9 w-9 items-center justify-center rounded-[var(--component-button-radius)] border border-survey-border-interactive bg-survey-background',
                   'text-survey-foreground transition-colors',
                   'hover:bg-survey-muted-background disabled:cursor-not-allowed disabled:opacity-50',
                   FOCUS_RING,
@@ -949,7 +949,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
                 disabled={disabled || !canNextPage}
                 aria-label="Last page"
                 className={cn(
-                  'flex h-9 w-9 items-center justify-center rounded-survey-md border border-survey-border-interactive bg-survey-background',
+                  'flex h-9 w-9 items-center justify-center rounded-[var(--component-button-radius)] border border-survey-border-interactive bg-survey-background',
                   'text-survey-foreground transition-colors',
                   'hover:bg-survey-muted-background disabled:cursor-not-allowed disabled:opacity-50',
                   FOCUS_RING,
@@ -969,28 +969,36 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
                 type="button"
                 onClick={cancelEditing}
                 disabled={disabled}
+                aria-label={cancelLabel}
                 className={cn(
-                  'flex h-9 items-center gap-2 rounded-survey-md bg-transparent px-3',
+                  // Icon-only square button in the narrow (container) layout;
+                  // expands to a labelled button once the container is wide.
+                  'flex h-9 w-9 @lg:w-auto items-center justify-center gap-2 rounded-[var(--component-button-radius)] bg-transparent px-0 @lg:px-3',
                   'text-survey-body font-medium text-survey-foreground transition-colors',
                   'hover:bg-survey-muted-background disabled:cursor-not-allowed disabled:opacity-50',
                   FOCUS_RING,
                 )}
               >
-                {cancelLabel}
+                <X className="h-4 w-4 @lg:hidden" />
+                <span className="hidden @lg:inline">{cancelLabel}</span>
               </button>
               <button
                 type="button"
                 onClick={confirmEditing}
                 disabled={disabled}
+                aria-label={confirmLabel}
                 // Same visual style as the "Add choice" button.
                 className={cn(
-                  'flex h-9 items-center gap-2 rounded-survey-md border border-survey-border-interactive bg-survey-background px-3',
+                  // Icon-only square button in the narrow (container) layout;
+                  // expands to a labelled button once the container is wide.
+                  'flex h-9 w-9 @lg:w-auto items-center justify-center gap-2 rounded-[var(--component-button-radius)] border border-survey-border-interactive bg-survey-background px-0 @lg:px-3',
                   'text-survey-body font-medium text-survey-foreground transition-colors',
                   'hover:bg-survey-muted-background disabled:cursor-not-allowed disabled:opacity-50',
                   FOCUS_RING,
                 )}
               >
-                {confirmLabel}
+                <Check className="h-4 w-4 @lg:hidden" />
+                <span className="hidden @lg:inline">{confirmLabel}</span>
               </button>
             </div>
           ) : canEdit && justConfirmed ? (
@@ -1001,7 +1009,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
               role="status"
               aria-live="polite"
               className={cn(
-                'flex h-9 items-center justify-self-end gap-2 rounded-survey-md px-3',
+                'flex h-9 items-center justify-self-end gap-2 rounded-[var(--component-button-radius)] px-3',
                 'bg-[hsl(var(--brand-secondary))] text-[hsl(var(--brand-secondary-foreground))]',
                 'text-survey-body font-medium transition-colors',
               )}
@@ -1018,7 +1026,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
               className={cn(
                 // Icon-only square button in the narrow (container) layout;
                 // expands to an icon + label button once the container is wide.
-                'flex h-9 w-9 @lg:w-auto items-center justify-center justify-self-end gap-2 rounded-survey-md border border-survey-border-interactive bg-survey-background px-0 @lg:px-3',
+                'flex h-9 w-9 @lg:w-auto items-center justify-center justify-self-end gap-2 rounded-[var(--component-button-radius)] border border-survey-border-interactive bg-survey-background px-0 @lg:px-3',
                 // Size tracks the survey theme (text-survey-body); weight stays
                 // medium to match the other survey action buttons.
                 'text-survey-body font-medium text-survey-foreground transition-colors',

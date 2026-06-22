@@ -76,6 +76,7 @@ export { SurveySlider, type SliderProps as SurveySliderProps, type SliderValue a
 export { RunningTotal, RunningTotalInput, type RunningTotalProps, type RunningTotalRow, type RunningTotalColumn, type RunningTotalValue } from "./components/survey-rendering/RunningTotal";
 export { SurveyLookupTable, type LookupTableProps, type LookupTableColumn, type LookupTableColumnFormat, type LookupTableColumnOption, type LookupTableRow, type LookupTableValue } from "./components/survey-rendering/LookupTable";
 export { HybridGrid, type HybridGridProps, type HybridGridRow, type HybridGridColumn, type HybridGridTextColumn, type HybridGridCheckboxColumn, type HybridGridDropdownColumn, type HybridGridCellValue, type HybridGridValue } from "./components/survey-rendering/HybridGrid";
+export { FileUpload, type FileUploadProps, type FileUploadFile } from "./components/survey-rendering/FileUpload";
 export { SurveyFilterTabs, type FilterTabsProps, type FilterTabItem } from "./components/survey-rendering/FilterTabs";
 export { DragAndDrop, type DragAndDropProps, type DragAndDropItem, type DragAndDropValue } from "./components/survey-rendering/DragAndDrop";
 export { Carousel, type CarouselProps, type CarouselItem } from "./components/survey-rendering/Carousel";
