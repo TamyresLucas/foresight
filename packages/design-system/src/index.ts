@@ -87,6 +87,10 @@ export {
   type CarouselQuestionOption,
   type CarouselQuestionValue,
 } from "./components/survey-rendering/CarouselQuestion";
+export { ImageAreaEvaluator, type ImageAreaEvaluatorProps, type ImageAreaEvaluatorChoice, type ImageAreaEvaluatorArea, type ImageAreaEvaluatorValue } from "./components/survey-rendering/ImageAreaEvaluator";
+export { ImageAreaSelector, type ImageAreaSelectorProps, type ImageAreaSelectorArea, type ImageAreaSelectorValue } from "./components/survey-rendering/ImageAreaSelector";
+export { ImageSelector, type ImageSelectorProps, type ImageSelectorOption, type ImageSelectorValue } from "./components/survey-rendering/ImageSelector";
+export { ImageChoiceGrid, type ImageChoiceGridProps, type ImageChoiceGridColumn, type ImageChoiceGridRow } from "./components/survey-rendering/ImageChoiceGrid";
 export { Bullet, type BulletProps } from "./components/survey-rendering/Bullet";
 export { Description, type DescriptionProps } from "./components/survey-rendering/Description";
 
