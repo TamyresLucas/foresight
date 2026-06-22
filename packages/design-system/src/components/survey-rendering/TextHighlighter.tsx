@@ -18,6 +18,13 @@ export interface TextHighlightCategory {
    */
   color?: string;
   /**
+   * Optional override for the low-opacity resting fill only. When set, the
+   * resting highlight is filled with this color while `color` still drives the
+   * underline and the full-opacity (editing) state — e.g. a yellow `fillColor`
+   * paired with a brown `color`. When omitted the fill is derived from `color`.
+   */
+  fillColor?: string;
+  /**
    * Open-end prompt shown above the text-answer field (the `withTextAnswer`
    * variation) once this category is selected, e.g. "What do you like about this
    * statement?" for a "Like" category.
@@ -135,10 +142,16 @@ type Tool = 'highlight' | 'erase';
 // Highlight fill: a borderless, lower-opacity fill of the category color PLUS a
 // colored underline. The underline keeps the highlight perceivable for people who
 // can't distinguish the subtle color (WCAG 1.4.1).
-const fillStyle = (color: string): React.CSSProperties => ({
-  backgroundColor: `color-mix(in srgb, ${color} 22%, transparent)`,
+// `lineColor` drives the full-opacity underline; `fillColor` (defaulting to
+// `lineColor`) the low-opacity fill, so a category can pair, say, a yellow fill
+// with a brown underline.
+const fillStyle = (
+  lineColor: string,
+  fillColor: string = lineColor,
+): React.CSSProperties => ({
+  backgroundColor: `color-mix(in srgb, ${fillColor} 22%, transparent)`,
   textDecorationLine: 'underline',
-  textDecorationColor: color,
+  textDecorationColor: lineColor,
   textDecorationThickness: '2px',
   textUnderlineOffset: '3px',
 });
@@ -231,6 +244,16 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
       if (withoutCategory) map[CATEGORYLESS_ID] = 'hsl(var(--survey-primary))';
       return map;
     }, [categories, withoutCategory]);
+
+    // Resting-fill color per category. Falls back to the category color (so the
+    // fill is just a low-opacity tint of it) unless a separate `fillColor` is set.
+    const fillById = React.useMemo(() => {
+      const map: Record<string, string> = {};
+      categories.forEach((category) => {
+        if (category.fillColor) map[category.id] = category.fillColor;
+      });
+      return map;
+    }, [categories]);
 
     // Resolve a legible flipped text color for each highlight color (used when an
     // existing highlight is lifted to full opacity while being re-edited). Keyed on
@@ -508,7 +531,9 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
       // A confirmed highlight is a subtle fill + colored underline. The whitespace
       // between same-category words is styled to match so a multi-word run reads as
       // one continuous block (incl. a continuous underline).
-      const assignedStyle = color ? fillStyle(color) : undefined;
+      const assignedStyle = color
+        ? fillStyle(color, assigned ? fillById[assigned] : undefined)
+        : undefined;
 
       // While a selection is pending (words picked, category not yet confirmed):
       //  - re-editing an existing highlight (the pending words already have a
@@ -593,7 +618,7 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
               !!pending?.includes(next.id);
             style = runPending
               ? { backgroundColor: colorById[pc] }
-              : fillStyle(colorById[pc]);
+              : fillStyle(colorById[pc], fillById[pc]);
           }
         }
       }
