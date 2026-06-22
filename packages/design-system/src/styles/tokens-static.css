@@ -209,6 +209,23 @@
   --chart-sentiment-4-muted: 88 52% 47% / 0.4;
   --chart-sentiment-5-muted: 165 100% 31% / 0.4;
 
+  /* ─── Text-highlighter categories ───────────────────────────────────────────
+     Per-category highlight colors for the TextHighlighter question type, in
+     `category-N` order. Each `--category-N` is the category's hue: the resting
+     highlight paints it as a low-opacity fill, and it doubles as the underline /
+     full-opacity (editing) color. A category whose fill and line should differ
+     also defines `--category-N-line` for the underline / full-opacity color —
+     e.g. category-4 is a yellow fill with a terracotta (#BD5541) line. Values are HSL
+     triplets; consume with `hsl(var(--category-N))`.
+  ─────────────────────────────────────────────────────────────────────────── */
+  --category-1: 177 100% 38%; /* mint */
+  --category-2: 4 94% 69%; /* peach */
+  --category-3: 283 62% 53%; /* grape */
+  --category-4: 48 96% 53%; /* yellow (fill) */
+  --category-4-line: 10 49% 50%; /* #BD5541 terracotta (underline / full opacity) */
+  --category-5: 331 75% 58%; /* watermelon */
+  --category-6: var(--brand-primary); /* brand primary */
+
   /* ─── Typography ────────────────────────────────────────────────────────── */
   --font-sans: "Inter", system-ui, sans-serif;
   --font-survey: "Outfit", sans-serif;

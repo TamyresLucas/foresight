@@ -161,13 +161,21 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
               )}
             </thead>
             <tbody>
-              {rows.map((row) => {
+              {rows.map((row, i) => {
                 const rowDisabled = disabled || row.disabled;
                 const rowEmpty = isRowEmpty(values[row.id], columns);
                 return (
                   <tr
                     key={row.id}
-                    className="border-b border-survey-border-muted transition-colors"
+                    className={cn(
+                      "border-b border-survey-border-muted transition-colors",
+                      // Zebra striping: alternate rows use the LookupTable token
+                      // (border-interactive at 0.06 opacity).
+                      i % 2 === 1 && "bg-[hsl(var(--survey-border-interactive)_/_0.06)]",
+                      // Row hover matches the LookupTable (survey-muted-background
+                      // = border-interactive / 0.2).
+                      !rowDisabled && "hover:bg-survey-muted-background",
+                    )}
                   >
                     <th
                       id={`hg-label-${row.id}`}

@@ -102,7 +102,7 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                 </tr>
               </thead>
               <tbody>
-                {rows.map((row) => (
+                {rows.map((row, i) => (
                   <RadioGroupPrimitive.Root
                     key={row.id}
                     asChild
@@ -111,8 +111,11 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                     disabled={disabled || row.disabled}
                   >
                     <tr className={cn(
-                      "group/row border-b border-survey-border-muted transition-colors hover:bg-survey-muted-background/10",
-                      forceHover && "bg-survey-muted-background/10"
+                      "group/row border-b border-survey-border-muted transition-colors hover:bg-survey-muted-background",
+                      // Zebra striping: alternate rows use the LookupTable token
+                      // (border-interactive at 0.06 opacity).
+                      i % 2 === 1 && "bg-[hsl(var(--survey-border-interactive)_/_0.06)]",
+                      forceHover && "bg-survey-muted-background"
                     )}>
                       <th
                         id={`label-${row.id}`}

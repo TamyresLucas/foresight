@@ -14,6 +14,25 @@ const categories = [
   { id: 'dislike', label: 'Dislike' },
 ];
 
+// A six-category set colored from the dedicated `--category-N` tokens (defined at
+// `:root` in tokens-static.css), rather than the default Like/Dislike survey
+// tokens. Immigration uses `--category-4` for a yellow fill paired with a brown
+// (`--category-4-line`, #BD5541) underline via `fillColor`. All values come from
+// tokens, so there are no hardcoded colors here.
+const themeCategories = [
+  { id: 'politics', label: 'Politics', color: 'hsl(var(--category-1))' },
+  { id: 'economy', label: 'Economy', color: 'hsl(var(--category-2))' },
+  { id: 'trade', label: 'Trade', color: 'hsl(var(--category-3))' },
+  {
+    id: 'immigration',
+    label: 'Immigration',
+    color: 'hsl(var(--category-4-line))',
+    fillColor: 'hsl(var(--category-4))',
+  },
+  { id: 'leadership', label: 'Leadership', color: 'hsl(var(--category-5))' },
+  { id: 'identity', label: 'National identity', color: 'hsl(var(--category-6))' },
+];
+
 // With `withTextAnswer`, each category can carry an open-end `question` shown
 // above the text field once that category is selected.
 const categoriesWithQuestions = [
@@ -144,6 +163,16 @@ export const FreeformPrefilled: Story = {
     categories,
     // "extremely polite people," (Like) + "welcoming melting pot," (Dislike).
     defaultValue: { w13: 'like', w14: 'like', w15: 'like', w17: 'dislike', w18: 'dislike', w19: 'dislike' },
+  },
+};
+
+// Six categories beyond the default Like/Dislike pair, each colored from the
+// chart palette tokens (--chart-2 … --chart-7). Useful for thematic coding where
+// respondents tag spans by topic rather than sentiment.
+export const SixChartCategories: Story = {
+  args: {
+    text: prose,
+    categories: themeCategories,
   },
 };
 
