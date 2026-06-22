@@ -203,14 +203,8 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
     const [draftCategory, setDraftCategory] = React.useState<string>('');
     // Draft free-text answer for the pending highlight (withTextAnswer only).
     const [draftNote, setDraftNote] = React.useState<string>('');
-    // withTextAnswer is a two-step panel: step 1 shows only the category dropdown +
-    // Cancel; once a category is chosen the dropdown is replaced (after a 1s beat)
-    // by the open-end question + text-answer field + Confirm. `answerPhase` is that
-    // second step.
-    const [answerPhase, setAnswerPhase] = React.useState(false);
-    const answerTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
     // Transient state after Confirm is pressed: the button shows a "confirmed"
-    // success style for 1s before the highlight is actually committed.
+    // success style for 0.5s before the highlight is actually committed.
     const [confirming, setConfirming] = React.useState(false);
     const confirmTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
     // Set when Confirm is pressed with no category chosen.
@@ -262,7 +256,6 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
     // Clear pending timers on unmount.
     React.useEffect(
       () => () => {
-        if (answerTimerRef.current) clearTimeout(answerTimerRef.current);
         if (confirmTimerRef.current) clearTimeout(confirmTimerRef.current);
       },
       [],
@@ -350,13 +343,6 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
       }
     };
 
-    const clearAnswerTimer = () => {
-      if (answerTimerRef.current) {
-        clearTimeout(answerTimerRef.current);
-        answerTimerRef.current = null;
-      }
-    };
-
     const clearConfirmTimer = () => {
       if (confirmTimerRef.current) {
         clearTimeout(confirmTimerRef.current);
@@ -366,29 +352,23 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
 
     // Reset all edit-mode state (exits the panel).
     const resetEdit = () => {
-      clearAnswerTimer();
       clearConfirmTimer();
       setPending(null);
       setDraftCategory('');
       setDraftNote('');
-      setAnswerPhase(false);
       setConfirming(false);
       setCategoryError(false);
     };
 
     // Enter edit mode for `ids`: seed the picker with their existing category
     // (and note, when withTextAnswer) when they all share one so re-editing a
-    // highlight pre-fills it. Re-editing already has a category, so it opens
-    // straight in the answer phase (withTextAnswer); a fresh selection starts in
-    // the category-pick step.
+    // highlight pre-fills it.
     const openPending = (ids: string[]) => {
       const first = currentValue[ids[0]];
       const uniform = first && ids.every((id) => currentValue[id] === first);
-      clearAnswerTimer();
       setPending(ids);
       setDraftCategory(uniform ? first : '');
       setDraftNote(withTextAnswer ? currentNotes[ids[0]] ?? '' : '');
-      setAnswerPhase(withTextAnswer && !!uniform);
       setCategoryError(false);
     };
 
@@ -403,7 +383,7 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
       const ids = pending;
       const category = draftCategory;
       const note = draftNote;
-      // Show the "confirmed" success style for 1s, then actually apply.
+      // Show the "confirmed" success style for 0.5s, then actually apply.
       setConfirming(true);
       clearConfirmTimer();
       confirmTimerRef.current = setTimeout(() => {
@@ -423,21 +403,12 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
           commitNotes(nextNotes);
         }
         resetEdit();
-      }, 1000);
+      }, 500);
     };
 
     const chooseCategory = (categoryId: string) => {
       setDraftCategory(categoryId);
       setCategoryError(false);
-      // withTextAnswer: a beat after the category is picked, swap the dropdown for
-      // the open-end question + text-answer field.
-      if (withTextAnswer && !answerPhase) {
-        clearAnswerTimer();
-        answerTimerRef.current = setTimeout(() => {
-          setAnswerPhase(true);
-          answerTimerRef.current = null;
-        }, 1000);
-      }
     };
 
     const cancelEdit = () => {
@@ -594,7 +565,7 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
               !assigned &&
               !isPending &&
               (variant === 'segments'
-                ? 'underline decoration-dotted decoration-survey-border-interactive underline-offset-4 hover:bg-survey-muted-background'
+                ? 'underline decoration-dotted decoration-survey-foreground underline-offset-4 hover:bg-survey-muted-background'
                 : 'hover:bg-survey-muted-background'),
           )}
           style={style}
@@ -627,7 +598,13 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
         }
       }
       return (
-        <span key={`static-${i}`} style={style}>
+        <span
+          key={`static-${i}`}
+          // In segments, the static (non-highlightable) text is muted to match the
+          // LookupTable "X of Y selected" caption color.
+          className={variant === 'segments' ? 'text-survey-muted-foreground' : undefined}
+          style={style}
+        >
           {token.text}
         </span>
       );
@@ -635,8 +612,7 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
 
     // Cancel / Confirm icon buttons for the edit-mode panel. They sit next to the
     // category dropdown normally, or next to the text-answer field when one is
-    // shown (withTextAnswer). The withTextAnswer category-pick step shows Cancel
-    // alone (nothing to confirm until the answer step).
+    // shown (withTextAnswer).
     const cancelButton = (
       <Button
         type="button"
@@ -644,7 +620,7 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
         size="icon"
         aria-label="Cancel"
         onClick={cancelEdit}
-        className="shrink-0 border-survey-border-interactive text-survey-foreground hover:bg-survey-muted-background"
+        className="shrink-0 rounded-[var(--component-button-radius)] border-survey-border-interactive text-survey-foreground hover:bg-survey-muted-background"
       >
         <X aria-hidden="true" />
       </Button>
@@ -657,13 +633,15 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
         aria-label="Confirm"
         onClick={confirmCategory}
         className={cn(
-          'shrink-0 border-2',
+          'shrink-0 rounded-[var(--component-button-radius)]',
           // For 1s after pressing Confirm, show the "confirmed" success style
           // (solid brand-secondary fill + white check), matching LookupTable.
           // Brand token is used directly so it stays teal inside the survey scope.
           confirming
             ? 'border-[hsl(var(--brand-secondary))] bg-[hsl(var(--brand-secondary))] text-[hsl(var(--brand-secondary-foreground))]'
-            : 'border-survey-primary text-survey-primary hover:bg-survey-muted-background',
+            : // Resting style mirrors the LookupTable mobile (icon-only) Confirm
+              // button: neutral interactive border + foreground check.
+              'border-survey-border-interactive text-survey-foreground hover:bg-survey-muted-background',
         )}
       >
         <Check aria-hidden="true" />
@@ -677,19 +655,20 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
     );
 
     return (
-      <div ref={ref} className={cn('flex flex-col w-full', className)}>
+      <div ref={ref} className={cn('flex flex-col w-full max-h-full min-h-0', className)}>
         {/* Toolbar. Freeform shows the Highlight tool (from the start) and Erase
             (once a highlight exists). Segments hides the Highlight toggle (the
             Highlight tool is always on) and shows only Erase, so the bar is
             omitted entirely until the first segment is highlighted. While editing
             a selection it is replaced by a category picker + Confirm.
-            The controls stay pinned to the top of the scroll area while a long
-            passage scrolls beneath them; the background + bottom padding cover
-            the text passing under the pinned controls. */}
+            The controls sit above the scrollable passage box, so a long passage
+            scrolls within its own borders while the controls stay in view. */}
         {!disabled && (!!pending || variant !== 'segments' || hasHighlights) && (
           <div
-            className="sticky top-0 z-10 bg-survey-background"
-            style={{ paddingBottom: 'var(--survey-margin)' }}
+            className="shrink-0 bg-survey-background"
+            // 8px gap between the toggles and the text box's top border.
+            // (--survey-margin is unset outside an applied theme, so fall back to 8px.)
+            style={{ paddingBottom: 'var(--survey-margin, 8px)' }}
           >
             {pending ? (
             <div className="flex flex-col" style={{ gap: 'var(--survey-margin)' }}>
@@ -702,64 +681,28 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
                   Please select a category
                 </p>
               )}
-              {/* The category step and the text-answer step sit 8px apart,
-                  independent of the panel's --survey-margin gap. */}
-              <div className="flex flex-col gap-2">
-                {/* Category step: the dropdown (+ actions). In withTextAnswer this
-                    is replaced by the answer step once a category is picked. */}
-                {!(withTextAnswer && answerPhase) && (
-                  <div className="flex items-center gap-2">
-                    {/* DropdownAnswer sizes itself to `w-fit`; the wrapper + child
-                        overrides stretch it (and its inner wrappers) to fill the row. */}
-                    <div className="flex-1 min-w-0 [&>div]:w-full [&>div>div]:w-full">
-                      <DropdownAnswer
-                        aria-label="Select category"
-                        options={categories.map((category) => ({
-                          value: category.id,
-                          label: category.label,
-                          color: colorById[category.id],
-                        }))}
-                        placeholder="Select category"
-                        value={draftCategory || undefined}
-                        onValueChange={chooseCategory}
-                        error={categoryError ? 'Please select a category' : undefined}
-                        className="w-full min-w-0"
-                      />
-                    </div>
-                    {/* withTextAnswer's category step offers only Cancel (Confirm
-                        comes with the answer step); otherwise full actions. */}
-                    {withTextAnswer ? cancelButton : editActions}
-                  </div>
-                )}
-                {/* Answer step (withTextAnswer): the open-end question for the
-                    selected category + the text field + actions. */}
-                {withTextAnswer && answerPhase && (
-                  <div className="flex flex-col gap-1">
-                    {categories.find((c) => c.id === draftCategory)?.question && (
-                      <p className="text-survey-body font-survey-regular font-survey text-survey-foreground">
-                        {categories.find((c) => c.id === draftCategory)?.question}
-                      </p>
-                    )}
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 min-w-0">
-                        <TextAnswer
-                          aria-label={textAnswerLabel}
-                          placeholder={textAnswerLabel}
-                          value={draftNote}
-                          onChange={(e) => setDraftNote(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              e.preventDefault();
-                              confirmCategory();
-                            }
-                          }}
-                        />
-                      </div>
-                      {/* Only Confirm here; Cancel lives in the category step. */}
-                      {confirmButton}
-                    </div>
-                  </div>
-                )}
+              {/* Category dropdown. Without a text answer it shares its row with
+                  Cancel/Confirm; with a text answer the actions move down beside
+                  the text-answer field, which is rendered below the passage. */}
+              <div className="flex items-center gap-2">
+                {/* DropdownAnswer sizes itself to `w-fit`; the wrapper + child
+                    overrides stretch it (and its inner wrappers) to fill the row. */}
+                <div className="flex-1 min-w-0 [&>div]:w-full [&>div>div]:w-full">
+                  <DropdownAnswer
+                    aria-label="Select category"
+                    options={categories.map((category) => ({
+                      value: category.id,
+                      label: category.label,
+                      color: colorById[category.id],
+                    }))}
+                    placeholder="Select category"
+                    value={draftCategory || undefined}
+                    onValueChange={chooseCategory}
+                    error={categoryError ? 'Please select a category' : undefined}
+                    className="w-full min-w-0"
+                  />
+                </div>
+                {!withTextAnswer && editActions}
               </div>
             </div>
           ) : (
@@ -772,7 +715,7 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
                   aria-pressed={activeTool === 'highlight'}
                   onClick={handleHighlightToggle}
                   className={cn(
-                    'font-survey-regular font-survey text-survey-foreground hover:bg-survey-muted-background',
+                    'text-survey-body rounded-[var(--component-button-radius)] font-survey-regular font-survey text-survey-foreground hover:bg-survey-muted-background',
                     activeTool === 'highlight'
                       ? 'border-2 border-survey-primary'
                       : 'border-survey-border-interactive',
@@ -790,7 +733,7 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
                   aria-pressed={activeTool === 'erase'}
                   onClick={() => selectTool('erase')}
                   className={cn(
-                    'font-survey-regular font-survey text-survey-foreground hover:bg-survey-muted-background',
+                    'text-survey-body rounded-[var(--component-button-radius)] font-survey-regular font-survey text-survey-foreground hover:bg-survey-muted-background',
                     activeTool === 'erase'
                       ? 'border-2 border-survey-primary'
                       : 'border-survey-border-interactive',
@@ -823,7 +766,13 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
           onMouseUp={handlePointerUp}
           onTouchEnd={handlePointerUp}
           className={cn(
-            'relative text-survey-body font-survey-regular font-survey leading-relaxed',
+            // The passage is its own scroll area: when the component is height-
+            // constrained it fills the space below the controls and scrolls
+            // within its top/bottom borders (so the scrollbar matches the text
+            // box, not the whole component). Borders use the same token as the
+            // multiple-choice option outline.
+            'relative flex-1 min-h-0 overflow-y-auto border-y border-survey-border-muted py-2',
+            'text-survey-body font-survey-regular font-survey leading-relaxed',
             disabled
               ? 'text-survey-muted-foreground opacity-50'
               : 'text-survey-foreground',
@@ -833,6 +782,40 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
             token.kind === 'unit' ? renderUnit(token) : renderStatic(token, i),
           )}
         </div>
+
+        {/* withTextAnswer: the open-end question for the selected category (when it
+            has one) + the text-answer field sit below the passage, with the
+            category dropdown kept above it in the controls. Cancel/Confirm sit on
+            the right of the text field. */}
+        {!disabled && pending && withTextAnswer && (
+          <div
+            className="shrink-0 flex flex-col gap-1"
+            style={{ paddingTop: 'var(--survey-margin, 8px)' }}
+          >
+            {categories.find((c) => c.id === draftCategory)?.question && (
+              <p className="text-survey-body font-survey-regular font-survey text-survey-foreground">
+                {categories.find((c) => c.id === draftCategory)?.question}
+              </p>
+            )}
+            <div className="flex items-center gap-2">
+              <div className="flex-1 min-w-0">
+                <TextAnswer
+                  aria-label={textAnswerLabel}
+                  placeholder={textAnswerLabel}
+                  value={draftNote}
+                  onChange={(e) => setDraftNote(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      confirmCategory();
+                    }
+                  }}
+                />
+              </div>
+              {editActions}
+            </div>
+          </div>
+        )}
       </div>
     );
   },

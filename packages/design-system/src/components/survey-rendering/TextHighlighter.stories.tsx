@@ -223,7 +223,7 @@ export const WithoutCategoryPrefilled: Story = {
 export const LongTextSticky: Story = {
   decorators: [
     (Story) => (
-      <div className="max-h-[320px] overflow-y-auto">
+      <div className="h-[320px] flex flex-col">
         <Story />
       </div>
     ),

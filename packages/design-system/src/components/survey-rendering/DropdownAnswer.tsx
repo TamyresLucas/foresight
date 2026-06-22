@@ -102,6 +102,8 @@ const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
               aria-invalid={error ? true : undefined}
               className={cn(
                 'flex box-border h-10 px-2 py-1.5 items-center justify-between gap-[10px] rounded-lg border bg-transparent transition-all outline-none',
+                // Label + placeholder follow the survey body text token (size/weight/family).
+                'text-survey-body font-survey-regular font-survey text-survey-foreground',
                 fullWidth ? 'w-full min-w-0' : 'w-fit min-w-[280px]',
                 'border-survey-border-interactive',
                 'group-data-[selected=true]/survey-input:border-survey-border-selected group-data-[selected=true]/survey-input:border-2',
