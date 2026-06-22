@@ -213,8 +213,8 @@ const StarRating = React.forwardRef<HTMLDivElement, StarRatingProps>(
                   onClick={() => handleClear(item.value)}
                   aria-label={`Clear ${item.label} rating`}
                   className={cn(
-                    'flex h-7 w-7 items-center justify-center rounded-[var(--component-button-radius)] text-survey-muted-foreground transition-colors',
-                    'hover:bg-survey-muted-background hover:text-survey-foreground',
+                    'flex h-7 w-7 items-center justify-center rounded-[var(--component-button-radius)] text-survey-foreground transition-colors',
+                    'hover:bg-survey-muted-background',
                     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-survey-border-selected',
                   )}
                 >
