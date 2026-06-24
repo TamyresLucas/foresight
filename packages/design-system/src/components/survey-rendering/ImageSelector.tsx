@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { cn } from '@/lib/utils';
+import { Card } from './Card';
 
 /** A selectable image option. */
 export interface ImageSelectorOption {
@@ -9,7 +10,7 @@ export interface ImageSelectorOption {
   /** Image URL. */
   src: string;
   alt?: string;
-  /** Caption shown below the image. Highlighted when the option is selected. */
+  /** Caption shown in the card's statement strip. */
   label?: string;
 }
 
@@ -32,12 +33,6 @@ export interface ImageSelectorProps {
   disabled?: boolean;
   className?: string;
 }
-
-// A selected image is tinted with the brand primary at low opacity and outlined
-// with the same color at full opacity, matching the other image question types.
-const SELECTED_FILL =
-  'color-mix(in srgb, hsl(var(--survey-primary)) 55%, transparent)';
-const SELECTED_BORDER = 'hsl(var(--survey-primary))';
 
 const ImageSelector = React.forwardRef<HTMLDivElement, ImageSelectorProps>(
   (
@@ -80,46 +75,26 @@ const ImageSelector = React.forwardRef<HTMLDivElement, ImageSelectorProps>(
     return (
       <div
         ref={ref}
-        className={cn('flex flex-col w-full font-survey', className)}
+        className={cn('flex flex-col items-start w-full font-survey', className)}
         style={{ gap: 'var(--survey-margin, 8px)' }}
       >
         {options.map((option) => {
           const selected = current.includes(option.id);
           return (
-            <button
+            <Card
               key={option.id}
-              type="button"
+              variant={option.label ? 'imageStatement' : 'image'}
+              imageSrc={option.src}
+              imageAlt={option.alt ?? ''}
+              selected={selected}
               disabled={disabled}
               onClick={() => handleClick(option.id)}
-              aria-pressed={selected}
               aria-label={option.label}
-              className={cn(
-                'flex flex-col items-start gap-2 self-start focus-visible:outline-none',
-                disabled ? 'cursor-not-allowed' : 'cursor-pointer',
-              )}
+              className={cn(disabled && 'cursor-not-allowed')}
             >
-              {/* Image with the selection tint + border overlaid. The overlay is
-                  borderless when unselected so the image is unobstructed. */}
-              <span className="relative inline-block max-w-full">
-                <img
-                  src={option.src}
-                  alt={option.alt ?? ''}
-                  className="block max-w-full select-none"
-                  draggable={false}
-                />
-                <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 transition-colors"
-                  style={{
-                    backgroundColor: selected ? SELECTED_FILL : 'transparent',
-                    border: selected ? `2px solid ${SELECTED_BORDER}` : undefined,
-                  }}
-                />
-              </span>
               {option.label && (
                 <span
                   className={cn(
-                    'text-survey-body',
                     selected
                       ? 'font-survey-semibold text-survey-primary'
                       : 'font-survey-regular text-survey-foreground',
@@ -128,7 +103,7 @@ const ImageSelector = React.forwardRef<HTMLDivElement, ImageSelectorProps>(
                   {option.label}
                 </span>
               )}
-            </button>
+            </Card>
           );
         })}
 

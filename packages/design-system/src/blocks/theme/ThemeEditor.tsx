@@ -80,6 +80,10 @@ export const QUESTION_TYPE_OPTIONS: { id: string; label: string }[] = [
   { id: 'lookup-table',     label: 'Lookup Table' },
   { id: 'text-highlighter', label: 'Text Highlighter' },
   { id: 'file-upload',      label: 'File Upload' },
+  { id: 'image-selector',      label: 'Image Selector' },
+  { id: 'image-choice-grid',   label: 'Image Choice Grid' },
+  { id: 'image-area-selector', label: 'Image Area Selector' },
+  { id: 'image-area-evaluator', label: 'Image Area Evaluator' },
 ];
 
 const ALL_QUESTION_TYPE_IDS = QUESTION_TYPE_OPTIONS.map(q => q.id);

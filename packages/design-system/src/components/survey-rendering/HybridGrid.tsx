@@ -126,7 +126,24 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
       >
         {/* Desktop View */}
         <div className={cn(desktopVisibility, "w-full overflow-x-auto")}>
-          <table role="grid" className="w-full border-collapse">
+          <table role="grid" className="w-full table-fixed border-collapse">
+            {/* Fixed column widths so cells never resize with content or state.
+                Each checkbox leaf gets a fixed width; the label, text and
+                dropdown columns are left flexible so they share — and fill — the
+                remaining grid width equally. */}
+            <colgroup>
+              <col />
+              {columns.map((column) =>
+                column.type === "checkbox" ? (
+                  column.choices.map((choice) => (
+                    <col key={`${column.id}-${choice.value}`} className="w-16" />
+                  ))
+                ) : (
+                  // text & dropdown columns flex to fill the remaining width
+                  <col key={column.id} />
+                ),
+              )}
+            </colgroup>
             <thead>
               <tr className="border-b border-survey-border-muted text-survey-foreground text-survey-body font-survey-regular">
                 <th className="px-2 py-2" />

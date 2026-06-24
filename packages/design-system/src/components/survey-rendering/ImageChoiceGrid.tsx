@@ -4,6 +4,7 @@ import * as React from "react";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { cn } from "@/lib/utils";
 import { AlertCircle } from "../ui/icons";
+import { Card } from "./Card";
 import {
   Accordion,
   AccordionContent,
@@ -98,7 +99,15 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
       >
         {/* Desktop View */}
         <div className={cn(desktopVisibility, "w-full overflow-x-auto")}>
-          <table role="grid" className="w-full border-collapse">
+          <table role="grid" className="w-full table-fixed border-collapse">
+            {/* Equal, content- and state-independent column widths: every
+                column (label included) fills the grid the same way. */}
+            <colgroup>
+              <col style={{ width: `${100 / (columns.length + 1)}%` }} />
+              {columns.map((column) => (
+                <col key={column.value} style={{ width: `${100 / (columns.length + 1)}%` }} />
+              ))}
+            </colgroup>
             <thead>
               <tr className="border-b border-survey-border-muted text-survey-foreground text-survey-body font-survey-regular">
                 <th className="px-2 py-2" /> {/* Empty corner */}
@@ -297,39 +306,45 @@ const ImageChoiceGridMobileOption = ({
   disabled?: boolean;
   hasError?: boolean;
 }) => {
-  const id = `mobile-${rowId}-${column.value}`;
-
   return (
-    <label
-      htmlFor={id}
-      className={cn(
-        "flex items-center gap-3 w-full px-4 py-4 cursor-pointer select-none rounded-none",
-        "transition-colors hover:bg-survey-muted-background",
-        disabled && "cursor-not-allowed opacity-50 hover:bg-transparent",
-      )}
-    >
+    // The Radix item drives radio semantics (roving focus, arrow keys, checked
+    // state); `asChild` projects them onto the Card, whose `data-state=checked`
+    // then renders the selected border.
+    <div className="p-4">
       <RadioGroupPrimitive.Item
-        id={id}
+        asChild
         value={column.value}
         disabled={disabled}
         aria-label={column.label}
         aria-invalid={hasError || undefined}
-        className={cn(
-          "rounded-survey-md transition-shadow",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-survey-border-interactive",
-        )}
       >
-        <SelectableImage src={column.src} alt={column.alt ?? column.label} />
+        <Card
+          variant="imageStatement"
+          imageSrc={column.src}
+          imageAlt={column.alt ?? column.label}
+          aria-pressed={undefined}
+          className={cn(
+            // Cap the card at 250px wide and the image at 200px tall; the image
+            // scales down to fit within both bounds, keeping its aspect ratio.
+            "w-full max-w-[250px]",
+            "[&_img]:!w-auto [&_img]:h-auto [&_img]:max-h-[200px] [&_img]:max-w-full",
+            // Keep the border width constant (2px) so selecting a card only
+            // changes its color, never the row height.
+            "!border-2 data-[state=checked]:border-survey-border-selected",
+            disabled && "cursor-not-allowed opacity-50",
+          )}
+        >
+          <span
+            className={cn(
+              "text-survey-foreground text-survey-body font-survey-regular",
+              disabled && "text-survey-muted-foreground",
+            )}
+          >
+            {column.label}
+          </span>
+        </Card>
       </RadioGroupPrimitive.Item>
-      <span
-        className={cn(
-          "text-survey-foreground text-survey-body font-survey-regular leading-none",
-          disabled && "text-survey-muted-foreground",
-        )}
-      >
-        {column.label}
-      </span>
-    </label>
+    </div>
   );
 };
 
