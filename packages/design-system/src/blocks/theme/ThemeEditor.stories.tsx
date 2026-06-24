@@ -24,6 +24,10 @@ import { DragAndDrop, type DragAndDropValue } from '../../components/survey-rend
 import { CarouselQuestion, type CarouselQuestionValue } from '../../components/survey-rendering/CarouselQuestion';
 import { SurveyLookupTable, type LookupTableValue, type LookupTableColumn, type LookupTableRow } from '../../components/survey-rendering/LookupTable';
 import { TextHighlighter, type TextHighlightValue, type TextHighlightNotes } from '../../components/survey-rendering/TextHighlighter';
+import { ImageSelector, type ImageSelectorValue } from '../../components/survey-rendering/ImageSelector';
+import { ImageChoiceGrid } from '../../components/survey-rendering/ImageChoiceGrid';
+import { ImageAreaSelector, type ImageAreaSelectorValue } from '../../components/survey-rendering/ImageAreaSelector';
+import { ImageAreaEvaluator, type ImageAreaEvaluatorValue } from '../../components/survey-rendering/ImageAreaEvaluator';
 import { SurveyErrorMessage } from '../../components/survey-rendering/SurveyErrorMessage';
 import { QuestionText } from '../../components/survey-rendering/QuestionText';
 import { QuestionField } from '../../components/survey-rendering/QuestionField';
@@ -82,6 +86,35 @@ const LivePreview = ({
   const highlightCategories = [
     { id: 'like', label: 'Like', question: 'What do you like about this statement?' },
     { id: 'dislike', label: 'Dislike', question: 'What do you dislike about this statement?' },
+  ];
+  const [imageSelectorValue, setImageSelectorValue] = React.useState<ImageSelectorValue>([]);
+  const imageSelectorOptions = [
+    { id: 'c1', label: 'Choice 1', src: 'https://images.unsplash.com/photo-1507783548227-544c3b8fc065?w=300&h=160&fit=crop', alt: 'Rainbow over a field' },
+    { id: 'c2', label: 'Choice 2', src: 'https://images.unsplash.com/photo-1470509037663-253afd7f0f51?w=300&h=160&fit=crop', alt: 'Sunflower' },
+  ];
+  const [imageGridValue, setImageGridValue] = React.useState<Record<string, string>>({});
+  const imageGridRows = [
+    { id: 'service', label: 'Service' },
+    { id: 'value', label: 'Value for money' },
+  ];
+  const imageGridColumns = [
+    { value: 'love', label: 'Love it', src: 'https://images.unsplash.com/photo-1545315003-c5ad6226c272?w=120&h=120&fit=crop', alt: 'Smiling face' },
+    { value: 'like', label: 'Like it', src: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=120&h=120&fit=crop', alt: 'Content face' },
+    { value: 'dislike', label: 'Dislike it', src: 'https://images.unsplash.com/photo-1517677208171-0bc6725a3e60?w=120&h=120&fit=crop', alt: 'Unhappy face' },
+  ];
+  const [imageAreaValue, setImageAreaValue] = React.useState<ImageAreaSelectorValue>([]);
+  const [imageAreaEvalValue, setImageAreaEvalValue] = React.useState<ImageAreaEvaluatorValue>({});
+  const sunflowerSrc = 'https://images.unsplash.com/photo-1470509037663-253afd7f0f51?w=300&h=160&fit=crop';
+  const imageAreaQuadrants = [
+    { id: 'tl', label: 'Top left', x: 0, y: 0, width: 50, height: 50 },
+    { id: 'tr', label: 'Top right', x: 50, y: 0, width: 50, height: 50 },
+    { id: 'bl', label: 'Bottom left', x: 0, y: 50, width: 50, height: 50 },
+    { id: 'br', label: 'Bottom right', x: 50, y: 50, width: 50, height: 50 },
+  ];
+  const imageAreaEvalAreas = [{ id: 'left', label: 'Left half', x: 0, y: 0, width: 50, height: 100 }];
+  const imageAreaEvalChoices = [
+    { id: 'c1', label: 'Choice 1' },
+    { id: 'c2', label: 'Choice 2' },
   ];
   const [showError, setShowError] = React.useState(false);
 
@@ -524,6 +557,57 @@ const LivePreview = ({
                 onFileRemove={(id) =>
                   setFileUploadFiles((prev) => prev.filter((f) => f.id !== id))
                 }
+              />
+            </QuestionField>
+          )}
+
+          {show('image-selector') && (
+            <QuestionField>
+              <QuestionText label="Single or Multiple answers question using Images" />
+              <ImageSelector
+                options={imageSelectorOptions}
+                value={imageSelectorValue}
+                onChange={setImageSelectorValue}
+              />
+            </QuestionField>
+          )}
+
+          {show('image-choice-grid') && (
+            <QuestionField>
+              <QuestionText label="Rate each item by selecting an image" />
+              <ImageChoiceGrid
+                rows={imageGridRows}
+                columns={imageGridColumns}
+                value={imageGridValue}
+                onValueChange={setImageGridValue}
+                variant={viewport === 'mobile' ? 'mobile' : 'auto'}
+              />
+            </QuestionField>
+          )}
+
+          {show('image-area-selector') && (
+            <QuestionField>
+              <QuestionText label="Single or Multiple answers question using Image Areas" />
+              <ImageAreaSelector
+                src={sunflowerSrc}
+                alt="Sunflower"
+                areas={imageAreaQuadrants}
+                value={imageAreaValue}
+                onChange={setImageAreaValue}
+              />
+            </QuestionField>
+          )}
+
+          {show('image-area-evaluator') && (
+            <QuestionField>
+              <QuestionText label="Assign a value to an image area by clicking it" />
+              <ImageAreaEvaluator
+                src={sunflowerSrc}
+                alt="Sunflower"
+                areas={imageAreaEvalAreas}
+                choices={imageAreaEvalChoices}
+                value={imageAreaEvalValue}
+                onChange={setImageAreaEvalValue}
               />
             </QuestionField>
           )}

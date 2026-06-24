@@ -87,7 +87,15 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
       >
           {/* Desktop View */}
           <div className={cn(desktopVisibility, "w-full overflow-x-auto")}>
-            <table role="grid" className="w-full border-collapse">
+            <table role="grid" className="w-full table-fixed border-collapse">
+              {/* Equal, content- and state-independent column widths: every
+                  column (label included) fills the grid the same way. */}
+              <colgroup>
+                <col style={{ width: `${100 / (columns.length + 1)}%` }} />
+                {columns.map((column) => (
+                  <col key={column.value} style={{ width: `${100 / (columns.length + 1)}%` }} />
+                ))}
+              </colgroup>
               <thead>
                 <tr className="border-b border-survey-border-muted text-survey-foreground text-survey-body font-survey-regular">
                   <th className="px-2 py-2" /> {/* Empty corner */}
