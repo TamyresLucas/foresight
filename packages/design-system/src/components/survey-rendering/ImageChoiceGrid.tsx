@@ -203,7 +203,6 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
                       <ImageChoiceGridMobileOption
                         key={column.value}
                         column={column}
-                        rowId={row.id}
                         disabled={disabled || row.disabled}
                         hasError={!!error && !values[row.id]}
                       />
@@ -293,12 +292,10 @@ const ImageChoiceGridCell = ({
 
 const ImageChoiceGridMobileOption = ({
   column,
-  rowId,
   disabled,
   hasError,
 }: {
   column: ImageChoiceGridColumn;
-  rowId: string;
   disabled?: boolean;
   hasError?: boolean;
 }) => {
