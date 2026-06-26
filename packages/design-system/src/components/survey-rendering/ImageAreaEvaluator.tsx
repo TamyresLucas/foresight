@@ -114,6 +114,13 @@ const ImageAreaEvaluator = React.forwardRef<
     const [internalValue, setInternalValue] =
       React.useState<ImageAreaEvaluatorValue>(defaultValue ?? {});
     const current = isControlled ? value : internalValue;
+    const [hoveredAreaId, setHoveredAreaId] = React.useState<string | null>(null);
+
+    // White border + dark shadow ring so the hover outline is visible on both
+    // light and dark image regions without relying on a brand color.
+    const HOVER_BORDER = 'rgba(255,255,255,0.9)';
+    const HOVER_SHADOW = '0 0 0 1px rgba(0,0,0,0.45)';
+    const HOVER_OVERLAY = 'rgba(255,255,255,0.12)';
 
     const paletteById = React.useMemo(() => {
       const map = new Map<string, PaletteEntry>();
@@ -150,7 +157,7 @@ const ImageAreaEvaluator = React.forwardRef<
         {/* Image with overlaid clickable areas. The wrapper is inline-block so
             it shrinks to the image's intrinsic size and the percentage-based
             areas line up with it. */}
-        <div className="relative inline-block max-w-full self-start">
+        <div className="relative inline-block max-w-full self-start border border-survey-border-muted rounded-survey-sm overflow-hidden">
           <img
             src={src}
             alt={alt}
@@ -161,12 +168,15 @@ const ImageAreaEvaluator = React.forwardRef<
             const assigned = current[area.id];
             const entry = assigned ? paletteById.get(assigned) : undefined;
             const choice = choices.find((c) => c.id === assigned);
+            const hovered = hoveredAreaId === area.id;
             return (
               <button
                 key={area.id}
                 type="button"
                 disabled={disabled}
                 onClick={() => handleAreaClick(area.id)}
+                onMouseEnter={() => !disabled && setHoveredAreaId(area.id)}
+                onMouseLeave={() => setHoveredAreaId(null)}
                 aria-label={
                   area.label
                     ? choice
@@ -184,15 +194,17 @@ const ImageAreaEvaluator = React.forwardRef<
                   top: `${area.y}%`,
                   width: `${area.width}%`,
                   height: `${area.height}%`,
-                  backgroundColor: entry
+                  backgroundColor: hovered
+                    ? HOVER_OVERLAY
+                    : entry
                     ? `color-mix(in srgb, ${entry.fill} 55%, transparent)`
                     : 'transparent',
-                  // Selected areas are outlined at full opacity (the fill stays
-                  // low-opacity so the image shows). The outline uses the slot's
-                  // dedicated line color when it has one, else the fill color.
-                  border: entry
+                  border: hovered
+                    ? `2px solid ${HOVER_BORDER}`
+                    : entry
                     ? `2px solid ${entry.line ?? entry.fill}`
-                    : undefined,
+                    : 'none',
+                  boxShadow: hovered ? HOVER_SHADOW : undefined,
                 }}
               />
             );

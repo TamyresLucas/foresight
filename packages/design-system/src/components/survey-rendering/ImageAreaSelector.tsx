@@ -41,14 +41,14 @@ export interface ImageAreaSelectorProps {
   className?: string;
 }
 
-// Unlike ImageAreaEvaluator there are no choices/categories: a selected area is
-// simply marked with the brand primary at a low opacity, matching the evaluator's
-// overlay treatment.
 const SELECTED_OVERLAY =
   'color-mix(in srgb, hsl(var(--survey-primary)) 55%, transparent)';
-// Selected areas are outlined with the primary color at full opacity, matching
-// the other image question types.
 const SELECTED_BORDER = 'hsl(var(--survey-primary))';
+// White border + dark shadow ring so the hover outline is always visible
+// regardless of whether the image beneath is light or dark.
+const HOVER_BORDER = 'rgba(255,255,255,0.9)';
+const HOVER_SHADOW = '0 0 0 1px rgba(0,0,0,0.45)';
+const HOVER_OVERLAY = 'rgba(255,255,255,0.12)';
 
 const ImageAreaSelector = React.forwardRef<
   HTMLDivElement,
@@ -73,6 +73,7 @@ const ImageAreaSelector = React.forwardRef<
     const [internalValue, setInternalValue] =
       React.useState<ImageAreaSelectorValue>(defaultValue ?? []);
     const current = isControlled ? value : internalValue;
+    const [hoveredAreaId, setHoveredAreaId] = React.useState<string | null>(null);
 
     // A click toggles the area's selection. In single mode, selecting an area
     // replaces any prior selection; clicking the selected area clears it.
@@ -102,7 +103,7 @@ const ImageAreaSelector = React.forwardRef<
         {/* Image with overlaid selectable areas. The wrapper is inline-block so
             it shrinks to the image's intrinsic size and the percentage-based
             areas line up with it. */}
-        <div className="relative inline-block max-w-full self-start">
+        <div className="relative inline-block max-w-full self-start border border-survey-border-muted rounded-survey-sm overflow-hidden">
           <img
             src={src}
             alt={alt}
@@ -111,12 +112,15 @@ const ImageAreaSelector = React.forwardRef<
           />
           {areas.map((area) => {
             const selected = current.includes(area.id);
+            const hovered = hoveredAreaId === area.id;
             return (
               <button
                 key={area.id}
                 type="button"
                 disabled={disabled}
                 onClick={() => handleAreaClick(area.id)}
+                onMouseEnter={() => !disabled && setHoveredAreaId(area.id)}
+                onMouseLeave={() => setHoveredAreaId(null)}
                 aria-label={area.label}
                 aria-pressed={selected}
                 className={cn(
@@ -128,8 +132,17 @@ const ImageAreaSelector = React.forwardRef<
                   top: `${area.y}%`,
                   width: `${area.width}%`,
                   height: `${area.height}%`,
-                  backgroundColor: selected ? SELECTED_OVERLAY : 'transparent',
-                  border: selected ? `2px solid ${SELECTED_BORDER}` : undefined,
+                  backgroundColor: hovered
+                    ? HOVER_OVERLAY
+                    : selected
+                    ? SELECTED_OVERLAY
+                    : 'transparent',
+                  border: selected && !hovered
+                    ? `2px solid ${SELECTED_BORDER}`
+                    : hovered
+                    ? `2px solid ${HOVER_BORDER}`
+                    : 'none',
+                  boxShadow: hovered ? HOVER_SHADOW : undefined,
                 }}
               />
             );

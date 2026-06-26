@@ -24,17 +24,19 @@ export interface FileUploadProps
   files?: FileUploadFile[];
   /** Called with the newly selected/dropped files. */
   onFilesAdded?: (files: File[]) => void;
-  /** Called with the id of the file whose remove (X) button was pressed. */
+  /** Called with the id of the file whose remove/cancel button was pressed. */
   onFileRemove?: (id: string) => void;
-  /** Drag-and-drop prompt. */
+  /** Drag-and-drop prompt shown above the inline browse link. */
   label?: React.ReactNode;
-  /** Browse button text. */
+  /** Text of the inline "browse" link within the drop zone. */
   buttonLabel?: React.ReactNode;
   /** Native accept attribute, e.g. "image/*". */
   accept?: string;
   multiple?: boolean;
   disabled?: boolean;
   error?: string;
+  /** When false, hides the file size and shows only the percentage/Completed label in the same muted style. Defaults to true. */
+  showFileSize?: boolean;
 }
 
 const KB = 1024;
@@ -45,27 +47,155 @@ function formatSize(bytes: number): string {
   return `${(bytes / (KB * KB)).toFixed(1)}MB`;
 }
 
+function fileState(progress: number | undefined): 'empty' | 'uploading' | 'completed' {
+  const p = progress ?? 0;
+  if (p >= 100) return 'completed';
+  if (p > 0) return 'uploading';
+  return 'empty';
+}
+
+// ─── Individual file row ──────────────────────────────────────────────────────
+
+interface FileRowProps {
+  file: FileUploadFile;
+  disabled?: boolean;
+  onRemove: (id: string) => void;
+  showFileSize?: boolean;
+}
+
+const FileRow = ({ file, disabled, onRemove, showFileSize = true }: FileRowProps) => {
+  const progress = file.progress ?? 0;
+  const state = fileState(progress);
+  const isImage = Boolean(file.previewUrl);
+
+  const iconName = isImage ? 'image' : state === 'uploading' ? 'upload_file' : 'description';
+
+  // Derive "XMB of YMB" for uploading state from progress + total size.
+  const uploadedBytes = Math.round((progress / 100) * file.size);
+  const progressText = `${formatSize(uploadedBytes)} of ${formatSize(file.size)}`;
+
+  const needsBar = state === 'uploading' || state === 'empty';
+
+  return (
+    <div
+      className={cn(
+        'relative flex items-center gap-3 bg-transparent overflow-hidden',
+        state === 'completed'
+          ? 'border border-survey-border-interactive'
+          : 'border border-survey-border-muted',
+        needsBar ? 'px-3 pt-3 pb-4' : 'px-3 py-3',
+      )}
+      style={{ borderRadius: 'var(--component-button-radius)' }}
+    >
+      {/* Icon */}
+      <div className="shrink-0 flex h-10 w-10 items-center justify-center rounded-survey-sm bg-survey-muted-background">
+        {file.previewUrl ? (
+          <img
+            src={file.previewUrl}
+            alt=""
+            className="h-10 w-10 rounded-survey-sm object-cover"
+          />
+        ) : (
+          <Icon
+            name={iconName}
+            fill={false}
+            size={22}
+            className="text-survey-foreground"
+            aria-hidden="true"
+          />
+        )}
+      </div>
+
+      {/* Text */}
+      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+        <span className="truncate text-survey-body font-survey-semibold text-survey-foreground">
+          {file.name}
+        </span>
+
+        {state === 'completed' ? (
+          <span className="flex items-center gap-1.5 text-survey-body font-survey-regular text-survey-muted-foreground">
+            {showFileSize && <span>{formatSize(file.size)}</span>}
+            <Icon
+              name="check_circle"
+              fill
+              size={16}
+              className="shrink-0 text-[hsl(var(--brand-secondary))]"
+              aria-hidden="true"
+            />
+            <span className={cn(showFileSize ? 'font-survey-semibold' : 'font-survey-regular', 'text-[hsl(var(--brand-secondary))]')}>
+              Completed
+            </span>
+          </span>
+        ) : (
+          <span className="text-survey-body font-survey-regular text-survey-muted-foreground">
+            {showFileSize && (
+              <>{state === 'uploading' ? progressText : formatSize(file.size)}{' • '}</>
+            )}
+            <span className={showFileSize ? 'font-survey-semibold text-survey-foreground' : ''}>
+              {Math.round(progress)}%
+            </span>
+          </span>
+        )}
+      </div>
+
+      {/* Action button — same bordered-square style for both states;
+          delete uses destructive color, cancel uses muted */}
+      <button
+        type="button"
+        aria-label={state === 'completed' ? `Remove ${file.name}` : `Cancel upload for ${file.name}`}
+        disabled={disabled}
+        onClick={() => onRemove(file.id)}
+        className={cn(
+          'shrink-0 inline-flex items-center justify-center rounded-survey-sm transition-colors',
+          'hover:bg-survey-muted-background',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-survey-border-selected',
+          'disabled:cursor-not-allowed disabled:opacity-50',
+          state === 'completed'
+            ? 'text-survey-destructive'
+            : 'text-survey-muted-foreground',
+        )}
+        style={{ width: 28, height: 28 }}
+      >
+        {state === 'completed'
+          ? <Icon name="delete" fill={false} size={16} aria-hidden="true" />
+          : <X className="h-3.5 w-3.5" />
+        }
+      </button>
+
+      {/* Progress bar — pinned to the bottom edge of the card */}
+      {needsBar && (
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-survey-muted-background">
+          <div
+            className="h-full bg-survey-primary transition-all duration-300"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ─── Drop zone ────────────────────────────────────────────────────────────────
+
 const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
   (
     {
       files,
       onFilesAdded,
       onFileRemove,
-      label = 'Drag and drop files here',
+      label = 'Drag & drop your file here',
       buttonLabel = 'Browse files',
       accept,
       multiple = true,
       disabled = false,
       error,
+      showFileSize = true,
       className,
       ...props
     },
     ref,
   ) => {
     const inputRef = React.useRef<HTMLInputElement>(null);
-    // Shared 10% black hover overlay used by SurveyNavigation's buttons.
-    const hoverOverlayClass =
-      'relative overflow-hidden after:absolute after:inset-0 after:bg-transparent hover:after:bg-survey-rendering-overlay after:transition-colors after:pointer-events-none';
     const [isDragging, setIsDragging] = React.useState(false);
     const [internalFiles, setInternalFiles] = React.useState<FileUploadFile[]>([]);
 
@@ -141,9 +271,8 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
             error && 'border-survey-destructive',
             disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
           )}
-          style={{ padding: '32px 16px', gap: '12px', borderRadius: 'var(--component-button-radius)' }}
+          style={{ padding: '32px 16px', gap: '10px', borderRadius: 'var(--component-button-radius)' }}
         >
-          {/* Google Material Symbol — default text color */}
           <Icon
             name="cloud_upload"
             fill={false}
@@ -151,12 +280,11 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
             className="text-survey-foreground"
             aria-hidden="true"
           />
-          {/* Prompt — regular weight */}
+
           <span className="text-survey-body font-survey-regular text-survey-foreground">
-            {label}
+            {label} or
           </span>
-          {/* Mirrors the SurveyNavigation "Next" button: theme-editor radius
-              preset, primary fill, and the shared 10% hover overlay. */}
+
           <Button
             type="button"
             disabled={disabled}
@@ -167,7 +295,7 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
             style={{ borderRadius: 'var(--component-button-radius)' }}
             className={cn(
               'bg-survey-primary text-primary-foreground text-survey-body h-10 px-8 shadow-sm hover:bg-survey-primary transition-all border-none focus-visible:outline-none',
-              hoverOverlayClass,
+              'relative overflow-hidden after:absolute after:inset-0 after:bg-transparent hover:after:bg-survey-rendering-overlay after:transition-colors after:pointer-events-none',
             )}
           >
             {buttonLabel}
@@ -182,71 +310,30 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
             className="hidden"
             onChange={(e) => {
               handleFiles(e.target.files);
-              // Allow re-selecting the same file.
               e.target.value = '';
             }}
           />
         </div>
 
-        {/* Uploaded files */}
+        {/* File list */}
         {renderedFiles.length > 0 && (
           <div className="flex flex-col" style={{ gap: 'var(--survey-margin, 8px)' }}>
             {renderedFiles.map((file) => (
-              <div
+              <FileRow
                 key={file.id}
-                className={cn(
-                  'flex items-center gap-3',
-                  'border border-survey-border-muted bg-transparent px-3 py-2',
-                )}
-                style={{ borderRadius: 'var(--survey-radius)' }}
-              >
-                {file.previewUrl ? (
-                  <img
-                    src={file.previewUrl}
-                    alt=""
-                    className="h-8 w-8 shrink-0 rounded-survey-sm object-cover"
-                  />
-                ) : (
-                  <Icon
-                    name="description"
-                    fill={false}
-                    size={24}
-                    className="shrink-0 text-survey-foreground"
-                    aria-hidden="true"
-                  />
-                )}
-
-                <div className="flex min-w-0 flex-1 flex-col">
-                  <span className="truncate text-survey-body font-survey-semibold text-survey-foreground">
-                    {file.name}
-                  </span>
-                  <span className="text-survey-body font-survey-regular text-survey-muted-foreground">
-                    {formatSize(file.size)}
-                  </span>
-                </div>
-
-                <span className="shrink-0 text-survey-body font-survey-semibold text-survey-foreground">
-                  {Math.round(file.progress ?? 0)}%
-                </span>
-
-                <button
-                  type="button"
-                  aria-label={`Remove ${file.name}`}
-                  disabled={disabled}
-                  onClick={() => handleRemove(file.id)}
-                  className={cn(
-                    'shrink-0 inline-flex items-center justify-center rounded-full p-0.5',
-                    'text-survey-foreground transition-colors',
-                    'hover:bg-survey-muted-background focus-visible:outline-none',
-                    'focus-visible:ring-2 focus-visible:ring-survey-border-selected',
-                    'disabled:cursor-not-allowed disabled:opacity-50',
-                  )}
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
+                file={file}
+                disabled={disabled}
+                onRemove={handleRemove}
+                showFileSize={showFileSize}
+              />
             ))}
           </div>
+        )}
+
+        {error && (
+          <p className="text-survey-body font-survey-regular text-survey-destructive">
+            {error}
+          </p>
         )}
       </div>
     );
