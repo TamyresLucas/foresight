@@ -94,13 +94,15 @@ const LivePreview = ({
   ];
   const [imageGridValue, setImageGridValue] = React.useState<Record<string, string>>({});
   const imageGridRows = [
-    { id: 'service', label: 'Service' },
-    { id: 'value', label: 'Value for money' },
+    { id: 'store1', label: 'Store 1' },
+    { id: 'store2', label: 'Store 2' },
+    { id: 'store3', label: 'Store 3' },
   ];
+  // Twemoji assets are keyed by Unicode codepoint, so the fruit is deterministic.
   const imageGridColumns = [
-    { value: 'love', label: 'Love it', src: 'https://images.unsplash.com/photo-1545315003-c5ad6226c272?w=120&h=120&fit=crop', alt: 'Smiling face' },
-    { value: 'like', label: 'Like it', src: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=120&h=120&fit=crop', alt: 'Content face' },
-    { value: 'dislike', label: 'Dislike it', src: 'https://images.unsplash.com/photo-1517677208171-0bc6725a3e60?w=120&h=120&fit=crop', alt: 'Unhappy face' },
+    { value: 'apples', label: 'Apples', src: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f34f.png', alt: 'Apples' },
+    { value: 'pears', label: 'Pears', src: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f350.png', alt: 'Pears' },
+    { value: 'lemons', label: 'Lemons', src: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f34b.png', alt: 'Lemons' },
   ];
   const [imageAreaValue, setImageAreaValue] = React.useState<ImageAreaSelectorValue>([]);
   const [imageAreaEvalValue, setImageAreaEvalValue] = React.useState<ImageAreaEvaluatorValue>({});
@@ -574,7 +576,7 @@ const LivePreview = ({
 
           {show('image-choice-grid') && (
             <QuestionField>
-              <QuestionText label="Rate each item by selecting an image" />
+              <QuestionText label="What fruit was on display in the following stores?" />
               <ImageChoiceGrid
                 rows={imageGridRows}
                 columns={imageGridColumns}

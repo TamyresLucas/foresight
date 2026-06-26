@@ -75,37 +75,45 @@ const ImageSelector = React.forwardRef<HTMLDivElement, ImageSelectorProps>(
     return (
       <div
         ref={ref}
-        className={cn('flex flex-col items-start w-full font-survey', className)}
+        className={cn('@container flex flex-col w-full font-survey', className)}
         style={{ gap: 'var(--survey-margin, 8px)' }}
       >
-        {options.map((option) => {
-          const selected = current.includes(option.id);
-          return (
-            <Card
-              key={option.id}
-              variant={option.label ? 'imageStatement' : 'image'}
-              imageSrc={option.src}
-              imageAlt={option.alt ?? ''}
-              selected={selected}
-              disabled={disabled}
-              onClick={() => handleClick(option.id)}
-              aria-label={option.label}
-              className={cn(disabled && 'cursor-not-allowed')}
-            >
-              {option.label && (
-                <span
-                  className={cn(
-                    selected
-                      ? 'font-survey-semibold text-survey-primary'
-                      : 'font-survey-regular text-survey-foreground',
-                  )}
-                >
-                  {option.label}
-                </span>
-              )}
-            </Card>
-          );
-        })}
+        {/* Responsive grid: a single column on the narrowest screens, two on
+            small ones, and three once the component is wide (desktop). Driven by
+            container queries so it adapts to its own width inside device frames. */}
+        <div
+          className="grid grid-cols-1 @xs:grid-cols-2 @lg:grid-cols-3"
+          style={{ gap: 'var(--survey-margin, 8px)' }}
+        >
+          {options.map((option) => {
+            const selected = current.includes(option.id);
+            return (
+              <Card
+                key={option.id}
+                variant={option.label ? 'imageStatement' : 'image'}
+                imageSrc={option.src}
+                imageAlt={option.alt ?? ''}
+                selected={selected}
+                disabled={disabled}
+                onClick={() => handleClick(option.id)}
+                aria-label={option.label}
+                className={cn('w-full', disabled && 'cursor-not-allowed')}
+              >
+                {option.label && (
+                  <span
+                    className={cn(
+                      selected
+                        ? 'font-survey-semibold text-survey-primary'
+                        : 'font-survey-regular text-survey-foreground',
+                    )}
+                  >
+                    {option.label}
+                  </span>
+                )}
+              </Card>
+            );
+          })}
+        </div>
 
         {error && (
           <p className="text-survey-body font-survey-regular text-survey-destructive">
