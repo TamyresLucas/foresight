@@ -317,13 +317,12 @@ const ImageChoiceGridMobileOption = ({
           imageAlt={column.alt ?? column.label}
           aria-pressed={undefined}
           className={cn(
-            // Cap the card at 250px wide and the image at 200px tall; the image
-            // scales down to fit within both bounds, keeping its aspect ratio.
-            "w-full max-w-[250px]",
-            "[&_img]:!w-auto [&_img]:h-auto [&_img]:max-h-[200px] [&_img]:max-w-full",
-            // Keep the border width constant (2px) so selecting a card only
-            // changes its color, never the row height.
-            "!border-2 data-[state=checked]:border-survey-border-selected",
+            // Card fills the available mobile width. Image stays at its natural
+            // size (w-auto) so card height follows the image height, capped at
+            // 300px. Width auto-adjusts to preserve the aspect ratio.
+            "w-full",
+            "[&_img]:!w-auto [&_img]:h-auto [&_img]:max-h-[300px] [&_img]:max-w-full",
+            "!border data-[state=checked]:!border-2 data-[state=checked]:border-survey-border-selected",
             disabled && "cursor-not-allowed opacity-50",
           )}
         >

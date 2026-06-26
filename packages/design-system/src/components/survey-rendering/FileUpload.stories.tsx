@@ -22,14 +22,24 @@ export const Default: Story = {
   args: {},
 };
 
-const uploadedFiles: FileUploadFile[] = [
-  { id: 'f1', name: 'Astyanax (1).png', size: 120 * 1024, progress: 0 },
+const allStates: FileUploadFile[] = [
+  { id: 'f1', name: 'Resume.pdf', size: 20 * 1024 * 1024, progress: 100 },
+  { id: 'f2', name: 'Design Essentials.pdf', size: 100 * 1024 * 1024, progress: 70 },
+  { id: 'f3', name: 'Graduation.jpeg', size: 600 * 1024 * 1024, progress: 0 },
 ];
 
-/** A file has been added and is shown in the upload list with a remove (X) control. */
-export const WithUploadedFile: Story = {
+/** All three states: completed (100%), uploading (1–99%), and empty (0%). */
+export const AllStates: Story = {
   args: {
-    files: uploadedFiles,
+    files: allStates,
+  },
+};
+
+/** Size hidden — only the percentage/Completed label is shown in the subtitle. */
+export const NoFileSize: Story = {
+  args: {
+    files: allStates,
+    showFileSize: false,
   },
 };
 
