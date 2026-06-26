@@ -22,6 +22,9 @@ const meta = {
         data-survey-theme
         className="w-screen max-w-[390px] md:max-w-2xl mx-auto p-4"
       >
+        <p className="mb-4 text-survey-foreground text-survey-body font-survey-regular font-survey">
+          What fruit was on display in the following stores?
+        </p>
         <Story />
       </div>
     ),
@@ -32,36 +35,32 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const rows = [
-  { id: "service", label: "Service" },
-  { id: "value", label: "Value for money" },
-  { id: "quality", label: "Quality" },
+  { id: "store1", label: "Store 1" },
+  { id: "store2", label: "Store 2" },
+  { id: "store3", label: "Store 3" },
 ];
 
-// Reaction faces used as the per-column choices, repeated across every row.
+// Fruit emoji used as the per-column choices, repeated across every row.
+// Twemoji assets are keyed by Unicode codepoint, so the fruit is deterministic.
+const TWEMOJI = "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72";
 const columns = [
   {
-    value: "love",
-    label: "Love it",
-    src: "https://images.unsplash.com/photo-1545315003-c5ad6226c272?w=120&h=120&fit=crop",
-    alt: "Smiling face",
+    value: "apples",
+    label: "Apples",
+    src: `${TWEMOJI}/1f34f.png`, // 🍏 green apple
+    alt: "Apples",
   },
   {
-    value: "like",
-    label: "Like it",
-    src: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=120&h=120&fit=crop",
-    alt: "Content face",
+    value: "pears",
+    label: "Pears",
+    src: `${TWEMOJI}/1f350.png`, // 🍐 pear
+    alt: "Pears",
   },
   {
-    value: "neutral",
-    label: "Neutral",
-    src: "https://images.unsplash.com/photo-1542156822-6924d1a71ace?w=120&h=120&fit=crop",
-    alt: "Neutral face",
-  },
-  {
-    value: "dislike",
-    label: "Dislike it",
-    src: "https://images.unsplash.com/photo-1517677208171-0bc6725a3e60?w=120&h=120&fit=crop",
-    alt: "Unhappy face",
+    value: "lemons",
+    label: "Lemons",
+    src: `${TWEMOJI}/1f34b.png`, // 🍋 lemon
+    alt: "Lemons",
   },
 ];
 
@@ -73,7 +72,7 @@ export const Selected: Story = {
   args: {
     rows,
     columns,
-    defaultValue: { service: "love", quality: "neutral" },
+    defaultValue: { store1: "apples", store3: "lemons" },
   },
 };
 
@@ -82,7 +81,7 @@ export const Desktop: Story = {
 };
 
 export const Mobile: Story = {
-  args: { rows, columns, variant: "mobile", defaultValue: { service: "love" } },
+  args: { rows, columns, variant: "mobile", defaultValue: { store1: "apples" } },
   decorators: [
     (Story) => (
       <div data-survey-theme className="w-[390px] mx-auto p-4">
@@ -97,5 +96,5 @@ export const WithError: Story = {
 };
 
 export const Disabled: Story = {
-  args: { rows, columns, defaultValue: { service: "love" }, disabled: true },
+  args: { rows, columns, defaultValue: { store1: "apples" }, disabled: true },
 };

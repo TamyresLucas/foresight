@@ -10,6 +10,10 @@ const sunflower =
 const options = [
   { id: 'c1', label: 'Choice 1', src: rainbow, alt: 'Rainbow over a field' },
   { id: 'c2', label: 'Choice 2', src: sunflower, alt: 'Sunflower' },
+  { id: 'c3', label: 'Choice 3', src: rainbow, alt: 'Rainbow over a field' },
+  { id: 'c4', label: 'Choice 4', src: sunflower, alt: 'Sunflower' },
+  { id: 'c5', label: 'Choice 5', src: rainbow, alt: 'Rainbow over a field' },
+  { id: 'c6', label: 'Choice 6', src: sunflower, alt: 'Sunflower' },
 ];
 
 const meta = {
@@ -18,7 +22,7 @@ const meta = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div data-survey-theme className="w-full max-w-2xl p-8">
+      <div data-survey-theme className="w-full max-w-2xl p-4 md:p-8 mx-auto">
         <Story />
       </div>
     ),
@@ -32,6 +36,7 @@ const meta = {
     error: { control: 'text' },
   },
   parameters: {
+    layout: 'fullscreen',
     docs: {
       description: {
         component:

@@ -17,7 +17,7 @@ import {
 import { cn } from '@/lib/utils'
 
 export interface CalendarDateTimeProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'defaultValue'> {
   /** Currently selected date + time. */
   value?: Date
   /** Initial value for uncontrolled usage. */

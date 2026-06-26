@@ -109,7 +109,7 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
               ))}
             </colgroup>
             <thead>
-              <tr className="border-b border-survey-border-muted text-survey-foreground text-survey-body font-survey-regular">
+              <tr className="text-survey-foreground text-survey-body font-survey-regular">
                 <th className="px-2 py-2" /> {/* Empty corner */}
                 {columns.map((column) => (
                   <th
@@ -122,7 +122,7 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
               </tr>
             </thead>
             <tbody>
-              {rows.map((row, i) => (
+              {rows.map((row) => (
                 <RadioGroupPrimitive.Root
                   key={row.id}
                   asChild
@@ -132,11 +132,7 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
                 >
                   <tr
                     className={cn(
-                      "group/row border-b border-survey-border-muted transition-colors hover:bg-survey-muted-background",
-                      // Zebra striping: alternate rows use the LookupTable token
-                      // (border-interactive at 0.06 opacity).
-                      i % 2 === 1 &&
-                        "bg-[hsl(var(--survey-border-interactive)_/_0.06)]",
+                      "group/row transition-colors hover:bg-survey-muted-background",
                     )}
                   >
                     <th
@@ -207,7 +203,6 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
                       <ImageChoiceGridMobileOption
                         key={column.value}
                         column={column}
-                        rowId={row.id}
                         disabled={disabled || row.disabled}
                         hasError={!!error && !values[row.id]}
                       />
@@ -239,7 +234,7 @@ const SelectableImage = ({
     <img
       src={src}
       alt={alt ?? ""}
-      className="block h-16 w-16 object-cover rounded-survey-md select-none"
+      className="block h-16 w-16 object-contain rounded-survey-md select-none"
       draggable={false}
     />
     <RadioGroupPrimitive.Indicator asChild>
@@ -297,12 +292,10 @@ const ImageChoiceGridCell = ({
 
 const ImageChoiceGridMobileOption = ({
   column,
-  rowId,
   disabled,
   hasError,
 }: {
   column: ImageChoiceGridColumn;
-  rowId: string;
   disabled?: boolean;
   hasError?: boolean;
 }) => {
