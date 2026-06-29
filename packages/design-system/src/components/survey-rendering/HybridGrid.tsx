@@ -13,6 +13,10 @@ import {
 import { TextAnswer } from "./TextAnswer";
 import { DropdownAnswer } from "./DropdownAnswer";
 import { CheckboxOption, CheckboxGroup } from "./Checkbox";
+import { RadioGroup, RadioGroupOption } from "./RadioGroup";
+import { SurveySlider, type SliderValue } from "./Slider";
+import { StarRating } from "./StarRating";
+import { ImageSelector, type ImageSelectorOption } from "./ImageSelector";
 
 export interface HybridGridRow {
   id: string;
@@ -23,6 +27,11 @@ export interface HybridGridRow {
 interface HybridGridColumnBase {
   id: string;
   label: string;
+  /**
+   * Override the desktop column's minimum width (px number or any CSS length).
+   * Defaults to a per-type floor sized to fit the column's control + content.
+   */
+  minWidth?: number | string;
 }
 
 export interface HybridGridTextColumn extends HybridGridColumnBase {
@@ -30,8 +39,23 @@ export interface HybridGridTextColumn extends HybridGridColumnBase {
   placeholder?: string;
 }
 
+/** Single-line answer constrained to numbers. */
+export interface HybridGridNumericColumn extends HybridGridColumnBase {
+  type: "numeric";
+  placeholder?: string;
+  min?: number;
+  max?: number;
+  step?: number;
+}
+
 export interface HybridGridCheckboxColumn extends HybridGridColumnBase {
   type: "checkbox";
+  choices: { value: string; label: string }[];
+}
+
+/** Single-select choice column, rendered as a radio matrix (one sub-column per choice). */
+export interface HybridGridRadioColumn extends HybridGridColumnBase {
+  type: "radio";
   choices: { value: string; label: string }[];
 }
 
@@ -41,13 +65,46 @@ export interface HybridGridDropdownColumn extends HybridGridColumnBase {
   placeholder?: string;
 }
 
+export interface HybridGridSliderColumn extends HybridGridColumnBase {
+  type: "slider";
+  min?: number;
+  max?: number;
+  step?: number;
+  minLabel?: string;
+  maxLabel?: string;
+  showValue?: boolean;
+}
+
+export interface HybridGridStarRatingColumn extends HybridGridColumnBase {
+  type: "starrating";
+  max?: number;
+}
+
+export interface HybridGridImageSelectorColumn extends HybridGridColumnBase {
+  type: "imageselector";
+  options: ImageSelectorOption[];
+  /** `single` keeps at most one image selected; `multiple` allows any number. Defaults to `single`. */
+  selectionMode?: "single" | "multiple";
+}
+
 export type HybridGridColumn =
   | HybridGridTextColumn
+  | HybridGridNumericColumn
   | HybridGridCheckboxColumn
-  | HybridGridDropdownColumn;
+  | HybridGridRadioColumn
+  | HybridGridDropdownColumn
+  | HybridGridSliderColumn
+  | HybridGridStarRatingColumn
+  | HybridGridImageSelectorColumn;
 
-/** Per-cell value: string for text/dropdown, string[] of checked choice values for checkbox. */
-export type HybridGridCellValue = string | string[];
+/**
+ * Per-cell value, by column type:
+ * - text / numeric / dropdown / radio → `string`
+ * - checkbox / imageselector → `string[]`
+ * - slider → `number[]` (one entry)
+ * - starrating → `number`
+ */
+export type HybridGridCellValue = string | string[] | number | number[];
 
 /** rowId -> columnId -> cell value */
 export type HybridGridValue = Record<string, Record<string, HybridGridCellValue>>;
@@ -73,7 +130,42 @@ export interface HybridGridProps {
 const isCellEmpty = (value: HybridGridCellValue | undefined): boolean =>
   value === undefined ||
   value === "" ||
-  (Array.isArray(value) && value.length === 0);
+  (Array.isArray(value) && value.length === 0) ||
+  (typeof value === "number" && Number.isNaN(value));
+
+/** Choice columns rendered as a sub-column per option (matrix layout). */
+const isSubColumn = (
+  column: HybridGridColumn,
+): column is HybridGridCheckboxColumn | HybridGridRadioColumn =>
+  column.type === "checkbox" || column.type === "radio";
+
+/** Width floor (px) for a single radio/checkbox choice sub-column. */
+const SUB_COLUMN_MIN_WIDTH = 64;
+
+/**
+ * Per-type minimum width (px) for a desktop column, sized so each control fits
+ * its realistic content (so the column never needs to grow past the floor in
+ * practice — keeping widths stable as cell content/state changes). `starrating`,
+ * `radio` and `checkbox` are computed in `columnMinWidth` instead.
+ */
+const COLUMN_MIN_WIDTH: Record<HybridGridColumn["type"], number> = {
+  text: 220,
+  numeric: 120,
+  dropdown: 180,
+  slider: 200,
+  imageselector: 200,
+  starrating: 0,
+  radio: 0,
+  checkbox: 0,
+};
+
+/** Resolve the min-width floor for a top-level column (author override wins). */
+const columnMinWidth = (column: HybridGridColumn): number | string => {
+  if (column.minWidth != null) return column.minWidth;
+  if (column.type === "starrating") return (column.max ?? 5) * 36 + 24;
+  if (isSubColumn(column)) return column.choices.length * SUB_COLUMN_MIN_WIDTH;
+  return COLUMN_MIN_WIDTH[column.type];
+};
 
 /** True when every cell in a row is empty (used for required-error affordances). */
 const isRowEmpty = (
@@ -117,7 +209,7 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
       onValueChange?.(nextValues);
     };
 
-    const hasCheckboxColumn = columns.some((col) => col.type === "checkbox");
+    const hasSubColumn = columns.some(isSubColumn);
 
     return (
       <div
@@ -126,46 +218,36 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
       >
         {/* Desktop View */}
         <div className={cn(desktopVisibility, "w-full overflow-x-auto")}>
-          <table role="grid" className="w-full table-fixed border-collapse">
-            {/* Fixed column widths so cells never resize with content or state.
-                Each checkbox leaf gets a fixed width; the label, text and
-                dropdown columns are left flexible so they share — and fill — the
-                remaining grid width equally. */}
-            <colgroup>
-              <col />
-              {columns.map((column) =>
-                column.type === "checkbox" ? (
-                  column.choices.map((choice) => (
-                    <col key={`${column.id}-${choice.value}`} className="w-16" />
-                  ))
-                ) : (
-                  // text & dropdown columns flex to fill the remaining width
-                  <col key={column.id} />
-                ),
-              )}
-            </colgroup>
+          {/* Auto layout + per-column min-widths: a column never shrinks below
+              its content/control (the floor), still grows to share surplus width
+              when the container is wide, and the wrapper scrolls horizontally
+              when the floors exceed it. Floors live on the cells (min-width on
+              <col> is unreliable in auto layout). */}
+          <table role="grid" className="w-full table-auto border-collapse">
             <thead>
               <tr className="border-b border-survey-border-muted text-survey-foreground text-survey-body font-survey-regular">
                 <th className="px-2 py-2" />
                 {columns.map((column) => (
                   <th
                     key={column.id}
-                    colSpan={column.type === "checkbox" ? column.choices.length : 1}
-                    className="px-2 py-2 text-center align-middle font-survey-regular"
+                    colSpan={isSubColumn(column) ? column.choices.length : 1}
+                    className="px-2 py-2 text-center align-middle font-survey-regular whitespace-nowrap"
+                    style={isSubColumn(column) ? undefined : { minWidth: columnMinWidth(column) }}
                   >
                     {column.label}
                   </th>
                 ))}
               </tr>
-              {hasCheckboxColumn && (
+              {hasSubColumn && (
                 <tr className="border-b border-survey-border-muted text-survey-muted-foreground text-survey-body font-survey-regular">
                   <th className="px-2 py-1" />
                   {columns.map((column) =>
-                    column.type === "checkbox" ? (
+                    isSubColumn(column) ? (
                       column.choices.map((choice) => (
                         <th
                           key={`${column.id}-${choice.value}`}
-                          className="px-2 py-1 text-center align-middle font-survey-regular"
+                          className="px-2 py-1 text-center align-middle font-survey-regular whitespace-nowrap"
+                          style={{ minWidth: SUB_COLUMN_MIN_WIDTH }}
                         >
                           {choice.label}
                         </th>
@@ -294,7 +376,7 @@ const toggleChoice = (
   choiceValue: string,
   checked: boolean,
 ): string[] => {
-  const list = Array.isArray(current) ? current : [];
+  const list = Array.isArray(current) ? current.map(String) : [];
   return checked
     ? [...list, choiceValue]
     : list.filter((v) => v !== choiceValue);
@@ -308,9 +390,12 @@ const HybridGridDesktopCell = ({
   hasError,
   onChange,
 }: HybridGridCellProps) => {
+  // Floor each column at its content/control width; the table flexes above it.
+  const minWidth = columnMinWidth(column);
+
   if (column.type === "text") {
     return (
-      <td className={cn("px-2 py-3 align-middle", disabled && "opacity-50")}>
+      <td className={cn("px-2 py-3 align-middle", disabled && "opacity-50")} style={{ minWidth }}>
         <TextAnswer
           aria-labelledby={`hg-label-${row.id}`}
           placeholder={column.placeholder}
@@ -323,9 +408,28 @@ const HybridGridDesktopCell = ({
     );
   }
 
+  if (column.type === "numeric") {
+    return (
+      <td className={cn("px-2 py-3 align-middle", disabled && "opacity-50")} style={{ minWidth }}>
+        <TextAnswer
+          aria-labelledby={`hg-label-${row.id}`}
+          inputMode="numeric"
+          placeholder={column.placeholder}
+          min={column.min}
+          max={column.max}
+          step={column.step}
+          value={typeof value === "string" || typeof value === "number" ? String(value) : ""}
+          onChange={(e) => onChange(e.target.value)}
+          disabled={disabled}
+          error={hasError ? " " : undefined}
+        />
+      </td>
+    );
+  }
+
   if (column.type === "dropdown") {
     return (
-      <td className={cn("px-2 py-3 align-middle", disabled && "opacity-50")}>
+      <td className={cn("px-2 py-3 align-middle", disabled && "opacity-50")} style={{ minWidth }}>
         <DropdownAnswer
           options={column.options}
           placeholder={column.placeholder ?? "Select an answer…"}
@@ -339,14 +443,117 @@ const HybridGridDesktopCell = ({
     );
   }
 
+  if (column.type === "slider") {
+    return (
+      <td className={cn("px-2 py-3 align-middle", disabled && "opacity-50")} style={{ minWidth }}>
+        <SurveySlider
+          min={column.min}
+          max={column.max}
+          step={column.step}
+          minLabel={column.minLabel}
+          maxLabel={column.maxLabel}
+          showValue={column.showValue}
+          value={Array.isArray(value) ? (value as SliderValue) : undefined}
+          onChange={(v) => onChange(v)}
+          disabled={disabled}
+          error={hasError ? " " : undefined}
+        />
+      </td>
+    );
+  }
+
+  if (column.type === "starrating") {
+    return (
+      <td className={cn("px-2 py-3 align-middle", disabled && "opacity-50")} style={{ minWidth }}>
+        <StarRating
+          items={[{ value: "rating", label: column.label }]}
+          max={column.max}
+          value={typeof value === "number" ? { rating: value } : {}}
+          onChange={(v) => onChange(v.rating ?? "")}
+          disabled={disabled}
+          error={hasError ? " " : undefined}
+        />
+      </td>
+    );
+  }
+
+  if (column.type === "imageselector") {
+    return (
+      <td className={cn("px-2 py-3 align-middle", disabled && "opacity-50")} style={{ minWidth }}>
+        <ImageSelector
+          options={column.options}
+          selectionMode={column.selectionMode ?? "single"}
+          value={Array.isArray(value) ? (value as string[]) : []}
+          onChange={(v) => onChange(v)}
+          disabled={disabled}
+          error={hasError ? " " : undefined}
+          // In the grid, lay the choices out side by side in a single row
+          // (override ImageSelector's responsive column grid) and cap the
+          // thumbnails so the column stays compact (mirrors ImageChoiceGrid).
+          // `auto-cols-fr` + `min-w-0` lets the cards share and shrink to fit.
+          className={cn(
+            "[&>div]:!grid-cols-none [&>div]:grid-flow-col [&>div]:auto-cols-fr [&>div>*]:!min-w-0",
+            "[&_img]:max-h-16 [&_img]:w-auto [&_img]:max-w-full [&_img]:object-contain",
+          )}
+        />
+      </td>
+    );
+  }
+
+  if (column.type === "radio") {
+    // radio: one <td> per choice, aligned under the sub-header. A native input
+    // group (shared name) gives single-select + roving focus for free.
+    const selected = typeof value === "string" ? value : "";
+    return (
+      <>
+        {column.choices.map((choice) => {
+          const id = `hg-${row.id}-${column.id}-${choice.value}`;
+          return (
+            <td key={choice.value} className={cn("p-0 align-middle", disabled && "opacity-50")} style={{ minWidth: SUB_COLUMN_MIN_WIDTH }}>
+              <label
+                htmlFor={id}
+                className={cn(
+                  "flex items-center justify-center p-2 cursor-pointer w-full h-full border-2 border-transparent transition-all",
+                  "has-[:focus-visible]:border-survey-border-interactive",
+                  disabled && "cursor-not-allowed",
+                )}
+              >
+                <input
+                  id={id}
+                  type="radio"
+                  name={`hg-${row.id}-${column.id}`}
+                  value={choice.value}
+                  checked={selected === choice.value}
+                  onChange={() => onChange(choice.value)}
+                  disabled={disabled}
+                  aria-labelledby={`hg-label-${row.id}`}
+                  aria-invalid={hasError || undefined}
+                  className="peer sr-only"
+                />
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "grid place-content-center flex-shrink-0 w-4 h-4 rounded-full border-2 transition-colors",
+                    "border-survey-border-interactive peer-checked:border-survey-border-selected",
+                    "after:block after:w-1.5 after:h-1.5 after:rounded-full after:bg-survey-border-selected after:opacity-0 peer-checked:after:opacity-100",
+                  )}
+                />
+              </label>
+            </td>
+          );
+        })}
+      </>
+    );
+  }
+
   // checkbox: one <td> per choice, aligned under the sub-header
-  const checkedValues = Array.isArray(value) ? value : [];
+  const checkedValues = Array.isArray(value) ? value.map(String) : [];
   return (
     <>
       {column.choices.map((choice) => {
         const id = `hg-${row.id}-${column.id}-${choice.value}`;
         return (
-          <td key={choice.value} className={cn("p-0 align-middle", disabled && "opacity-50")}>
+          <td key={choice.value} className={cn("p-0 align-middle", disabled && "opacity-50")} style={{ minWidth: SUB_COLUMN_MIN_WIDTH }}>
             <label
               htmlFor={id}
               className={cn(
@@ -389,7 +596,7 @@ const HybridGridMobileField = ({
   hasError,
   onChange,
 }: HybridGridCellProps) => {
-  const checkedValues = Array.isArray(value) ? value : [];
+  const checkedValues = Array.isArray(value) ? value.map(String) : [];
 
   return (
     <div className="flex flex-col gap-2">
@@ -412,6 +619,20 @@ const HybridGridMobileField = ({
         />
       )}
 
+      {column.type === "numeric" && (
+        <TextAnswer
+          inputMode="numeric"
+          placeholder={column.placeholder}
+          min={column.min}
+          max={column.max}
+          step={column.step}
+          value={typeof value === "string" || typeof value === "number" ? String(value) : ""}
+          onChange={(e) => onChange(e.target.value)}
+          disabled={disabled}
+          error={hasError ? " " : undefined}
+        />
+      )}
+
       {column.type === "dropdown" && (
         <DropdownAnswer
           options={column.options}
@@ -422,6 +643,24 @@ const HybridGridMobileField = ({
           error={hasError ? " " : undefined}
           fullWidth
         />
+      )}
+
+      {column.type === "radio" && (
+        <RadioGroup
+          value={typeof value === "string" ? value : undefined}
+          onValueChange={(v) => onChange(v)}
+          error={hasError ? " " : undefined}
+        >
+          {column.choices.map((choice) => (
+            <RadioGroupOption
+              key={choice.value}
+              id={`hg-m-${row.id}-${column.id}-${choice.value}`}
+              value={choice.value}
+              label={choice.label}
+              disabled={disabled}
+            />
+          ))}
+        </RadioGroup>
       )}
 
       {column.type === "checkbox" && (
@@ -437,6 +676,43 @@ const HybridGridMobileField = ({
             />
           ))}
         </CheckboxGroup>
+      )}
+
+      {column.type === "slider" && (
+        <SurveySlider
+          min={column.min}
+          max={column.max}
+          step={column.step}
+          minLabel={column.minLabel}
+          maxLabel={column.maxLabel}
+          showValue={column.showValue}
+          value={Array.isArray(value) ? (value as SliderValue) : undefined}
+          onChange={(v) => onChange(v)}
+          disabled={disabled}
+          error={hasError ? " " : undefined}
+        />
+      )}
+
+      {column.type === "starrating" && (
+        <StarRating
+          items={[{ value: "rating", label: column.label }]}
+          max={column.max}
+          value={typeof value === "number" ? { rating: value } : {}}
+          onChange={(v) => onChange(v.rating ?? "")}
+          disabled={disabled}
+          error={hasError ? " " : undefined}
+        />
+      )}
+
+      {column.type === "imageselector" && (
+        <ImageSelector
+          options={column.options}
+          selectionMode={column.selectionMode ?? "single"}
+          value={Array.isArray(value) ? (value as string[]) : []}
+          onChange={(v) => onChange(v)}
+          disabled={disabled}
+          error={hasError ? " " : undefined}
+        />
       )}
     </div>
   );
