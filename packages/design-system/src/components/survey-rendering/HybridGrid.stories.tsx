@@ -101,3 +101,58 @@ export const MobileWithError: Story = {
   args: { rows, columns, error: 'This question is required', variant: 'mobile' },
   parameters: { viewport: { defaultViewport: 'iphone12' } },
 };
+
+// --- All question types ---
+// A single grid can mix any of the eight supported column types.
+
+const imageOptions = [
+  { id: 'img-a', src: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=200', alt: 'Paris', label: 'Paris' },
+  { id: 'img-b', src: 'https://images.unsplash.com/photo-1538970272646-f61fabb3a8a2?w=200', alt: 'Tokyo', label: 'Tokyo' },
+];
+
+const allTypeColumns: HybridGridColumn[] = [
+  { id: 'c-text', type: 'text', label: 'Comment', placeholder: 'Type an answer…' },
+  { id: 'c-num', type: 'numeric', label: 'Quantity', placeholder: '0', min: 0, max: 100 },
+  {
+    id: 'c-dropdown',
+    type: 'dropdown',
+    label: 'Priority',
+    options: [
+      { value: 'low', label: 'Low' },
+      { value: 'medium', label: 'Medium' },
+      { value: 'high', label: 'High' },
+    ],
+  },
+  {
+    id: 'c-radio',
+    type: 'radio',
+    label: 'Agreement',
+    choices: [
+      { value: 'yes', label: 'Yes' },
+      { value: 'no', label: 'No' },
+    ],
+  },
+  {
+    id: 'c-checkbox',
+    type: 'checkbox',
+    label: 'Channels',
+    choices: [
+      { value: 'email', label: 'Email' },
+      { value: 'sms', label: 'SMS' },
+    ],
+  },
+  { id: 'c-slider', type: 'slider', label: 'Confidence', min: 0, max: 100, showValue: true },
+  { id: 'c-star', type: 'starrating', label: 'Rating', max: 5 },
+  { id: 'c-image', type: 'imageselector', label: 'Favorite', options: imageOptions, selectionMode: 'single' },
+];
+
+export const DesktopAllTypes: Story = {
+  name: 'Desktop / All question types',
+  args: { rows, columns: allTypeColumns, variant: 'desktop' },
+};
+
+export const MobileAllTypes: Story = {
+  name: 'Mobile / All question types',
+  args: { rows: [rows[0]], columns: allTypeColumns, variant: 'mobile' },
+  parameters: { viewport: { defaultViewport: 'iphone12' } },
+};

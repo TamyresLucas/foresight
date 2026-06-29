@@ -38,55 +38,88 @@ export interface CheckboxOptionProps {
   checked?: boolean | "indeterminate";
   onCheckedChange?: (checked: boolean | "indeterminate") => void;
   className?: string;
+  /** When true, shows a text input below this option when it is checked */
+  openEnd?: boolean;
+  openEndPlaceholder?: string;
+  openEndValue?: string;
+  onOpenEndChange?: (value: string) => void;
 }
 
-const CheckboxOption = React.forwardRef<HTMLLabelElement, CheckboxOptionProps>(
-  ({ label, id, focused = false, error, disabled = false, checked, onCheckedChange, className }, ref) => {
+const CheckboxOption = React.forwardRef<HTMLDivElement, CheckboxOptionProps>(
+  ({ label, id, focused = false, error, disabled = false, checked, onCheckedChange, className, openEnd, openEndPlaceholder, openEndValue, onOpenEndChange }, ref) => {
     const itemId = id ?? `survey-checkbox-${label}`;
     const groupError = React.useContext(CheckboxGroupErrorContext);
     const hasError = error ?? groupError;
+    const showOpenEnd = openEnd && checked === true;
+
     return (
-      <label
+      <div
         ref={ref}
-        htmlFor={itemId}
         className={cn(
-          "flex items-center gap-3 w-full px-4 py-3 cursor-pointer select-none",
           "rounded-survey-md border bg-survey-background",
-          "transition-colors hover:bg-survey-muted-background",
+          "transition-colors",
           "border-survey-border-muted",
           "has-[[data-state=checked]]:border-2 has-[[data-state=checked]]:border-survey-border-selected",
           focused && "ring-2 ring-survey-border-interactive ring-offset-2 ring-offset-survey-background",
           focused && "[&:has([data-state=checked])]:ring-survey-border-selected",
           "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-survey-border-interactive has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-survey-background",
           "[&:has([data-state=checked]):has(:focus-visible)]:ring-survey-border-selected",
-          disabled && "cursor-not-allowed opacity-50",
+          disabled && "opacity-50",
           className,
         )}
       >
-        <CheckboxPrimitive.Root
-          id={itemId}
-          checked={checked}
-          onCheckedChange={onCheckedChange}
-          disabled={disabled}
-          aria-invalid={hasError || undefined}
+        <label
+          htmlFor={itemId}
           className={cn(
-            "flex-shrink-0 w-4 h-4 rounded-[4px] border-2 transition-colors grid place-content-center",
-            "border-survey-border-interactive",
-            "data-[state=checked]:border-survey-border-selected data-[state=checked]:bg-survey-border-selected",
-            "focus:outline-none focus-visible:outline-none",
+            "flex items-center gap-3 w-full px-4 py-3 cursor-pointer select-none",
+            "hover:bg-survey-muted-background rounded-survey-md",
+            showOpenEnd && "rounded-b-none",
+            disabled && "cursor-not-allowed",
           )}
         >
-          <CheckboxPrimitive.Indicator className="flex items-center justify-center text-white">
-            <Check className="h-3 w-3 stroke-[3]" />
-          </CheckboxPrimitive.Indicator>
-        </CheckboxPrimitive.Root>
-        <span className={cn(
-          "text-survey-foreground text-survey-body font-survey-regular leading-none",
-          disabled && "text-survey-muted-foreground"
-        )}>
-          {label}
-        </span>
-      </label>
+          <CheckboxPrimitive.Root
+            id={itemId}
+            checked={checked}
+            onCheckedChange={onCheckedChange}
+            disabled={disabled}
+            aria-invalid={hasError || undefined}
+            className={cn(
+              "flex-shrink-0 w-4 h-4 rounded-[4px] border-2 transition-colors grid place-content-center",
+              "border-survey-border-interactive",
+              "data-[state=checked]:border-survey-border-selected data-[state=checked]:bg-survey-border-selected",
+              "focus:outline-none focus-visible:outline-none",
+            )}
+          >
+            <CheckboxPrimitive.Indicator className="flex items-center justify-center text-white">
+              <Check className="h-3 w-3 stroke-[3]" />
+            </CheckboxPrimitive.Indicator>
+          </CheckboxPrimitive.Root>
+          <span className={cn(
+            "text-survey-foreground text-survey-body font-survey-regular leading-none",
+            disabled && "text-survey-muted-foreground"
+          )}>
+            {label}
+          </span>
+        </label>
+        {showOpenEnd && (
+          <div className="px-4 pb-1">
+            <input
+              type="text"
+              value={openEndValue ?? ""}
+              onChange={(e) => onOpenEndChange?.(e.target.value)}
+              placeholder={openEndPlaceholder ?? "Please specify…"}
+              onClick={(e) => e.stopPropagation()}
+              className={cn(
+                "w-full bg-transparent border-0 border-b border-survey-border-muted",
+                "text-survey-foreground text-survey-body font-survey-regular",
+                "placeholder:text-survey-muted-foreground",
+                "focus:outline-none focus:border-survey-border-interactive",
+                "py-1 pb-1",
+              )}
+            />
+          </div>
+        )}
+      </div>
     );
   }
 );

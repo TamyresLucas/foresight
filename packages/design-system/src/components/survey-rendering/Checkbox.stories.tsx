@@ -1,3 +1,4 @@
+import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { CheckboxOption, CheckboxGroup } from './Checkbox';
 
@@ -46,6 +47,28 @@ export const GroupDefault: Story = {
       <CheckboxOption label="Option" />
     </CheckboxGroup>
   ),
+};
+
+export const OpenEndChecked: Story = {
+  args: { label: 'Other' },
+  render: () => {
+    const [checked, setChecked] = React.useState<boolean | 'indeterminate'>(true);
+    const [text, setText] = React.useState('');
+    return (
+      <CheckboxGroup>
+        <CheckboxOption label="Option A" />
+        <CheckboxOption label="Option B" />
+        <CheckboxOption
+          label="Other"
+          checked={checked}
+          onCheckedChange={setChecked}
+          openEnd
+          openEndValue={text}
+          onOpenEndChange={setText}
+        />
+      </CheckboxGroup>
+    );
+  },
 };
 
 export const GroupWithError: Story = {

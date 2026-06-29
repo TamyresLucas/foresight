@@ -41,6 +41,29 @@ export interface ImageChoiceGridProps {
    * `@lg` container query, so it adapts inside fixed-width device frames too).
    */
   variant?: "auto" | "desktop" | "mobile";
+  /**
+   * Width of each image in the grid, expressed as a number with a unit (e.g. `"100%"` or `"200px"`).
+   * @default "100%"
+   */
+  imageWidth?: string;
+  /**
+   * Height of each image in the grid, expressed as a number with a unit (e.g. `"200px"` or `"50%"`).
+   * When omitted the image height is unconstrained and scales naturally with the image's intrinsic aspect ratio.
+   * @default undefined (unconstrained)
+   */
+  imageHeight?: string;
+  /**
+   * Width applied to every data column in the desktop table layout.
+   * Accepts any valid CSS length or percentage.
+   * @default "25%"
+   */
+  defaultColumnWidth?: string;
+  /**
+   * Width applied to the first (row-label) column in the desktop table layout.
+   * Accepts any valid CSS length or percentage.
+   * @default "25%"
+   */
+  firstColumnWidth?: string;
 }
 
 // A selected image is tinted with the brand primary at low opacity and outlined

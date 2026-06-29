@@ -35,55 +35,90 @@ export interface RadioGroupOptionProps {
   focused?: boolean;
   disabled?: boolean;
   className?: string;
+  /** When true, shows a text input below this option when it is selected */
+  openEnd?: boolean;
+  openEndPlaceholder?: string;
+  /** Whether this option is currently selected (required to show the open-end input) */
+  checked?: boolean;
+  openEndValue?: string;
+  onOpenEndChange?: (value: string) => void;
 }
 
 const RadioGroupOption = React.forwardRef<
-  HTMLLabelElement,
+  HTMLDivElement,
   RadioGroupOptionProps
->(({ value, label, id, focused = false, disabled = false, className }, ref) => {
+>(({ value, label, id, focused = false, disabled = false, className, openEnd, openEndPlaceholder, checked, openEndValue, onOpenEndChange }, ref) => {
   const itemId = id ?? `survey-option-${value}`;
   const hasError = React.useContext(RadioGroupErrorContext);
+  const showOpenEnd = openEnd && checked;
+
   return (
-    <label
+    <div
       ref={ref}
-      htmlFor={itemId}
       className={cn(
-        "flex items-center gap-3 w-full px-4 py-3 cursor-pointer select-none",
         "rounded-survey-md border bg-survey-background",
-        "transition-colors hover:bg-survey-muted-background",
+        "transition-colors",
         "border-survey-border-muted",
         "has-[[data-state=checked]]:border-2 has-[[data-state=checked]]:border-survey-border-selected",
         focused && "ring-2 ring-survey-border-interactive ring-offset-2 ring-offset-survey-background",
         focused && "[&:has([data-state=checked])]:ring-survey-border-selected",
         "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-survey-border-interactive has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-survey-background",
         "[&:has([data-state=checked]):has(:focus-visible)]:ring-survey-border-selected",
-        disabled && "cursor-not-allowed opacity-50",
+        disabled && "opacity-50",
         className,
       )}
     >
-      <RadioGroupPrimitive.Item
-        id={itemId}
-        value={value}
-        disabled={disabled}
-        aria-invalid={hasError || undefined}
+      <label
+        htmlFor={itemId}
         className={cn(
-          "flex-shrink-0 w-4 h-4 rounded-full border-2 transition-colors",
-          "border-survey-border-interactive",
-          "data-[state=checked]:border-survey-border-selected data-[state=checked]:bg-survey-border-selected",
-          "focus:outline-none focus-visible:outline-none",
+          "flex items-center gap-3 w-full px-4 py-3 cursor-pointer select-none",
+          "hover:bg-survey-muted-background rounded-survey-md",
+          showOpenEnd && "rounded-b-none",
+          disabled && "cursor-not-allowed",
         )}
       >
-        <RadioGroupPrimitive.Indicator className="flex items-center justify-center w-full h-full">
-          <span className="block w-1.5 h-1.5 rounded-full bg-white" />
-        </RadioGroupPrimitive.Indicator>
-      </RadioGroupPrimitive.Item>
-      <span className={cn(
-        "text-survey-foreground text-survey-body font-survey-regular leading-none",
-        disabled && "text-survey-muted-foreground"
-      )}>
-        {label}
-      </span>
-    </label>
+        <RadioGroupPrimitive.Item
+          id={itemId}
+          value={value}
+          disabled={disabled}
+          aria-invalid={hasError || undefined}
+          className={cn(
+            "flex-shrink-0 w-4 h-4 rounded-full border-2 transition-colors",
+            "border-survey-border-interactive",
+            "data-[state=checked]:border-survey-border-selected data-[state=checked]:bg-survey-border-selected",
+            "focus:outline-none focus-visible:outline-none",
+          )}
+        >
+          <RadioGroupPrimitive.Indicator className="flex items-center justify-center w-full h-full">
+            <span className="block w-1.5 h-1.5 rounded-full bg-white" />
+          </RadioGroupPrimitive.Indicator>
+        </RadioGroupPrimitive.Item>
+        <span className={cn(
+          "text-survey-foreground text-survey-body font-survey-regular leading-none",
+          disabled && "text-survey-muted-foreground"
+        )}>
+          {label}
+        </span>
+      </label>
+      {showOpenEnd && (
+        <div className="px-4 pb-1">
+          <input
+            type="text"
+            value={openEndValue ?? ""}
+            onChange={(e) => onOpenEndChange?.(e.target.value)}
+            placeholder={openEndPlaceholder ?? "Please specify…"}
+            onClick={(e) => e.stopPropagation()}
+            className={cn(
+              "w-full bg-transparent border-0 border-b border-survey-border-muted",
+              "text-survey-foreground text-survey-body font-survey-regular",
+              "placeholder:text-survey-muted-foreground",
+              "focus:outline-none focus:border-survey-border-interactive",
+              "py-1 pb-1",
+            )}
+          />
+        </div>
+      )}
+    </div>
   );
 });
 RadioGroupOption.displayName = "RadioGroupOption";

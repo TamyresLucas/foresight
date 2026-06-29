@@ -61,6 +61,7 @@ const LivePreview = ({
   const [timeValue, setTimeValue] = React.useState<TimeValue>({ hour: 2, minute: 30, period: 'PM' });
   const [lang, setLang] = React.useState('en');
   const [checkedOptions, setCheckedOptions] = React.useState({ a: false, b: false, c: false });
+  const [customIntegrationsText, setCustomIntegrationsText] = React.useState('');
   const [contactMethod, setContactMethod] = React.useState<string>('');
   const [npsValue, setNpsValue] = React.useState<string>('');
   const [gridValue, setGridValue] = React.useState<Record<string, string>>({});
@@ -292,6 +293,9 @@ const LivePreview = ({
                   label="Custom integrations"
                   checked={checkedOptions.c}
                   onCheckedChange={(val) => setCheckedOptions(p => ({ ...p, c: !!val }))}
+                  openEnd
+                  openEndValue={customIntegrationsText}
+                  onOpenEndChange={setCustomIntegrationsText}
                 />
               </CheckboxGroup>
             </QuestionField>
