@@ -428,8 +428,16 @@ const HybridGridDesktopCell = ({
   }
 
   if (column.type === "dropdown") {
+    // The trigger renders the selected option as text. In an auto table a cell's
+    // `truncate` (white-space: nowrap) makes its min-content the full label, so a
+    // long answer would widen the column on selection. `maxWidth: 0` paired with the
+    // `minWidth` floor gives the cell a definite width: the floor governs, surplus is
+    // still shared, and the label truncates instead of expanding the column.
     return (
-      <td className={cn("px-2 py-3 align-middle", disabled && "opacity-50")} style={{ minWidth }}>
+      <td
+        className={cn("px-2 py-3 align-middle", disabled && "opacity-50")}
+        style={{ minWidth, maxWidth: 0 }}
+      >
         <DropdownAnswer
           options={column.options}
           placeholder={column.placeholder ?? "Select an answer…"}

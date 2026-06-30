@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { cn } from '@/lib/utils';
+import { frameCornerRadius } from './imageAreaCorners';
 
 /** A selectable choice the respondent can assign to an area. */
 export interface ImageAreaEvaluatorChoice {
@@ -115,11 +116,20 @@ const ImageAreaEvaluator = React.forwardRef<
       React.useState<ImageAreaEvaluatorValue>(defaultValue ?? {});
     const current = isControlled ? value : internalValue;
     const [hoveredAreaId, setHoveredAreaId] = React.useState<string | null>(null);
+    // Keyboard focus is surfaced with the same treatment as hover. Tracked in
+    // state (gated on :focus-visible so it stays keyboard-only) rather than via a
+    // CSS ring, because the hover ring/fill are inline styles that would override
+    // a focus-visible class.
+    const [focusedAreaId, setFocusedAreaId] = React.useState<string | null>(null);
 
-    // White border + dark shadow ring so the hover outline is visible on both
-    // light and dark image regions without relying on a brand color.
-    const HOVER_BORDER = 'rgba(255,255,255,0.9)';
-    const HOVER_SHADOW = '0 0 0 1px rgba(0,0,0,0.45)';
+    // On hover, draw a ring that straddles the area's boundary so it overlaps the
+    // edge exactly (rather than an inset border, which shrinks the highlight): a
+    // white ring just inside the edge plus a dark ring just outside, so the
+    // outline reads on both light and dark image regions without a brand color.
+    // The wrapper's `overflow-hidden` trims the outer ring flush against the
+    // image border at the image's own edges.
+    const HOVER_RING =
+      'inset 0 0 0 2px rgba(255,255,255,0.95), 0 0 0 2px rgba(0,0,0,0.55)';
     const HOVER_OVERLAY = 'rgba(255,255,255,0.12)';
 
     const paletteById = React.useMemo(() => {
@@ -157,18 +167,28 @@ const ImageAreaEvaluator = React.forwardRef<
         {/* Image with overlaid clickable areas. The wrapper is inline-block so
             it shrinks to the image's intrinsic size and the percentage-based
             areas line up with it. */}
-        <div className="relative inline-block max-w-full self-start border border-survey-border-muted rounded-survey-sm overflow-hidden">
-          <img
-            src={src}
-            alt={alt}
-            className="block max-w-full select-none"
-            draggable={false}
-          />
+        <div className="relative inline-block max-w-full self-start border border-survey-border-muted rounded-survey-sm">
+          {/* Clip only the image to the frame's rounded corners on an inner box,
+              so the wrapper itself doesn't clip the areas' hover ring. The dark
+              outer ring then paints on top of the frame border wherever an area
+              meets the image edge, instead of being trimmed at the inner edge. */}
+          <div className="overflow-hidden rounded-[inherit]">
+            <img
+              src={src}
+              alt={alt}
+              className="block max-w-full select-none"
+              draggable={false}
+            />
+          </div>
           {areas.map((area) => {
             const assigned = current[area.id];
             const entry = assigned ? paletteById.get(assigned) : undefined;
             const choice = choices.find((c) => c.id === assigned);
             const hovered = hoveredAreaId === area.id;
+            const focused = focusedAreaId === area.id;
+            // Keyboard focus mirrors hover: the same boundary ring + fill mark
+            // which area is active.
+            const active = hovered || focused;
             return (
               <button
                 key={area.id}
@@ -177,6 +197,11 @@ const ImageAreaEvaluator = React.forwardRef<
                 onClick={() => handleAreaClick(area.id)}
                 onMouseEnter={() => !disabled && setHoveredAreaId(area.id)}
                 onMouseLeave={() => setHoveredAreaId(null)}
+                onFocus={(e) => {
+                  if (!disabled && e.currentTarget.matches(':focus-visible'))
+                    setFocusedAreaId(area.id);
+                }}
+                onBlur={() => setFocusedAreaId(null)}
                 aria-label={
                   area.label
                     ? choice
@@ -186,7 +211,7 @@ const ImageAreaEvaluator = React.forwardRef<
                 }
                 aria-pressed={Boolean(assigned)}
                 className={cn(
-                  'absolute transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-survey-border-selected',
+                  'absolute transition-colors focus-visible:outline-none',
                   disabled ? 'cursor-not-allowed' : 'cursor-pointer',
                 )}
                 style={{
@@ -194,17 +219,18 @@ const ImageAreaEvaluator = React.forwardRef<
                   top: `${area.y}%`,
                   width: `${area.width}%`,
                   height: `${area.height}%`,
-                  backgroundColor: hovered
+                  ...frameCornerRadius(area),
+                  backgroundColor: active
                     ? HOVER_OVERLAY
                     : entry
                     ? `color-mix(in srgb, ${entry.fill} 55%, transparent)`
                     : 'transparent',
-                  border: hovered
-                    ? `2px solid ${HOVER_BORDER}`
+                  border: active
+                    ? 'none'
                     : entry
                     ? `2px solid ${entry.line ?? entry.fill}`
                     : 'none',
-                  boxShadow: hovered ? HOVER_SHADOW : undefined,
+                  boxShadow: active ? HOVER_RING : undefined,
                 }}
               />
             );

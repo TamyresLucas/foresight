@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { userEvent, within } from '@storybook/test';
 import { QuestionText } from './QuestionText';
 import { ImageAreaEvaluator } from './ImageAreaEvaluator';
 
@@ -51,7 +52,9 @@ const meta = {
       description: {
         component:
           'ImageAreaEvaluator: a single-answer question where the respondent assigns a value (choice) to an image area (variable) by clicking it. Each click on an area advances it to the next choice; clicking past the last choice clears it back to unassigned. Assigned areas get a translucent overlay in the choice color, and the legend below maps each choice color to its label. Compose with QuestionText for the question label and error message.\n\n' +
-          '**Legend:** the legend is a plain row — no background, no border. The word "Legend" and each choice label use the survey body text token; each choice shows a small color swatch beside its label. Hide it with `showLegend={false}`.',
+          '**Legend:** the legend is a plain row — no background, no border. The word "Legend" and each choice label use the survey body text token; each choice shows a small color swatch beside its label. Hide it with `showLegend={false}`.\n\n' +
+          '**Hover:** pointing at an area previews it without advancing its choice. While hovered an area gets a faint white fill and a ring that straddles the boundary — a white line just inside the edge and a darker line just outside — which temporarily replaces any assigned-choice color border so the outline stays legible over both light and dark parts of the image. Where an area meets the image frame, the darker outer line is drawn on top of the frame border and the area corner follows the frame\'s rounded preset, so the highlight reads as part of the frame rather than a floating box. See the **Hover** story (open the Canvas tab to interact).\n\n' +
+          '**Focus:** keyboard focus (Tab) is shown with the exact same treatment as hover — the boundary ring plus faint fill, temporarily replacing any assigned-choice color border — so the active area is obvious without a pointer. Focus is keyboard-only (`:focus-visible`): clicking an area advances its choice without leaving a focus ring behind. See the **Focused** story (open the Canvas tab; focus engages via Tab).',
       },
     },
   },
@@ -67,6 +70,61 @@ export const Default: Story = {
       <ImageAreaEvaluator {...args} />
     </div>
   ),
+};
+
+export const Hover: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Hovering the top-left area, which is assigned Choice 1. While hovered, the ring straddles the area boundary (white inside, dark outside) and temporarily replaces the assigned-choice color border, staying visible on any image region; against the image frame the dark outer line sits on top of the frame border and the corner follows the frame radius. Hover is a transient preview only — it does not advance the choice. (View in the Canvas tab; the highlight is driven by a pointer hover.)",
+      },
+    },
+  },
+  args: {
+    areas: [
+      { id: 'tl', label: 'Top left', x: 0, y: 0, width: 50, height: 50 },
+      { id: 'tr', label: 'Top right', x: 50, y: 0, width: 50, height: 50 },
+      { id: 'bl', label: 'Bottom left', x: 0, y: 50, width: 50, height: 50 },
+      { id: 'br', label: 'Bottom right', x: 50, y: 50, width: 50, height: 50 },
+    ],
+    defaultValue: { tl: 'c1', br: 'c2' },
+  },
+  play: async ({ canvasElement }) => {
+    // Hover a corner area that is already assigned a choice, so the ring's
+    // overlap with the frame border, the frame-matching corner radius, and the
+    // hover ring replacing the assigned-choice border are all visible.
+    const area = await within(canvasElement).findByRole('button', {
+      name: 'Top left: Choice 1',
+    });
+    await userEvent.hover(area);
+  },
+};
+
+export const Focused: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Keyboard focus is intentionally identical to hover: tabbing to the top-left area (assigned Choice 1) marks it with the same boundary ring and faint fill, temporarily replacing the assigned-choice border, with the dark outer line over the frame border and the corner following the frame radius. Focus is keyboard-only — clicking advances the choice without leaving a focus ring. (View in the Canvas tab; focus is moved with Tab.)',
+      },
+    },
+  },
+  args: {
+    areas: [
+      { id: 'tl', label: 'Top left', x: 0, y: 0, width: 50, height: 50 },
+      { id: 'tr', label: 'Top right', x: 50, y: 0, width: 50, height: 50 },
+      { id: 'bl', label: 'Bottom left', x: 0, y: 50, width: 50, height: 50 },
+      { id: 'br', label: 'Bottom right', x: 50, y: 50, width: 50, height: 50 },
+    ],
+    defaultValue: { tl: 'c1', br: 'c2' },
+  },
+  play: async ({ canvasElement }) => {
+    // Move keyboard focus to the first area via Tab so the :focus-visible state
+    // engages and renders the hover-style ring (focus is keyboard-only).
+    await within(canvasElement).findByRole('button', { name: 'Top left: Choice 1' });
+    await userEvent.tab();
+  },
 };
 
 export const Choice1Assigned: Story = {
