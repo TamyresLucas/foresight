@@ -29,7 +29,6 @@ export interface TimerProps
   onComplete?: () => void;
   /** Fired every second with the elapsed seconds. */
   onTick?: (elapsedSeconds: number) => void;
-  disabled?: boolean;
 }
 
 function formatTime(totalSeconds: number): string {
@@ -51,7 +50,6 @@ const Timer = React.forwardRef<HTMLDivElement, TimerProps>(
       autoStart = false,
       onComplete,
       onTick,
-      disabled = false,
       className,
       ...props
     },
@@ -59,7 +57,7 @@ const Timer = React.forwardRef<HTMLDivElement, TimerProps>(
   ) => {
     // Elapsed seconds since the timer started ticking.
     const [elapsed, setElapsed] = React.useState(0);
-    const [running, setRunning] = React.useState(autoStart && !disabled);
+    const [running, setRunning] = React.useState(autoStart);
     const completedRef = React.useRef(false);
 
     const hasLimit = mode === 'countdown' || duration > 0;
@@ -78,12 +76,12 @@ const Timer = React.forwardRef<HTMLDivElement, TimerProps>(
 
     // Tick once per second while running.
     React.useEffect(() => {
-      if (!running || disabled) return;
+      if (!running) return;
       const id = window.setInterval(() => {
         setElapsed((prev) => prev + 1);
       }, 1000);
       return () => window.clearInterval(id);
-    }, [running, disabled]);
+    }, [running]);
 
     // Report ticks and fire onComplete exactly once when the limit is hit.
     React.useEffect(() => {
@@ -111,12 +109,10 @@ const Timer = React.forwardRef<HTMLDivElement, TimerProps>(
         ref={ref}
         role="timer"
         aria-live={isEnding ? 'assertive' : 'off'}
-        aria-disabled={disabled || undefined}
         className={cn(
           'flex w-full items-center font-survey transition-colors',
           'flex-col gap-3 sm:flex-row sm:gap-4',
           'border bg-transparent',
-          disabled && 'opacity-50',
           className,
         )}
         style={{

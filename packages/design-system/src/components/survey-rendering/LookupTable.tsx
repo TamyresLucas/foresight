@@ -112,7 +112,6 @@ export interface LookupTableProps {
   /** Label for the cancel button shown while adding a choice. */
   cancelLabel?: string;
   error?: string;
-  disabled?: boolean;
   className?: string;
 }
 
@@ -173,10 +172,9 @@ const SearchInput = React.forwardRef<
     value: string;
     onChange: (value: string) => void;
     placeholder?: string;
-    disabled?: boolean;
     className?: string;
   }
->(({ value, onChange, placeholder, disabled, className }, ref) => {
+>(({ value, onChange, placeholder, className }, ref) => {
   const [selected, setSelected] = React.useState(false);
 
   return (
@@ -212,9 +210,8 @@ const SearchInput = React.forwardRef<
             value={value}
             onChange={(e) => onChange(e.target.value)}
             placeholder={placeholder}
-            disabled={disabled}
             onBlur={() => setSelected(false)}
-            className="w-full bg-transparent text-survey-body font-survey-regular focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 text-survey-foreground font-survey placeholder:text-survey-muted-foreground"
+            className="w-full bg-transparent text-survey-body font-survey-regular focus-visible:outline-none text-survey-foreground font-survey placeholder:text-survey-muted-foreground"
           />
         </div>
       </div>
@@ -238,22 +235,19 @@ const DraftTextInput: React.FC<{
   onChange: (value: string) => void;
   placeholder?: string;
   align?: 'left' | 'right';
-  disabled?: boolean;
   error?: boolean;
-}> = ({ value, onChange, placeholder, align, disabled, error }) => (
+}> = ({ value, onChange, placeholder, align, error }) => (
   <input
     type="text"
     value={value}
     onChange={(e) => onChange(e.target.value)}
     placeholder={placeholder}
-    disabled={disabled}
     aria-invalid={error || undefined}
     className={cn(
       'flex h-9 w-full min-w-0 rounded-survey-md border border-survey-border-interactive bg-transparent px-2',
       'text-survey-body font-survey-regular text-survey-foreground transition-colors',
       'placeholder:text-survey-muted-foreground',
       'focus-visible:outline-none focus-visible:border-survey-border-selected',
-      'disabled:cursor-not-allowed disabled:opacity-50',
       error && 'placeholder:text-survey-destructive',
       align === 'right' && 'text-right tabular-nums',
     )}
@@ -267,17 +261,15 @@ const DraftSelect: React.FC<{
   options: LookupTableColumnOption[];
   placeholder?: string;
   align?: 'left' | 'right';
-  disabled?: boolean;
   error?: boolean;
-}> = ({ value, onChange, options, placeholder = 'Select…', align, disabled, error }) => (
-  <SelectPrimitive.Root value={value || undefined} onValueChange={onChange} disabled={disabled}>
+}> = ({ value, onChange, options, placeholder = 'Select…', align, error }) => (
+  <SelectPrimitive.Root value={value || undefined} onValueChange={onChange}>
     <SelectPrimitive.Trigger
       aria-invalid={error || undefined}
       className={cn(
         'flex h-9 w-full min-w-0 items-center justify-between gap-2 rounded-survey-md border border-survey-border-interactive bg-transparent px-2',
         'text-survey-body font-survey-regular text-survey-foreground transition-colors outline-none',
         'focus-visible:border-survey-border-selected',
-        'disabled:cursor-not-allowed disabled:opacity-50',
         '[&>span]:truncate data-[placeholder]:[&>span]:text-survey-muted-foreground',
         error && 'data-[placeholder]:[&>span]:text-survey-destructive',
         align === 'right' && 'text-right',
@@ -329,7 +321,6 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
       confirmedLabel = 'Confirmed',
       cancelLabel = 'Cancel',
       error,
-      disabled = false,
       className,
     },
     ref,
@@ -461,7 +452,6 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
             onCheckedChange={(checked) =>
               table.toggleAllPageRowsSelected(!!checked)
             }
-            disabled={disabled}
             aria-label="Select all rows"
             aria-invalid={!!error || undefined}
           />
@@ -470,7 +460,6 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
           <SurveyCheckbox
             checked={row.getIsSelected()}
             onCheckedChange={(checked) => row.toggleSelected(!!checked)}
-            disabled={disabled}
             aria-label="Select row"
             aria-invalid={!!error || undefined}
           />
@@ -494,10 +483,10 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
               className={cn(
                 'inline-flex items-center gap-1 select-none',
                 alignClass,
-                disabled ? 'cursor-not-allowed' : 'cursor-pointer hover:text-survey-foreground',
+                'cursor-pointer hover:text-survey-foreground',
               )}
               onClick={() =>
-                !disabled && column.toggleSorting(column.getIsSorted() === 'asc')
+                column.toggleSorting(column.getIsSorted() === 'asc')
               }
               aria-label={`Sort by ${col.label}`}
             >
@@ -531,7 +520,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
         : [];
 
       return [selectColumn, ...dataColumns, ...actionColumn];
-    }, [columns, rowActions, disabled, error]);
+    }, [columns, rowActions, error]);
 
     // While editing, splice a stable, empty draft row into the data at the end
     // of the current page. The table then re-paginates: the draft lands on the
@@ -561,7 +550,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
       // want (on text-filter changes) are handled explicitly below.
       autoResetPageIndex: false,
       // The draft row is never part of the answer, so it can't be selected.
-      enableRowSelection: disabled ? false : (row) => row.id !== DRAFT_ROW_ID,
+      enableRowSelection: (row) => row.id !== DRAFT_ROW_ID,
       enableSortingRemoval: true,
       onRowSelectionChange: (updater) => {
         const next =
@@ -634,7 +623,6 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
         ref={ref}
         className={cn(
           '@container flex w-full flex-col font-survey text-survey-body',
-          disabled && 'opacity-60',
           className,
         )}
         style={{ gap: 'var(--survey-margin)' }}
@@ -651,7 +639,6 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
                 table.getColumn(filterColumnId)?.setFilterValue(next)
               }
               placeholder={filterPlaceholder}
-              disabled={disabled}
               className="flex-1"
             />
           ) : (
@@ -663,7 +650,6 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
             <SelectPrimitive.Root
               value={selectionFilter}
               onValueChange={(next) => setSelectionFilter(next as SelectionFilter)}
-              disabled={disabled}
             >
               <SelectPrimitive.Trigger
                 aria-label="Filter rows by selection"
@@ -707,7 +693,6 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
               tabs={FILTER_TABS}
               value={selectionFilter}
               onValueChange={(next) => setSelectionFilter(next as SelectionFilter)}
-              disabled={disabled}
               aria-label="Filter rows by selection"
               className=""
             />
@@ -806,7 +791,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
                         // (survey-muted-background = border-interactive / 0.2) at
                         // 30% of its opacity (0.06).
                         i % 2 === 1 && 'bg-[hsl(var(--survey-border-interactive)_/_0.06)]',
-                        !disabled && 'hover:bg-survey-muted-background',
+                        'hover:bg-survey-muted-background',
                       )}
                     >
                       {row.getVisibleCells().map((cell) => (
@@ -824,7 +809,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
                                 // inset shadow on the sticky cell so it sits above its own background.
                                 'group-data-[state=selected]:shadow-[inset_2px_0_0_0_hsl(var(--survey-primary))]',
                                 i % 2 === 1 && STICKY_SELECT_ZEBRA,
-                                !disabled && STICKY_SELECT_HOVER,
+                                STICKY_SELECT_HOVER,
                               ),
                           )}
                         >
@@ -875,7 +860,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
               <button
                 type="button"
                 onClick={() => table.firstPage()}
-                disabled={disabled || !canPreviousPage}
+                disabled={!canPreviousPage}
                 aria-label="First page"
                 className={cn(
                   'flex h-9 w-9 items-center justify-center rounded-[var(--component-button-radius)] border border-survey-border-interactive bg-survey-background',
@@ -890,7 +875,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
               <button
                 type="button"
                 onClick={() => table.previousPage()}
-                disabled={disabled || !canPreviousPage}
+                disabled={!canPreviousPage}
                 aria-label="Previous page"
                 className={cn(
                   'flex h-9 w-9 items-center justify-center rounded-[var(--component-button-radius)] border border-survey-border-interactive bg-survey-background',
@@ -911,7 +896,6 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
                     key={p}
                     type="button"
                     onClick={() => table.setPageIndex(p)}
-                    disabled={disabled}
                     aria-label={`Page ${p + 1}`}
                     aria-current={p === pageIndex ? 'page' : undefined}
                     className={cn(
@@ -931,7 +915,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
               <button
                 type="button"
                 onClick={() => table.nextPage()}
-                disabled={disabled || !canNextPage}
+                disabled={!canNextPage}
                 aria-label="Next page"
                 className={cn(
                   'flex h-9 w-9 items-center justify-center rounded-[var(--component-button-radius)] border border-survey-border-interactive bg-survey-background',
@@ -946,7 +930,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
               <button
                 type="button"
                 onClick={() => table.lastPage()}
-                disabled={disabled || !canNextPage}
+                disabled={!canNextPage}
                 aria-label="Last page"
                 className={cn(
                   'flex h-9 w-9 items-center justify-center rounded-[var(--component-button-radius)] border border-survey-border-interactive bg-survey-background',
@@ -968,7 +952,6 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
               <button
                 type="button"
                 onClick={cancelEditing}
-                disabled={disabled}
                 aria-label={cancelLabel}
                 className={cn(
                   // Icon-only square button in the narrow (container) layout;
@@ -985,7 +968,6 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
               <button
                 type="button"
                 onClick={confirmEditing}
-                disabled={disabled}
                 aria-label={confirmLabel}
                 // Same visual style as the "Add choice" button.
                 className={cn(
@@ -1021,7 +1003,6 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
             <button
               type="button"
               onClick={startEditing}
-              disabled={disabled}
               aria-label={addChoiceLabel}
               className={cn(
                 // Icon-only square button in the narrow (container) layout;

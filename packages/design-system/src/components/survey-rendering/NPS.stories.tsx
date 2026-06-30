@@ -59,7 +59,3 @@ export const WithLabels: Story = {
 export const WithError: Story = {
   render: (args) => <NPS {...args} error="This question is required" />,
 };
-
-export const AllDisabled: Story = {
-  render: (args) => <NPS {...args} disabled />,
-};

@@ -49,7 +49,7 @@ const TextAnswer = React.forwardRef<HTMLInputElement, TextAnswerProps>(
               type="text"
               aria-invalid={error ? true : undefined}
               className={cn(
-                'w-full bg-transparent text-survey-body font-survey-regular focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 text-survey-foreground font-survey',
+                'w-full bg-transparent text-survey-body font-survey-regular focus-visible:outline-none text-survey-foreground font-survey',
                 className,
               )}
               ref={ref}

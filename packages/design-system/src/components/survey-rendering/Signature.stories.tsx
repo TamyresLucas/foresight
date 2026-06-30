@@ -22,12 +22,6 @@ export const Default: Story = {
   args: {},
 };
 
-export const Disabled: Story = {
-  args: {
-    disabled: true,
-  },
-};
-
 export const WithError: Story = {
   args: {
     error: 'A signature is required',

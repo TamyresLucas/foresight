@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils';
 export interface DropdownPopUpOption {
   value: string;
   label: string;
-  disabled?: boolean;
 }
 
 export interface DropdownPopUpProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect'> {
@@ -46,16 +45,14 @@ const DropdownPopUp = React.forwardRef<HTMLDivElement, DropdownPopUpProps>(
       }
     }, [ref]);
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, value: string, disabled?: boolean) => {
-      if (disabled) return;
-
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, value: string) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         onSelect?.(value);
       } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
         e.preventDefault();
         const optionNodes = Array.from(
-          listboxRef.current?.querySelectorAll('[role="option"]:not([data-disabled])') || []
+          listboxRef.current?.querySelectorAll('[role="option"]') || []
         ) as HTMLElement[];
         const currentIndex = optionNodes.indexOf(e.currentTarget);
         let nextIndex = currentIndex;
@@ -69,12 +66,12 @@ const DropdownPopUp = React.forwardRef<HTMLDivElement, DropdownPopUpProps>(
         optionNodes[nextIndex]?.focus();
       } else if (e.key === 'Home') {
         e.preventDefault();
-        const firstOption = listboxRef.current?.querySelector('[role="option"]:not([data-disabled])') as HTMLElement;
+        const firstOption = listboxRef.current?.querySelector('[role="option"]') as HTMLElement;
         firstOption?.focus();
       } else if (e.key === 'End') {
         e.preventDefault();
         const allOptions = Array.from(
-          listboxRef.current?.querySelectorAll('[role="option"]:not([data-disabled])') || []
+          listboxRef.current?.querySelectorAll('[role="option"]') || []
         ) as HTMLElement[];
         allOptions[allOptions.length - 1]?.focus();
       }
@@ -105,11 +102,10 @@ const DropdownPopUp = React.forwardRef<HTMLDivElement, DropdownPopUpProps>(
                   key={option.value}
                   role="option"
                   data-selected={isSelected}
-                  data-disabled={option.disabled || undefined}
-                  tabIndex={option.disabled ? -1 : 0}
+                  tabIndex={0}
                   aria-selected={isSelected}
-                  onClick={() => !option.disabled && onSelect?.(option.value)}
-                  onKeyDown={(e) => handleKeyDown(e, option.value, option.disabled)}
+                  onClick={() => onSelect?.(option.value)}
+                  onKeyDown={(e) => handleKeyDown(e, option.value)}
                   className={cn(
                     'relative flex w-full cursor-pointer select-none items-center justify-between',
                     'rounded-sm py-2 px-3 outline-none',
@@ -117,7 +113,6 @@ const DropdownPopUp = React.forwardRef<HTMLDivElement, DropdownPopUpProps>(
                     'hover:bg-survey-muted-background',
                     'focus-visible:bg-survey-muted-background',
                     'data-[selected=true]:font-bold data-[selected=true]:text-survey-primary',
-                    'data-[disabled]:text-survey-muted-foreground data-[disabled]:pointer-events-none'
                   )}
                 >
                   <span>{option.label}</span>

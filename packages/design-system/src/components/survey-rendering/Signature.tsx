@@ -16,7 +16,6 @@ export interface SignatureProps
   label?: React.ReactNode;
   /** Height of the drawing surface in pixels. Defaults to 200. */
   height?: number;
-  disabled?: boolean;
   error?: string;
 }
 
@@ -41,7 +40,6 @@ const Signature = React.forwardRef<HTMLDivElement, SignatureProps>(
       onClear,
       label = 'Sign here',
       height = 200,
-      disabled = false,
       error,
       className,
       ...props
@@ -102,14 +100,13 @@ const Signature = React.forwardRef<HTMLDivElement, SignatureProps>(
     };
 
     const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
-      if (disabled) return;
       e.currentTarget.setPointerCapture(e.pointerId);
       drawing.current = true;
       lastPoint.current = getPoint(e);
     };
 
     const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
-      if (!drawing.current || disabled) return;
+      if (!drawing.current) return;
       const ctx = canvasRef.current?.getContext('2d');
       if (!ctx || !lastPoint.current) return;
       const point = getPoint(e);
@@ -147,17 +144,15 @@ const Signature = React.forwardRef<HTMLDivElement, SignatureProps>(
       >
         <div
           aria-invalid={error ? true : undefined}
-          aria-disabled={disabled || undefined}
           className={cn(
             'relative w-full border bg-transparent transition-colors',
             'border-survey-border-interactive',
             error && 'border-survey-destructive',
-            disabled && 'opacity-50',
           )}
           style={{ borderRadius: 'var(--survey-radius)' }}
         >
           {/* Clear control — mirrors FileUpload's remove button. */}
-          {hasSignature && !disabled && (
+          {hasSignature && (
             <button
               type="button"
               aria-label="Clear signature"
@@ -175,10 +170,7 @@ const Signature = React.forwardRef<HTMLDivElement, SignatureProps>(
 
           <canvas
             ref={canvasRef}
-            className={cn(
-              'block w-full touch-none',
-              disabled ? 'cursor-not-allowed' : 'cursor-crosshair',
-            )}
+            className="block w-full touch-none cursor-crosshair"
             style={{ height }}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}

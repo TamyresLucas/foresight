@@ -76,17 +76,6 @@ export const WithError: Story = {
   ),
 };
 
-export const WithDisabledOptions: Story = {
-  render: (args) => (
-    <RadioGroup {...args}>
-      <RadioGroupOption value="option-1" label="Enabled Option" />
-      <RadioGroupOption value="option-2" label="Disabled Option" disabled />
-      <RadioGroupOption value="option-3" label="Enabled Option" />
-      <RadioGroupOption value="option-4" label="Disabled Option" disabled />
-    </RadioGroup>
-  ),
-};
-
 export const WithOpenEnd: Story = {
   render: (args) => {
     const [value, setValue] = React.useState('option-3');
@@ -108,13 +97,3 @@ export const WithOpenEnd: Story = {
   },
 };
 
-export const AllDisabled: Story = {
-  render: (args) => (
-    <RadioGroup {...args}>
-      <RadioGroupOption value="option-1" label="Disabled Option 1" disabled />
-      <RadioGroupOption value="option-2" label="Disabled Option 2" disabled />
-      <RadioGroupOption value="option-3" label="Disabled Option 3" disabled />
-      <RadioGroupOption value="option-4" label="Disabled Option 4" disabled />
-    </RadioGroup>
-  ),
-};

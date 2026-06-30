@@ -59,7 +59,6 @@ interface TextHighlighterBaseProps {
   highlightLabel?: string;
   eraseLabel?: string;
   error?: string;
-  disabled?: boolean;
   className?: string;
   /**
    * When true, there are no categories: highlighting applies immediately and the
@@ -185,7 +184,6 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
       defaultValue,
       onChange,
       error,
-      disabled = false,
       className,
       highlightLabel = 'Highlight',
       eraseLabel = 'Erase',
@@ -471,7 +469,7 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
     // enters edit mode; with the erase tool it removes the words.
     const handlePointerUp = () => {
       // No tool active -> leave the native selection alone, apply nothing.
-      if (disabled || variant !== 'freeform' || !activeTool) return;
+      if (variant !== 'freeform' || !activeTool) return;
       const ids = getSelectionIds();
       if (!ids) {
         draggedRef.current = false;
@@ -501,7 +499,6 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
     };
 
     const handleUnitClick = (id: string) => {
-      if (disabled) return;
       // A drag-selection already handled this interaction.
       if (draggedRef.current) {
         draggedRef.current = false;
@@ -525,7 +522,7 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
     const renderUnit = (token: Extract<Token, { kind: 'unit' }>) => {
       const assigned = currentValue[token.id];
       const color = assigned ? colorById[assigned] : undefined;
-      const isPending = !disabled && pending?.includes(token.id);
+      const isPending = pending?.includes(token.id);
       const label = categories.find((c) => c.id === assigned)?.label;
 
       // A confirmed highlight is a subtle fill + colored underline. The whitespace
@@ -556,14 +553,6 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
               textUnderlineOffset: '3px',
             }
         : assignedStyle;
-
-      if (disabled) {
-        return (
-          <span key={token.id} className="px-0.5" style={style}>
-            {token.text}
-          </span>
-        );
-      }
 
       return (
         <span
@@ -613,7 +602,6 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
             // When the run is being re-edited it is lifted to full opacity, so the
             // joining whitespace matches with a solid fill too.
             const runPending =
-              !disabled &&
               !!pending?.includes(prev.id) &&
               !!pending?.includes(next.id);
             style = runPending
@@ -688,7 +676,7 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
             a selection it is replaced by a category picker + Confirm.
             The controls sit above the scrollable passage box, so a long passage
             scrolls within its own borders while the controls stay in view. */}
-        {!disabled && (!!pending || variant !== 'segments' || hasHighlights) && (
+        {(!!pending || variant !== 'segments' || hasHighlights) && (
           <div
             className="shrink-0 bg-survey-background"
             // 8px gap between the toggles and the text box's top border.
@@ -798,9 +786,7 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
             // multiple-choice option outline.
             'relative flex-1 min-h-0 overflow-y-auto border-y border-survey-border-muted py-2',
             'text-survey-body font-survey-regular font-survey leading-relaxed',
-            disabled
-              ? 'text-survey-muted-foreground opacity-50'
-              : 'text-survey-foreground',
+            'text-survey-foreground',
           )}
         >
           {tokens.map((token, i) =>
@@ -812,7 +798,7 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
             has one) + the text-answer field sit below the passage, with the
             category dropdown kept above it in the controls. Cancel/Confirm sit on
             the right of the text field. */}
-        {!disabled && pending && withTextAnswer && (
+        {pending && withTextAnswer && (
           <div
             className="shrink-0 flex flex-col gap-1"
             style={{ paddingTop: 'var(--survey-margin, 8px)' }}

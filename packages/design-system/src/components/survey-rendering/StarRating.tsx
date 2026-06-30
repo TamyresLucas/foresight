@@ -26,7 +26,6 @@ export interface StarRatingProps {
   defaultValue?: StarRatingValue;
   onChange?: (value: StarRatingValue) => void;
   error?: string;
-  disabled?: boolean;
   className?: string;
 }
 
@@ -47,7 +46,7 @@ const Star = ({ filled, className }: { filled: boolean; className?: string }) =>
 );
 
 const StarRating = React.forwardRef<HTMLDivElement, StarRatingProps>(
-  ({ items, max = 5, value, defaultValue, onChange, error, disabled = false, className }, ref) => {
+  ({ items, max = 5, value, defaultValue, onChange, error, className }, ref) => {
     const [internalValue, setInternalValue] = React.useState<StarRatingValue>(
       defaultValue ?? {},
     );
@@ -56,7 +55,6 @@ const StarRating = React.forwardRef<HTMLDivElement, StarRatingProps>(
     const [hovered, setHovered] = React.useState<StarRatingValue>({});
 
     const handleSelect = (itemValue: string, rating: number) => {
-      if (disabled) return;
       const next = { ...currentValue, [itemValue]: rating };
       if (value === undefined) {
         setInternalValue(next);
@@ -65,7 +63,6 @@ const StarRating = React.forwardRef<HTMLDivElement, StarRatingProps>(
     };
 
     const handleClear = (itemValue: string) => {
-      if (disabled) return;
       const { [itemValue]: _omit, ...rest } = currentValue;
       if (value === undefined) {
         setInternalValue(rest);
@@ -74,7 +71,6 @@ const StarRating = React.forwardRef<HTMLDivElement, StarRatingProps>(
     };
 
     const setHover = (itemValue: string, rating: number) => {
-      if (disabled) return;
       setHovered((prev) => ({ ...prev, [itemValue]: rating }));
     };
 
@@ -153,7 +149,6 @@ const StarRating = React.forwardRef<HTMLDivElement, StarRatingProps>(
                 }}
                 className={cn(
                   'shrink-0 whitespace-nowrap text-survey-foreground text-survey-body font-survey-regular font-survey leading-none',
-                  disabled && 'text-survey-muted-foreground opacity-50',
                 )}
                 style={labelColWidth ? { width: `${labelColWidth}px` } : undefined}
               >
@@ -186,7 +181,6 @@ const StarRating = React.forwardRef<HTMLDivElement, StarRatingProps>(
                       role="radio"
                       aria-checked={selected === rating}
                       aria-label={`${item.label}: ${rating} of ${max} stars`}
-                      disabled={disabled}
                       onClick={() => handleSelect(item.value, rating)}
                       onMouseEnter={() => setHover(item.value, rating)}
                       onFocus={() => setHover(item.value, rating)}
@@ -196,7 +190,7 @@ const StarRating = React.forwardRef<HTMLDivElement, StarRatingProps>(
                         filled
                           ? 'text-survey-border-selected'
                           : 'text-survey-border-interactive',
-                        disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
+                        'cursor-pointer',
                       )}
                     >
                       <Star filled={filled} />
@@ -207,7 +201,7 @@ const StarRating = React.forwardRef<HTMLDivElement, StarRatingProps>(
               {/* Optional items expose a reset control once a score is picked so
                   the respondent can clear it back to empty. Mandatory items omit
                   it (their answer cannot be removed). */}
-              {item.optional && selected > 0 && !disabled && (
+              {item.optional && selected > 0 && (
                 <button
                   type="button"
                   onClick={() => handleClear(item.value)}

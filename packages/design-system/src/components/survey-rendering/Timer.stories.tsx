@@ -62,10 +62,3 @@ export const CountUp: Story = {
   },
 };
 
-export const Disabled: Story = {
-  args: {
-    label: 'Time remaining on this page',
-    duration: 300,
-    disabled: true,
-  },
-};

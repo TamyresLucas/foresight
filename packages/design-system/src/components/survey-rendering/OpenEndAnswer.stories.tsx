@@ -17,7 +17,6 @@ const meta = {
     selected: { control: 'boolean' },
     error: { control: 'text' },
     placeholder: { control: 'text' },
-    disabled: { control: 'boolean' },
   },
   parameters: {
     docs: {

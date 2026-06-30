@@ -28,7 +28,6 @@ const meta = {
   },
   argTypes: {
     error: { control: 'text' },
-    disabled: { control: 'boolean' },
   },
   parameters: {
     docs: {
@@ -75,16 +74,6 @@ export const WithError: Story = {
   },
 };
 
-export const Disabled: Story = {
-  args: {
-    disabled: true,
-    defaultValue: {
-      row1: { col1: '10' },
-      row2: { col1: '20' },
-      row3: { col1: '30' },
-    },
-  },
-};
 
 export const ManyRows: Story = {
   args: {

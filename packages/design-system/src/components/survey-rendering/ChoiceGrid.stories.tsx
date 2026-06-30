@@ -65,27 +65,6 @@ export const DesktopWithError: Story = {
   },
 };
 
-export const DesktopDisabled: Story = {
-  name: 'Desktop / Disabled',
-  args: {
-    rows: desktopRows,
-    columns: desktopColumns,
-    disabled: true,
-  },
-};
-
-export const DesktopRowDisabled: Story = {
-  name: 'Desktop / RowDisabled',
-  args: {
-    rows: [
-      { id: 'option-1', label: 'Option' },
-      { id: 'option-2', label: 'Option', disabled: true },
-      { id: 'option-3', label: 'Option' },
-    ],
-    columns: desktopColumns,
-  },
-};
-
 export const DesktopCellStates: Story = {
   name: 'Desktop / CellStates',
   render: (args) => (
@@ -169,33 +148,3 @@ export const MobileWithError: Story = {
   },
 };
 
-export const MobileDisabled: Story = {
-  name: 'Mobile / Disabled',
-  args: {
-    rows: desktopRows,
-    columns: desktopColumns,
-    disabled: true,
-  },
-  parameters: {
-    viewport: {
-      defaultViewport: 'iphone12',
-    },
-  },
-};
-
-export const MobileRowDisabled: Story = {
-  name: 'Mobile / RowDisabled',
-  args: {
-    rows: [
-      { id: 'option-1', label: 'Option' },
-      { id: 'option-2', label: 'Option', disabled: true },
-      { id: 'option-3', label: 'Option' },
-    ],
-    columns: desktopColumns,
-  },
-  parameters: {
-    viewport: {
-      defaultViewport: 'iphone12',
-    },
-  },
-};

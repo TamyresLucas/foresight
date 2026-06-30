@@ -110,7 +110,6 @@ const meta = {
   ],
   argTypes: {
     error: { control: 'text' },
-    disabled: { control: 'boolean' },
   },
   parameters: {
     docs: {
@@ -260,15 +259,6 @@ export const LongTextSticky: Story = {
   args: {
     text: longProse,
     categories,
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    text: prose,
-    categories,
-    disabled: true,
-    defaultValue: { w13: 'like', w14: 'like', w15: 'like' },
   },
 };
 

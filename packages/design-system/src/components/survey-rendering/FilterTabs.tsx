@@ -19,7 +19,6 @@ export interface FilterTabsProps {
   /** Uncontrolled initial tab id (defaults to the first tab). */
   defaultValue?: string;
   onValueChange?: (value: string) => void;
-  disabled?: boolean;
   /** Accessible label for the underlying tablist. */
   'aria-label'?: string;
   className?: string;
@@ -44,7 +43,6 @@ const SurveyFilterTabs = React.forwardRef<HTMLDivElement, FilterTabsProps>(
       value,
       defaultValue,
       onValueChange,
-      disabled = false,
       'aria-label': ariaLabel,
       className,
     },
@@ -56,7 +54,6 @@ const SurveyFilterTabs = React.forwardRef<HTMLDivElement, FilterTabsProps>(
     const current = value ?? internalValue;
 
     const handleSelect = (id: string) => {
-      if (disabled) return;
       if (value === undefined) setInternalValue(id);
       onValueChange?.(id);
     };
@@ -69,7 +66,6 @@ const SurveyFilterTabs = React.forwardRef<HTMLDivElement, FilterTabsProps>(
         className={cn(
           // Match the height of the survey search bar (h-10).
           'inline-flex h-10 items-stretch gap-5 border-b border-survey-border-muted font-survey',
-          disabled && 'opacity-50',
           className,
         )}
       >
@@ -81,13 +77,12 @@ const SurveyFilterTabs = React.forwardRef<HTMLDivElement, FilterTabsProps>(
               type="button"
               role="tab"
               aria-selected={active}
-              disabled={disabled}
               onClick={() => handleSelect(tab.id)}
               className={cn(
                 // Fill the control height and center the label; pull each tab's
                 // underline down 1px so its 2px border sits over the
                 // container's horizontal rule.
-                'flex items-center -mb-px border-b-2 border-transparent px-0.5 font-survey text-survey-body transition-colors disabled:cursor-not-allowed',
+                'flex items-center -mb-px border-b-2 border-transparent px-0.5 font-survey text-survey-body transition-colors',
                 // Outer focus border shown on keyboard (tab) navigation.
                 'rounded-[2px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-survey-border-interactive focus-visible:ring-offset-2 focus-visible:ring-offset-survey-background',
                 active

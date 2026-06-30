@@ -19,7 +19,6 @@ export interface ChoiceGridColumn {
 export interface ChoiceGridRow {
   id: string;
   label: string;
-  disabled?: boolean;
 }
 
 export interface ChoiceGridProps {
@@ -29,7 +28,6 @@ export interface ChoiceGridProps {
   defaultValue?: Record<string, string>;
   onValueChange?: (value: Record<string, string>) => void;
   error?: string;
-  disabled?: boolean;
   className?: string;
   /**
    * Force a specific variant regardless of width.
@@ -55,7 +53,6 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
       defaultValue,
       onValueChange,
       error,
-      disabled = false,
       className,
       variant = 'auto',
       ...rest
@@ -116,7 +113,6 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                     asChild
                     value={values[row.id]}
                     onValueChange={(val) => handleValueChange(row.id, val)}
-                    disabled={disabled || row.disabled}
                   >
                     <tr className={cn(
                       "group/row border-b border-survey-border-muted transition-colors hover:bg-survey-muted-background",
@@ -128,10 +124,7 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                       <th
                         id={`label-${row.id}`}
                         scope="row"
-                        className={cn(
-                          "px-2 py-2 text-left text-survey-foreground text-survey-body font-survey-regular align-middle",
-                          (disabled || row.disabled) && "opacity-50"
-                        )}
+                        className="px-2 py-2 text-left text-survey-foreground text-survey-body font-survey-regular align-middle"
                       >
                         {row.label}
                       </th>
@@ -142,7 +135,6 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                           columnValue={column.value}
                           isLast={index === columns.length - 1}
                           isFocused={focusedRow === row.id && focusedColumn === column.value}
-                          disabled={disabled || row.disabled}
                           forceHover={forceHover}
                           hasError={!!error && !values[row.id]}
                         />
@@ -165,10 +157,7 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                     "w-full rounded-none last:border-b-0 border-b border-survey-border-muted"
                   )}
                 >
-                  <AccordionTrigger className={cn(
-                    "px-4 py-4 hover:no-underline text-left text-survey-foreground text-survey-body font-survey-regular rounded-none",
-                    (disabled || row.disabled) && "opacity-50 cursor-not-allowed"
-                  )}>
+                  <AccordionTrigger className="px-4 py-4 hover:no-underline text-left text-survey-foreground text-survey-body font-survey-regular rounded-none">
                     <span className="flex items-center gap-2">
                       {error && !values[row.id] && (
                         <AlertCircle className="flex-shrink-0 w-4 h-4 text-survey-destructive" />
@@ -181,7 +170,6 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                       className="flex flex-col p-0"
                       value={values[row.id]}
                       onValueChange={(val) => handleValueChange(row.id, val)}
-                      disabled={disabled || row.disabled}
                     >
                       {columns.map((column) => (
                         <ChoiceGridMobileOption
@@ -189,7 +177,6 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                           column={column}
                           rowId={row.id}
                           isFocused={focusedRow === row.id && focusedColumn === column.value}
-                          disabled={disabled || row.disabled}
                           hasError={!!error && !values[row.id]}
                         />
                       ))}
@@ -210,7 +197,6 @@ interface ChoiceGridCellProps {
   columnValue: string;
   isLast: boolean;
   isFocused: boolean;
-  disabled?: boolean;
   forceHover?: boolean;
   hasError?: boolean;
 }
@@ -219,31 +205,23 @@ const ChoiceGridCell = ({
   rowId,
   columnValue,
   isFocused,
-  disabled,
   hasError,
 }: ChoiceGridCellProps) => {
   const cellId = `cell-${rowId}-${columnValue}`;
 
   return (
-    <td
-      className={cn(
-        "p-0 transition-colors",
-        (disabled) && "opacity-50"
-      )}
-    >
+    <td className="p-0 transition-colors">
       <label
         htmlFor={cellId}
         className={cn(
           "flex items-center justify-center p-2 cursor-pointer w-full h-full border-2 border-transparent transition-all",
           isFocused && "border-survey-border-interactive",
           "has-[:focus-visible]:border-survey-border-interactive",
-          disabled && "cursor-not-allowed"
         )}
       >
         <RadioGroupPrimitive.Item
           id={cellId}
           value={columnValue}
-          disabled={disabled}
           aria-labelledby={`label-${rowId}`}
           aria-invalid={hasError || undefined}
           className={cn(
@@ -266,13 +244,11 @@ const ChoiceGridMobileOption = ({
   column,
   rowId,
   isFocused,
-  disabled,
   hasError,
 }: {
   column: ChoiceGridColumn;
   rowId: string;
   isFocused: boolean;
-  disabled?: boolean;
   hasError?: boolean;
 }) => {
   const id = `mobile-${rowId}-${column.value}`;
@@ -285,13 +261,11 @@ const ChoiceGridMobileOption = ({
         "transition-colors hover:bg-survey-muted-background",
         isFocused && "ring-2 ring-survey-border-interactive ring-inset",
         "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-survey-border-interactive has-[:focus-visible]:ring-inset",
-        disabled && "cursor-not-allowed opacity-50 hover:bg-transparent"
       )}
     >
       <RadioGroupPrimitive.Item
         id={id}
         value={column.value}
-        disabled={disabled}
         aria-invalid={hasError || undefined}
         className={cn(
           "flex-shrink-0 w-4 h-4 rounded-full border-2 transition-colors",
@@ -304,10 +278,7 @@ const ChoiceGridMobileOption = ({
           <span className="block w-1.5 h-1.5 rounded-full bg-white" />
         </RadioGroupPrimitive.Indicator>
       </RadioGroupPrimitive.Item>
-      <span className={cn(
-        "text-survey-foreground text-survey-body font-survey-regular leading-none",
-        disabled && "text-survey-muted-foreground"
-      )}>
+      <span className="text-survey-foreground text-survey-body font-survey-regular leading-none">
         {column.label}
       </span>
     </label>

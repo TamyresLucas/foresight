@@ -33,7 +33,6 @@ export interface RadioGroupOptionProps {
   label: string;
   id?: string;
   focused?: boolean;
-  disabled?: boolean;
   className?: string;
   /** When true, shows a text input below this option when it is selected */
   openEnd?: boolean;
@@ -47,7 +46,7 @@ export interface RadioGroupOptionProps {
 const RadioGroupOption = React.forwardRef<
   HTMLDivElement,
   RadioGroupOptionProps
->(({ value, label, id, focused = false, disabled = false, className, openEnd, openEndPlaceholder, checked, openEndValue, onOpenEndChange }, ref) => {
+>(({ value, label, id, focused = false, className, openEnd, openEndPlaceholder, checked, openEndValue, onOpenEndChange }, ref) => {
   const itemId = id ?? `survey-option-${value}`;
   const hasError = React.useContext(RadioGroupErrorContext);
   const showOpenEnd = openEnd && checked;
@@ -64,7 +63,6 @@ const RadioGroupOption = React.forwardRef<
         focused && "[&:has([data-state=checked])]:ring-survey-border-selected",
         "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-survey-border-interactive has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-survey-background",
         "[&:has([data-state=checked]):has(:focus-visible)]:ring-survey-border-selected",
-        disabled && "opacity-50",
         className,
       )}
     >
@@ -74,13 +72,11 @@ const RadioGroupOption = React.forwardRef<
           "flex items-center gap-3 w-full px-4 py-3 cursor-pointer select-none",
           "hover:bg-survey-muted-background rounded-survey-md",
           showOpenEnd && "rounded-b-none",
-          disabled && "cursor-not-allowed",
         )}
       >
         <RadioGroupPrimitive.Item
           id={itemId}
           value={value}
-          disabled={disabled}
           aria-invalid={hasError || undefined}
           className={cn(
             "flex-shrink-0 w-4 h-4 rounded-full border-2 transition-colors",
@@ -93,10 +89,7 @@ const RadioGroupOption = React.forwardRef<
             <span className="block w-1.5 h-1.5 rounded-full bg-white" />
           </RadioGroupPrimitive.Indicator>
         </RadioGroupPrimitive.Item>
-        <span className={cn(
-          "text-survey-foreground text-survey-body font-survey-regular leading-none",
-          disabled && "text-survey-muted-foreground"
-        )}>
+        <span className="text-survey-foreground text-survey-body font-survey-regular leading-none">
           {label}
         </span>
       </label>
@@ -109,7 +102,7 @@ const RadioGroupOption = React.forwardRef<
             placeholder={openEndPlaceholder ?? "Please specify…"}
             onClick={(e) => e.stopPropagation()}
             className={cn(
-              "w-full bg-transparent border-0 border-b border-survey-border-muted",
+              "w-full bg-transparent border-0 border-b border-survey-border-interactive",
               "text-survey-foreground text-survey-body font-survey-regular",
               "placeholder:text-survey-muted-foreground",
               "focus:outline-none focus:border-survey-border-interactive",

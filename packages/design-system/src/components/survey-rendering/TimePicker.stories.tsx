@@ -91,17 +91,6 @@ export const WithError: Story = {
   },
 }
 
-export const Disabled: Story = {
-  render: () => {
-    const [value] = useState<TimeValue>({ hour: 2, minute: 45, period: 'PM' })
-    return (
-      <ThemedFrame>
-        <TimePicker mode="single" value={value} disabled />
-      </ThemedFrame>
-    )
-  },
-}
-
 export const RangeWithError: Story = {
   render: () => {
     const [value, setValue] = useState<TimePickerProps['value']>({

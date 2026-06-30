@@ -8,7 +8,6 @@ import { cn } from '@/lib/utils'
 export interface DropdownOption {
   value: string
   label: string
-  disabled?: boolean
   /** Optional swatch color; when set, a colored dot is shown before the label. */
   color?: string
 }
@@ -19,7 +18,6 @@ export interface DropdownAnswerProps {
   value?: string
   defaultValue?: string
   onValueChange?: (v: string) => void
-  disabled?: boolean
   selected?: boolean // controle externo do estado "selected" (Storybook)
   focused?: boolean // simula foco para Storybook
   error?: string
@@ -36,7 +34,6 @@ const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
       value,
       defaultValue,
       onValueChange,
-      disabled,
       selected,
       focused = false,
       error,
@@ -93,7 +90,6 @@ const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
             value={value}
             defaultValue={defaultValue}
             onValueChange={onValueChange}
-            disabled={disabled}
             open={open}
             onOpenChange={setOpen}
           >
@@ -136,8 +132,7 @@ const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
                     <SelectPrimitive.Item
                       key={option.value}
                       value={option.value}
-                      disabled={option.disabled}
-                      className="relative flex w-full cursor-pointer select-none items-center rounded-sm py-2 px-3 text-survey-body font-survey-regular text-survey-foreground outline-none data-[highlighted]:bg-survey-muted-background data-[state=checked]:font-bold data-[state=checked]:text-survey-primary data-[disabled]:opacity-50 data-[disabled]:text-survey-muted-foreground data-[disabled]:cursor-not-allowed"
+                      className="relative flex w-full cursor-pointer select-none items-center rounded-sm py-2 px-3 text-survey-body font-survey-regular text-survey-foreground outline-none data-[highlighted]:bg-survey-muted-background data-[state=checked]:font-bold data-[state=checked]:text-survey-primary"
                     >
                       {option.color && (
                         <span

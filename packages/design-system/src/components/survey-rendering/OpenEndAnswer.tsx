@@ -48,7 +48,7 @@ const OpenEndAnswer = React.forwardRef<HTMLTextAreaElement, OpenEndAnswerProps>(
             <textarea
               aria-invalid={error ? true : undefined}
               className={cn(
-                'w-full min-h-[100px] bg-transparent px-2 py-1.5 text-survey-body font-survey-regular focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 text-survey-foreground font-survey resize-none',
+                'w-full min-h-[100px] bg-transparent px-2 py-1.5 text-survey-body font-survey-regular focus-visible:outline-none text-survey-foreground font-survey resize-none',
                 className,
               )}
               ref={ref}
