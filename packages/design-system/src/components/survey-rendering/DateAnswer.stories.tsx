@@ -16,7 +16,6 @@ const meta = {
     focused: { control: 'boolean' },
     selected: { control: 'boolean' },
     error: { control: 'text' },
-    disabled: { control: 'boolean' },
   },
   parameters: {
     docs: {

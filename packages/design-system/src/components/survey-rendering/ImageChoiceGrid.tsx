@@ -23,7 +23,6 @@ export interface ImageChoiceGridColumn {
 export interface ImageChoiceGridRow {
   id: string;
   label: string;
-  disabled?: boolean;
 }
 
 export interface ImageChoiceGridProps {
@@ -33,7 +32,6 @@ export interface ImageChoiceGridProps {
   defaultValue?: Record<string, string>;
   onValueChange?: (value: Record<string, string>) => void;
   error?: string;
-  disabled?: boolean;
   className?: string;
   /**
    * Force a specific variant regardless of width.
@@ -81,7 +79,6 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
       defaultValue,
       onValueChange,
       error,
-      disabled = false,
       className,
       variant = "auto",
     } = props;
@@ -151,7 +148,6 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
                   asChild
                   value={values[row.id]}
                   onValueChange={(val) => handleValueChange(row.id, val)}
-                  disabled={disabled || row.disabled}
                 >
                   <tr
                     className={cn(
@@ -161,10 +157,7 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
                     <th
                       id={`label-${row.id}`}
                       scope="row"
-                      className={cn(
-                        "px-2 py-2 text-left text-survey-foreground text-survey-body font-survey-regular align-middle",
-                        (disabled || row.disabled) && "opacity-50",
-                      )}
+                      className="px-2 py-2 text-left text-survey-foreground text-survey-body font-survey-regular align-middle"
                     >
                       {row.label}
                     </th>
@@ -173,7 +166,6 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
                         key={column.value}
                         rowId={row.id}
                         column={column}
-                        disabled={disabled || row.disabled}
                         hasError={!!error && !values[row.id]}
                       />
                     ))}
@@ -201,13 +193,7 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
                   "w-full rounded-none last:border-b-0 border-b border-survey-border-muted",
                 )}
               >
-                <AccordionTrigger
-                  className={cn(
-                    "px-4 py-4 hover:no-underline text-left text-survey-foreground text-survey-body font-survey-regular rounded-none",
-                    (disabled || row.disabled) &&
-                      "opacity-50 cursor-not-allowed",
-                  )}
-                >
+                <AccordionTrigger className="px-4 py-4 hover:no-underline text-left text-survey-foreground text-survey-body font-survey-regular rounded-none">
                   <span className="flex items-center gap-2">
                     {error && !values[row.id] && (
                       <AlertCircle className="flex-shrink-0 w-4 h-4 text-survey-destructive" />
@@ -220,13 +206,11 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
                     className="flex flex-col p-0"
                     value={values[row.id]}
                     onValueChange={(val) => handleValueChange(row.id, val)}
-                    disabled={disabled || row.disabled}
                   >
                     {columns.map((column) => (
                       <ImageChoiceGridMobileOption
                         key={column.value}
                         column={column}
-                        disabled={disabled || row.disabled}
                         hasError={!!error && !values[row.id]}
                       />
                     ))}
@@ -273,31 +257,25 @@ const SelectableImage = ({
 interface ImageChoiceGridCellProps {
   rowId: string;
   column: ImageChoiceGridColumn;
-  disabled?: boolean;
   hasError?: boolean;
 }
 
 const ImageChoiceGridCell = ({
   rowId,
   column,
-  disabled,
   hasError,
 }: ImageChoiceGridCellProps) => {
   const cellId = `cell-${rowId}-${column.value}`;
 
   return (
-    <td className={cn("p-0 transition-colors", disabled && "opacity-50")}>
+    <td className="p-0 transition-colors">
       <label
         htmlFor={cellId}
-        className={cn(
-          "flex items-center justify-center p-2 cursor-pointer w-full h-full transition-all",
-          disabled && "cursor-not-allowed",
-        )}
+        className="flex items-center justify-center p-2 cursor-pointer w-full h-full transition-all"
       >
         <RadioGroupPrimitive.Item
           id={cellId}
           value={column.value}
-          disabled={disabled}
           aria-labelledby={`label-${rowId}`}
           aria-label={column.label}
           aria-invalid={hasError || undefined}
@@ -315,11 +293,9 @@ const ImageChoiceGridCell = ({
 
 const ImageChoiceGridMobileOption = ({
   column,
-  disabled,
   hasError,
 }: {
   column: ImageChoiceGridColumn;
-  disabled?: boolean;
   hasError?: boolean;
 }) => {
   return (
@@ -330,7 +306,6 @@ const ImageChoiceGridMobileOption = ({
       <RadioGroupPrimitive.Item
         asChild
         value={column.value}
-        disabled={disabled}
         aria-label={column.label}
         aria-invalid={hasError || undefined}
       >
@@ -346,15 +321,9 @@ const ImageChoiceGridMobileOption = ({
             "w-full",
             "[&_img]:!w-auto [&_img]:h-auto [&_img]:max-h-[300px] [&_img]:max-w-full",
             "!border data-[state=checked]:!border-2 data-[state=checked]:border-survey-border-selected",
-            disabled && "cursor-not-allowed opacity-50",
           )}
         >
-          <span
-            className={cn(
-              "text-survey-foreground text-survey-body font-survey-regular",
-              disabled && "text-survey-muted-foreground",
-            )}
-          >
+          <span className="text-survey-foreground text-survey-body font-survey-regular">
             {column.label}
           </span>
         </Card>

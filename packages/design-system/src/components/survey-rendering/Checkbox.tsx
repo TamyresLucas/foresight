@@ -34,7 +34,6 @@ export interface CheckboxOptionProps {
   id?: string;
   focused?: boolean;
   error?: boolean;
-  disabled?: boolean;
   checked?: boolean | "indeterminate";
   onCheckedChange?: (checked: boolean | "indeterminate") => void;
   className?: string;
@@ -46,7 +45,7 @@ export interface CheckboxOptionProps {
 }
 
 const CheckboxOption = React.forwardRef<HTMLDivElement, CheckboxOptionProps>(
-  ({ label, id, focused = false, error, disabled = false, checked, onCheckedChange, className, openEnd, openEndPlaceholder, openEndValue, onOpenEndChange }, ref) => {
+  ({ label, id, focused = false, error, checked, onCheckedChange, className, openEnd, openEndPlaceholder, openEndValue, onOpenEndChange }, ref) => {
     const itemId = id ?? `survey-checkbox-${label}`;
     const groupError = React.useContext(CheckboxGroupErrorContext);
     const hasError = error ?? groupError;
@@ -64,7 +63,6 @@ const CheckboxOption = React.forwardRef<HTMLDivElement, CheckboxOptionProps>(
           focused && "[&:has([data-state=checked])]:ring-survey-border-selected",
           "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-survey-border-interactive has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-survey-background",
           "[&:has([data-state=checked]):has(:focus-visible)]:ring-survey-border-selected",
-          disabled && "opacity-50",
           className,
         )}
       >
@@ -74,14 +72,12 @@ const CheckboxOption = React.forwardRef<HTMLDivElement, CheckboxOptionProps>(
             "flex items-center gap-3 w-full px-4 py-3 cursor-pointer select-none",
             "hover:bg-survey-muted-background rounded-survey-md",
             showOpenEnd && "rounded-b-none",
-            disabled && "cursor-not-allowed",
           )}
         >
           <CheckboxPrimitive.Root
             id={itemId}
             checked={checked}
             onCheckedChange={onCheckedChange}
-            disabled={disabled}
             aria-invalid={hasError || undefined}
             className={cn(
               "flex-shrink-0 w-4 h-4 rounded-[4px] border-2 transition-colors grid place-content-center",
@@ -94,10 +90,7 @@ const CheckboxOption = React.forwardRef<HTMLDivElement, CheckboxOptionProps>(
               <Check className="h-3 w-3 stroke-[3]" />
             </CheckboxPrimitive.Indicator>
           </CheckboxPrimitive.Root>
-          <span className={cn(
-            "text-survey-foreground text-survey-body font-survey-regular leading-none",
-            disabled && "text-survey-muted-foreground"
-          )}>
+          <span className="text-survey-foreground text-survey-body font-survey-regular leading-none">
             {label}
           </span>
         </label>
@@ -110,7 +103,7 @@ const CheckboxOption = React.forwardRef<HTMLDivElement, CheckboxOptionProps>(
               placeholder={openEndPlaceholder ?? "Please specify…"}
               onClick={(e) => e.stopPropagation()}
               className={cn(
-                "w-full bg-transparent border-0 border-b border-survey-border-muted",
+                "w-full bg-transparent border-0 border-b border-survey-border-interactive",
                 "text-survey-foreground text-survey-body font-survey-regular",
                 "placeholder:text-survey-muted-foreground",
                 "focus:outline-none focus:border-survey-border-interactive",

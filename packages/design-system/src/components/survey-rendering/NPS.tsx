@@ -11,7 +11,6 @@ export interface NPSProps {
   defaultValue?: string;
   onValueChange?: (value: string) => void;
   error?: string;
-  disabled?: boolean;
   className?: string;
   children?: React.ReactNode;
   name?: string;
@@ -28,7 +27,6 @@ const NPS = React.forwardRef<HTMLDivElement, NPSProps>(
       defaultValue,
       onValueChange,
       error,
-      disabled,
       className,
       children,
       name,
@@ -55,9 +53,8 @@ const NPS = React.forwardRef<HTMLDivElement, NPSProps>(
       () => ({
         value: currentValue,
         onSelect: handleSelect,
-        disabled: !!disabled,
       }),
-      [currentValue, handleSelect, disabled],
+      [currentValue, handleSelect],
     );
 
     const options =
@@ -102,7 +99,6 @@ NPS.displayName = "NPS";
 interface NPSContextValue {
   value: string | undefined;
   onSelect: (value: string) => void;
-  disabled: boolean;
 }
 
 const NPSContext = React.createContext<NPSContextValue | null>(null);
@@ -110,19 +106,17 @@ const NPSContext = React.createContext<NPSContextValue | null>(null);
 export interface NPSOptionProps {
   value: string;
   focused?: boolean;
-  disabled?: boolean;
   className?: string;
 }
 
 const NPSOption = React.forwardRef<HTMLButtonElement, NPSOptionProps>(
-  ({ value, focused = false, disabled, className }, ref) => {
+  ({ value, focused = false, className }, ref) => {
     const ctx = React.useContext(NPSContext);
     const hasError = React.useContext(NPSErrorContext);
     if (!ctx) {
       throw new Error("NPSOption must be used inside <NPS>");
     }
     const selected = ctx.value === value;
-    const isDisabled = disabled ?? ctx.disabled;
 
     return (
       <Card
@@ -133,17 +127,10 @@ const NPSOption = React.forwardRef<HTMLButtonElement, NPSOptionProps>(
         aria-checked={selected}
         selected={selected}
         focused={focused}
-        disabled={isDisabled}
-        onClick={() => {
-          if (!isDisabled) ctx.onSelect(value);
-        }}
+        onClick={() => ctx.onSelect(value)}
         style={{ minWidth: 0, minHeight: "2.75rem" }}
         aria-invalid={hasError || undefined}
-        className={cn(
-          "w-full text-survey-body",
-          isDisabled && "cursor-not-allowed opacity-50",
-          className,
-        )}
+        className={cn("w-full text-survey-body", className)}
       >
         {value}
       </Card>

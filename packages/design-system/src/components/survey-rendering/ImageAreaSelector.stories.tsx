@@ -31,7 +31,6 @@ const meta = {
   },
   argTypes: {
     selectionMode: { control: 'inline-radio', options: ['single', 'multiple'] },
-    disabled: { control: 'boolean' },
     error: { control: 'text' },
   },
   parameters: {
@@ -106,13 +105,6 @@ export const Single: Story = {
   args: {
     selectionMode: 'single',
     defaultValue: ['tl'],
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    defaultValue: ['tl'],
-    disabled: true,
   },
 };
 

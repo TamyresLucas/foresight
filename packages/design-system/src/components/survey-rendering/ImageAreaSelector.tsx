@@ -38,7 +38,6 @@ export interface ImageAreaSelectorProps {
   defaultValue?: ImageAreaSelectorValue;
   onChange?: (value: ImageAreaSelectorValue) => void;
   error?: string;
-  disabled?: boolean;
   className?: string;
 }
 
@@ -68,7 +67,6 @@ const ImageAreaSelector = React.forwardRef<
       defaultValue,
       onChange,
       error,
-      disabled = false,
       className,
     },
     ref,
@@ -87,7 +85,6 @@ const ImageAreaSelector = React.forwardRef<
     // A click toggles the area's selection. In single mode, selecting an area
     // replaces any prior selection; clicking the selected area clears it.
     const handleAreaClick = (areaId: string) => {
-      if (disabled) return;
       const isSelected = current.includes(areaId);
 
       let next: ImageAreaSelectorValue;
@@ -136,21 +133,17 @@ const ImageAreaSelector = React.forwardRef<
               <button
                 key={area.id}
                 type="button"
-                disabled={disabled}
                 onClick={() => handleAreaClick(area.id)}
-                onMouseEnter={() => !disabled && setHoveredAreaId(area.id)}
+                onMouseEnter={() => setHoveredAreaId(area.id)}
                 onMouseLeave={() => setHoveredAreaId(null)}
                 onFocus={(e) => {
-                  if (!disabled && e.currentTarget.matches(':focus-visible'))
+                  if (e.currentTarget.matches(':focus-visible'))
                     setFocusedAreaId(area.id);
                 }}
                 onBlur={() => setFocusedAreaId(null)}
                 aria-label={area.label}
                 aria-pressed={selected}
-                className={cn(
-                  'absolute transition-colors focus-visible:outline-none',
-                  disabled ? 'cursor-not-allowed' : 'cursor-pointer',
-                )}
+                className="absolute transition-colors focus-visible:outline-none cursor-pointer"
                 style={{
                   left: `${area.x}%`,
                   top: `${area.y}%`,

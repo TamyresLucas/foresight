@@ -64,7 +64,6 @@ const meta = {
     pageSize: { control: { type: 'number', min: 1 } },
     filterPlaceholder: { control: 'text' },
     error: { control: 'text' },
-    disabled: { control: 'boolean' },
   },
   parameters: {
     docs: {
@@ -140,13 +139,6 @@ export const WithAddChoiceEditing: Story = {
 export const WithError: Story = {
   args: {
     error: 'This question is required',
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    defaultValue: ['r1'],
-    disabled: true,
   },
 };
 

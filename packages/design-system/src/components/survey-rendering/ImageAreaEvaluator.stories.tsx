@@ -44,7 +44,6 @@ const meta = {
   },
   argTypes: {
     showLegend: { control: 'boolean' },
-    disabled: { control: 'boolean' },
     error: { control: 'text' },
   },
   parameters: {
@@ -174,13 +173,6 @@ export const ManyChoices: Story = {
       { id: 'c4', label: 'Choice 4' },
     ],
     defaultValue: { tl: 'c1', tr: 'c2', bl: 'c3', br: 'c4' },
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    defaultValue: { left: 'c1' },
-    disabled: true,
   },
 };
 

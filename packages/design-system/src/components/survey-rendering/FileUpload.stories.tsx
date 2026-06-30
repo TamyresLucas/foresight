@@ -43,12 +43,6 @@ export const NoFileSize: Story = {
   },
 };
 
-export const Disabled: Story = {
-  args: {
-    disabled: true,
-  },
-};
-
 export const WithError: Story = {
   args: {
     error: 'Please upload a file',

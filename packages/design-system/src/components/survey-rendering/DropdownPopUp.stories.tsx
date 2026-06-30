@@ -23,7 +23,7 @@ const options = [
   { value: 'option-2', label: 'Option 2' },
   { value: 'option-3', label: 'Option 3' },
   { value: 'option-4', label: 'Option 4' },
-  { value: 'option-5', label: 'Option 5 (disabled)', disabled: true },
+  { value: 'option-5', label: 'Option 5' },
 ];
 
 export const Default: Story = {
@@ -36,12 +36,6 @@ export const WithSelection: Story = {
   args: {
     options,
     selectedValue: 'option-2',
-  },
-};
-
-export const WithDisabledOption: Story = {
-  args: {
-    options,
   },
 };
 

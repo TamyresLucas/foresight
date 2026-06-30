@@ -23,7 +23,6 @@ const meta = {
   },
   argTypes: {
     error: { control: 'text' },
-    disabled: { control: 'boolean' },
   },
   parameters: {
     docs: {
@@ -49,13 +48,6 @@ export const WithValues: Story = {
 export const WithError: Story = {
   args: {
     error: 'This question is required',
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    disabled: true,
-    defaultValue: { '1': '1', '2': '2', '3': '3' },
   },
 };
 

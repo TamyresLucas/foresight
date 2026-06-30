@@ -30,7 +30,6 @@ export interface ImageSelectorProps {
   defaultValue?: ImageSelectorValue;
   onChange?: (value: ImageSelectorValue) => void;
   error?: string;
-  disabled?: boolean;
   className?: string;
 }
 
@@ -43,7 +42,6 @@ const ImageSelector = React.forwardRef<HTMLDivElement, ImageSelectorProps>(
       defaultValue,
       onChange,
       error,
-      disabled = false,
       className,
     },
     ref,
@@ -56,7 +54,6 @@ const ImageSelector = React.forwardRef<HTMLDivElement, ImageSelectorProps>(
     // A click toggles the image's selection. In single mode, selecting an image
     // replaces any prior selection; clicking the selected image clears it.
     const handleClick = (id: string) => {
-      if (disabled) return;
       const isSelected = current.includes(id);
 
       let next: ImageSelectorValue;
@@ -94,10 +91,9 @@ const ImageSelector = React.forwardRef<HTMLDivElement, ImageSelectorProps>(
                 imageSrc={option.src}
                 imageAlt={option.alt ?? ''}
                 selected={selected}
-                disabled={disabled}
                 onClick={() => handleClick(option.id)}
                 aria-label={option.label}
-                className={cn('w-full', disabled && 'cursor-not-allowed')}
+                className="w-full"
               >
                 {option.label && (
                   <span

@@ -24,7 +24,6 @@ const meta = {
     'aria-label': 'Filter rows by selection',
   },
   argTypes: {
-    disabled: { control: 'boolean' },
     defaultValue: { control: 'text' },
   },
   parameters: {
@@ -60,13 +59,6 @@ export const TwoSegments: Story = {
     ],
     defaultValue: 'list',
     'aria-label': 'View mode',
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    defaultValue: 'all',
-    disabled: true,
   },
 };
 

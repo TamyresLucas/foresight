@@ -77,11 +77,6 @@ export const DesktopWithError: Story = {
   args: { rows, columns, error: 'This question is required', variant: 'desktop' },
 };
 
-export const DesktopDisabled: Story = {
-  name: 'Desktop / Disabled',
-  args: { rows, columns, disabled: true, variant: 'desktop' },
-};
-
 // --- Mobile Stories ---
 
 export const MobileDefault: Story = {

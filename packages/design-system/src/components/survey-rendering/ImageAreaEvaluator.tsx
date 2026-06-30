@@ -51,7 +51,6 @@ export interface ImageAreaEvaluatorProps {
   /** Hide the legend row entirely. */
   showLegend?: boolean;
   error?: string;
-  disabled?: boolean;
   className?: string;
 }
 
@@ -106,7 +105,6 @@ const ImageAreaEvaluator = React.forwardRef<
       legendLabel = 'Legend',
       showLegend = true,
       error,
-      disabled = false,
       className,
     },
     ref,
@@ -142,7 +140,7 @@ const ImageAreaEvaluator = React.forwardRef<
     // assigns a value by clicking a "certain number" of times: the last choice
     // cycles back to unassigned so a mistaken click can be undone in place.
     const handleAreaClick = (areaId: string) => {
-      if (disabled || choices.length === 0) return;
+      if (choices.length === 0) return;
       const currentChoice = current[areaId];
       const currentIndex = choices.findIndex((c) => c.id === currentChoice);
       const nextIndex = currentIndex + 1;
@@ -193,12 +191,11 @@ const ImageAreaEvaluator = React.forwardRef<
               <button
                 key={area.id}
                 type="button"
-                disabled={disabled}
                 onClick={() => handleAreaClick(area.id)}
-                onMouseEnter={() => !disabled && setHoveredAreaId(area.id)}
+                onMouseEnter={() => setHoveredAreaId(area.id)}
                 onMouseLeave={() => setHoveredAreaId(null)}
                 onFocus={(e) => {
-                  if (!disabled && e.currentTarget.matches(':focus-visible'))
+                  if (e.currentTarget.matches(':focus-visible'))
                     setFocusedAreaId(area.id);
                 }}
                 onBlur={() => setFocusedAreaId(null)}
@@ -210,10 +207,7 @@ const ImageAreaEvaluator = React.forwardRef<
                     : undefined
                 }
                 aria-pressed={Boolean(assigned)}
-                className={cn(
-                  'absolute transition-colors focus-visible:outline-none',
-                  disabled ? 'cursor-not-allowed' : 'cursor-pointer',
-                )}
+                className="absolute transition-colors focus-visible:outline-none cursor-pointer"
                 style={{
                   left: `${area.x}%`,
                   top: `${area.y}%`,

@@ -95,6 +95,3 @@ export const WithError: Story = {
   args: { rows, columns, error: "Please answer every row" },
 };
 
-export const Disabled: Story = {
-  args: { rows, columns, defaultValue: { store1: "apples" }, disabled: true },
-};

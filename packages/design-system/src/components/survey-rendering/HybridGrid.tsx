@@ -21,7 +21,6 @@ import { ImageSelector, type ImageSelectorOption } from "./ImageSelector";
 export interface HybridGridRow {
   id: string;
   label: string;
-  disabled?: boolean;
 }
 
 interface HybridGridColumnBase {
@@ -116,7 +115,6 @@ export interface HybridGridProps {
   defaultValue?: HybridGridValue;
   onValueChange?: (value: HybridGridValue) => void;
   error?: string;
-  disabled?: boolean;
   className?: string;
   /**
    * Force a specific variant regardless of width.
@@ -183,7 +181,6 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
       defaultValue,
       onValueChange,
       error,
-      disabled = false,
       className,
       variant = "auto",
     } = props;
@@ -261,7 +258,6 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
             </thead>
             <tbody>
               {rows.map((row, i) => {
-                const rowDisabled = disabled || row.disabled;
                 const rowEmpty = isRowEmpty(values[row.id], columns);
                 return (
                   <tr
@@ -273,16 +269,13 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
                       i % 2 === 1 && "bg-[hsl(var(--survey-border-interactive)_/_0.06)]",
                       // Row hover matches the LookupTable (survey-muted-background
                       // = border-interactive / 0.2).
-                      !rowDisabled && "hover:bg-survey-muted-background",
+                      "hover:bg-survey-muted-background",
                     )}
                   >
                     <th
                       id={`hg-label-${row.id}`}
                       scope="row"
-                      className={cn(
-                        "px-2 py-3 text-left text-survey-foreground text-survey-body font-survey-regular align-middle whitespace-nowrap",
-                        rowDisabled && "opacity-50",
-                      )}
+                      className="px-2 py-3 text-left text-survey-foreground text-survey-body font-survey-regular align-middle whitespace-nowrap"
                     >
                       {row.label}
                     </th>
@@ -292,7 +285,6 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
                         row={row}
                         column={column}
                         value={values[row.id]?.[column.id]}
-                        disabled={rowDisabled}
                         hasError={!!error && rowEmpty}
                         onChange={(next) => setCell(row.id, column.id, next)}
                       />
@@ -314,7 +306,6 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
             )}
           >
             {rows.map((row) => {
-              const rowDisabled = disabled || row.disabled;
               const rowEmpty = isRowEmpty(values[row.id], columns);
               return (
                 <AccordionItem
@@ -322,12 +313,7 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
                   value={row.id}
                   className="w-full rounded-none last:border-b-0 border-b border-survey-border-muted"
                 >
-                  <AccordionTrigger
-                    className={cn(
-                      "px-4 py-4 hover:no-underline text-left text-survey-foreground text-survey-body font-survey-regular rounded-none",
-                      rowDisabled && "opacity-50 cursor-not-allowed",
-                    )}
-                  >
+                  <AccordionTrigger className="px-4 py-4 hover:no-underline text-left text-survey-foreground text-survey-body font-survey-regular rounded-none">
                     <span className="flex items-center gap-2">
                       {!!error && rowEmpty && (
                         <AlertCircle className="flex-shrink-0 w-4 h-4 text-survey-destructive" />
@@ -343,7 +329,6 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
                           row={row}
                           column={column}
                           value={values[row.id]?.[column.id]}
-                          disabled={rowDisabled}
                           hasError={!!error && rowEmpty}
                           onChange={(next) => setCell(row.id, column.id, next)}
                         />
@@ -365,7 +350,6 @@ interface HybridGridCellProps {
   row: HybridGridRow;
   column: HybridGridColumn;
   value: HybridGridCellValue | undefined;
-  disabled?: boolean;
   hasError?: boolean;
   onChange: (next: HybridGridCellValue) => void;
 }
@@ -386,7 +370,6 @@ const HybridGridDesktopCell = ({
   row,
   column,
   value,
-  disabled,
   hasError,
   onChange,
 }: HybridGridCellProps) => {
@@ -395,13 +378,12 @@ const HybridGridDesktopCell = ({
 
   if (column.type === "text") {
     return (
-      <td className={cn("px-2 py-3 align-middle", disabled && "opacity-50")} style={{ minWidth }}>
+      <td className="px-2 py-3 align-middle" style={{ minWidth }}>
         <TextAnswer
           aria-labelledby={`hg-label-${row.id}`}
           placeholder={column.placeholder}
           value={typeof value === "string" ? value : ""}
           onChange={(e) => onChange(e.target.value)}
-          disabled={disabled}
           error={hasError ? " " : undefined}
         />
       </td>
@@ -410,7 +392,7 @@ const HybridGridDesktopCell = ({
 
   if (column.type === "numeric") {
     return (
-      <td className={cn("px-2 py-3 align-middle", disabled && "opacity-50")} style={{ minWidth }}>
+      <td className="px-2 py-3 align-middle" style={{ minWidth }}>
         <TextAnswer
           aria-labelledby={`hg-label-${row.id}`}
           inputMode="numeric"
@@ -420,7 +402,6 @@ const HybridGridDesktopCell = ({
           step={column.step}
           value={typeof value === "string" || typeof value === "number" ? String(value) : ""}
           onChange={(e) => onChange(e.target.value)}
-          disabled={disabled}
           error={hasError ? " " : undefined}
         />
       </td>
@@ -435,7 +416,7 @@ const HybridGridDesktopCell = ({
     // still shared, and the label truncates instead of expanding the column.
     return (
       <td
-        className={cn("px-2 py-3 align-middle", disabled && "opacity-50")}
+        className="px-2 py-3 align-middle"
         style={{ minWidth, maxWidth: 0 }}
       >
         <DropdownAnswer
@@ -443,7 +424,6 @@ const HybridGridDesktopCell = ({
           placeholder={column.placeholder ?? "Select an answer…"}
           value={typeof value === "string" && value !== "" ? value : undefined}
           onValueChange={(v) => onChange(v)}
-          disabled={disabled}
           error={hasError ? " " : undefined}
           fullWidth
         />
@@ -453,7 +433,7 @@ const HybridGridDesktopCell = ({
 
   if (column.type === "slider") {
     return (
-      <td className={cn("px-2 py-3 align-middle", disabled && "opacity-50")} style={{ minWidth }}>
+      <td className="px-2 py-3 align-middle" style={{ minWidth }}>
         <SurveySlider
           min={column.min}
           max={column.max}
@@ -463,7 +443,6 @@ const HybridGridDesktopCell = ({
           showValue={column.showValue}
           value={Array.isArray(value) ? (value as SliderValue) : undefined}
           onChange={(v) => onChange(v)}
-          disabled={disabled}
           error={hasError ? " " : undefined}
         />
       </td>
@@ -472,13 +451,12 @@ const HybridGridDesktopCell = ({
 
   if (column.type === "starrating") {
     return (
-      <td className={cn("px-2 py-3 align-middle", disabled && "opacity-50")} style={{ minWidth }}>
+      <td className="px-2 py-3 align-middle" style={{ minWidth }}>
         <StarRating
           items={[{ value: "rating", label: column.label }]}
           max={column.max}
           value={typeof value === "number" ? { rating: value } : {}}
           onChange={(v) => onChange(v.rating ?? "")}
-          disabled={disabled}
           error={hasError ? " " : undefined}
         />
       </td>
@@ -487,13 +465,12 @@ const HybridGridDesktopCell = ({
 
   if (column.type === "imageselector") {
     return (
-      <td className={cn("px-2 py-3 align-middle", disabled && "opacity-50")} style={{ minWidth }}>
+      <td className="px-2 py-3 align-middle" style={{ minWidth }}>
         <ImageSelector
           options={column.options}
           selectionMode={column.selectionMode ?? "single"}
           value={Array.isArray(value) ? (value as string[]) : []}
           onChange={(v) => onChange(v)}
-          disabled={disabled}
           error={hasError ? " " : undefined}
           // In the grid, lay the choices out side by side in a single row
           // (override ImageSelector's responsive column grid) and cap the
@@ -517,13 +494,12 @@ const HybridGridDesktopCell = ({
         {column.choices.map((choice) => {
           const id = `hg-${row.id}-${column.id}-${choice.value}`;
           return (
-            <td key={choice.value} className={cn("p-0 align-middle", disabled && "opacity-50")} style={{ minWidth: SUB_COLUMN_MIN_WIDTH }}>
+            <td key={choice.value} className="p-0 align-middle" style={{ minWidth: SUB_COLUMN_MIN_WIDTH }}>
               <label
                 htmlFor={id}
                 className={cn(
                   "flex items-center justify-center p-2 cursor-pointer w-full h-full border-2 border-transparent transition-all",
                   "has-[:focus-visible]:border-survey-border-interactive",
-                  disabled && "cursor-not-allowed",
                 )}
               >
                 <input
@@ -533,7 +509,6 @@ const HybridGridDesktopCell = ({
                   value={choice.value}
                   checked={selected === choice.value}
                   onChange={() => onChange(choice.value)}
-                  disabled={disabled}
                   aria-labelledby={`hg-label-${row.id}`}
                   aria-invalid={hasError || undefined}
                   className="peer sr-only"
@@ -561,20 +536,18 @@ const HybridGridDesktopCell = ({
       {column.choices.map((choice) => {
         const id = `hg-${row.id}-${column.id}-${choice.value}`;
         return (
-          <td key={choice.value} className={cn("p-0 align-middle", disabled && "opacity-50")} style={{ minWidth: SUB_COLUMN_MIN_WIDTH }}>
+          <td key={choice.value} className="p-0 align-middle" style={{ minWidth: SUB_COLUMN_MIN_WIDTH }}>
             <label
               htmlFor={id}
               className={cn(
                 "flex items-center justify-center p-2 cursor-pointer w-full h-full border-2 border-transparent transition-all",
                 "has-[:focus-visible]:border-survey-border-interactive",
-                disabled && "cursor-not-allowed",
               )}
             >
               <CheckboxPrimitive.Root
                 id={id}
                 checked={checkedValues.includes(choice.value)}
                 onCheckedChange={(c) => onChange(toggleChoice(value, choice.value, c === true))}
-                disabled={disabled}
                 aria-labelledby={`hg-label-${row.id}`}
                 aria-invalid={hasError || undefined}
                 className={cn(
@@ -600,7 +573,6 @@ const HybridGridMobileField = ({
   row,
   column,
   value,
-  disabled,
   hasError,
   onChange,
 }: HybridGridCellProps) => {
@@ -608,12 +580,7 @@ const HybridGridMobileField = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <span
-        className={cn(
-          "text-survey-foreground text-survey-body font-survey-regular",
-          disabled && "text-survey-muted-foreground",
-        )}
-      >
+      <span className="text-survey-foreground text-survey-body font-survey-regular">
         {column.label}
       </span>
 
@@ -622,7 +589,6 @@ const HybridGridMobileField = ({
           placeholder={column.placeholder}
           value={typeof value === "string" ? value : ""}
           onChange={(e) => onChange(e.target.value)}
-          disabled={disabled}
           error={hasError ? " " : undefined}
         />
       )}
@@ -636,7 +602,6 @@ const HybridGridMobileField = ({
           step={column.step}
           value={typeof value === "string" || typeof value === "number" ? String(value) : ""}
           onChange={(e) => onChange(e.target.value)}
-          disabled={disabled}
           error={hasError ? " " : undefined}
         />
       )}
@@ -647,7 +612,6 @@ const HybridGridMobileField = ({
           placeholder={column.placeholder ?? "Select an answer…"}
           value={typeof value === "string" && value !== "" ? value : undefined}
           onValueChange={(v) => onChange(v)}
-          disabled={disabled}
           error={hasError ? " " : undefined}
           fullWidth
         />
@@ -665,7 +629,6 @@ const HybridGridMobileField = ({
               id={`hg-m-${row.id}-${column.id}-${choice.value}`}
               value={choice.value}
               label={choice.label}
-              disabled={disabled}
             />
           ))}
         </RadioGroup>
@@ -680,7 +643,6 @@ const HybridGridMobileField = ({
               label={choice.label}
               checked={checkedValues.includes(choice.value)}
               onCheckedChange={(c) => onChange(toggleChoice(value, choice.value, c === true))}
-              disabled={disabled}
             />
           ))}
         </CheckboxGroup>
@@ -696,7 +658,6 @@ const HybridGridMobileField = ({
           showValue={column.showValue}
           value={Array.isArray(value) ? (value as SliderValue) : undefined}
           onChange={(v) => onChange(v)}
-          disabled={disabled}
           error={hasError ? " " : undefined}
         />
       )}
@@ -707,7 +668,6 @@ const HybridGridMobileField = ({
           max={column.max}
           value={typeof value === "number" ? { rating: value } : {}}
           onChange={(v) => onChange(v.rating ?? "")}
-          disabled={disabled}
           error={hasError ? " " : undefined}
         />
       )}
@@ -718,7 +678,6 @@ const HybridGridMobileField = ({
           selectionMode={column.selectionMode ?? "single"}
           value={Array.isArray(value) ? (value as string[]) : []}
           onChange={(v) => onChange(v)}
-          disabled={disabled}
           error={hasError ? " " : undefined}
         />
       )}

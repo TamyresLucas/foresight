@@ -27,7 +27,6 @@ const meta = {
     minLabel: { control: 'text' },
     maxLabel: { control: 'text' },
     error: { control: 'text' },
-    disabled: { control: 'boolean' },
   },
   parameters: {
     docs: {
@@ -88,13 +87,6 @@ export const WithError: Story = {
     // controls the `error` prop, as with the other question types).
     defaultValue: [0],
     error: 'This question is required',
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    defaultValue: [40],
-    disabled: true,
   },
 };
 

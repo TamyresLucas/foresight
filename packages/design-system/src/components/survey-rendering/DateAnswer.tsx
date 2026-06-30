@@ -19,7 +19,7 @@ const parseIso = (value: string | undefined): Date | undefined => {
 export interface DateAnswerProps
   extends Omit<
     React.ButtonHTMLAttributes<HTMLButtonElement>,
-    'value' | 'defaultValue' | 'onChange' | 'type'
+    'value' | 'defaultValue' | 'onChange' | 'type' | 'disabled'
   > {
   /** Selected date as ISO yyyy-MM-dd string */
   value?: string;
@@ -46,7 +46,6 @@ const DateAnswer = React.forwardRef<HTMLButtonElement, DateAnswerProps>(
       onChange,
       value,
       defaultValue,
-      disabled,
       placeholder = 'Select a date',
       ...props
     },
@@ -99,7 +98,6 @@ const DateAnswer = React.forwardRef<HTMLButtonElement, DateAnswerProps>(
               <button
                 ref={ref}
                 type="button"
-                disabled={disabled}
                 aria-invalid={error ? true : undefined}
                 onBlur={(e) => {
                   // Don't reset selected when focus moves into the popover
@@ -109,7 +107,7 @@ const DateAnswer = React.forwardRef<HTMLButtonElement, DateAnswerProps>(
                 className={cn(
                   'flex w-fit min-w-[200px] h-10 px-2 py-1.5 items-center gap-[10px] rounded-lg border bg-transparent transition-all relative',
                   'border-survey-border-interactive text-survey-body font-survey-regular text-survey-foreground font-survey',
-                  'focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+                  'focus-visible:outline-none',
                   'group-data-[selected=true]/survey-input:border-survey-border-selected group-data-[selected=true]/survey-input:border-2',
                   'group-has-[:focus-visible]/survey-input:border',
                   focused && 'border',

@@ -33,7 +33,6 @@ export interface FileUploadProps
   /** Native accept attribute, e.g. "image/*". */
   accept?: string;
   multiple?: boolean;
-  disabled?: boolean;
   error?: string;
   /** When false, hides the file size and shows only the percentage/Completed label in the same muted style. Defaults to true. */
   showFileSize?: boolean;
@@ -58,12 +57,11 @@ function fileState(progress: number | undefined): 'empty' | 'uploading' | 'compl
 
 interface FileRowProps {
   file: FileUploadFile;
-  disabled?: boolean;
   onRemove: (id: string) => void;
   showFileSize?: boolean;
 }
 
-const FileRow = ({ file, disabled, onRemove, showFileSize = true }: FileRowProps) => {
+const FileRow = ({ file, onRemove, showFileSize = true }: FileRowProps) => {
   const progress = file.progress ?? 0;
   const state = fileState(progress);
   const isImage = Boolean(file.previewUrl);
@@ -143,13 +141,11 @@ const FileRow = ({ file, disabled, onRemove, showFileSize = true }: FileRowProps
       <button
         type="button"
         aria-label={state === 'completed' ? `Remove ${file.name}` : `Cancel upload for ${file.name}`}
-        disabled={disabled}
         onClick={() => onRemove(file.id)}
         className={cn(
           'shrink-0 inline-flex items-center justify-center rounded-survey-sm transition-colors',
           'hover:bg-survey-muted-background',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-survey-border-selected',
-          'disabled:cursor-not-allowed disabled:opacity-50',
           state === 'completed'
             ? 'text-survey-destructive'
             : 'text-survey-muted-foreground',
@@ -187,7 +183,6 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
       buttonLabel = 'Browse files',
       accept,
       multiple = true,
-      disabled = false,
       error,
       showFileSize = true,
       className,
@@ -230,7 +225,7 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
     };
 
     const openPicker = () => {
-      if (!disabled) inputRef.current?.click();
+      inputRef.current?.click();
     };
 
     return (
@@ -243,8 +238,7 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
         {/* Drop zone */}
         <div
           role="button"
-          tabIndex={disabled ? -1 : 0}
-          aria-disabled={disabled || undefined}
+          tabIndex={0}
           aria-invalid={error ? true : undefined}
           onClick={openPicker}
           onKeyDown={(e) => {
@@ -255,21 +249,21 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
           }}
           onDragOver={(e) => {
             e.preventDefault();
-            if (!disabled) setIsDragging(true);
+            setIsDragging(true);
           }}
           onDragLeave={() => setIsDragging(false)}
           onDrop={(e) => {
             e.preventDefault();
             setIsDragging(false);
-            if (!disabled) handleFiles(e.dataTransfer.files);
+            handleFiles(e.dataTransfer.files);
           }}
           className={cn(
             'flex flex-col items-center justify-center text-center',
             'border-2 border-dashed border-survey-border-interactive bg-transparent transition-colors',
             'focus-visible:outline-none focus-visible:border-survey-border-selected',
+            'cursor-pointer',
             isDragging && 'border-survey-border-selected bg-survey-muted-background',
             error && 'border-survey-destructive',
-            disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
           )}
           style={{ padding: '32px 16px', gap: '10px', borderRadius: 'var(--component-button-radius)' }}
         >
@@ -287,7 +281,6 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
 
           <Button
             type="button"
-            disabled={disabled}
             onClick={(e) => {
               e.stopPropagation();
               openPicker();
@@ -306,7 +299,6 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
             type="file"
             accept={accept}
             multiple={multiple}
-            disabled={disabled}
             className="hidden"
             onChange={(e) => {
               handleFiles(e.target.files);
@@ -322,7 +314,6 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
               <FileRow
                 key={file.id}
                 file={file}
-                disabled={disabled}
                 onRemove={handleRemove}
                 showFileSize={showFileSize}
               />

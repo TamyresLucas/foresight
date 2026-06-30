@@ -22,7 +22,6 @@ export interface SliderProps {
   /** Optional label rendered beneath the right (max) end of the track. */
   maxLabel?: string;
   error?: string;
-  disabled?: boolean;
   className?: string;
 }
 
@@ -43,7 +42,6 @@ const SurveySlider = React.forwardRef<
       minLabel,
       maxLabel,
       error,
-      disabled = false,
       className,
     },
     ref,
@@ -55,7 +53,6 @@ const SurveySlider = React.forwardRef<
     const currentValue = value ?? internalValue;
 
     const handleChange = (next: SliderValue) => {
-      if (disabled) return;
       if (value === undefined) {
         setInternalValue(next);
       }
@@ -73,12 +70,10 @@ const SurveySlider = React.forwardRef<
           step={step}
           value={currentValue}
           onValueChange={handleChange}
-          disabled={disabled}
           aria-invalid={!!error || undefined}
           className={cn(
-            'relative flex w-full touch-none select-none items-center',
+            'relative flex w-full touch-none select-none items-center cursor-pointer',
             showValue && 'mt-7',
-            disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
           )}
         >
           <SliderPrimitive.Track className="relative h-1 w-full grow overflow-hidden rounded-survey-md bg-survey-border-muted">
@@ -94,18 +89,14 @@ const SurveySlider = React.forwardRef<
               className={cn(
                 'relative block h-4 w-4 rounded-full border-2 bg-survey-background outline-none transition-[box-shadow,border-color] focus:outline-none',
                 'border-survey-border-selected',
-                disabled
-                  ? 'cursor-not-allowed'
-                  : cn(
-                      'cursor-pointer',
-                      // Hover, focused, and selected (clicked) states show a soft
-                      // outer halo at 30% of the survey primary token around the
-                      // picker. Using :focus (not :focus-visible) means a mouse
-                      // click also shows it and it persists until blur. The
-                      // default state (idle) shows only the inner border.
-                      'hover:ring-8 hover:ring-[hsl(var(--survey-primary)_/_0.3)]',
-                      'focus:border-survey-border-selected focus:ring-8 focus:ring-[hsl(var(--survey-primary)_/_0.3)]',
-                    ),
+                'cursor-pointer',
+                // Hover, focused, and selected (clicked) states show a soft
+                // outer halo at 30% of the survey primary token around the
+                // picker. Using :focus (not :focus-visible) means a mouse
+                // click also shows it and it persists until blur. The
+                // default state (idle) shows only the inner border.
+                'hover:ring-8 hover:ring-[hsl(var(--survey-primary)_/_0.3)]',
+                'focus:border-survey-border-selected focus:ring-8 focus:ring-[hsl(var(--survey-primary)_/_0.3)]',
               )}
             >
               {showValue && (

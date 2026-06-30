@@ -16,7 +16,6 @@ export interface TimePickerProps
   onChange?: (event: { target: { value: TimePickerProps['value'] } }) => void
   fromLabel?: string
   toLabel?: string
-  disabled?: boolean
   error?: string
   id?: string
   'aria-label'?: string
@@ -41,13 +40,12 @@ interface TimeInputProps {
   value: string
   onCommit: (raw: string) => void
   error?: boolean
-  disabled?: boolean
   'aria-label'?: string
   inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode']
   maxLength?: number
 }
 
-function TimeInput({ value: controlledValue, onCommit, error, disabled, ...props }: TimeInputProps) {
+function TimeInput({ value: controlledValue, onCommit, error, ...props }: TimeInputProps) {
   const [localValue, setLocalValue] = React.useState(controlledValue)
   const [isPointerActive, setIsPointerActive] = React.useState(false)
   const [isFocused, setIsFocused] = React.useState(false)
@@ -72,7 +70,6 @@ function TimeInput({ value: controlledValue, onCommit, error, disabled, ...props
         setIsFocused(false)
         onCommit(localValue)
       }}
-      disabled={disabled}
       aria-invalid={error || undefined}
       className={cn(
         'w-12 h-10 text-center rounded-survey-md border bg-transparent',
@@ -151,11 +148,10 @@ function PeriodSelect({ value, onValueChange, error }: PeriodSelectProps) {
 interface TimeFieldProps {
   value: TimeValue
   onChange: (val: TimeValue) => void
-  disabled?: boolean
   error?: boolean
 }
 
-function TimeField({ value, onChange, disabled, error }: TimeFieldProps) {
+function TimeField({ value, onChange, error }: TimeFieldProps) {
   const clampHour = (h: number) => Math.max(1, Math.min(12, h))
   const clampMinute = (m: number) => Math.max(0, Math.min(59, m))
   const padZero = (n: number) => String(n).padStart(2, '0')
@@ -179,7 +175,6 @@ function TimeField({ value, onChange, disabled, error }: TimeFieldProps) {
       <TimeInput
         value={padZero(value.hour)}
         onCommit={handleHourCommit}
-        disabled={disabled}
         aria-label="Hour"
         inputMode="numeric"
         maxLength={2}
@@ -189,7 +184,6 @@ function TimeField({ value, onChange, disabled, error }: TimeFieldProps) {
       <TimeInput
         value={padZero(value.minute)}
         onCommit={handleMinuteCommit}
-        disabled={disabled}
         aria-label="Minute"
         inputMode="numeric"
         maxLength={2}
@@ -211,7 +205,6 @@ const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
       onChange,
       fromLabel = 'From',
       toLabel = 'To',
-      disabled = false,
       error,
       className,
       id,
@@ -244,7 +237,7 @@ const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
           className={cn('flex flex-col gap-3', className)}
           {...props}
         >
-          <TimeField value={singleValue} onChange={handleChange} disabled={disabled} error={!!error} />
+          <TimeField value={singleValue} onChange={handleChange} error={!!error} />
           {error && (
             <p role="alert" className="flex items-center gap-1 text-survey-body-sm font-survey-regular text-survey-destructive">
               <AlertCircle size={14} aria-hidden className="flex-shrink-0" />
@@ -273,7 +266,6 @@ const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
           <TimeField
             value={fromVal}
             onChange={(val) => handleChange({ ...rangeValue, from: val })}
-            disabled={disabled}
             error={!!error}
           />
         </div>
@@ -282,7 +274,6 @@ const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
           <TimeField
             value={toVal}
             onChange={(val) => handleChange({ ...rangeValue, to: val })}
-            disabled={disabled}
             error={!!error}
           />
         </div>

@@ -26,7 +26,6 @@ export interface RunningTotalProps {
   defaultValue?: RunningTotalValue;
   onChange?: (value: RunningTotalValue) => void;
   error?: string;
-  disabled?: boolean;
   className?: string;
 }
 
@@ -77,7 +76,7 @@ const RunningTotalInput = React.forwardRef<
             inputMode="numeric"
             aria-invalid={error || undefined}
             className={cn(
-              'w-full bg-transparent text-right text-survey-body font-survey-regular focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 text-survey-foreground font-survey',
+              'w-full bg-transparent text-right text-survey-body font-survey-regular focus-visible:outline-none text-survey-foreground font-survey',
               className,
             )}
             ref={ref}
@@ -92,7 +91,7 @@ const RunningTotalInput = React.forwardRef<
 RunningTotalInput.displayName = 'RunningTotalInput';
 
 const RunningTotal = React.forwardRef<HTMLDivElement, RunningTotalProps>(
-  ({ rows, columns, value, defaultValue, onChange, error, disabled = false, className }, ref) => {
+  ({ rows, columns, value, defaultValue, onChange, error, className }, ref) => {
     const [internalValue, setInternalValue] = React.useState<RunningTotalValue>(
       defaultValue ?? {},
     );
@@ -152,7 +151,6 @@ const RunningTotal = React.forwardRef<HTMLDivElement, RunningTotalProps>(
               <span
                 className={cn(
                   'text-survey-foreground text-survey-body font-survey-regular font-survey leading-none',
-                  disabled && 'text-survey-muted-foreground opacity-50',
                 )}
               >
                 {row.label}
@@ -164,7 +162,6 @@ const RunningTotal = React.forwardRef<HTMLDivElement, RunningTotalProps>(
                   value={currentValue[row.value]?.[col.value] ?? ''}
                   onChange={(e) => handleCellChange(row.value, col.value, e.target.value)}
                   error={!!error}
-                  disabled={disabled}
                   aria-label={`${row.label} - ${col.label}`}
                 />
               </div>

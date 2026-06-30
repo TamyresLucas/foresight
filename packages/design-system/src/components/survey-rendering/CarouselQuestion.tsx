@@ -66,7 +66,6 @@ export interface CarouselQuestionProps
    * above the question text via `SurveyErrorMessage`, not rendered here.
    */
   error?: string;
-  disabled?: boolean;
   className?: string;
 }
 
@@ -87,7 +86,6 @@ const CarouselQuestion = React.forwardRef<HTMLDivElement, CarouselQuestionProps>
       advanceOnAnswer = true,
       advanceDelayMs = 500,
       error,
-      disabled = false,
       className,
       navigation = "bullets",
       ...carouselProps
@@ -212,7 +210,6 @@ const CarouselQuestion = React.forwardRef<HTMLDivElement, CarouselQuestionProps>
                     key={opt.value}
                     value={opt.value}
                     label={opt.label}
-                    disabled={disabled}
                   />
                 ))}
               </RadioGroup>
@@ -222,7 +219,6 @@ const CarouselQuestion = React.forwardRef<HTMLDivElement, CarouselQuestionProps>
                 value={answers[activeItem.id] ?? undefined}
                 onValueChange={(v) => handleSelect(activeItem.id, v)}
                 error={error}
-                disabled={disabled}
                 name={activeItem.id}
                 leftLabel={npsLeftLabel}
                 rightLabel={npsRightLabel}

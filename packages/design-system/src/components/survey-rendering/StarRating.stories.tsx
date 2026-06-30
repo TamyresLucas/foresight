@@ -24,14 +24,13 @@ const meta = {
   argTypes: {
     max: { control: { type: 'number', min: 1, max: 10 } },
     error: { control: 'text' },
-    disabled: { control: 'boolean' },
   },
   parameters: {
     docs: {
       description: {
         component:
           'StarRating component for survey rendering. Displays a list of items, each rated on a row of stars (default 5). Empty stars use the same border token as the text-answer input (survey-border-interactive); filled stars use the brand selected token (survey-border-selected). Compose with QuestionText (and optionally QuestionField) for the question label and error message.\n\n' +
-          '**Optional items and resetting a score:** mark an item with `optional: true` to let respondents clear a score they already picked. Once an optional item has a selected score, a reset (X) icon button appears to the right of its stars; clicking it removes that item’s score (back to empty) without affecting the other rows. Mandatory items (the default, `optional` omitted or false) never show the reset button — their answer cannot be removed once chosen. The reset button is also hidden while the component is `disabled`.\n\n' +
+          '**Optional items and resetting a score:** mark an item with `optional: true` to let respondents clear a score they already picked. Once an optional item has a selected score, a reset (X) icon button appears to the right of its stars; clicking it removes that item’s score (back to empty) without affecting the other rows. Mandatory items (the default, `optional` omitted or false) never show the reset button — their answer cannot be removed once chosen.\n\n' +
           '**Required items and per-item validation:** mandatory items (anything not marked `optional`) show a red asterisk after their label. Validation is per item: when the `error` prop is set (e.g. the respondent tries to advance to the next page), only the mandatory items that are still unanswered turn red — answered items and optional items are never flagged. Set `error` from the parent based on whether any mandatory item is unanswered, and render the message with QuestionText.\n\n' +
           '**Label alignment and wrapping:** every label is sized to the width of the longest one so the stars line up across all rows; shorter labels fill that shared width. When the row is too narrow to fit the label and stars side by side, the stars wrap onto their own line below the label, separated by the theme’s margin token (`--survey-margin`). Because the labels share one width, all rows wrap together, so the stars stay aligned.',
       },
@@ -82,13 +81,6 @@ export const RequiredValidation: Story = {
     ],
     defaultValue: { r1: 4 },
     error: 'This question is required',
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    disabled: true,
-    defaultValue: { r1: 4, r2: 2, r3: 5 },
   },
 };
 

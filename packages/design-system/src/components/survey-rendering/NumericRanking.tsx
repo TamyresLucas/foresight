@@ -18,7 +18,6 @@ export interface NumericRankingProps {
   defaultValue?: NumericRankingValue;
   onChange?: (value: NumericRankingValue) => void;
   error?: string;
-  disabled?: boolean;
   className?: string;
 }
 
@@ -69,7 +68,7 @@ const NumericRankingInput = React.forwardRef<
             inputMode="numeric"
             aria-invalid={error || undefined}
             className={cn(
-              'w-full bg-transparent text-left text-survey-body font-survey-regular focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 text-survey-foreground font-survey',
+              'w-full bg-transparent text-left text-survey-body font-survey-regular focus-visible:outline-none text-survey-foreground font-survey',
               className,
             )}
             ref={ref}
@@ -84,7 +83,7 @@ const NumericRankingInput = React.forwardRef<
 NumericRankingInput.displayName = 'NumericRankingInput';
 
 const NumericRanking = React.forwardRef<HTMLDivElement, NumericRankingProps>(
-  ({ items, value, defaultValue, onChange, error, disabled = false, className }, ref) => {
+  ({ items, value, defaultValue, onChange, error, className }, ref) => {
     const [internalValue, setInternalValue] = React.useState<NumericRankingValue>(
       defaultValue ?? {},
     );
@@ -110,13 +109,11 @@ const NumericRanking = React.forwardRef<HTMLDivElement, NumericRankingProps>(
               value={currentValue[item.value] ?? ''}
               onChange={(e) => handleItemChange(item.value, e.target.value)}
               error={!!error}
-              disabled={disabled}
               aria-label={`Rank for ${item.label}`}
             />
             <span
               className={cn(
                 'text-survey-foreground text-survey-body font-survey-regular font-survey leading-none',
-                disabled && 'text-survey-muted-foreground opacity-50',
               )}
             >
               {item.label}
