@@ -26,9 +26,6 @@ const meta = {
     rows: defaultRows,
     columns: defaultColumns,
   },
-  argTypes: {
-    error: { control: 'text' },
-  },
   parameters: {
     docs: {
       description: {
@@ -65,12 +62,6 @@ export const MultipleColumns: Story = {
       row2: { col1: '10', col2: '20' },
       row3: { col1: '25', col2: '5' },
     },
-  },
-};
-
-export const WithError: Story = {
-  args: {
-    error: 'This question is required',
   },
 };
 

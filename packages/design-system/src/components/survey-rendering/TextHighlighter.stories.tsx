@@ -108,9 +108,6 @@ const meta = {
       </>
     ),
   ],
-  argTypes: {
-    error: { control: 'text' },
-  },
   parameters: {
     docs: {
       description: {
@@ -262,10 +259,3 @@ export const LongTextSticky: Story = {
   },
 };
 
-export const WithError: Story = {
-  args: {
-    text: prose,
-    categories,
-    error: 'Please highlight at least one part of the text',
-  },
-};

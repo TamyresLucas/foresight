@@ -21,9 +21,6 @@ const meta = {
   args: {
     items: defaultItems,
   },
-  argTypes: {
-    error: { control: 'text' },
-  },
   parameters: {
     docs: {
       description: {
@@ -42,12 +39,6 @@ export const Default: Story = {};
 export const WithValues: Story = {
   args: {
     defaultValue: { '1': '3', '2': '1', '3': '2' },
-  },
-};
-
-export const WithError: Story = {
-  args: {
-    error: 'This question is required',
   },
 };
 

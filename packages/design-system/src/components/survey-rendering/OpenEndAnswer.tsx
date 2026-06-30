@@ -7,11 +7,10 @@ export interface OpenEndAnswerProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   selected?: boolean;
   focused?: boolean;
-  error?: string;
 }
 
 const OpenEndAnswer = React.forwardRef<HTMLTextAreaElement, OpenEndAnswerProps>(
-  ({ className, selected, focused = false, error, onBlur, ...props }, ref) => {
+  ({ className, selected, focused = false, onBlur, ...props }, ref) => {
     const [internalSelected, setInternalSelected] = React.useState(false);
     const isSelected = selected ?? internalSelected;
 
@@ -46,7 +45,6 @@ const OpenEndAnswer = React.forwardRef<HTMLTextAreaElement, OpenEndAnswerProps>(
             )}
           >
             <textarea
-              aria-invalid={error ? true : undefined}
               className={cn(
                 'w-full min-h-[100px] bg-transparent px-2 py-1.5 text-survey-body font-survey-regular focus-visible:outline-none text-survey-foreground font-survey resize-none',
                 className,

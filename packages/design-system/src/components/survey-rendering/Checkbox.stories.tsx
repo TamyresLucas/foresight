@@ -34,10 +34,6 @@ export const FocusedAndSelected: Story = {
   args: { label: 'Option', focused: true, checked: true },
 };
 
-export const WithError: Story = {
-  args: { label: 'Option', error: true },
-};
-
 export const GroupDefault: Story = {
   args: { label: 'Option' },
   render: () => (
@@ -71,13 +67,3 @@ export const OpenEndChecked: Story = {
   },
 };
 
-export const GroupWithError: Story = {
-  args: { label: 'Option' },
-  render: () => (
-    <CheckboxGroup error="This question is required">
-      <CheckboxOption label="Option" />
-      <CheckboxOption label="Option" />
-      <CheckboxOption label="Option" />
-    </CheckboxGroup>
-  ),
-};

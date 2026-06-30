@@ -31,7 +31,6 @@ const meta = {
   },
   argTypes: {
     selectionMode: { control: 'inline-radio', options: ['single', 'multiple'] },
-    error: { control: 'text' },
   },
   parameters: {
     docs: {
@@ -108,8 +107,3 @@ export const Single: Story = {
   },
 };
 
-export const WithError: Story = {
-  args: {
-    error: 'This question is required',
-  },
-};

@@ -58,7 +58,6 @@ interface TextHighlighterBaseProps {
   /** Toolbar labels (also used as aria-labels). */
   highlightLabel?: string;
   eraseLabel?: string;
-  error?: string;
   className?: string;
   /**
    * When true, there are no categories: highlighting applies immediately and the
@@ -183,7 +182,6 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
       value,
       defaultValue,
       onChange,
-      error,
       className,
       highlightLabel = 'Highlight',
       eraseLabel = 'Erase',
@@ -711,7 +709,6 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
                     placeholder="Select category"
                     value={draftCategory || undefined}
                     onValueChange={chooseCategory}
-                    error={categoryError ? 'Please select a category' : undefined}
                     className="w-full min-w-0"
                   />
                 </div>
@@ -767,7 +764,6 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
           ref={containerRef}
           role="group"
           aria-label="Highlightable text"
-          aria-invalid={error ? true : undefined}
           onMouseDown={() => {
             // Each new interaction starts fresh; only the synthetic click that
             // immediately follows a drag's mouseup is suppressed.

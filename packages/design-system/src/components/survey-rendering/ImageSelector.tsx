@@ -29,7 +29,6 @@ export interface ImageSelectorProps {
   value?: ImageSelectorValue;
   defaultValue?: ImageSelectorValue;
   onChange?: (value: ImageSelectorValue) => void;
-  error?: string;
   className?: string;
 }
 
@@ -41,7 +40,6 @@ const ImageSelector = React.forwardRef<HTMLDivElement, ImageSelectorProps>(
       value,
       defaultValue,
       onChange,
-      error,
       className,
     },
     ref,
@@ -110,12 +108,6 @@ const ImageSelector = React.forwardRef<HTMLDivElement, ImageSelectorProps>(
             );
           })}
         </div>
-
-        {error && (
-          <p className="text-survey-body font-survey-regular text-survey-destructive">
-            {error}
-          </p>
-        )}
       </div>
     );
   },

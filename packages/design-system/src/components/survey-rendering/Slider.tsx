@@ -21,7 +21,6 @@ export interface SliderProps {
   minLabel?: string;
   /** Optional label rendered beneath the right (max) end of the track. */
   maxLabel?: string;
-  error?: string;
   className?: string;
 }
 
@@ -41,7 +40,6 @@ const SurveySlider = React.forwardRef<
       showValue = false,
       minLabel,
       maxLabel,
-      error,
       className,
     },
     ref,
@@ -70,7 +68,6 @@ const SurveySlider = React.forwardRef<
           step={step}
           value={currentValue}
           onValueChange={handleChange}
-          aria-invalid={!!error || undefined}
           className={cn(
             'relative flex w-full touch-none select-none items-center cursor-pointer',
             showValue && 'mt-7',

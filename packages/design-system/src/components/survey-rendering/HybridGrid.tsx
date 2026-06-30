@@ -3,7 +3,7 @@
 import * as React from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { cn } from "@/lib/utils";
-import { AlertCircle, Check } from "../ui/icons";
+import { Check } from "../ui/icons";
 import {
   Accordion,
   AccordionContent,
@@ -114,7 +114,6 @@ export interface HybridGridProps {
   value?: HybridGridValue;
   defaultValue?: HybridGridValue;
   onValueChange?: (value: HybridGridValue) => void;
-  error?: string;
   className?: string;
   /**
    * Force a specific variant regardless of width.
@@ -123,13 +122,6 @@ export interface HybridGridProps {
    */
   variant?: "auto" | "desktop" | "mobile";
 }
-
-/** True when a cell holds no answer. */
-const isCellEmpty = (value: HybridGridCellValue | undefined): boolean =>
-  value === undefined ||
-  value === "" ||
-  (Array.isArray(value) && value.length === 0) ||
-  (typeof value === "number" && Number.isNaN(value));
 
 /** Choice columns rendered as a sub-column per option (matrix layout). */
 const isSubColumn = (
@@ -165,13 +157,6 @@ const columnMinWidth = (column: HybridGridColumn): number | string => {
   return COLUMN_MIN_WIDTH[column.type];
 };
 
-/** True when every cell in a row is empty (used for required-error affordances). */
-const isRowEmpty = (
-  rowValues: Record<string, HybridGridCellValue> | undefined,
-  columns: HybridGridColumn[],
-): boolean =>
-  !rowValues || columns.every((col) => isCellEmpty(rowValues[col.id]));
-
 const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
   (props, ref) => {
     const {
@@ -180,7 +165,6 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
       value: controlledValue,
       defaultValue,
       onValueChange,
-      error,
       className,
       variant = "auto",
     } = props;
@@ -258,7 +242,6 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
             </thead>
             <tbody>
               {rows.map((row, i) => {
-                const rowEmpty = isRowEmpty(values[row.id], columns);
                 return (
                   <tr
                     key={row.id}
@@ -285,7 +268,6 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
                         row={row}
                         column={column}
                         value={values[row.id]?.[column.id]}
-                        hasError={!!error && rowEmpty}
                         onChange={(next) => setCell(row.id, column.id, next)}
                       />
                     ))}
@@ -306,7 +288,6 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
             )}
           >
             {rows.map((row) => {
-              const rowEmpty = isRowEmpty(values[row.id], columns);
               return (
                 <AccordionItem
                   key={row.id}
@@ -315,9 +296,6 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
                 >
                   <AccordionTrigger className="px-4 py-4 hover:no-underline text-left text-survey-foreground text-survey-body font-survey-regular rounded-none">
                     <span className="flex items-center gap-2">
-                      {!!error && rowEmpty && (
-                        <AlertCircle className="flex-shrink-0 w-4 h-4 text-survey-destructive" />
-                      )}
                       {row.label}
                     </span>
                   </AccordionTrigger>
@@ -329,7 +307,6 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
                           row={row}
                           column={column}
                           value={values[row.id]?.[column.id]}
-                          hasError={!!error && rowEmpty}
                           onChange={(next) => setCell(row.id, column.id, next)}
                         />
                       ))}
@@ -350,7 +327,6 @@ interface HybridGridCellProps {
   row: HybridGridRow;
   column: HybridGridColumn;
   value: HybridGridCellValue | undefined;
-  hasError?: boolean;
   onChange: (next: HybridGridCellValue) => void;
 }
 
@@ -370,7 +346,6 @@ const HybridGridDesktopCell = ({
   row,
   column,
   value,
-  hasError,
   onChange,
 }: HybridGridCellProps) => {
   // Floor each column at its content/control width; the table flexes above it.
@@ -384,7 +359,6 @@ const HybridGridDesktopCell = ({
           placeholder={column.placeholder}
           value={typeof value === "string" ? value : ""}
           onChange={(e) => onChange(e.target.value)}
-          error={hasError ? " " : undefined}
         />
       </td>
     );
@@ -402,7 +376,6 @@ const HybridGridDesktopCell = ({
           step={column.step}
           value={typeof value === "string" || typeof value === "number" ? String(value) : ""}
           onChange={(e) => onChange(e.target.value)}
-          error={hasError ? " " : undefined}
         />
       </td>
     );
@@ -424,7 +397,6 @@ const HybridGridDesktopCell = ({
           placeholder={column.placeholder ?? "Select an answer…"}
           value={typeof value === "string" && value !== "" ? value : undefined}
           onValueChange={(v) => onChange(v)}
-          error={hasError ? " " : undefined}
           fullWidth
         />
       </td>
@@ -443,7 +415,6 @@ const HybridGridDesktopCell = ({
           showValue={column.showValue}
           value={Array.isArray(value) ? (value as SliderValue) : undefined}
           onChange={(v) => onChange(v)}
-          error={hasError ? " " : undefined}
         />
       </td>
     );
@@ -457,7 +428,6 @@ const HybridGridDesktopCell = ({
           max={column.max}
           value={typeof value === "number" ? { rating: value } : {}}
           onChange={(v) => onChange(v.rating ?? "")}
-          error={hasError ? " " : undefined}
         />
       </td>
     );
@@ -471,7 +441,6 @@ const HybridGridDesktopCell = ({
           selectionMode={column.selectionMode ?? "single"}
           value={Array.isArray(value) ? (value as string[]) : []}
           onChange={(v) => onChange(v)}
-          error={hasError ? " " : undefined}
           // In the grid, lay the choices out side by side in a single row
           // (override ImageSelector's responsive column grid) and cap the
           // thumbnails so the column stays compact (mirrors ImageChoiceGrid).
@@ -510,7 +479,6 @@ const HybridGridDesktopCell = ({
                   checked={selected === choice.value}
                   onChange={() => onChange(choice.value)}
                   aria-labelledby={`hg-label-${row.id}`}
-                  aria-invalid={hasError || undefined}
                   className="peer sr-only"
                 />
                 <span
@@ -549,7 +517,6 @@ const HybridGridDesktopCell = ({
                 checked={checkedValues.includes(choice.value)}
                 onCheckedChange={(c) => onChange(toggleChoice(value, choice.value, c === true))}
                 aria-labelledby={`hg-label-${row.id}`}
-                aria-invalid={hasError || undefined}
                 className={cn(
                   "flex-shrink-0 w-4 h-4 rounded-[4px] border-2 transition-colors grid place-content-center",
                   "border-survey-border-interactive",
@@ -573,7 +540,6 @@ const HybridGridMobileField = ({
   row,
   column,
   value,
-  hasError,
   onChange,
 }: HybridGridCellProps) => {
   const checkedValues = Array.isArray(value) ? value.map(String) : [];
@@ -589,7 +555,6 @@ const HybridGridMobileField = ({
           placeholder={column.placeholder}
           value={typeof value === "string" ? value : ""}
           onChange={(e) => onChange(e.target.value)}
-          error={hasError ? " " : undefined}
         />
       )}
 
@@ -602,7 +567,6 @@ const HybridGridMobileField = ({
           step={column.step}
           value={typeof value === "string" || typeof value === "number" ? String(value) : ""}
           onChange={(e) => onChange(e.target.value)}
-          error={hasError ? " " : undefined}
         />
       )}
 
@@ -612,7 +576,6 @@ const HybridGridMobileField = ({
           placeholder={column.placeholder ?? "Select an answer…"}
           value={typeof value === "string" && value !== "" ? value : undefined}
           onValueChange={(v) => onChange(v)}
-          error={hasError ? " " : undefined}
           fullWidth
         />
       )}
@@ -621,7 +584,6 @@ const HybridGridMobileField = ({
         <RadioGroup
           value={typeof value === "string" ? value : undefined}
           onValueChange={(v) => onChange(v)}
-          error={hasError ? " " : undefined}
         >
           {column.choices.map((choice) => (
             <RadioGroupOption
@@ -635,7 +597,7 @@ const HybridGridMobileField = ({
       )}
 
       {column.type === "checkbox" && (
-        <CheckboxGroup error={hasError ? " " : undefined}>
+        <CheckboxGroup>
           {column.choices.map((choice) => (
             <CheckboxOption
               key={choice.value}
@@ -658,7 +620,6 @@ const HybridGridMobileField = ({
           showValue={column.showValue}
           value={Array.isArray(value) ? (value as SliderValue) : undefined}
           onChange={(v) => onChange(v)}
-          error={hasError ? " " : undefined}
         />
       )}
 
@@ -668,7 +629,6 @@ const HybridGridMobileField = ({
           max={column.max}
           value={typeof value === "number" ? { rating: value } : {}}
           onChange={(v) => onChange(v.rating ?? "")}
-          error={hasError ? " " : undefined}
         />
       )}
 
@@ -678,7 +638,6 @@ const HybridGridMobileField = ({
           selectionMode={column.selectionMode ?? "single"}
           value={Array.isArray(value) ? (value as string[]) : []}
           onChange={(v) => onChange(v)}
-          error={hasError ? " " : undefined}
         />
       )}
     </div>

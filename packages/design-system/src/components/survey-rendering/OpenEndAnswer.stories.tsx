@@ -15,7 +15,6 @@ const meta = {
   argTypes: {
     focused: { control: 'boolean' },
     selected: { control: 'boolean' },
-    error: { control: 'text' },
     placeholder: { control: 'text' },
   },
   parameters: {
@@ -45,10 +44,6 @@ export const Selected: Story = {
 
 export const SelectedAndFocused: Story = {
   args: { selected: true, focused: true, placeholder: 'Type your answer here...' },
-};
-
-export const WithError: Story = {
-  args: { error: 'This question is required', placeholder: 'Type your answer here...' },
 };
 
 export const WithValue: Story = {

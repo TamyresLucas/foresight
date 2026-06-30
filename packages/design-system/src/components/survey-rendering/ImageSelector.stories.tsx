@@ -32,7 +32,6 @@ const meta = {
   },
   argTypes: {
     selectionMode: { control: 'inline-radio', options: ['single', 'multiple'] },
-    error: { control: 'text' },
   },
   parameters: {
     layout: 'fullscreen',
@@ -75,8 +74,3 @@ export const Single: Story = {
   },
 };
 
-export const WithError: Story = {
-  args: {
-    error: 'This question is required',
-  },
-};

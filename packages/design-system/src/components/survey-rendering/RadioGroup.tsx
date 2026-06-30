@@ -4,26 +4,22 @@ import * as React from "react";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { cn } from "@/lib/utils";
 
-const RadioGroupErrorContext = React.createContext<boolean>(false);
-
-export interface RadioGroupProps
-  extends Omit<React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>, 'disabled'> {
-  error?: string;
-}
+export type RadioGroupProps = Omit<
+  React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>,
+  'disabled'
+>;
 
 const RadioGroup = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Root>,
   RadioGroupProps
->(({ className, error, ...props }, ref) => {
+>(({ className, ...props }, ref) => {
   return (
-    <RadioGroupErrorContext.Provider value={!!error}>
-      <RadioGroupPrimitive.Root
-        className={cn("flex flex-col font-survey w-full", className)}
-        style={{ gap: 'var(--survey-margin)' }}
-        {...props}
-        ref={ref}
-      />
-    </RadioGroupErrorContext.Provider>
+    <RadioGroupPrimitive.Root
+      className={cn("flex flex-col font-survey w-full", className)}
+      style={{ gap: 'var(--survey-margin)' }}
+      {...props}
+      ref={ref}
+    />
   );
 });
 RadioGroup.displayName = RadioGroupPrimitive.Root.displayName;
@@ -48,7 +44,6 @@ const RadioGroupOption = React.forwardRef<
   RadioGroupOptionProps
 >(({ value, label, id, focused = false, className, openEnd, openEndPlaceholder, checked, openEndValue, onOpenEndChange }, ref) => {
   const itemId = id ?? `survey-option-${value}`;
-  const hasError = React.useContext(RadioGroupErrorContext);
   const showOpenEnd = openEnd && checked;
 
   return (
@@ -77,7 +72,6 @@ const RadioGroupOption = React.forwardRef<
         <RadioGroupPrimitive.Item
           id={itemId}
           value={value}
-          aria-invalid={hasError || undefined}
           className={cn(
             "flex-shrink-0 w-4 h-4 rounded-full border-2 transition-colors",
             "border-survey-border-interactive",

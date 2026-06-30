@@ -72,11 +72,6 @@ export const DesktopSelected: Story = {
   args: { rows, columns, defaultValue: seededValue, variant: 'desktop' },
 };
 
-export const DesktopWithError: Story = {
-  name: 'Desktop / WithError',
-  args: { rows, columns, error: 'This question is required', variant: 'desktop' },
-};
-
 // --- Mobile Stories ---
 
 export const MobileDefault: Story = {
@@ -88,12 +83,6 @@ export const MobileDefault: Story = {
 export const MobileSelected: Story = {
   name: 'Mobile / Selected',
   args: { rows, columns, defaultValue: seededValue, variant: 'mobile' },
-  parameters: { viewport: { defaultViewport: 'iphone12' } },
-};
-
-export const MobileWithError: Story = {
-  name: 'Mobile / WithError',
-  args: { rows, columns, error: 'This question is required', variant: 'mobile' },
   parameters: { viewport: { defaultViewport: 'iphone12' } },
 };
 

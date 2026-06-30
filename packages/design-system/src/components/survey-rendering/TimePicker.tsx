@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import * as PopoverPrimitive from '@radix-ui/react-popover'
-import { AlertCircle, ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { DropdownPopUp } from './DropdownPopUp'
 
@@ -16,7 +16,6 @@ export interface TimePickerProps
   onChange?: (event: { target: { value: TimePickerProps['value'] } }) => void
   fromLabel?: string
   toLabel?: string
-  error?: string
   id?: string
   'aria-label'?: string
 }
@@ -39,13 +38,12 @@ const triggerClass = cn(
 interface TimeInputProps {
   value: string
   onCommit: (raw: string) => void
-  error?: boolean
   'aria-label'?: string
   inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode']
   maxLength?: number
 }
 
-function TimeInput({ value: controlledValue, onCommit, error, ...props }: TimeInputProps) {
+function TimeInput({ value: controlledValue, onCommit, ...props }: TimeInputProps) {
   const [localValue, setLocalValue] = React.useState(controlledValue)
   const [isPointerActive, setIsPointerActive] = React.useState(false)
   const [isFocused, setIsFocused] = React.useState(false)
@@ -70,7 +68,6 @@ function TimeInput({ value: controlledValue, onCommit, error, ...props }: TimeIn
         setIsFocused(false)
         onCommit(localValue)
       }}
-      aria-invalid={error || undefined}
       className={cn(
         'w-12 h-10 text-center rounded-survey-md border bg-transparent',
         'text-survey-body font-survey-regular text-survey-foreground',
@@ -99,17 +96,15 @@ const periodOptions = [
 type PeriodSelectProps = {
   value: 'AM' | 'PM'
   onValueChange: (value: 'AM' | 'PM') => void
-  error?: boolean
 }
 
-function PeriodSelect({ value, onValueChange, error }: PeriodSelectProps) {
+function PeriodSelect({ value, onValueChange }: PeriodSelectProps) {
   const [open, setOpen] = React.useState(false)
 
   return (
     <PopoverPrimitive.Root open={open} onOpenChange={setOpen}>
       <PopoverPrimitive.Trigger
         aria-label="AM/PM"
-        aria-invalid={error || undefined}
         data-state={open ? 'open' : 'closed'}
         className={triggerClass}
       >
@@ -148,10 +143,9 @@ function PeriodSelect({ value, onValueChange, error }: PeriodSelectProps) {
 interface TimeFieldProps {
   value: TimeValue
   onChange: (val: TimeValue) => void
-  error?: boolean
 }
 
-function TimeField({ value, onChange, error }: TimeFieldProps) {
+function TimeField({ value, onChange }: TimeFieldProps) {
   const clampHour = (h: number) => Math.max(1, Math.min(12, h))
   const clampMinute = (m: number) => Math.max(0, Math.min(59, m))
   const padZero = (n: number) => String(n).padStart(2, '0')
@@ -178,7 +172,6 @@ function TimeField({ value, onChange, error }: TimeFieldProps) {
         aria-label="Hour"
         inputMode="numeric"
         maxLength={2}
-        error={error}
       />
       <span aria-hidden className="text-survey-foreground">:</span>
       <TimeInput
@@ -187,9 +180,8 @@ function TimeField({ value, onChange, error }: TimeFieldProps) {
         aria-label="Minute"
         inputMode="numeric"
         maxLength={2}
-        error={error}
       />
-      <PeriodSelect value={value.period} onValueChange={handlePeriodChange} error={error} />
+      <PeriodSelect value={value.period} onValueChange={handlePeriodChange} />
     </div>
   )
 }
@@ -205,7 +197,6 @@ const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
       onChange,
       fromLabel = 'From',
       toLabel = 'To',
-      error,
       className,
       id,
       'aria-label': ariaLabel,
@@ -237,13 +228,7 @@ const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
           className={cn('flex flex-col gap-3', className)}
           {...props}
         >
-          <TimeField value={singleValue} onChange={handleChange} error={!!error} />
-          {error && (
-            <p role="alert" className="flex items-center gap-1 text-survey-body-sm font-survey-regular text-survey-destructive">
-              <AlertCircle size={14} aria-hidden className="flex-shrink-0" />
-              {error}
-            </p>
-          )}
+          <TimeField value={singleValue} onChange={handleChange} />
         </div>
       )
     }
@@ -266,7 +251,6 @@ const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
           <TimeField
             value={fromVal}
             onChange={(val) => handleChange({ ...rangeValue, from: val })}
-            error={!!error}
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -274,15 +258,8 @@ const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
           <TimeField
             value={toVal}
             onChange={(val) => handleChange({ ...rangeValue, to: val })}
-            error={!!error}
           />
         </div>
-        {error && (
-          <p role="alert" className="flex items-center gap-1 text-survey-body-sm font-survey-regular text-survey-destructive">
-            <AlertCircle size={14} aria-hidden className="flex-shrink-0" />
-            {error}
-          </p>
-        )}
       </div>
     )
   },

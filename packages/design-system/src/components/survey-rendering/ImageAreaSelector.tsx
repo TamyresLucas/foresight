@@ -37,7 +37,6 @@ export interface ImageAreaSelectorProps {
   value?: ImageAreaSelectorValue;
   defaultValue?: ImageAreaSelectorValue;
   onChange?: (value: ImageAreaSelectorValue) => void;
-  error?: string;
   className?: string;
 }
 
@@ -66,7 +65,6 @@ const ImageAreaSelector = React.forwardRef<
       value,
       defaultValue,
       onChange,
-      error,
       className,
     },
     ref,
@@ -164,12 +162,6 @@ const ImageAreaSelector = React.forwardRef<
             );
           })}
         </div>
-
-        {error && (
-          <p className="text-survey-body font-survey-regular text-survey-destructive">
-            {error}
-          </p>
-        )}
       </div>
     );
   },

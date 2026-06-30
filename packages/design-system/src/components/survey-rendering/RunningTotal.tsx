@@ -25,7 +25,6 @@ export interface RunningTotalProps {
   value?: RunningTotalValue;
   defaultValue?: RunningTotalValue;
   onChange?: (value: RunningTotalValue) => void;
-  error?: string;
   className?: string;
 }
 
@@ -34,10 +33,9 @@ const RunningTotalInput = React.forwardRef<
   {
     selected?: boolean;
     focused?: boolean;
-    error?: boolean;
     className?: string;
   } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'>
->(({ className, selected, focused = false, error, onBlur, ...props }, ref) => {
+>(({ className, selected, focused = false, onBlur, ...props }, ref) => {
   const [internalSelected, setInternalSelected] = React.useState(false);
   const isSelected = selected ?? internalSelected;
 
@@ -74,7 +72,6 @@ const RunningTotalInput = React.forwardRef<
           <input
             type="text"
             inputMode="numeric"
-            aria-invalid={error || undefined}
             className={cn(
               'w-full bg-transparent text-right text-survey-body font-survey-regular focus-visible:outline-none text-survey-foreground font-survey',
               className,
@@ -91,7 +88,7 @@ const RunningTotalInput = React.forwardRef<
 RunningTotalInput.displayName = 'RunningTotalInput';
 
 const RunningTotal = React.forwardRef<HTMLDivElement, RunningTotalProps>(
-  ({ rows, columns, value, defaultValue, onChange, error, className }, ref) => {
+  ({ rows, columns, value, defaultValue, onChange, className }, ref) => {
     const [internalValue, setInternalValue] = React.useState<RunningTotalValue>(
       defaultValue ?? {},
     );
@@ -161,7 +158,6 @@ const RunningTotal = React.forwardRef<HTMLDivElement, RunningTotalProps>(
                 <RunningTotalInput
                   value={currentValue[row.value]?.[col.value] ?? ''}
                   onChange={(e) => handleCellChange(row.value, col.value, e.target.value)}
-                  error={!!error}
                   aria-label={`${row.label} - ${col.label}`}
                 />
               </div>

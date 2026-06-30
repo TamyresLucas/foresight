@@ -252,7 +252,6 @@ const LivePreview = ({
                 placeholder="e.g. Design, Engineering, Product..."
                 value={textValue}
                 onChange={(e) => setTextValue(e.target.value)}
-                error={textError}
               />
             </QuestionField>
           )}
@@ -260,7 +259,7 @@ const LivePreview = ({
           {show('radio') && (
             <QuestionField>
               <QuestionText label="Select your preferred contact method:" error={radioError} />
-              <RadioGroup value={contactMethod} onValueChange={setContactMethod} error={radioError}>
+              <RadioGroup value={contactMethod} onValueChange={setContactMethod}>
                 <RadioGroupOption value="email" label="Email" />
                 <RadioGroupOption value="phone" label="Phone" />
                 <RadioGroupOption value="sms" label="SMS" />
@@ -271,14 +270,14 @@ const LivePreview = ({
           {show('nps') && (
             <QuestionField>
               <QuestionText label="How likely are you to recommend us?" error={npsError} />
-              <NPS value={npsValue} onValueChange={setNpsValue} error={npsError} />
+              <NPS value={npsValue} onValueChange={setNpsValue} />
             </QuestionField>
           )}
 
           {show('checkbox') && (
             <QuestionField>
               <QuestionText label="Which features are most important to you?" error={checkboxError} />
-              <CheckboxGroup error={checkboxError}>
+              <CheckboxGroup>
                 <CheckboxOption
                   label="Real-time collaboration"
                   checked={checkedOptions.a}
@@ -308,7 +307,6 @@ const LivePreview = ({
                 placeholder="Tell us about the challenges and outcomes..."
                 value={openValue}
                 onChange={(e) => setOpenValue(e.target.value)}
-                error={openError}
               />
             </QuestionField>
           )}
@@ -321,7 +319,6 @@ const LivePreview = ({
                 columns={gridColumns}
                 value={gridValue}
                 onValueChange={setGridValue}
-                error={gridError}
                 variant={viewport}
               />
             </QuestionField>
@@ -335,7 +332,6 @@ const LivePreview = ({
                 columns={hybridGridColumns}
                 value={hybridGridValue}
                 onValueChange={setHybridGridValue}
-                error={hybridGridError}
                 variant={viewport}
               />
             </QuestionField>
@@ -347,7 +343,6 @@ const LivePreview = ({
               <DateAnswer
                 value={dateValue}
                 onChange={(e) => setDateValue(e.target.value)}
-                error={dateError}
               />
             </QuestionField>
           )}
@@ -376,7 +371,6 @@ const LivePreview = ({
                 ]}
                 value={dropdownValue}
                 onValueChange={setDropdownValue}
-                error={dropdownError}
               />
             </QuestionField>
           )}
@@ -453,7 +447,6 @@ const LivePreview = ({
                 items={starRatingItems}
                 value={starRatingValue}
                 onChange={setStarRatingValue}
-                error={starRatingError}
               />
             </QuestionField>
           )}

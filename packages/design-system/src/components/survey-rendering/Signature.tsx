@@ -16,7 +16,6 @@ export interface SignatureProps
   label?: React.ReactNode;
   /** Height of the drawing surface in pixels. Defaults to 200. */
   height?: number;
-  error?: string;
 }
 
 /**
@@ -40,7 +39,6 @@ const Signature = React.forwardRef<HTMLDivElement, SignatureProps>(
       onClear,
       label = 'Sign here',
       height = 200,
-      error,
       className,
       ...props
     },
@@ -143,11 +141,9 @@ const Signature = React.forwardRef<HTMLDivElement, SignatureProps>(
         {...props}
       >
         <div
-          aria-invalid={error ? true : undefined}
           className={cn(
             'relative w-full border bg-transparent transition-colors',
             'border-survey-border-interactive',
-            error && 'border-survey-destructive',
           )}
           style={{ borderRadius: 'var(--survey-radius)' }}
         >
@@ -199,12 +195,6 @@ const Signature = React.forwardRef<HTMLDivElement, SignatureProps>(
             />
           </div>
         </div>
-
-        {error && (
-          <span className="text-survey-body font-survey-regular text-survey-destructive">
-            {error}
-          </span>
-        )}
       </div>
     );
   },

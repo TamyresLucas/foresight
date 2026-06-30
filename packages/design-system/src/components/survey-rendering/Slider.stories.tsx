@@ -26,7 +26,6 @@ const meta = {
     showValue: { control: 'boolean' },
     minLabel: { control: 'text' },
     maxLabel: { control: 'text' },
-    error: { control: 'text' },
   },
   parameters: {
     docs: {
@@ -79,16 +78,6 @@ export const CustomRangeAndStep: Story = {
   },
 };
 
-export const WithError: Story = {
-  args: {
-    // Mandatory question that has not been answered yet: picker sits at the
-    // start with no value chosen, and only the picker shows the error color.
-    // Dragging the picker to choose a value clears the error (the parent
-    // controls the `error` prop, as with the other question types).
-    defaultValue: [0],
-    error: 'This question is required',
-  },
-};
 
 export const Focused: Story = {
   args: {

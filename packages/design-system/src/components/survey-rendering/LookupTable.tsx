@@ -111,7 +111,6 @@ export interface LookupTableProps {
   confirmedLabel?: string;
   /** Label for the cancel button shown while adding a choice. */
   cancelLabel?: string;
-  error?: string;
   className?: string;
 }
 
@@ -320,7 +319,6 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
       confirmLabel = 'Confirm',
       confirmedLabel = 'Confirmed',
       cancelLabel = 'Cancel',
-      error,
       className,
     },
     ref,
@@ -453,7 +451,6 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
               table.toggleAllPageRowsSelected(!!checked)
             }
             aria-label="Select all rows"
-            aria-invalid={!!error || undefined}
           />
         ),
         cell: ({ row }) => (
@@ -461,7 +458,6 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
             checked={row.getIsSelected()}
             onCheckedChange={(checked) => row.toggleSelected(!!checked)}
             aria-label="Select row"
-            aria-invalid={!!error || undefined}
           />
         ),
       };
@@ -520,7 +516,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
         : [];
 
       return [selectColumn, ...dataColumns, ...actionColumn];
-    }, [columns, rowActions, error]);
+    }, [columns, rowActions]);
 
     // While editing, splice a stable, empty draft row into the data at the end
     // of the current page. The table then re-paginates: the draft lands on the
@@ -626,7 +622,6 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
           className,
         )}
         style={{ gap: 'var(--survey-margin)' }}
-        aria-invalid={!!error || undefined}
       >
         {/* Toolbar: text filter + selection-state tabs. The rule runs the full
             table width. Items align to the bottom so the active tab's underline
@@ -835,12 +830,6 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
             </TableBody>
           </Table>
         </div>
-
-        {error && (
-          <span className="text-survey-destructive font-survey-regular text-survey-body">
-            {error}
-          </span>
-        )}
 
         {/* Footer. Wide container: a 3-column grid keeps the pagination truly
             centered (selection count left · pagination center · add choice

@@ -17,7 +17,6 @@ export interface NumericRankingProps {
   value?: NumericRankingValue;
   defaultValue?: NumericRankingValue;
   onChange?: (value: NumericRankingValue) => void;
-  error?: string;
   className?: string;
 }
 
@@ -26,10 +25,9 @@ const NumericRankingInput = React.forwardRef<
   {
     selected?: boolean;
     focused?: boolean;
-    error?: boolean;
     className?: string;
   } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'>
->(({ className, selected, focused = false, error, onBlur, ...props }, ref) => {
+>(({ className, selected, focused = false, onBlur, ...props }, ref) => {
   const [internalSelected, setInternalSelected] = React.useState(false);
   const isSelected = selected ?? internalSelected;
 
@@ -66,7 +64,6 @@ const NumericRankingInput = React.forwardRef<
           <input
             type="text"
             inputMode="numeric"
-            aria-invalid={error || undefined}
             className={cn(
               'w-full bg-transparent text-left text-survey-body font-survey-regular focus-visible:outline-none text-survey-foreground font-survey',
               className,
@@ -83,7 +80,7 @@ const NumericRankingInput = React.forwardRef<
 NumericRankingInput.displayName = 'NumericRankingInput';
 
 const NumericRanking = React.forwardRef<HTMLDivElement, NumericRankingProps>(
-  ({ items, value, defaultValue, onChange, error, className }, ref) => {
+  ({ items, value, defaultValue, onChange, className }, ref) => {
     const [internalValue, setInternalValue] = React.useState<NumericRankingValue>(
       defaultValue ?? {},
     );
@@ -108,7 +105,6 @@ const NumericRanking = React.forwardRef<HTMLDivElement, NumericRankingProps>(
             <NumericRankingInput
               value={currentValue[item.value] ?? ''}
               onChange={(e) => handleItemChange(item.value, e.target.value)}
-              error={!!error}
               aria-label={`Rank for ${item.label}`}
             />
             <span

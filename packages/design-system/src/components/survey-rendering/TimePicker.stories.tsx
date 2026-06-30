@@ -75,41 +75,6 @@ export const Range: Story = {
   },
 }
 
-export const WithError: Story = {
-  render: () => {
-    const [value, setValue] = useState<TimeValue>({ hour: 3, minute: 15, period: 'PM' })
-    return (
-      <ThemedFrame>
-        <TimePicker
-          mode="single"
-          value={value}
-          onChange={(e) => setValue(e.target.value as TimeValue)}
-          error="This question is required"
-        />
-      </ThemedFrame>
-    )
-  },
-}
-
-export const RangeWithError: Story = {
-  render: () => {
-    const [value, setValue] = useState<TimePickerProps['value']>({
-      from: { hour: 8, minute: 0, period: 'AM' },
-      to: { hour: 6, minute: 0, period: 'PM' },
-    })
-    return (
-      <ThemedFrame>
-        <TimePicker
-          mode="range"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          error="This question is required"
-        />
-      </ThemedFrame>
-    )
-  },
-}
-
 export const PresetCorporate: Story = {
   render: () => {
     const [value, setValue] = useState<TimeValue>({ hour: 11, minute: 0, period: 'AM' })
