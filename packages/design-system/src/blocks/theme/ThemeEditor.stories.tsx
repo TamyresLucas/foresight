@@ -1,6 +1,8 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { ThemeEditor, QUESTION_TYPE_OPTIONS } from './ThemeEditor';
+import { ThemeEditor, QUESTION_TYPE_OPTIONS, type SurveyPreviewPage, type HeaderBrand } from './ThemeEditor';
+import { SurveyLoginPage } from '../../components/survey-rendering/Layout/SurveyLoginPage';
+import { SurveyAuthenticationPage } from '../../components/survey-rendering/Layout/SurveyAuthenticationPage';
 import { TextAnswer } from '../../components/survey-rendering/TextAnswer';
 import { OpenEndAnswer } from '../../components/survey-rendering/OpenEndAnswer';
 import { DateAnswer } from '../../components/survey-rendering/DateAnswer';
@@ -49,9 +51,13 @@ const ALL_IDS = QUESTION_TYPE_OPTIONS.map(q => q.id);
 const LivePreview = ({
   viewport = 'desktop',
   visibleQuestionTypes = ALL_IDS,
+  companyName = 'Company name',
+  logoSrc,
 }: {
   viewport?: 'desktop' | 'mobile';
   visibleQuestionTypes?: string[];
+  companyName?: string;
+  logoSrc?: string;
 }) => {
   const show = (id: string) => visibleQuestionTypes.includes(id);
   const [textValue, setTextValue] = React.useState('');
@@ -222,8 +228,12 @@ const LivePreview = ({
   const surveyContent = (
     <>
         {/* Top Toolbar */}
-        <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold tracking-tight text-foreground">Company name</h2>
+        <div className="flex justify-between items-center gap-4">
+          {logoSrc ? (
+            <img src={logoSrc} alt={companyName} className="max-h-12 w-auto object-contain" />
+          ) : (
+            <h2 className="text-2xl font-bold tracking-tight text-foreground">{companyName}</h2>
+          )}
           <LanguageSelector
             selectedLanguage={lang}
             onLanguageChange={setLang}
@@ -656,6 +666,17 @@ export const Default: Story = {
   render: () => {
     const [viewport, setViewport] = React.useState<'desktop' | 'mobile'>('desktop');
     const [visibleQuestionTypes, setVisibleQuestionTypes] = React.useState<string[]>(ALL_IDS);
+    const [page, setPage] = React.useState<SurveyPreviewPage>('survey');
+    const [pageLang, setPageLang] = React.useState('en');
+    const [pin, setPin] = React.useState('');
+    const [code, setCode] = React.useState('');
+    const [headerBrand, setHeaderBrand] = React.useState<HeaderBrand>({
+      type: 'name',
+      name: 'Company name',
+    });
+
+    const companyName = headerBrand.name;
+    const logoSrc = headerBrand.type === 'logo' ? headerBrand.logoSrc : undefined;
 
     return (
       <div className="flex h-screen w-full overflow-hidden bg-background">
@@ -665,10 +686,47 @@ export const Default: Story = {
             onViewportChange={setViewport}
             visibleQuestionTypes={visibleQuestionTypes}
             onVisibleQuestionTypesChange={setVisibleQuestionTypes}
+            page={page}
+            onPageChange={setPage}
+            headerBrand={headerBrand}
+            onHeaderBrandChange={setHeaderBrand}
           />
         </div>
         <div className="flex-1 overflow-y-auto scrollbar-none">
-          <LivePreview viewport={viewport} visibleQuestionTypes={visibleQuestionTypes} />
+          {page === 'survey' && (
+            <LivePreview
+              viewport={viewport}
+              visibleQuestionTypes={visibleQuestionTypes}
+              companyName={companyName}
+              logoSrc={logoSrc}
+            />
+          )}
+          {page === 'login' && (
+            <SurveyLoginPage
+              viewport={viewport}
+              companyName={companyName}
+              logoSrc={logoSrc}
+              selectedLanguage={pageLang}
+              onLanguageChange={setPageLang}
+              pin={pin}
+              onPinChange={setPin}
+              onSubmit={() => alert(`Take survey with PIN: ${pin || '(empty)'}`)}
+            />
+          )}
+          {page === 'authentication' && (
+            <SurveyAuthenticationPage
+              viewport={viewport}
+              companyName={companyName}
+              logoSrc={logoSrc}
+              selectedLanguage={pageLang}
+              onLanguageChange={setPageLang}
+              maskedEmail="j***@example.com"
+              code={code}
+              onCodeChange={setCode}
+              onSubmit={() => alert(`Continue with code: ${code || '(empty)'}`)}
+              onResend={() => alert('Resent code')}
+            />
+          )}
         </div>
       </div>
     );

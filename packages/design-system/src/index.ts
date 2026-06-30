@@ -97,6 +97,12 @@ export { ImageChoiceGrid, type ImageChoiceGridProps, type ImageChoiceGridColumn,
 export { Bullet, type BulletProps } from "./components/survey-rendering/Bullet";
 export { Description, type DescriptionProps } from "./components/survey-rendering/Description";
 
+// Survey rendering — Layout pages
+export { SurveyPageShell, SurveyPoweredByFooter, SurveyPrimaryButton, SurveySecondaryButton, surveyButtonHoverOverlay, type SurveyPageShellProps } from "./components/survey-rendering/Layout/SurveyPageShell";
+export { SurveyTakingPage, type SurveyTakingPageProps } from "./components/survey-rendering/Layout/SurveyTakingPage";
+export { SurveyLoginPage, type SurveyLoginPageProps } from "./components/survey-rendering/Layout/SurveyLoginPage";
+export { SurveyAuthenticationPage, type SurveyAuthenticationPageProps } from "./components/survey-rendering/Layout/SurveyAuthenticationPage";
+
 // Theme blocks
 export * from "./blocks/theme/ThemeEditor";
 export * from "./blocks/theme/PresetPicker";
