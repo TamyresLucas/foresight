@@ -12,9 +12,6 @@ const meta = {
       </div>
     ),
   ],
-  argTypes: {
-    error: { control: 'text' },
-  },
 } satisfies Meta<typeof NPS>;
 
 export default meta;
@@ -56,6 +53,3 @@ export const WithLabels: Story = {
   ),
 };
 
-export const WithError: Story = {
-  render: (args) => <NPS {...args} error="This question is required" />,
-};

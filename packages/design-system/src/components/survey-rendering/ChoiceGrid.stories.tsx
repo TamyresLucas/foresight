@@ -55,16 +55,6 @@ export const DesktopSelected: Story = {
   },
 };
 
-export const DesktopWithError: Story = {
-  name: 'Desktop / WithError',
-  args: {
-    rows: desktopRows,
-    columns: desktopColumns,
-    error: 'This question is required',
-    variant: 'desktop',
-  },
-};
-
 export const DesktopCellStates: Story = {
   name: 'Desktop / CellStates',
   render: (args) => (
@@ -126,20 +116,6 @@ export const MobileSelected: Story = {
     rows: desktopRows,
     columns: desktopColumns,
     defaultValue: { 'option-1': 'very_satisfied' },
-  },
-  parameters: {
-    viewport: {
-      defaultViewport: 'iphone12',
-    },
-  },
-};
-
-export const MobileWithError: Story = {
-  name: 'Mobile / WithError',
-  args: {
-    rows: desktopRows,
-    columns: desktopColumns,
-    error: 'This question is required',
   },
   parameters: {
     viewport: {

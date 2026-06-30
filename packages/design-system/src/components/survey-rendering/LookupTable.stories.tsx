@@ -63,7 +63,6 @@ const meta = {
   argTypes: {
     pageSize: { control: { type: 'number', min: 1 } },
     filterPlaceholder: { control: 'text' },
-    error: { control: 'text' },
   },
   parameters: {
     docs: {
@@ -133,12 +132,6 @@ export const WithAddChoiceEditing: Story = {
         onAddRow={(row) => setRows((prev) => [...prev, row])}
       />
     );
-  },
-};
-
-export const WithError: Story = {
-  args: {
-    error: 'This question is required',
   },
 };
 

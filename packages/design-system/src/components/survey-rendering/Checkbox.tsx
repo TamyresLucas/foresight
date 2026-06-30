@@ -5,14 +5,10 @@ import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { Check } from "../ui/icons";
 import { cn } from "@/lib/utils";
 
-const CheckboxGroupErrorContext = React.createContext<boolean>(false);
-
-export interface CheckboxGroupProps extends React.HTMLAttributes<HTMLDivElement> {
-  error?: string;
-}
+export type CheckboxGroupProps = React.HTMLAttributes<HTMLDivElement>;
 
 const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps>(
-  ({ className, error, children, style, ...props }, ref) => {
+  ({ className, children, style, ...props }, ref) => {
     return (
       <div
         ref={ref}
@@ -20,9 +16,7 @@ const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps>(
         style={{ gap: 'var(--survey-margin)', ...style }}
         {...props}
       >
-        <CheckboxGroupErrorContext.Provider value={!!error}>
-          {children}
-        </CheckboxGroupErrorContext.Provider>
+        {children}
       </div>
     );
   }
@@ -33,7 +27,6 @@ export interface CheckboxOptionProps {
   label: string;
   id?: string;
   focused?: boolean;
-  error?: boolean;
   checked?: boolean | "indeterminate";
   onCheckedChange?: (checked: boolean | "indeterminate") => void;
   className?: string;
@@ -45,10 +38,8 @@ export interface CheckboxOptionProps {
 }
 
 const CheckboxOption = React.forwardRef<HTMLDivElement, CheckboxOptionProps>(
-  ({ label, id, focused = false, error, checked, onCheckedChange, className, openEnd, openEndPlaceholder, openEndValue, onOpenEndChange }, ref) => {
+  ({ label, id, focused = false, checked, onCheckedChange, className, openEnd, openEndPlaceholder, openEndValue, onOpenEndChange }, ref) => {
     const itemId = id ?? `survey-checkbox-${label}`;
-    const groupError = React.useContext(CheckboxGroupErrorContext);
-    const hasError = error ?? groupError;
     const showOpenEnd = openEnd && checked === true;
 
     return (
@@ -78,7 +69,6 @@ const CheckboxOption = React.forwardRef<HTMLDivElement, CheckboxOptionProps>(
             id={itemId}
             checked={checked}
             onCheckedChange={onCheckedChange}
-            aria-invalid={hasError || undefined}
             className={cn(
               "flex-shrink-0 w-4 h-4 rounded-[4px] border-2 transition-colors grid place-content-center",
               "border-survey-border-interactive",

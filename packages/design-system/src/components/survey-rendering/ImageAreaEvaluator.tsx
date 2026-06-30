@@ -50,7 +50,6 @@ export interface ImageAreaEvaluatorProps {
   legendLabel?: string;
   /** Hide the legend row entirely. */
   showLegend?: boolean;
-  error?: string;
   className?: string;
 }
 
@@ -104,7 +103,6 @@ const ImageAreaEvaluator = React.forwardRef<
       onChange,
       legendLabel = 'Legend',
       showLegend = true,
-      error,
       className,
     },
     ref,
@@ -251,12 +249,6 @@ const ImageAreaEvaluator = React.forwardRef<
               </span>
             ))}
           </div>
-        )}
-
-        {error && (
-          <p className="text-survey-body font-survey-regular text-survey-destructive">
-            {error}
-          </p>
         )}
       </div>
     );

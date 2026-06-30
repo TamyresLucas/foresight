@@ -7,11 +7,10 @@ export interface TextAnswerProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
   selected?: boolean;
   focused?: boolean;
-  error?: string;
 }
 
 const TextAnswer = React.forwardRef<HTMLInputElement, TextAnswerProps>(
-  ({ className, selected, focused = false, error, onBlur, ...props }, ref) => {
+  ({ className, selected, focused = false, onBlur, ...props }, ref) => {
     const [internalSelected, setInternalSelected] = React.useState(false);
     const isSelected = selected ?? internalSelected;
 
@@ -47,7 +46,6 @@ const TextAnswer = React.forwardRef<HTMLInputElement, TextAnswerProps>(
           >
             <input
               type="text"
-              aria-invalid={error ? true : undefined}
               className={cn(
                 'w-full bg-transparent text-survey-body font-survey-regular focus-visible:outline-none text-survey-foreground font-survey',
                 className,

@@ -4,13 +4,10 @@ import * as React from "react";
 import { Card } from "./Card";
 import { cn } from "@/lib/utils";
 
-const NPSErrorContext = React.createContext<boolean>(false);
-
 export interface NPSProps {
   value?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
-  error?: string;
   className?: string;
   children?: React.ReactNode;
   name?: string;
@@ -26,7 +23,6 @@ const NPS = React.forwardRef<HTMLDivElement, NPSProps>(
       value: valueProp,
       defaultValue,
       onValueChange,
-      error,
       className,
       children,
       name,
@@ -67,30 +63,27 @@ const NPS = React.forwardRef<HTMLDivElement, NPSProps>(
     const hasLabels = leftLabel != null || rightLabel != null;
 
     return (
-      <NPSErrorContext.Provider value={!!error}>
-        <NPSContext.Provider value={contextValue}>
-          <div ref={ref} className={cn("flex flex-col font-survey w-full", className)}>
-            <div
-              role="radiogroup"
-              aria-invalid={!!error || undefined}
-              className="grid w-full"
-              style={{
-                gap: "4px",
-                gridTemplateColumns: "repeat(10, minmax(0, 1fr))",
-              }}
-              data-name={name}
-            >
-              {options}
-            </div>
-            {hasLabels && (
-              <div className="mt-2 flex items-start justify-between gap-4 text-survey-body text-survey-muted-foreground">
-                <span className="text-left">{leftLabel}</span>
-                <span className="text-right">{rightLabel}</span>
-              </div>
-            )}
+      <NPSContext.Provider value={contextValue}>
+        <div ref={ref} className={cn("flex flex-col font-survey w-full", className)}>
+          <div
+            role="radiogroup"
+            className="grid w-full"
+            style={{
+              gap: "4px",
+              gridTemplateColumns: "repeat(10, minmax(0, 1fr))",
+            }}
+            data-name={name}
+          >
+            {options}
           </div>
-        </NPSContext.Provider>
-      </NPSErrorContext.Provider>
+          {hasLabels && (
+            <div className="mt-2 flex items-start justify-between gap-4 text-survey-body text-survey-muted-foreground">
+              <span className="text-left">{leftLabel}</span>
+              <span className="text-right">{rightLabel}</span>
+            </div>
+          )}
+        </div>
+      </NPSContext.Provider>
     );
   },
 );
@@ -112,7 +105,6 @@ export interface NPSOptionProps {
 const NPSOption = React.forwardRef<HTMLButtonElement, NPSOptionProps>(
   ({ value, focused = false, className }, ref) => {
     const ctx = React.useContext(NPSContext);
-    const hasError = React.useContext(NPSErrorContext);
     if (!ctx) {
       throw new Error("NPSOption must be used inside <NPS>");
     }
@@ -129,7 +121,6 @@ const NPSOption = React.forwardRef<HTMLButtonElement, NPSOptionProps>(
         focused={focused}
         onClick={() => ctx.onSelect(value)}
         style={{ minWidth: 0, minHeight: "2.75rem" }}
-        aria-invalid={hasError || undefined}
         className={cn("w-full text-survey-body", className)}
       >
         {value}

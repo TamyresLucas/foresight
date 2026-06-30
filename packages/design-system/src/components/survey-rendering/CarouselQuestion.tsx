@@ -61,11 +61,6 @@ export interface CarouselQuestionProps
    * first shown in its selected state. Defaults to 500.
    */
   advanceDelayMs?: number;
-  /**
-   * Marks the answer inputs invalid (red borders). The error *message* is shown
-   * above the question text via `SurveyErrorMessage`, not rendered here.
-   */
-  error?: string;
   className?: string;
 }
 
@@ -85,7 +80,6 @@ const CarouselQuestion = React.forwardRef<HTMLDivElement, CarouselQuestionProps>
       onIndexChange,
       advanceOnAnswer = true,
       advanceDelayMs = 500,
-      error,
       className,
       navigation = "bullets",
       ...carouselProps
@@ -202,7 +196,6 @@ const CarouselQuestion = React.forwardRef<HTMLDivElement, CarouselQuestionProps>
                 key={activeItem.id}
                 value={answers[activeItem.id] ?? ""}
                 onValueChange={(v) => handleSelect(activeItem.id, v)}
-                error={error}
                 aria-label="Answer options"
               >
                 {options!.map((opt) => (
@@ -218,7 +211,6 @@ const CarouselQuestion = React.forwardRef<HTMLDivElement, CarouselQuestionProps>
                 key={activeItem.id}
                 value={answers[activeItem.id] ?? undefined}
                 onValueChange={(v) => handleSelect(activeItem.id, v)}
-                error={error}
                 name={activeItem.id}
                 leftLabel={npsLeftLabel}
                 rightLabel={npsRightLabel}

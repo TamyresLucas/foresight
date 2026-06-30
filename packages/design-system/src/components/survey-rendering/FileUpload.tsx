@@ -33,7 +33,6 @@ export interface FileUploadProps
   /** Native accept attribute, e.g. "image/*". */
   accept?: string;
   multiple?: boolean;
-  error?: string;
   /** When false, hides the file size and shows only the percentage/Completed label in the same muted style. Defaults to true. */
   showFileSize?: boolean;
 }
@@ -183,7 +182,6 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
       buttonLabel = 'Browse files',
       accept,
       multiple = true,
-      error,
       showFileSize = true,
       className,
       ...props
@@ -239,7 +237,6 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
         <div
           role="button"
           tabIndex={0}
-          aria-invalid={error ? true : undefined}
           onClick={openPicker}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -263,7 +260,6 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
             'focus-visible:outline-none focus-visible:border-survey-border-selected',
             'cursor-pointer',
             isDragging && 'border-survey-border-selected bg-survey-muted-background',
-            error && 'border-survey-destructive',
           )}
           style={{ padding: '32px 16px', gap: '10px', borderRadius: 'var(--component-button-radius)' }}
         >
@@ -319,12 +315,6 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
               />
             ))}
           </div>
-        )}
-
-        {error && (
-          <p className="text-survey-body font-survey-regular text-survey-destructive">
-            {error}
-          </p>
         )}
       </div>
     );

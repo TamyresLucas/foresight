@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import * as React from "react";
 import { CarouselQuestion, type CarouselQuestionValue } from "./CarouselQuestion";
-import { QuestionText } from "./QuestionText";
 
 const meta = {
   title: "Survey Rendering/CarouselQuestion",
@@ -89,29 +88,6 @@ export const StatementCardsWithRadio: Story = {
     answerType: "radio",
     options: ratingOptions,
     navigation: "bullets",
-  },
-};
-
-/**
- * The error *message* lives above the question text (via `QuestionText`); the
- * `error` prop on `CarouselQuestion` only flags the inputs invalid (red borders).
- */
-export const WithError: Story = {
-  render: (args) => (
-    <div className="flex flex-col">
-      <QuestionText
-        label="How do you feel about each item?"
-        required
-        error="This question is required"
-      />
-      <CarouselQuestion {...args} />
-    </div>
-  ),
-  args: {
-    items,
-    answerType: "radio",
-    options: ratingOptions,
-    error: "This question is required",
   },
 };
 

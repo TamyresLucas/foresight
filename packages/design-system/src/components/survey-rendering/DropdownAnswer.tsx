@@ -20,7 +20,6 @@ export interface DropdownAnswerProps {
   onValueChange?: (v: string) => void
   selected?: boolean // controle externo do estado "selected" (Storybook)
   focused?: boolean // simula foco para Storybook
-  error?: string
   className?: string
   /** Fill the parent's width instead of sizing to the content (e.g. inside a grid cell). */
   fullWidth?: boolean
@@ -36,7 +35,6 @@ const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
       onValueChange,
       selected,
       focused = false,
-      error,
       className,
       fullWidth = false,
       ...props
@@ -95,7 +93,6 @@ const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
           >
             <SelectPrimitive.Trigger
               ref={ref}
-              aria-invalid={error ? true : undefined}
               className={cn(
                 'flex box-border h-10 px-2 py-1.5 items-center justify-between gap-[10px] rounded-lg border bg-transparent transition-all outline-none',
                 // Label + placeholder follow the survey body text token (size/weight/family).

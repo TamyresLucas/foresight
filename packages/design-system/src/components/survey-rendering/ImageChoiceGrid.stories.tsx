@@ -91,7 +91,3 @@ export const Mobile: Story = {
   ],
 };
 
-export const WithError: Story = {
-  args: { rows, columns, error: "Please answer every row" },
-};
-

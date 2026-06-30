@@ -25,7 +25,6 @@ export interface StarRatingProps {
   value?: StarRatingValue;
   defaultValue?: StarRatingValue;
   onChange?: (value: StarRatingValue) => void;
-  error?: string;
   className?: string;
 }
 
@@ -46,7 +45,7 @@ const Star = ({ filled, className }: { filled: boolean; className?: string }) =>
 );
 
 const StarRating = React.forwardRef<HTMLDivElement, StarRatingProps>(
-  ({ items, max = 5, value, defaultValue, onChange, error, className }, ref) => {
+  ({ items, max = 5, value, defaultValue, onChange, className }, ref) => {
     const [internalValue, setInternalValue] = React.useState<StarRatingValue>(
       defaultValue ?? {},
     );
@@ -131,11 +130,6 @@ const StarRating = React.forwardRef<HTMLDivElement, StarRatingProps>(
           const selected = currentValue[item.value] ?? 0;
           const preview = hovered[item.value] ?? selected;
           const isMandatory = !item.optional;
-          // Per-item required validation: when the parent signals an error
-          // (e.g. the respondent tried to advance to the next page), only
-          // unanswered mandatory items show the error state — answered items
-          // and optional items are never flagged.
-          const itemHasError = !!error && isMandatory && selected === 0;
 
           return (
             <div
@@ -166,7 +160,6 @@ const StarRating = React.forwardRef<HTMLDivElement, StarRatingProps>(
               <div
                 role="radiogroup"
                 aria-label={item.label}
-                aria-invalid={itemHasError || undefined}
                 aria-required={isMandatory || undefined}
                 className="flex items-center gap-2"
                 onMouseLeave={() => clearHover(item.value)}

@@ -3,7 +3,6 @@
 import * as React from "react";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { cn } from "@/lib/utils";
-import { AlertCircle } from "../ui/icons";
 import {
   Accordion,
   AccordionContent,
@@ -27,7 +26,6 @@ export interface ChoiceGridProps {
   value?: Record<string, string>; // rowId -> columnValue
   defaultValue?: Record<string, string>;
   onValueChange?: (value: Record<string, string>) => void;
-  error?: string;
   className?: string;
   /**
    * Force a specific variant regardless of width.
@@ -52,7 +50,6 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
       value: controlledValue,
       defaultValue,
       onValueChange,
-      error,
       className,
       variant = 'auto',
       ...rest
@@ -136,7 +133,6 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                           isLast={index === columns.length - 1}
                           isFocused={focusedRow === row.id && focusedColumn === column.value}
                           forceHover={forceHover}
-                          hasError={!!error && !values[row.id]}
                         />
                       ))}
                     </tr>
@@ -159,9 +155,6 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                 >
                   <AccordionTrigger className="px-4 py-4 hover:no-underline text-left text-survey-foreground text-survey-body font-survey-regular rounded-none">
                     <span className="flex items-center gap-2">
-                      {error && !values[row.id] && (
-                        <AlertCircle className="flex-shrink-0 w-4 h-4 text-survey-destructive" />
-                      )}
                       {row.label}
                     </span>
                   </AccordionTrigger>
@@ -177,7 +170,6 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                           column={column}
                           rowId={row.id}
                           isFocused={focusedRow === row.id && focusedColumn === column.value}
-                          hasError={!!error && !values[row.id]}
                         />
                       ))}
                     </RadioGroupPrimitive.Root>
@@ -198,14 +190,12 @@ interface ChoiceGridCellProps {
   isLast: boolean;
   isFocused: boolean;
   forceHover?: boolean;
-  hasError?: boolean;
 }
 
 const ChoiceGridCell = ({
   rowId,
   columnValue,
   isFocused,
-  hasError,
 }: ChoiceGridCellProps) => {
   const cellId = `cell-${rowId}-${columnValue}`;
 
@@ -223,7 +213,6 @@ const ChoiceGridCell = ({
           id={cellId}
           value={columnValue}
           aria-labelledby={`label-${rowId}`}
-          aria-invalid={hasError || undefined}
           className={cn(
             "flex-shrink-0 w-4 h-4 rounded-full border-2 transition-colors",
             "border-survey-border-interactive",
@@ -244,12 +233,10 @@ const ChoiceGridMobileOption = ({
   column,
   rowId,
   isFocused,
-  hasError,
 }: {
   column: ChoiceGridColumn;
   rowId: string;
   isFocused: boolean;
-  hasError?: boolean;
 }) => {
   const id = `mobile-${rowId}-${column.value}`;
 
@@ -266,7 +253,6 @@ const ChoiceGridMobileOption = ({
       <RadioGroupPrimitive.Item
         id={id}
         value={column.value}
-        aria-invalid={hasError || undefined}
         className={cn(
           "flex-shrink-0 w-4 h-4 rounded-full border-2 transition-colors",
           "border-survey-border-interactive",

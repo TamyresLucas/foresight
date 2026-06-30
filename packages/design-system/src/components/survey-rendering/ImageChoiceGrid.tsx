@@ -3,7 +3,6 @@
 import * as React from "react";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { cn } from "@/lib/utils";
-import { AlertCircle } from "../ui/icons";
 import { Card } from "./Card";
 import {
   Accordion,
@@ -31,7 +30,6 @@ export interface ImageChoiceGridProps {
   value?: Record<string, string>; // rowId -> columnValue
   defaultValue?: Record<string, string>;
   onValueChange?: (value: Record<string, string>) => void;
-  error?: string;
   className?: string;
   /**
    * Force a specific variant regardless of width.
@@ -78,7 +76,6 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
       value: controlledValue,
       defaultValue,
       onValueChange,
-      error,
       className,
       variant = "auto",
     } = props;
@@ -166,7 +163,6 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
                         key={column.value}
                         rowId={row.id}
                         column={column}
-                        hasError={!!error && !values[row.id]}
                       />
                     ))}
                   </tr>
@@ -195,9 +191,6 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
               >
                 <AccordionTrigger className="px-4 py-4 hover:no-underline text-left text-survey-foreground text-survey-body font-survey-regular rounded-none">
                   <span className="flex items-center gap-2">
-                    {error && !values[row.id] && (
-                      <AlertCircle className="flex-shrink-0 w-4 h-4 text-survey-destructive" />
-                    )}
                     {row.label}
                   </span>
                 </AccordionTrigger>
@@ -211,7 +204,6 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
                       <ImageChoiceGridMobileOption
                         key={column.value}
                         column={column}
-                        hasError={!!error && !values[row.id]}
                       />
                     ))}
                   </RadioGroupPrimitive.Root>
@@ -257,13 +249,11 @@ const SelectableImage = ({
 interface ImageChoiceGridCellProps {
   rowId: string;
   column: ImageChoiceGridColumn;
-  hasError?: boolean;
 }
 
 const ImageChoiceGridCell = ({
   rowId,
   column,
-  hasError,
 }: ImageChoiceGridCellProps) => {
   const cellId = `cell-${rowId}-${column.value}`;
 
@@ -278,7 +268,6 @@ const ImageChoiceGridCell = ({
           value={column.value}
           aria-labelledby={`label-${rowId}`}
           aria-label={column.label}
-          aria-invalid={hasError || undefined}
           className={cn(
             "rounded-survey-md transition-shadow",
             "focus:outline-none focus-visible:ring-2 focus-visible:ring-survey-border-interactive",
@@ -293,10 +282,8 @@ const ImageChoiceGridCell = ({
 
 const ImageChoiceGridMobileOption = ({
   column,
-  hasError,
 }: {
   column: ImageChoiceGridColumn;
-  hasError?: boolean;
 }) => {
   return (
     // The Radix item drives radio semantics (roving focus, arrow keys, checked
@@ -307,7 +294,6 @@ const ImageChoiceGridMobileOption = ({
         asChild
         value={column.value}
         aria-label={column.label}
-        aria-invalid={hasError || undefined}
       >
         <Card
           variant="imageStatement"

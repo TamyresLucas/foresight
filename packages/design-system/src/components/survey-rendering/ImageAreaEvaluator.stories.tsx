@@ -44,7 +44,6 @@ const meta = {
   },
   argTypes: {
     showLegend: { control: 'boolean' },
-    error: { control: 'text' },
   },
   parameters: {
     docs: {
@@ -176,8 +175,3 @@ export const ManyChoices: Story = {
   },
 };
 
-export const WithError: Story = {
-  args: {
-    error: 'This question is required',
-  },
-};

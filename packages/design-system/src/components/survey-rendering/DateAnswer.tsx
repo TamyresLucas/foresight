@@ -31,7 +31,6 @@ export interface DateAnswerProps
   onChange?: (event: { target: { value: string } }) => void;
   selected?: boolean;
   focused?: boolean;
-  error?: string;
   placeholder?: string;
 }
 
@@ -41,7 +40,6 @@ const DateAnswer = React.forwardRef<HTMLButtonElement, DateAnswerProps>(
       className,
       selected,
       focused = false,
-      error,
       onBlur,
       onChange,
       value,
@@ -98,7 +96,6 @@ const DateAnswer = React.forwardRef<HTMLButtonElement, DateAnswerProps>(
               <button
                 ref={ref}
                 type="button"
-                aria-invalid={error ? true : undefined}
                 onBlur={(e) => {
                   // Don't reset selected when focus moves into the popover
                   if (!open) setInternalSelected(false);

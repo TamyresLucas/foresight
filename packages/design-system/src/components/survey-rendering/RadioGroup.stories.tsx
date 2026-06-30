@@ -13,9 +13,6 @@ const meta = {
       </div>
     ),
   ],
-  argTypes: {
-    error: { control: 'text' },
-  },
 } satisfies Meta<typeof RadioGroup>;
 
 export default meta;
@@ -58,17 +55,6 @@ export const FocusedAndSelected: Story = {
   render: (args) => (
     <RadioGroup {...args} defaultValue="option-1">
       <RadioGroupOption value="option-1" label="Option" focused />
-      <RadioGroupOption value="option-2" label="Option" />
-      <RadioGroupOption value="option-3" label="Option" />
-      <RadioGroupOption value="option-4" label="Option" />
-    </RadioGroup>
-  ),
-};
-
-export const WithError: Story = {
-  render: (args) => (
-    <RadioGroup {...args} error="This question is required">
-      <RadioGroupOption value="option-1" label="Option" />
       <RadioGroupOption value="option-2" label="Option" />
       <RadioGroupOption value="option-3" label="Option" />
       <RadioGroupOption value="option-4" label="Option" />
