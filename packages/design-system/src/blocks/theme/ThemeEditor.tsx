@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Save, RotateCcw, Trash2, Plus, Monitor, Smartphone } from 'lucide-react';
+import { Save, RotateCcw, Trash2, Plus, Monitor, Smartphone, Upload } from 'lucide-react';
 
 import { 
   Theme, 
@@ -94,6 +94,27 @@ const MARGIN_OPTIONS = [
   { value: '16px', label: 'Cozy (16px)' },
 ];
 
+export type SurveyPreviewPage = 'survey' | 'login' | 'authentication';
+
+export type HeaderBrandType = 'name' | 'logo';
+
+export interface HeaderBrand {
+  /** Whether the header shows a typed company name or an uploaded logo. */
+  type: HeaderBrandType;
+  /** Company name text (used when type is 'name', and as logo alt text). */
+  name: string;
+  /** Logo image as a data URL (used when type is 'logo'). */
+  logoSrc?: string;
+}
+
+const DEFAULT_HEADER_BRAND: HeaderBrand = { type: 'name', name: 'Company name' };
+
+const PAGE_OPTIONS: { value: SurveyPreviewPage; label: string }[] = [
+  { value: 'survey', label: 'Survey taking page' },
+  { value: 'login', label: 'Login page' },
+  { value: 'authentication', label: 'Authentication page' },
+];
+
 interface ThemeEditorProps {
   initialTheme?: Theme;
   onSave?: (theme: Theme) => void;
@@ -103,6 +124,12 @@ interface ThemeEditorProps {
   /** Controlled list of question type ids shown in the preview. Defaults to all visible. */
   visibleQuestionTypes?: string[];
   onVisibleQuestionTypesChange?: (types: string[]) => void;
+  /** Which respondent page the preview shows. Defaults to 'survey'. */
+  page?: SurveyPreviewPage;
+  onPageChange?: (page: SurveyPreviewPage) => void;
+  /** Header branding: typed company name or an uploaded logo. */
+  headerBrand?: HeaderBrand;
+  onHeaderBrandChange?: (brand: HeaderBrand) => void;
 }
 
 export function ThemeEditor({
@@ -113,7 +140,24 @@ export function ThemeEditor({
   onViewportChange,
   visibleQuestionTypes: visibleProp,
   onVisibleQuestionTypesChange,
+  page = 'survey',
+  onPageChange,
+  headerBrand = DEFAULT_HEADER_BRAND,
+  onHeaderBrandChange,
 }: ThemeEditorProps) {
+  const logoInputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleLogoFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      onHeaderBrandChange?.({ ...headerBrand, type: 'logo', logoSrc: reader.result as string });
+    };
+    reader.readAsDataURL(file);
+    // Allow re-selecting the same file later.
+    e.target.value = '';
+  };
   const [availableThemes, setAvailableThemes] = React.useState<Theme[]>([]);
   const isVisibilityControlled = visibleProp !== undefined;
   const [internalVisible, setInternalVisible] = React.useState<string[]>(ALL_QUESTION_TYPE_IDS);
@@ -209,6 +253,21 @@ export function ThemeEditor({
         <CardTitle className="text-lg font-bold">Theme Editor</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
+        {/* Preview Page */}
+        <div className="space-y-2">
+          <Label>Preview Page</Label>
+          <Select value={page} onValueChange={(v) => onPageChange?.(v as SurveyPreviewPage)}>
+            <SelectTrigger className="border-primary/40 bg-muted/50">
+              <SelectValue placeholder="Select a page" />
+            </SelectTrigger>
+            <SelectContent>
+              {PAGE_OPTIONS.map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
         {/* Preview Mode */}
         <div className="space-y-2">
           <Label>Preview Mode</Label>
@@ -280,6 +339,90 @@ export function ThemeEditor({
               <Input {...field} placeholder="My Custom Theme" className="border-primary/40" />
             )}
           />
+        </div>
+
+        <SelectSeparator className="my-2" />
+
+        {/* Header Branding */}
+        <div className="space-y-2">
+          <Label>Header</Label>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => onHeaderBrandChange?.({ ...headerBrand, type: 'name' })}
+              aria-pressed={headerBrand.type === 'name'}
+              className={cn(
+                'flex-1 flex items-center justify-center gap-2 h-9 rounded-md border border-primary/40 transition-colors',
+                headerBrand.type === 'name'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted/50 hover:bg-muted',
+              )}
+            >
+              Company name
+            </button>
+            <button
+              type="button"
+              onClick={() => onHeaderBrandChange?.({ ...headerBrand, type: 'logo' })}
+              aria-pressed={headerBrand.type === 'logo'}
+              className={cn(
+                'flex-1 flex items-center justify-center gap-2 h-9 rounded-md border border-primary/40 transition-colors',
+                headerBrand.type === 'logo'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted/50 hover:bg-muted',
+              )}
+            >
+              Logo
+            </button>
+          </div>
+
+          {headerBrand.type === 'name' ? (
+            <Input
+              value={headerBrand.name}
+              onChange={(e) => onHeaderBrandChange?.({ ...headerBrand, name: e.target.value })}
+              placeholder="Company name"
+              className="border-primary/40"
+            />
+          ) : (
+            <div className="space-y-2">
+              <input
+                ref={logoInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleLogoFile}
+              />
+              <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => logoInputRef.current?.click()}
+                  className="border-primary/40"
+                >
+                  <Upload className="h-4 w-4 mr-2" />
+                  {headerBrand.logoSrc ? 'Replace logo' : 'Upload logo'}
+                </Button>
+                {headerBrand.logoSrc && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    onClick={() => onHeaderBrandChange?.({ ...headerBrand, logoSrc: undefined })}
+                    className="text-destructive hover:text-destructive"
+                    title="Remove logo"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+              {headerBrand.logoSrc && (
+                <img
+                  src={headerBrand.logoSrc}
+                  alt="Logo preview"
+                  className="max-h-12 w-auto object-contain rounded border border-border-decorative bg-muted/30 p-1"
+                />
+              )}
+            </div>
+          )}
         </div>
 
         {/* Colors */}
@@ -464,9 +607,10 @@ export function ThemeEditor({
             </div>
           </div>
         </div>
-        <SelectSeparator className="my-2" />
+        {page === 'survey' && <SelectSeparator className="my-2" />}
 
         {/* Preview Questions */}
+        {page === 'survey' && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Preview Questions</h3>
@@ -494,6 +638,7 @@ export function ThemeEditor({
             })}
           </div>
         </div>
+        )}
       </CardContent>
       <CardFooter className="flex justify-between gap-2 border-t border-border-decorative pt-6">
         <div className="flex gap-2">
