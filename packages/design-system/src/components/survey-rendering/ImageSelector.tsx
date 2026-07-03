@@ -21,6 +21,14 @@ export interface ImageSelectorProps {
   /** Selectable image options. */
   options: ImageSelectorOption[];
   /**
+   * `imageStatement` (default) shows each option's `label` in a caption strip
+   * below the image (options without a `label` still fall back to a bare
+   * image). `imageOnly` always shows just the image, with no caption strip,
+   * regardless of whether `label` is set — `label` is still used as the
+   * option's accessible name.
+   */
+  variant?: 'imageStatement' | 'imageOnly';
+  /**
    * `single` keeps at most one image selected (selecting another replaces it);
    * `multiple` lets any number be selected at once. Defaults to `multiple`.
    */
@@ -36,6 +44,7 @@ const ImageSelector = React.forwardRef<HTMLDivElement, ImageSelectorProps>(
   (
     {
       options,
+      variant = 'imageStatement',
       selectionMode = 'multiple',
       value,
       defaultValue,
@@ -75,32 +84,37 @@ const ImageSelector = React.forwardRef<HTMLDivElement, ImageSelectorProps>(
       >
         {/* Responsive grid: a single column on the narrowest screens, two on
             small ones, and three once the component is wide (desktop). Driven by
-            container queries so it adapts to its own width inside device frames. */}
+            container queries so it adapts to its own width inside device frames.
+            `items-start` overrides Grid's default row-stretch so each card sizes
+            to its own image's natural height instead of being stretched to match
+            the tallest card in its row (which would leave blank space below
+            shorter images whenever options mix aspect ratios). */}
         <div
-          className="grid grid-cols-1 @xs:grid-cols-2 @lg:grid-cols-3"
+          className="grid grid-cols-1 @xs:grid-cols-2 @lg:grid-cols-3 items-start"
           style={{ gap: 'var(--survey-margin, 8px)' }}
         >
           {options.map((option) => {
             const selected = current.includes(option.id);
+            const showCaption = variant !== 'imageOnly' && !!option.label;
             return (
               <Card
                 key={option.id}
-                variant={option.label ? 'imageStatement' : 'image'}
+                variant={showCaption ? 'imageStatement' : 'image'}
                 imageSrc={option.src}
                 imageAlt={option.alt ?? ''}
                 selected={selected}
                 onClick={() => handleClick(option.id)}
                 aria-label={option.label}
-                className="w-full"
+                // Card's `image`/`imageStatement` compound variants apply a
+                // baseline `min-w-28 min-h-28`, which is a sensible floor for
+                // a lone Card but fights the fill-width sizing here: a very
+                // wide/short image (e.g. a banner-shaped photo) would get
+                // padded out to that minimum height, leaving blank space
+                // below the image instead of the card hugging its true ratio.
+                className="w-full !min-w-0 !min-h-0"
               >
-                {option.label && (
-                  <span
-                    className={cn(
-                      selected
-                        ? 'font-survey-semibold text-survey-primary'
-                        : 'font-survey-regular text-survey-foreground',
-                    )}
-                  >
+                {showCaption && (
+                  <span className="font-survey-regular text-survey-foreground">
                     {option.label}
                   </span>
                 )}

@@ -7,12 +7,6 @@ import { X } from '../ui/icons';
 export interface StarRatingItem {
   value: string;
   label: string;
-  /**
-   * When true, the item is optional: once a score is selected a reset (X)
-   * button appears so the respondent can clear it back to empty. Mandatory
-   * items (the default) never show the reset button.
-   */
-  optional?: boolean;
 }
 
 export interface StarRatingValue {
@@ -22,6 +16,13 @@ export interface StarRatingValue {
 export interface StarRatingProps {
   items: StarRatingItem[];
   max?: number;
+  /**
+   * Whether the question as a whole is required. This is question-level (not
+   * per-item): it only drives `aria-required` on each item's star row. The
+   * visual required indicator (e.g. a red asterisk) belongs on the composing
+   * QuestionText label, not repeated on every row here.
+   */
+  required?: boolean;
   value?: StarRatingValue;
   defaultValue?: StarRatingValue;
   onChange?: (value: StarRatingValue) => void;
@@ -45,7 +46,7 @@ const Star = ({ filled, className }: { filled: boolean; className?: string }) =>
 );
 
 const StarRating = React.forwardRef<HTMLDivElement, StarRatingProps>(
-  ({ items, max = 5, value, defaultValue, onChange, className }, ref) => {
+  ({ items, max = 5, required = false, value, defaultValue, onChange, className }, ref) => {
     const [internalValue, setInternalValue] = React.useState<StarRatingValue>(
       defaultValue ?? {},
     );
@@ -88,9 +89,7 @@ const StarRating = React.forwardRef<HTMLDivElement, StarRatingProps>(
     // once, keeping them aligned.
     const labelRefs = React.useRef<Record<string, HTMLSpanElement | null>>({});
     const [labelColWidth, setLabelColWidth] = React.useState<number>();
-    const labelsKey = items
-      .map((it) => `${it.value}:${it.label}:${it.optional ? '?' : ''}`)
-      .join('|');
+    const labelsKey = items.map((it) => `${it.value}:${it.label}`).join('|');
 
     React.useLayoutEffect(() => {
       const measure = () => {
@@ -129,7 +128,6 @@ const StarRating = React.forwardRef<HTMLDivElement, StarRatingProps>(
         {items.map((item) => {
           const selected = currentValue[item.value] ?? 0;
           const preview = hovered[item.value] ?? selected;
-          const isMandatory = !item.optional;
 
           return (
             <div
@@ -147,20 +145,14 @@ const StarRating = React.forwardRef<HTMLDivElement, StarRatingProps>(
                 style={labelColWidth ? { width: `${labelColWidth}px` } : undefined}
               >
                 {item.label}
-                {isMandatory && (
-                  <span aria-hidden="true" className="text-survey-destructive">
-                    {' '}
-                    *
-                  </span>
-                )}
               </span>
-              {/* Stars + optional reset, kept together so they wrap below the
-                  label as one unit when the row runs out of room. */}
+              {/* Stars + reset, kept together so they wrap below the label as
+                  one unit when the row runs out of room. */}
               <div className="flex items-center gap-3">
               <div
                 role="radiogroup"
                 aria-label={item.label}
-                aria-required={isMandatory || undefined}
+                aria-required={required || undefined}
                 className="flex items-center gap-2"
                 onMouseLeave={() => clearHover(item.value)}
               >
@@ -191,10 +183,10 @@ const StarRating = React.forwardRef<HTMLDivElement, StarRatingProps>(
                   );
                 })}
               </div>
-              {/* Optional items expose a reset control once a score is picked so
-                  the respondent can clear it back to empty. Mandatory items omit
-                  it (their answer cannot be removed). */}
-              {item.optional && selected > 0 && (
+              {/* A reset control appears once a score is picked, regardless of
+                  whether the question is required, so the respondent can
+                  clear a row back to empty and re-rate it. */}
+              {selected > 0 && (
                 <button
                   type="button"
                   onClick={() => handleClear(item.value)}

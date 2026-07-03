@@ -22,8 +22,8 @@ const items = [
   {
     id: "portrait",
     label: "Portrait",
-    imageSrc: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?h=450&w=338&fit=crop",
-    imageAlt: "Portrait of a person smiling",
+    imageSrc: "https://images.pexels.com/photos/7784610/pexels-photo-7784610.jpeg?h=450&w=338&fit=crop",
+    imageAlt: "Ice cream in a bowl, portrait format",
     imageWidth: 338,
     imageHeight: 450,
   },

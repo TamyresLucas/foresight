@@ -62,12 +62,6 @@ export interface ImageChoiceGridProps {
   firstColumnWidth?: string;
 }
 
-// A selected image is tinted with the brand primary at low opacity and outlined
-// with the same color at full opacity, matching the other image question types.
-const SELECTED_FILL =
-  "color-mix(in srgb, hsl(var(--survey-primary)) 55%, transparent)";
-const SELECTED_BORDER = "hsl(var(--survey-primary))";
-
 const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
   (props, ref) => {
     const {
@@ -163,6 +157,7 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
                         key={column.value}
                         rowId={row.id}
                         column={column}
+                        selected={values[row.id] === column.value}
                       />
                     ))}
                   </tr>
@@ -218,42 +213,24 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
 );
 ImageChoiceGrid.displayName = "ImageChoiceGrid";
 
-// The selectable image. The tint + full-opacity border are rendered through the
-// Radix Indicator, which only mounts when the item is checked.
-const SelectableImage = ({
-  src,
-  alt,
-  className,
-}: {
-  src: string;
-  alt?: string;
-  className?: string;
-}) => (
-  <span className={cn("relative inline-block", className)}>
-    <img
-      src={src}
-      alt={alt ?? ""}
-      className="block h-16 w-16 object-contain rounded-survey-md select-none"
-      draggable={false}
-    />
-    <RadioGroupPrimitive.Indicator asChild>
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 rounded-survey-md"
-        style={{ backgroundColor: SELECTED_FILL, border: `2px solid ${SELECTED_BORDER}` }}
-      />
-    </RadioGroupPrimitive.Indicator>
-  </span>
-);
-
 interface ImageChoiceGridCellProps {
   rowId: string;
   column: ImageChoiceGridColumn;
+  selected: boolean;
 }
 
+// The selectable image, rendered through Card's `image` variant so the
+// selected framing (outer primary-color border, inner white ring, low-opacity
+// primary tint) matches every other image question type exactly, instead of
+// being hand-rolled here. `asChild` merges Radix's radio semantics (role,
+// roving focus, `data-state`) onto Card's own button rather than nesting two
+// buttons; the visual selected state is driven by the explicit `selected` prop
+// (computed by the parent from `values`) since Card's own `data-state` would
+// otherwise be clobbered by the "checked"/"unchecked" one Radix injects.
 const ImageChoiceGridCell = ({
   rowId,
   column,
+  selected,
 }: ImageChoiceGridCellProps) => {
   const cellId = `cell-${rowId}-${column.value}`;
 
@@ -264,16 +241,32 @@ const ImageChoiceGridCell = ({
         className="flex items-center justify-center p-2 cursor-pointer w-full h-full transition-all"
       >
         <RadioGroupPrimitive.Item
+          asChild
           id={cellId}
           value={column.value}
           aria-labelledby={`label-${rowId}`}
           aria-label={column.label}
-          className={cn(
-            "rounded-survey-md transition-shadow",
-            "focus:outline-none focus-visible:ring-2 focus-visible:ring-survey-border-interactive",
-          )}
         >
-          <SelectableImage src={column.src} alt={column.alt ?? column.label} />
+          <Card
+            variant="image"
+            imageSrc={column.src}
+            imageAlt={column.alt ?? column.label}
+            selected={selected}
+            // Fill the column's width; omitting `height` puts Card in its
+            // "fill-width" mode, where the image keeps its natural aspect
+            // ratio (`h-auto`) and the card's height follows it, rather than
+            // cropping to a fixed square.
+            width="100%"
+            className={cn(
+              "!min-w-0 !min-h-0",
+              // Radix's `asChild` overwrites Card's own `data-state` (which
+              // drives its `data-[state=selected]` border rule) with its own
+              // "checked"/"unchecked" value, so the border needs a matching
+              // override here. The white-ring + tint overlay is unaffected
+              // since it's driven by the `selected` prop directly, not CSS.
+              "data-[state=checked]:!border-2 data-[state=checked]:!border-survey-border-selected",
+            )}
+          />
         </RadioGroupPrimitive.Item>
       </label>
     </td>
@@ -287,8 +280,10 @@ const ImageChoiceGridMobileOption = ({
 }) => {
   return (
     // The Radix item drives radio semantics (roving focus, arrow keys, checked
-    // state); `asChild` projects them onto the Card, whose `data-state=checked`
-    // then renders the selected border.
+    // state, hover/focus-visible on the real DOM node); `asChild` projects
+    // them onto the Card, which already provides the `imageStatement`
+    // layout's hover wash, focus ring, and (once corrected below) selected
+    // border — no need to hand-roll any of that here.
     <div className="p-4">
       <RadioGroupPrimitive.Item
         asChild
@@ -301,12 +296,16 @@ const ImageChoiceGridMobileOption = ({
           imageAlt={column.alt ?? column.label}
           aria-pressed={undefined}
           className={cn(
-            // Card fills the available mobile width. Image stays at its natural
-            // size (w-auto) so card height follows the image height, capped at
-            // 300px. Width auto-adjusts to preserve the aspect ratio.
-            "w-full",
-            "[&_img]:!w-auto [&_img]:h-auto [&_img]:max-h-[300px] [&_img]:max-w-full",
-            "!border data-[state=checked]:!border-2 data-[state=checked]:border-survey-border-selected",
+            // Card fills the available mobile width; omitting `height` keeps
+            // it in fill-width mode, where the image already renders at
+            // `w-full h-auto` (natural ratio) — only the height cap is
+            // specific to this grid.
+            "w-full [&_img]:max-h-[300px]",
+            // Radix's `asChild` overwrites Card's own `data-state` (which
+            // drives its `data-[state=selected]` border rule) with its own
+            // "checked"/"unchecked" value, so the border needs a matching
+            // override here — same reasoning as the desktop cell above.
+            "data-[state=checked]:!border-2 data-[state=checked]:!border-survey-border-selected",
           )}
         >
           <span className="text-survey-foreground text-survey-body font-survey-regular">

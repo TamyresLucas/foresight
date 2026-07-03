@@ -50,6 +50,11 @@ export interface ImageAreaEvaluatorProps {
   legendLabel?: string;
   /** Hide the legend row entirely. */
   showLegend?: boolean;
+  /**
+   * Variation: show the assigned choice's label as a tag/chip centered in its
+   * area (in addition to the area's fill/outline color). Off by default.
+   */
+  showChoiceTag?: boolean;
   className?: string;
 }
 
@@ -103,6 +108,7 @@ const ImageAreaEvaluator = React.forwardRef<
       onChange,
       legendLabel = 'Legend',
       showLegend = true,
+      showChoiceTag = false,
       className,
     },
     ref,
@@ -127,6 +133,17 @@ const ImageAreaEvaluator = React.forwardRef<
     const HOVER_RING =
       'inset 0 0 0 2px rgba(255,255,255,0.95), 0 0 0 2px rgba(0,0,0,0.55)';
     const HOVER_OVERLAY = 'rgba(255,255,255,0.12)';
+
+    // Assigned (selected) areas use the same straddling-ring technique as hover
+    // above (a white line just inside the edge, a colored line just outside) so
+    // the outer line hugs the image frame exactly the same way — drawn on top of
+    // the frame border and clipped flush by the wrapper's `overflow-hidden`
+    // rather than sitting inset a couple pixels in, which a real `border`
+    // property would do. The only difference from hover: the outer line keeps
+    // the choice's own color instead of turning neutral, and the fill is a
+    // low-opacity tint of that same color instead of a plain white wash.
+    const selectedRing = (color: string) =>
+      `inset 0 0 0 2px rgba(255,255,255,0.95), 0 0 0 2px ${color}`;
 
     const paletteById = React.useMemo(() => {
       const map = new Map<string, PaletteEntry>();
@@ -215,16 +232,32 @@ const ImageAreaEvaluator = React.forwardRef<
                   backgroundColor: active
                     ? HOVER_OVERLAY
                     : entry
-                    ? `color-mix(in srgb, ${entry.fill} 55%, transparent)`
+                    ? `color-mix(in srgb, ${entry.fill} 25%, transparent)`
                     : 'transparent',
-                  border: active
-                    ? 'none'
+                  border: 'none',
+                  boxShadow: active
+                    ? HOVER_RING
                     : entry
-                    ? `2px solid ${entry.line ?? entry.fill}`
-                    : 'none',
-                  boxShadow: active ? HOVER_RING : undefined,
+                    ? selectedRing(entry.line ?? entry.fill)
+                    : undefined,
                 }}
-              />
+              >
+                {/* `showChoiceTag` variation: the assigned choice's label as a
+                    centered tag/chip over the area. Outlined in the choice's
+                    color (matching the area outline + legend swatch) on a
+                    solid background so it stays legible over any fill color
+                    or image content underneath. Off by default. */}
+                {showChoiceTag && choice && entry && (
+                  <span className="pointer-events-none absolute inset-0 flex items-center justify-center px-1">
+                    <span
+                      className="max-w-full truncate rounded-full border bg-survey-background px-2 py-0.5 text-survey-body font-survey-regular text-survey-foreground shadow-sm"
+                      style={{ borderColor: entry.line ?? entry.fill }}
+                    >
+                      {choice.label}
+                    </span>
+                  </span>
+                )}
+              </button>
             );
           })}
         </div>

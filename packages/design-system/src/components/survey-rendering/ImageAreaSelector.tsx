@@ -41,7 +41,7 @@ export interface ImageAreaSelectorProps {
 }
 
 const SELECTED_OVERLAY =
-  'color-mix(in srgb, hsl(var(--survey-primary)) 55%, transparent)';
+  'color-mix(in srgb, hsl(var(--survey-primary)) 25%, transparent)';
 const SELECTED_BORDER = 'hsl(var(--survey-primary))';
 // On hover, draw a ring that straddles the area's boundary so it overlaps the
 // edge exactly (rather than an inset border, which shrinks the highlight): a
@@ -51,6 +51,16 @@ const SELECTED_BORDER = 'hsl(var(--survey-primary))';
 const HOVER_RING =
   'inset 0 0 0 2px rgba(255,255,255,0.95), 0 0 0 2px rgba(0,0,0,0.55)';
 const HOVER_OVERLAY = 'rgba(255,255,255,0.12)';
+
+// Selected areas use the same straddling-ring technique as hover: a white line
+// just inside the edge, a colored line just outside. The outer line hugs the
+// image frame exactly the way hover's does — drawn on top of the frame border
+// and clipped flush by the wrapper's `overflow-hidden` — rather than sitting
+// inset a couple pixels in, which a real `border` property would do. The only
+// difference from hover: the outer line keeps the brand primary color instead
+// of turning neutral, and the fill is a low-opacity tint of that same color
+// instead of a plain white wash.
+const SELECTED_RING = `inset 0 0 0 2px rgba(255,255,255,0.95), 0 0 0 2px ${SELECTED_BORDER}`;
 
 const ImageAreaSelector = React.forwardRef<
   HTMLDivElement,
@@ -153,10 +163,12 @@ const ImageAreaSelector = React.forwardRef<
                     : selected
                     ? SELECTED_OVERLAY
                     : 'transparent',
-                  border: selected && !active
-                    ? `2px solid ${SELECTED_BORDER}`
-                    : 'none',
-                  boxShadow: active ? HOVER_RING : undefined,
+                  border: 'none',
+                  boxShadow: active
+                    ? HOVER_RING
+                    : selected
+                    ? SELECTED_RING
+                    : undefined,
                 }}
               />
             );

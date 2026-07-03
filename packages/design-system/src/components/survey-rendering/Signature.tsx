@@ -143,7 +143,7 @@ const Signature = React.forwardRef<HTMLDivElement, SignatureProps>(
         <div
           className={cn(
             'relative w-full border bg-transparent transition-colors',
-            'border-survey-border-interactive',
+            'border-survey-border-muted',
           )}
           style={{ borderRadius: 'var(--survey-radius)' }}
         >
@@ -191,7 +191,7 @@ const Signature = React.forwardRef<HTMLDivElement, SignatureProps>(
             )}
             <div
               className="mt-2 h-px w-full"
-              style={{ backgroundColor: 'hsl(var(--survey-border-muted))' }}
+              style={{ backgroundColor: 'hsl(var(--survey-border-interactive))' }}
             />
           </div>
         </div>

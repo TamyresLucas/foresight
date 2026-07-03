@@ -246,9 +246,12 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
                   aria-roledescription="slide"
                   aria-label={`${i + 1} of ${items.length}`}
                   aria-hidden={!isActive}
-                  // Self-sizing slides hug their card (width follows the image);
-                  // other variants keep the full slot width.
-                  className="shrink-0 flex justify-center"
+                  // `group` drives the out-of-focus hover treatment below (a
+                  // Carousel-specific hover, not Card's own — see
+                  // `hoverEffect={false}` on both cards). Self-sizing slides
+                  // hug their card (width follows the image); other variants
+                  // keep the full slot width.
+                  className="group shrink-0 flex justify-center"
                   style={usesBand ? undefined : { width: `${cardWidth}px` }}
                 >
                   {isActive ? (
@@ -262,6 +265,7 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
                       imageWidth={item.imageWidth}
                       imageHeight={item.imageHeight}
                       tabIndex={0}
+                      hoverEffect={false}
                       className={cn(
                         "cursor-default shadow-lg",
                         !usesBand && "w-full",
@@ -282,11 +286,23 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
                       slideMaxHeight={usesBand ? maxH : undefined}
                       imageWidth={item.imageWidth}
                       imageHeight={item.imageHeight}
-                      disabled
+                      // Clicking an out-of-focus slide navigates to it, same
+                      // as clicking its bullet or the chevron would. Kept out
+                      // of the tab order and hidden from assistive tech
+                      // (`aria-hidden`) since the carousel already exposes
+                      // in-order navigation via the chevrons/bullets — this
+                      // click is a mouse-only convenience on top of that.
+                      onClick={() => goTo(i)}
                       aria-hidden
                       tabIndex={-1}
+                      hoverEffect={false}
                       className={cn(
-                        "cursor-default border-survey-border-muted shadow-none",
+                        "cursor-pointer border-survey-border-muted shadow-none transition-shadow",
+                        // Carousel's own hover (not Card's): out-of-focus
+                        // slides get the same drop shadow and border color as
+                        // the in-focus slide once hovered, driven by the
+                        // slide wrapper's `group` above.
+                        "group-hover:shadow-lg group-hover:border-survey-border-interactive",
                         !usesBand && "w-full",
                         (isImageVariant || isImageStatement) && "bg-survey-muted-background",
                         "[&_img]:opacity-0 [&_img]:transition-opacity [&_img]:duration-500 [&_img]:ease-in-out",

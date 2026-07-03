@@ -266,7 +266,9 @@ const DraftSelect: React.FC<{
     <SelectPrimitive.Trigger
       aria-invalid={error || undefined}
       className={cn(
-        'flex h-9 w-full min-w-0 items-center justify-between gap-2 rounded-survey-md border border-survey-border-interactive bg-transparent px-2',
+        // Fixed width so the trigger (and its table column) doesn't reflow as the
+        // selected option's label length changes — same width empty or filled.
+        'flex h-9 w-40 shrink-0 items-center justify-between gap-2 rounded-survey-md border border-survey-border-interactive bg-transparent px-2',
         'text-survey-body font-survey-regular text-survey-foreground transition-colors outline-none',
         'focus-visible:border-survey-border-selected',
         '[&>span]:truncate data-[placeholder]:[&>span]:text-survey-muted-foreground',
