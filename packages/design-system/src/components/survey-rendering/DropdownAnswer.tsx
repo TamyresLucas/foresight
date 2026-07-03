@@ -99,6 +99,7 @@ const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
                 'text-survey-body font-survey-regular font-survey text-survey-foreground',
                 fullWidth ? 'w-full min-w-0' : 'w-fit min-w-[280px]',
                 'border-survey-border-interactive',
+                'hover:bg-survey-muted-background',
                 'group-data-[selected=true]/survey-input:border-survey-border-selected group-data-[selected=true]/survey-input:border-2',
                 'group-has-[:focus-visible]/survey-input:border',
                 focused && 'border',

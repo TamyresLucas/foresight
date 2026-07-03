@@ -76,11 +76,12 @@ const LivePreview = ({
   const [cardSortValue, setCardSortValue] = React.useState<CardSortValue>({});
   const [numericRankingValue, setNumericRankingValue] = React.useState<NumericRankingValue>({});
   const [starRatingValue, setStarRatingValue] = React.useState<StarRatingValue>({});
-  // Rating 2 is optional (shows an X reset once scored); the others are
-  // mandatory (marked with a red asterisk and validated per item).
+  // The question as a whole is required (see the `required` prop passed to
+  // StarRating below); every row must be rated. Once any row is scored, its
+  // X reset button appears regardless of that required status.
   const starRatingItems = [
     { value: 'r1', label: 'Rating 1' },
-    { value: 'r2', label: 'Rating 2 (optional)', optional: true },
+    { value: 'r2', label: 'Rating 2' },
     { value: 'r3', label: 'Rating 3' },
   ];
   const [sliderValue, setSliderValue] = React.useState<SurveySliderValue>([50]);
@@ -219,7 +220,7 @@ const LivePreview = ({
   const gridError = showError && Object.keys(gridValue).length === 0 ? 'Please answer all rows' : undefined;
   const hybridGridError = showError && Object.keys(hybridGridValue).length === 0 ? 'Please answer all rows' : undefined;
   const starRatingError =
-    showError && starRatingItems.some((it) => !it.optional && !starRatingValue[it.value])
+    showError && starRatingItems.some((it) => !starRatingValue[it.value])
       ? 'Please rate all required items'
       : undefined;
 
@@ -452,9 +453,10 @@ const LivePreview = ({
 
           {show('star-rating') && (
             <QuestionField>
-              <QuestionText label="Numeric answers question using stars to rate items" error={starRatingError} />
+              <QuestionText label="Numeric answers question using stars to rate items" required error={starRatingError} />
               <StarRating
                 items={starRatingItems}
+                required
                 value={starRatingValue}
                 onChange={setStarRatingValue}
               />
@@ -487,8 +489,8 @@ const LivePreview = ({
                   {
                     id: 'portrait',
                     label: 'Portrait',
-                    imageSrc: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?h=450&w=338&fit=crop',
-                    imageAlt: 'Portrait of a person smiling',
+                    imageSrc: 'https://images.pexels.com/photos/7784610/pexels-photo-7784610.jpeg?h=450&w=338&fit=crop',
+                    imageAlt: 'Ice cream in a bowl, portrait format',
                     imageWidth: 338,
                     imageHeight: 450,
                   },

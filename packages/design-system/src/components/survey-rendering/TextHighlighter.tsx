@@ -777,10 +777,9 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
           className={cn(
             // The passage is its own scroll area: when the component is height-
             // constrained it fills the space below the controls and scrolls
-            // within its top/bottom borders (so the scrollbar matches the text
-            // box, not the whole component). Borders use the same token as the
-            // multiple-choice option outline.
-            'relative flex-1 min-h-0 overflow-y-auto border-y border-survey-border-muted py-2',
+            // within its borders (so the scrollbar matches the text box, not the
+            // whole component). Border uses the same token as the TextAnswer field.
+            'relative flex-1 min-h-0 overflow-y-auto border border-survey-border-interactive rounded-lg px-2 py-2',
             'text-survey-body font-survey-regular font-survey leading-relaxed',
             'text-survey-foreground',
           )}

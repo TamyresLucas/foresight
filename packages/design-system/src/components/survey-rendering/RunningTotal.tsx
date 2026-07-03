@@ -64,6 +64,7 @@ const RunningTotalInput = React.forwardRef<
           className={cn(
             'flex h-10 px-2 py-1.5 items-center justify-center rounded-lg border bg-transparent transition-all',
             'border-survey-border-interactive',
+            'hover:bg-survey-muted-background',
             'group-data-[selected=true]/survey-input:border-survey-border-selected group-data-[selected=true]/survey-input:border-2',
             'group-has-[:focus-visible]/survey-input:border',
             focused && 'border',

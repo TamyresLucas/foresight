@@ -105,6 +105,7 @@ const DateAnswer = React.forwardRef<HTMLButtonElement, DateAnswerProps>(
                   'flex w-fit min-w-[200px] h-10 px-2 py-1.5 items-center gap-[10px] rounded-lg border bg-transparent transition-all relative',
                   'border-survey-border-interactive text-survey-body font-survey-regular text-survey-foreground font-survey',
                   'focus-visible:outline-none',
+                  'hover:bg-survey-muted-background',
                   'group-data-[selected=true]/survey-input:border-survey-border-selected group-data-[selected=true]/survey-input:border-2',
                   'group-has-[:focus-visible]/survey-input:border',
                   focused && 'border',

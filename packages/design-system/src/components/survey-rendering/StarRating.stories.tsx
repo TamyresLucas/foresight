@@ -23,14 +23,15 @@ const meta = {
   },
   argTypes: {
     max: { control: { type: 'number', min: 1, max: 10 } },
+    required: { control: 'boolean' },
   },
   parameters: {
     docs: {
       description: {
         component:
           'StarRating component for survey rendering. Displays a list of items, each rated on a row of stars (default 5). Empty stars use the same border token as the text-answer input (survey-border-interactive); filled stars use the brand selected token (survey-border-selected). Compose with QuestionText (and optionally QuestionField) for the question label and error message.\n\n' +
-          '**Optional items and resetting a score:** mark an item with `optional: true` to let respondents clear a score they already picked. Once an optional item has a selected score, a reset (X) icon button appears to the right of its stars; clicking it removes that item’s score (back to empty) without affecting the other rows. Mandatory items (the default, `optional` omitted or false) never show the reset button — their answer cannot be removed once chosen.\n\n' +
-          '**Required items:** mandatory items (anything not marked `optional`) show a red asterisk after their label.\n\n' +
+          '**Required is question-level:** `required` is a single prop on the whole component (not per item) — it only sets `aria-required` on every row\'s star group. The visual required indicator (a red asterisk) belongs on the composing QuestionText label, not repeated on every row here.\n\n' +
+          '**Resetting a score:** once any row has a selected score, a reset (X) icon button appears to its right; clicking it clears that row back to empty without affecting the other rows. This applies to every row regardless of `required`.\n\n' +
           '**Label alignment and wrapping:** every label is sized to the width of the longest one so the stars line up across all rows; shorter labels fill that shared width. When the row is too narrow to fit the label and stars side by side, the stars wrap onto their own line below the label, separated by the theme’s margin token (`--survey-margin`). Because the labels share one width, all rows wrap together, so the stars stay aligned.',
       },
     },
@@ -48,22 +49,17 @@ export const WithValues: Story = {
   },
 };
 
-export const RequiredAndOptional: Story = {
-  name: 'Required & optional items',
+export const Required: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          'Mandatory items carry a red asterisk after their label; optional ones do not.',
+          '`required` is set on the whole question, applying `aria-required` to every row — there is no per-item required flag.',
       },
     },
   },
   args: {
-    items: [
-      { value: 'r1', label: 'Rating 1' },
-      { value: 'r2', label: 'Rating 2 (optional)', optional: true },
-      { value: 'r3', label: 'Rating 3' },
-    ],
+    required: true,
     defaultValue: { r1: 4 },
   },
 };
@@ -75,22 +71,18 @@ export const CustomMax: Story = {
   },
 };
 
-export const OptionalReset: Story = {
-  name: 'Optional / Resettable items',
+export const ResetOnceRated: Story = {
+  name: 'Reset once a rating is assigned',
   parameters: {
     docs: {
       description: {
         story:
-          'Rating 2 is marked `optional: true`, so once it has a score a reset (X) button appears next to its stars to clear it back to empty. Ratings 1 and 3 are mandatory, so no reset button is shown even though they have a score.',
+          'Once a row has a score, a reset (X) button appears next to its stars so the respondent can clear it back to empty — shown here for every row, regardless of `required`.',
       },
     },
   },
   args: {
-    items: [
-      { value: 'r1', label: 'Rating 1' },
-      { value: 'r2', label: 'Rating 2 (optional)', optional: true },
-      { value: 'r3', label: 'Rating 3' },
-    ],
+    required: true,
     defaultValue: { r1: 4, r2: 3, r3: 5 },
   },
 };

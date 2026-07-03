@@ -85,6 +85,29 @@ export const ImageOnlySelected: Story = {
   },
 };
 
+export const ImageOnlyFocused: Story = {
+  args: {
+    variant: 'image',
+    imageSrc: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=300&fit=crop',
+    imageAlt: 'Green sofa',
+    focused: true,
+    width: 200,
+    height: 200,
+  },
+};
+
+export const ImageOnlyFocusedAndSelected: Story = {
+  args: {
+    variant: 'image',
+    imageSrc: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=300&fit=crop',
+    imageAlt: 'Green sofa',
+    focused: true,
+    selected: true,
+    width: 200,
+    height: 200,
+  },
+};
+
 export const ImageOnlySquare: Story = {
   args: {
     variant: 'image',
@@ -124,6 +147,31 @@ export const ImageStatementSelected: Story = {
     imageSrc: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=300&fit=crop',
     imageAlt: 'Green sofa',
     children: 'Armchair',
+    selected: true,
+    width: 257,
+    height: 311,
+  },
+};
+
+export const ImageStatementFocused: Story = {
+  args: {
+    variant: 'imageStatement',
+    imageSrc: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=300&fit=crop',
+    imageAlt: 'Green sofa',
+    children: 'Armchair',
+    focused: true,
+    width: 257,
+    height: 311,
+  },
+};
+
+export const ImageStatementFocusedAndSelected: Story = {
+  args: {
+    variant: 'imageStatement',
+    imageSrc: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=300&fit=crop',
+    imageAlt: 'Green sofa',
+    children: 'Armchair',
+    focused: true,
     selected: true,
     width: 257,
     height: 311,

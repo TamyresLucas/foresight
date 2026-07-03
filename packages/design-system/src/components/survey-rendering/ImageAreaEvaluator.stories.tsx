@@ -44,15 +44,17 @@ const meta = {
   },
   argTypes: {
     showLegend: { control: 'boolean' },
+    showChoiceTag: { control: 'boolean' },
   },
   parameters: {
     docs: {
       description: {
         component:
-          'ImageAreaEvaluator: a single-answer question where the respondent assigns a value (choice) to an image area (variable) by clicking it. Each click on an area advances it to the next choice; clicking past the last choice clears it back to unassigned. Assigned areas get a translucent overlay in the choice color, and the legend below maps each choice color to its label. Compose with QuestionText for the question label and error message.\n\n' +
+          'ImageAreaEvaluator: a single-answer question where the respondent assigns a value (choice) to an image area (variable) by clicking it. Each click on an area advances it to the next choice; clicking past the last choice clears it back to unassigned. Assigned areas mirror the Card image-only selected treatment: a solid outer border in the choice color, a white ring just inside it, and a low-opacity fill of the choice color — and the legend below maps each choice color to its label. Compose with QuestionText for the question label and error message.\n\n' +
           '**Legend:** the legend is a plain row — no background, no border. The word "Legend" and each choice label use the survey body text token; each choice shows a small color swatch beside its label. Hide it with `showLegend={false}`.\n\n' +
           '**Hover:** pointing at an area previews it without advancing its choice. While hovered an area gets a faint white fill and a ring that straddles the boundary — a white line just inside the edge and a darker line just outside — which temporarily replaces any assigned-choice color border so the outline stays legible over both light and dark parts of the image. Where an area meets the image frame, the darker outer line is drawn on top of the frame border and the area corner follows the frame\'s rounded preset, so the highlight reads as part of the frame rather than a floating box. See the **Hover** story (open the Canvas tab to interact).\n\n' +
-          '**Focus:** keyboard focus (Tab) is shown with the exact same treatment as hover — the boundary ring plus faint fill, temporarily replacing any assigned-choice color border — so the active area is obvious without a pointer. Focus is keyboard-only (`:focus-visible`): clicking an area advances its choice without leaving a focus ring behind. See the **Focused** story (open the Canvas tab; focus engages via Tab).',
+          '**Focus:** keyboard focus (Tab) is shown with the exact same treatment as hover — the boundary ring plus faint fill, temporarily replacing any assigned-choice color border — so the active area is obvious without a pointer. Focus is keyboard-only (`:focus-visible`): clicking an area advances its choice without leaving a focus ring behind. See the **Focused** story (open the Canvas tab; focus engages via Tab).\n\n' +
+          '**Choice tag:** `showChoiceTag` is a variation that also shows the assigned choice\'s label as a tag/chip centered in its area, outlined in the choice color. Off by default (the color-coded area + legend already identify the choice). See the **WithChoiceTag** story.',
       },
     },
   },
@@ -146,6 +148,27 @@ export const MultipleAreas: Story = {
       { id: 'br', label: 'Bottom right', x: 50, y: 50, width: 50, height: 50 },
     ],
     defaultValue: { tl: 'c1', br: 'c2' },
+  },
+};
+
+export const WithChoiceTag: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The `showChoiceTag` variation: each assigned area also shows its choice label as a centered tag/chip, outlined in the choice color, on top of the area fill. Off by default.',
+      },
+    },
+  },
+  args: {
+    areas: [
+      { id: 'tl', label: 'Top left', x: 0, y: 0, width: 50, height: 50 },
+      { id: 'tr', label: 'Top right', x: 50, y: 0, width: 50, height: 50 },
+      { id: 'bl', label: 'Bottom left', x: 0, y: 50, width: 50, height: 50 },
+      { id: 'br', label: 'Bottom right', x: 50, y: 50, width: 50, height: 50 },
+    ],
+    defaultValue: { tl: 'c1', br: 'c2' },
+    showChoiceTag: true,
   },
 };
 
