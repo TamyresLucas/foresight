@@ -359,6 +359,7 @@ const HybridGridDesktopCell = ({
           placeholder={column.placeholder}
           value={typeof value === "string" ? value : ""}
           onChange={(e) => onChange(e.target.value)}
+          hoverEffect={false}
         />
       </td>
     );
@@ -376,6 +377,7 @@ const HybridGridDesktopCell = ({
           step={column.step}
           value={typeof value === "string" || typeof value === "number" ? String(value) : ""}
           onChange={(e) => onChange(e.target.value)}
+          hoverEffect={false}
         />
       </td>
     );
@@ -398,6 +400,7 @@ const HybridGridDesktopCell = ({
           value={typeof value === "string" && value !== "" ? value : undefined}
           onValueChange={(v) => onChange(v)}
           fullWidth
+          hoverEffect={false}
         />
       </td>
     );
@@ -441,6 +444,7 @@ const HybridGridDesktopCell = ({
           selectionMode={column.selectionMode ?? "single"}
           value={Array.isArray(value) ? (value as string[]) : []}
           onChange={(v) => onChange(v)}
+          hoverEffect={false}
           // In the grid, lay the choices out side by side in a single row
           // (override ImageSelector's responsive column grid) and cap the
           // thumbnails so the column stays compact (mirrors ImageChoiceGrid).
