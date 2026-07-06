@@ -356,6 +356,13 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
     const [draftErrors, setDraftErrors] = React.useState<Record<string, boolean>>({});
     const newRowSeq = React.useRef(0);
 
+    // Column widths captured from view/select mode right before editing starts,
+    // so the draft row's inputs never reflow the table. Applied via a
+    // `<colgroup>` while editing; cleared (back to natural auto-layout) once
+    // editing ends.
+    const tableRef = React.useRef<HTMLTableElement>(null);
+    const [lockedColumnWidths, setLockedColumnWidths] = React.useState<number[] | null>(null);
+
     // Transient success state: after a successful Confirm the add-choice button is
     // replaced by a "Confirmed" badge for 2s, then reverts.
     const [justConfirmed, setJustConfirmed] = React.useState(false);
@@ -389,12 +396,25 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
     }, [pageSize]);
 
     const startEditing = () => {
+      // Snapshot the current (view/select mode) column widths before the
+      // draft row's inputs mount — their own natural widths (e.g. the fixed
+      // `DraftSelect` trigger) can differ from the data columns' content-driven
+      // widths and would otherwise reflow the whole table the instant editing
+      // starts. Locking them via a `<colgroup>` keeps every column exactly as
+      // wide as it was a moment ago.
+      const headerCells = tableRef.current?.querySelectorAll('thead th');
+      if (headerCells?.length) {
+        setLockedColumnWidths(
+          Array.from(headerCells).map((el) => el.getBoundingClientRect().width),
+        );
+      }
       setDraft({});
       setDraftErrors({});
       setEditing(true);
     };
     const cancelEditing = () => {
       setEditing(false);
+      setLockedColumnWidths(null);
       setDraft({});
       setDraftErrors({});
     };
@@ -422,6 +442,7 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
         onAddChoice?.();
       }
       setEditing(false);
+      setLockedColumnWidths(null);
       setDraft({});
       setDraftErrors({});
 
@@ -702,7 +723,18 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
             'overflow-hidden rounded-survey-md border border-survey-border-muted',
           )}
         >
-          <Table className="bg-survey-background">
+          <Table
+            ref={tableRef}
+            className="bg-survey-background"
+            style={lockedColumnWidths ? { tableLayout: 'fixed' } : undefined}
+          >
+            {lockedColumnWidths && (
+              <colgroup>
+                {lockedColumnWidths.map((width, i) => (
+                  <col key={i} style={{ width }} />
+                ))}
+              </colgroup>
+            )}
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow

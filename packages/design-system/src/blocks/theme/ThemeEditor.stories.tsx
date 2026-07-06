@@ -96,9 +96,12 @@ const LivePreview = ({
     { id: 'dislike', label: 'Dislike', question: 'What do you dislike about this statement?' },
   ];
   const [imageSelectorValue, setImageSelectorValue] = React.useState<ImageSelectorValue>([]);
+  // No `w`/`h`/`fit` crop params — Card's fill-width mode keeps each photo's
+  // own natural aspect ratio instead of cropping to a fixed box.
   const imageSelectorOptions = [
-    { id: 'c1', label: 'Choice 1', src: 'https://images.unsplash.com/photo-1507783548227-544c3b8fc065?w=300&h=160&fit=crop', alt: 'Rainbow over a field' },
-    { id: 'c2', label: 'Choice 2', src: 'https://images.unsplash.com/photo-1470509037663-253afd7f0f51?w=300&h=160&fit=crop', alt: 'Sunflower' },
+    { id: 'rio', label: 'Rio de Janeiro', src: 'https://images.pexels.com/photos/20668258/pexels-photo-20668258.jpeg', alt: 'Rio de Janeiro' },
+    { id: 'nyc', label: 'New York', src: 'https://images.pexels.com/photos/30362662/pexels-photo-30362662.jpeg', alt: 'New York' },
+    { id: 'tokyo', label: 'Tokyo', src: 'https://images.pexels.com/photos/30933060/pexels-photo-30933060.jpeg', alt: 'Tokyo' },
   ];
   const [imageGridValue, setImageGridValue] = React.useState<Record<string, string>>({});
   const imageGridRows = [
@@ -106,11 +109,11 @@ const LivePreview = ({
     { id: 'store2', label: 'Store 2' },
     { id: 'store3', label: 'Store 3' },
   ];
-  // Twemoji assets are keyed by Unicode codepoint, so the fruit is deterministic.
+  // Same photos used in the ImageChoiceGrid docs/stories.
   const imageGridColumns = [
-    { value: 'apples', label: 'Apples', src: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f34f.png', alt: 'Apples' },
-    { value: 'pears', label: 'Pears', src: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f350.png', alt: 'Pears' },
-    { value: 'lemons', label: 'Lemons', src: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f34b.png', alt: 'Lemons' },
+    { value: 'apples', label: 'Apples', src: 'https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=300&h=300&fit=crop', alt: 'Apples' },
+    { value: 'pears', label: 'Pears', src: 'https://images.unsplash.com/photo-1615484477778-ca3b77940c25?w=300&h=300&fit=crop', alt: 'Pears' },
+    { value: 'lemons', label: 'Lemons', src: 'https://images.unsplash.com/photo-1582287086947-1fd0fdac5cc9?w=300&h=300&fit=crop', alt: 'Lemons' },
   ];
   const [imageAreaValue, setImageAreaValue] = React.useState<ImageAreaSelectorValue>([]);
   const [imageAreaEvalValue, setImageAreaEvalValue] = React.useState<ImageAreaEvaluatorValue>({});

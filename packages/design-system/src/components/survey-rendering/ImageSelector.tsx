@@ -38,6 +38,12 @@ export interface ImageSelectorProps {
   defaultValue?: ImageSelectorValue;
   onChange?: (value: ImageSelectorValue) => void;
   className?: string;
+  /**
+   * Whether each option card washes on hover. Defaults to true; set to false
+   * where a consumer already signals hover elsewhere — e.g. a grid question's
+   * row, which highlights on its own.
+   */
+  hoverEffect?: boolean;
 }
 
 const ImageSelector = React.forwardRef<HTMLDivElement, ImageSelectorProps>(
@@ -50,6 +56,7 @@ const ImageSelector = React.forwardRef<HTMLDivElement, ImageSelectorProps>(
       defaultValue,
       onChange,
       className,
+      hoverEffect = true,
     },
     ref,
   ) => {
@@ -105,6 +112,7 @@ const ImageSelector = React.forwardRef<HTMLDivElement, ImageSelectorProps>(
                 selected={selected}
                 onClick={() => handleClick(option.id)}
                 aria-label={option.label}
+                hoverEffect={hoverEffect}
                 // Card's `image`/`imageStatement` compound variants apply a
                 // baseline `min-w-28 min-h-28`, which is a sensible floor for
                 // a lone Card but fights the fill-width sizing here: a very

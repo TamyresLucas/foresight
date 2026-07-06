@@ -23,6 +23,12 @@ export interface DropdownAnswerProps {
   className?: string
   /** Fill the parent's width instead of sizing to the content (e.g. inside a grid cell). */
   fullWidth?: boolean
+  /**
+   * Whether the trigger washes its background on hover. Defaults to true; set
+   * to false where a consumer already signals hover elsewhere — e.g. a grid
+   * question's row, which highlights on its own.
+   */
+  hoverEffect?: boolean
 }
 
 const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
@@ -37,6 +43,7 @@ const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
       focused = false,
       className,
       fullWidth = false,
+      hoverEffect = true,
       ...props
     },
     ref,
@@ -99,7 +106,7 @@ const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
                 'text-survey-body font-survey-regular font-survey text-survey-foreground',
                 fullWidth ? 'w-full min-w-0' : 'w-fit min-w-[280px]',
                 'border-survey-border-interactive',
-                'hover:bg-survey-muted-background',
+                hoverEffect && 'hover:bg-survey-muted-background',
                 'group-data-[selected=true]/survey-input:border-survey-border-selected group-data-[selected=true]/survey-input:border-2',
                 'group-has-[:focus-visible]/survey-input:border',
                 focused && 'border',
