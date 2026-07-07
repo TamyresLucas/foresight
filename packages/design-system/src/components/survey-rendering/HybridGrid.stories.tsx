@@ -1,5 +1,6 @@
+import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { HybridGrid, type HybridGridColumn } from './HybridGrid';
+import { HybridGrid, type HybridGridColumn, type HybridGridValue } from './HybridGrid';
 
 const meta = {
   title: 'Survey Rendering/HybridGrid',
@@ -138,5 +139,66 @@ export const DesktopAllTypes: Story = {
 export const MobileAllTypes: Story = {
   name: 'Mobile / All question types',
   args: { rows: [rows[0]], columns: allTypeColumns, variant: 'mobile' },
+  parameters: { viewport: { defaultViewport: 'iphone12' } },
+};
+
+// --- Open-end reveal ---
+// A `radio`/`checkbox` choice flagged `openEnd` (e.g. "Other") reveals a
+// free-text field for the row once selected: an extra row directly below the
+// answered row on desktop, inline beneath the choice within the same
+// accordion item on mobile (reusing RadioGroupOption/CheckboxOption's own
+// openEnd behavior).
+
+const openEndColumns: HybridGridColumn[] = [
+  {
+    id: 'col-contact',
+    type: 'radio',
+    label: 'Preferred contact',
+    choices: [
+      { value: 'email', label: 'Email' },
+      { value: 'phone', label: 'Phone' },
+      { value: 'other', label: 'Other', openEnd: true },
+    ],
+  },
+  {
+    id: 'col-channels',
+    type: 'checkbox',
+    label: 'Channels used',
+    choices: [
+      { value: 'sms', label: 'SMS' },
+      { value: 'push', label: 'Push notification' },
+      { value: 'other', label: 'Other', openEnd: true },
+    ],
+  },
+];
+
+const openEndSeededValue: HybridGridValue = {
+  'row-1': { 'col-contact': 'other', 'col-channels': ['sms', 'other'] },
+};
+
+const WithOpenEndRender = (args: React.ComponentProps<typeof HybridGrid>) => {
+  const [value, setValue] = React.useState<HybridGridValue>(openEndSeededValue);
+  const [openEndValues, setOpenEndValues] = React.useState<Record<string, Record<string, string>>>({});
+  return (
+    <HybridGrid
+      {...args}
+      value={value}
+      onValueChange={setValue}
+      openEndValues={openEndValues}
+      onOpenEndValuesChange={setOpenEndValues}
+    />
+  );
+};
+
+export const DesktopWithOpenEnd: Story = {
+  name: 'Desktop / With open end',
+  render: WithOpenEndRender,
+  args: { rows, columns: openEndColumns, variant: 'desktop' },
+};
+
+export const MobileWithOpenEnd: Story = {
+  name: 'Mobile / With open end',
+  render: WithOpenEndRender,
+  args: { rows: [rows[0]], columns: openEndColumns, variant: 'mobile' },
   parameters: { viewport: { defaultViewport: 'iphone12' } },
 };

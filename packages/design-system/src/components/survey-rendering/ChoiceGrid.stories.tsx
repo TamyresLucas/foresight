@@ -1,5 +1,6 @@
+import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { ChoiceGrid } from './ChoiceGrid';
+import { ChoiceGrid, type ChoiceGridColumn } from './ChoiceGrid';
 
 const meta = {
   title: 'Survey Rendering/ChoiceGrid',
@@ -116,6 +117,55 @@ export const MobileSelected: Story = {
     rows: desktopRows,
     columns: desktopColumns,
     defaultValue: { 'option-1': 'very_satisfied' },
+  },
+  parameters: {
+    viewport: {
+      defaultViewport: 'iphone12',
+    },
+  },
+};
+
+// --- Open-end reveal ---
+// A column flagged `openEnd` (e.g. "Other") reveals a free-text field for the
+// row once selected: an extra row directly below the answered row on desktop,
+// inline beneath the choice within the same accordion item on mobile.
+
+const openEndColumns: ChoiceGridColumn[] = [
+  { value: 'very_satisfied', label: 'Very satisfied' },
+  { value: 'somewhat_satisfied', label: 'Somewhat satisfied' },
+  { value: 'dissatisfied', label: 'Dissatisfied' },
+  { value: 'other', label: 'Other', openEnd: true, openEndPlaceholder: 'Tell us more…' },
+];
+
+const WithOpenEndRender = (args: React.ComponentProps<typeof ChoiceGrid>) => {
+  const [value, setValue] = React.useState<Record<string, string>>({ 'option-1': 'other' });
+  const [openEndValues, setOpenEndValues] = React.useState<Record<string, string>>({});
+  return (
+    <ChoiceGrid
+      {...args}
+      value={value}
+      onValueChange={setValue}
+      openEndValues={openEndValues}
+      onOpenEndValuesChange={setOpenEndValues}
+    />
+  );
+};
+
+export const DesktopWithOpenEnd: Story = {
+  name: 'Desktop / With open end',
+  render: WithOpenEndRender,
+  args: {
+    rows: desktopRows,
+    columns: openEndColumns,
+  },
+};
+
+export const MobileWithOpenEnd: Story = {
+  name: 'Mobile / With open end',
+  render: WithOpenEndRender,
+  args: {
+    rows: desktopRows,
+    columns: openEndColumns,
   },
   parameters: {
     viewport: {
