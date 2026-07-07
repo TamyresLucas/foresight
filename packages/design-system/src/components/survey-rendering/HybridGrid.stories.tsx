@@ -167,13 +167,12 @@ const openEndColumns: HybridGridColumn[] = [
     choices: [
       { value: 'sms', label: 'SMS' },
       { value: 'push', label: 'Push notification' },
-      { value: 'other', label: 'Other', openEnd: true },
     ],
   },
 ];
 
 const openEndSeededValue: HybridGridValue = {
-  'row-1': { 'col-contact': 'other', 'col-channels': ['sms', 'other'] },
+  'row-1': { 'col-contact': 'other', 'col-channels': ['sms'] },
 };
 
 const WithOpenEndRender = (args: React.ComponentProps<typeof HybridGrid>) => {
