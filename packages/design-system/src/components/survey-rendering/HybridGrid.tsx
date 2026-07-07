@@ -47,15 +47,22 @@ export interface HybridGridNumericColumn extends HybridGridColumnBase {
   step?: number;
 }
 
+export interface HybridGridChoice {
+  value: string;
+  label: string;
+  /** When true, selecting this choice reveals a free-text field for the row — an extra row below it on desktop, inline beneath the choice on mobile. */
+  openEnd?: boolean;
+}
+
 export interface HybridGridCheckboxColumn extends HybridGridColumnBase {
   type: "checkbox";
-  choices: { value: string; label: string }[];
+  choices: HybridGridChoice[];
 }
 
 /** Single-select choice column, rendered as a radio matrix (one sub-column per choice). */
 export interface HybridGridRadioColumn extends HybridGridColumnBase {
   type: "radio";
-  choices: { value: string; label: string }[];
+  choices: HybridGridChoice[];
 }
 
 export interface HybridGridDropdownColumn extends HybridGridColumnBase {
@@ -114,6 +121,10 @@ export interface HybridGridProps {
   value?: HybridGridValue;
   defaultValue?: HybridGridValue;
   onValueChange?: (value: HybridGridValue) => void;
+  /** rowId -> columnId -> the row's open-end text, for choices flagged `openEnd` */
+  openEndValues?: Record<string, Record<string, string>>;
+  defaultOpenEndValues?: Record<string, Record<string, string>>;
+  onOpenEndValuesChange?: (value: Record<string, Record<string, string>>) => void;
   className?: string;
   /**
    * Force a specific variant regardless of width.
@@ -165,6 +176,9 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
       value: controlledValue,
       defaultValue,
       onValueChange,
+      openEndValues: controlledOpenEndValues,
+      defaultOpenEndValues,
+      onOpenEndValuesChange,
       className,
       variant = "auto",
     } = props;
@@ -190,7 +204,39 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
       onValueChange?.(nextValues);
     };
 
+    const [uncontrolledOpenEnd, setUncontrolledOpenEnd] = React.useState<
+      Record<string, Record<string, string>>
+    >(defaultOpenEndValues ?? {});
+    const openEndValues = controlledOpenEndValues ?? uncontrolledOpenEnd;
+
+    const setOpenEndCell = (rowId: string, columnId: string, text: string) => {
+      const nextValues = {
+        ...openEndValues,
+        [rowId]: { ...openEndValues[rowId], [columnId]: text },
+      };
+      if (!controlledOpenEndValues) {
+        setUncontrolledOpenEnd(nextValues);
+      }
+      onOpenEndValuesChange?.(nextValues);
+    };
+
     const hasSubColumn = columns.some(isSubColumn);
+
+    /** Total column count spanned by the label + all columns (sub-columns count once per choice). */
+    const totalColumnSpan =
+      1 + columns.reduce((sum, column) => sum + (isSubColumn(column) ? column.choices.length : 1), 0);
+
+    /** Sub-columns (radio/checkbox) in this row with an `openEnd` choice currently selected. */
+    const openEndColumnsForRow = (rowId: string) =>
+      columns.filter(isSubColumn).filter((column) => {
+        const cellValue = values[rowId]?.[column.id];
+        const selected = Array.isArray(cellValue)
+          ? cellValue.map(String)
+          : typeof cellValue === "string"
+            ? [cellValue]
+            : [];
+        return column.choices.some((choice) => choice.openEnd && selected.includes(choice.value));
+      });
 
     return (
       <div
@@ -242,36 +288,62 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
             </thead>
             <tbody>
               {rows.map((row, i) => {
+                const openEndColumns = openEndColumnsForRow(row.id);
+                const zebra = i % 2 === 1 && "bg-[hsl(var(--survey-border-interactive)_/_0.06)]";
                 return (
-                  <tr
-                    key={row.id}
-                    className={cn(
-                      "border-b border-survey-border-muted transition-colors",
-                      // Zebra striping: alternate rows use the LookupTable token
-                      // (border-interactive at 0.06 opacity).
-                      i % 2 === 1 && "bg-[hsl(var(--survey-border-interactive)_/_0.06)]",
-                      // Row hover matches the LookupTable (survey-muted-background
-                      // = border-interactive / 0.2).
-                      "hover:bg-survey-muted-background",
-                    )}
-                  >
-                    <th
-                      id={`hg-label-${row.id}`}
-                      scope="row"
-                      className="px-2 py-3 text-left text-survey-foreground text-survey-body font-survey-regular align-middle whitespace-nowrap"
+                  <React.Fragment key={row.id}>
+                    <tr
+                      className={cn(
+                        "transition-colors",
+                        // The open-end row below (if any) owns the bottom border instead.
+                        !openEndColumns.length && "border-b border-survey-border-muted",
+                        zebra,
+                        // Row hover matches the LookupTable (survey-muted-background
+                        // = border-interactive / 0.2).
+                        "hover:bg-survey-muted-background",
+                      )}
                     >
-                      {row.label}
-                    </th>
-                    {columns.map((column) => (
-                      <HybridGridDesktopCell
-                        key={column.id}
-                        row={row}
-                        column={column}
-                        value={values[row.id]?.[column.id]}
-                        onChange={(next) => setCell(row.id, column.id, next)}
-                      />
+                      <th
+                        id={`hg-label-${row.id}`}
+                        scope="row"
+                        className="px-2 py-3 text-left text-survey-foreground text-survey-body font-survey-regular align-middle whitespace-nowrap"
+                      >
+                        {row.label}
+                      </th>
+                      {columns.map((column) => (
+                        <HybridGridDesktopCell
+                          key={column.id}
+                          row={row}
+                          column={column}
+                          value={values[row.id]?.[column.id]}
+                          onChange={(next) => setCell(row.id, column.id, next)}
+                        />
+                      ))}
+                    </tr>
+                    {openEndColumns.map((column) => (
+                      <tr
+                        key={`${row.id}-${column.id}-openend`}
+                        className={cn("border-b border-survey-border-muted transition-colors", zebra)}
+                      >
+                        <td colSpan={totalColumnSpan} className="px-2 pb-3 pt-0">
+                          <input
+                            type="text"
+                            aria-labelledby={`hg-label-${row.id}`}
+                            value={openEndValues[row.id]?.[column.id] ?? ""}
+                            onChange={(e) => setOpenEndCell(row.id, column.id, e.target.value)}
+                            placeholder="Please specify…"
+                            className={cn(
+                              "w-full bg-transparent border-0 border-b border-survey-border-interactive",
+                              "text-survey-foreground text-survey-body font-survey-regular",
+                              "placeholder:text-survey-muted-foreground",
+                              "focus:outline-none focus:border-survey-border-interactive",
+                              "py-1",
+                            )}
+                          />
+                        </td>
+                      </tr>
                     ))}
-                  </tr>
+                  </React.Fragment>
                 );
               })}
             </tbody>
@@ -308,6 +380,8 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
                           column={column}
                           value={values[row.id]?.[column.id]}
                           onChange={(next) => setCell(row.id, column.id, next)}
+                          openEndValue={openEndValues[row.id]?.[column.id] ?? ""}
+                          onOpenEndChange={(text) => setOpenEndCell(row.id, column.id, text)}
                         />
                       ))}
                     </div>
@@ -545,7 +619,13 @@ const HybridGridMobileField = ({
   column,
   value,
   onChange,
-}: HybridGridCellProps) => {
+  openEndValue,
+  onOpenEndChange,
+}: HybridGridCellProps & {
+  /** Open-end text for this row+column, used when a `radio`/`checkbox` choice is flagged `openEnd`. */
+  openEndValue: string;
+  onOpenEndChange: (text: string) => void;
+}) => {
   const checkedValues = Array.isArray(value) ? value.map(String) : [];
 
   return (
@@ -595,6 +675,10 @@ const HybridGridMobileField = ({
               id={`hg-m-${row.id}-${column.id}-${choice.value}`}
               value={choice.value}
               label={choice.label}
+              checked={value === choice.value}
+              openEnd={choice.openEnd}
+              openEndValue={openEndValue}
+              onOpenEndChange={onOpenEndChange}
             />
           ))}
         </RadioGroup>
@@ -609,6 +693,9 @@ const HybridGridMobileField = ({
               label={choice.label}
               checked={checkedValues.includes(choice.value)}
               onCheckedChange={(c) => onChange(toggleChoice(value, choice.value, c === true))}
+              openEnd={choice.openEnd}
+              openEndValue={openEndValue}
+              onOpenEndChange={onOpenEndChange}
             />
           ))}
         </CheckboxGroup>

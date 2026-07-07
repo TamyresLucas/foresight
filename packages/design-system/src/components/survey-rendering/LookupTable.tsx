@@ -246,6 +246,7 @@ const DraftTextInput: React.FC<{
       'flex h-9 w-full min-w-0 rounded-survey-md border border-survey-border-interactive bg-transparent px-2',
       'text-survey-body font-survey-regular text-survey-foreground transition-colors',
       'placeholder:text-survey-muted-foreground',
+      'hover:border-survey-border-selected',
       'focus-visible:outline-none focus-visible:border-survey-border-selected',
       error && 'placeholder:text-survey-destructive',
       align === 'right' && 'text-right tabular-nums',
@@ -266,10 +267,11 @@ const DraftSelect: React.FC<{
     <SelectPrimitive.Trigger
       aria-invalid={error || undefined}
       className={cn(
-        // Fixed width so the trigger (and its table column) doesn't reflow as the
-        // selected option's label length changes — same width empty or filled.
-        'flex h-9 w-40 shrink-0 items-center justify-between gap-2 rounded-survey-md border border-survey-border-interactive bg-transparent px-2',
+        // Fills the (locked, during editing) column width so it never reflows as
+        // the selected option's label length changes — same width empty or filled.
+        'flex h-9 w-full min-w-0 items-center justify-between gap-2 rounded-survey-md border border-survey-border-interactive bg-transparent px-2',
         'text-survey-body font-survey-regular text-survey-foreground transition-colors outline-none',
+        'hover:border-survey-border-selected',
         'focus-visible:border-survey-border-selected',
         '[&>span]:truncate data-[placeholder]:[&>span]:text-survey-muted-foreground',
         error && 'data-[placeholder]:[&>span]:text-survey-destructive',
@@ -768,7 +770,9 @@ const SurveyLookupTable = React.forwardRef<HTMLDivElement, LookupTableProps>(
                     <TableRow
                       key={row.id}
                       className={cn(
-                        'border-b border-survey-border-muted transition-colors',
+                        // Draft row is already in an active editing state, so it
+                        // skips the shared `.table-body-row:hover` affordance.
+                        'border-b border-survey-border-muted transition-colors hover:bg-transparent',
                         i % 2 === 1 && 'bg-[hsl(var(--survey-border-interactive)_/_0.06)]',
                       )}
                     >

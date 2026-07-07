@@ -13,6 +13,9 @@ import {
 export interface ChoiceGridColumn {
   value: string;
   label: string;
+  /** When true, selecting this column reveals a free-text field for the row — an extra row below it on desktop, inline beneath the choice on mobile. */
+  openEnd?: boolean;
+  openEndPlaceholder?: string;
 }
 
 export interface ChoiceGridRow {
@@ -26,6 +29,10 @@ export interface ChoiceGridProps {
   value?: Record<string, string>; // rowId -> columnValue
   defaultValue?: Record<string, string>;
   onValueChange?: (value: Record<string, string>) => void;
+  /** rowId -> the row's open-end text, for columns flagged `openEnd` */
+  openEndValues?: Record<string, string>;
+  defaultOpenEndValues?: Record<string, string>;
+  onOpenEndValuesChange?: (value: Record<string, string>) => void;
   className?: string;
   /**
    * Force a specific variant regardless of width.
@@ -50,6 +57,9 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
       value: controlledValue,
       defaultValue,
       onValueChange,
+      openEndValues: controlledOpenEndValues,
+      defaultOpenEndValues,
+      onOpenEndValuesChange,
       className,
       variant = 'auto',
       ...rest
@@ -72,6 +82,19 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
         setUncontrolledValue(nextValues);
       }
       onValueChange?.(nextValues);
+    };
+
+    const [uncontrolledOpenEnd, setUncontrolledOpenEnd] = React.useState<Record<string, string>>(
+      defaultOpenEndValues ?? {},
+    );
+    const openEndValues = controlledOpenEndValues ?? uncontrolledOpenEnd;
+
+    const handleOpenEndChange = (rowId: string, text: string) => {
+      const nextValues = { ...openEndValues, [rowId]: text };
+      if (!controlledOpenEndValues) {
+        setUncontrolledOpenEnd(nextValues);
+      }
+      onOpenEndValuesChange?.(nextValues);
     };
 
     return (
@@ -104,40 +127,67 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                 </tr>
               </thead>
               <tbody>
-                {rows.map((row, i) => (
-                  <RadioGroupPrimitive.Root
-                    key={row.id}
-                    asChild
-                    value={values[row.id]}
-                    onValueChange={(val) => handleValueChange(row.id, val)}
-                  >
-                    <tr className={cn(
-                      "group/row border-b border-survey-border-muted transition-colors hover:bg-survey-muted-background",
-                      // Zebra striping: alternate rows use the LookupTable token
-                      // (border-interactive at 0.06 opacity).
-                      i % 2 === 1 && "bg-[hsl(var(--survey-border-interactive)_/_0.06)]",
-                      forceHover && "bg-survey-muted-background"
-                    )}>
-                      <th
-                        id={`label-${row.id}`}
-                        scope="row"
-                        className="px-2 py-2 text-left text-survey-foreground text-survey-body font-survey-regular align-middle"
+                {rows.map((row, i) => {
+                  const openEndColumn = columns.find(
+                    (column) => column.openEnd && column.value === values[row.id],
+                  );
+                  const zebra = i % 2 === 1 && "bg-[hsl(var(--survey-border-interactive)_/_0.06)]";
+                  return (
+                    <React.Fragment key={row.id}>
+                      <RadioGroupPrimitive.Root
+                        asChild
+                        value={values[row.id]}
+                        onValueChange={(val) => handleValueChange(row.id, val)}
                       >
-                        {row.label}
-                      </th>
-                      {columns.map((column, index) => (
-                        <ChoiceGridCell
-                          key={column.value}
-                          rowId={row.id}
-                          columnValue={column.value}
-                          isLast={index === columns.length - 1}
-                          isFocused={focusedRow === row.id && focusedColumn === column.value}
-                          forceHover={forceHover}
-                        />
-                      ))}
-                    </tr>
-                  </RadioGroupPrimitive.Root>
-                ))}
+                        <tr className={cn(
+                          "group/row transition-colors hover:bg-survey-muted-background",
+                          // The open-end row below (if any) owns the bottom border instead.
+                          !openEndColumn && "border-b border-survey-border-muted",
+                          zebra,
+                          forceHover && "bg-survey-muted-background"
+                        )}>
+                          <th
+                            id={`label-${row.id}`}
+                            scope="row"
+                            className="px-2 py-2 text-left text-survey-foreground text-survey-body font-survey-regular align-middle"
+                          >
+                            {row.label}
+                          </th>
+                          {columns.map((column, index) => (
+                            <ChoiceGridCell
+                              key={column.value}
+                              rowId={row.id}
+                              columnValue={column.value}
+                              isLast={index === columns.length - 1}
+                              isFocused={focusedRow === row.id && focusedColumn === column.value}
+                              forceHover={forceHover}
+                            />
+                          ))}
+                        </tr>
+                      </RadioGroupPrimitive.Root>
+                      {openEndColumn && (
+                        <tr className={cn("border-b border-survey-border-muted transition-colors", zebra)}>
+                          <td colSpan={columns.length + 1} className="px-2 pb-3 pt-0">
+                            <input
+                              type="text"
+                              aria-labelledby={`label-${row.id}`}
+                              value={openEndValues[row.id] ?? ""}
+                              onChange={(e) => handleOpenEndChange(row.id, e.target.value)}
+                              placeholder={openEndColumn.openEndPlaceholder ?? "Please specify…"}
+                              className={cn(
+                                "w-full bg-transparent border-0 border-b border-survey-border-interactive",
+                                "text-survey-foreground text-survey-body font-survey-regular",
+                                "placeholder:text-survey-muted-foreground",
+                                "focus:outline-none focus:border-survey-border-interactive",
+                                "py-1",
+                              )}
+                            />
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -165,12 +215,31 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                       onValueChange={(val) => handleValueChange(row.id, val)}
                     >
                       {columns.map((column) => (
-                        <ChoiceGridMobileOption
-                          key={column.value}
-                          column={column}
-                          rowId={row.id}
-                          isFocused={focusedRow === row.id && focusedColumn === column.value}
-                        />
+                        <React.Fragment key={column.value}>
+                          <ChoiceGridMobileOption
+                            column={column}
+                            rowId={row.id}
+                            isFocused={focusedRow === row.id && focusedColumn === column.value}
+                          />
+                          {column.openEnd && values[row.id] === column.value && (
+                            <div className="px-4 pb-4 -mt-2">
+                              <input
+                                type="text"
+                                value={openEndValues[row.id] ?? ""}
+                                onChange={(e) => handleOpenEndChange(row.id, e.target.value)}
+                                onClick={(e) => e.stopPropagation()}
+                                placeholder={column.openEndPlaceholder ?? "Please specify…"}
+                                className={cn(
+                                  "w-full bg-transparent border-0 border-b border-survey-border-interactive",
+                                  "text-survey-foreground text-survey-body font-survey-regular",
+                                  "placeholder:text-survey-muted-foreground",
+                                  "focus:outline-none focus:border-survey-border-interactive",
+                                  "py-1",
+                                )}
+                              />
+                            </div>
+                          )}
+                        </React.Fragment>
                       ))}
                     </RadioGroupPrimitive.Root>
                   </AccordionContent>
