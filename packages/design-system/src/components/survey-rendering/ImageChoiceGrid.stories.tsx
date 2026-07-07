@@ -1,5 +1,6 @@
+import * as React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import { ImageChoiceGrid } from "./ImageChoiceGrid";
+import { ImageChoiceGrid, type ImageChoiceGridColumn } from "./ImageChoiceGrid";
 
 const meta = {
   title: "Survey Rendering/ImageChoiceGrid",
@@ -122,5 +123,56 @@ export const MixedAspectRatios: Story = {
     rows,
     columns: aspectRatioColumns,
   },
+};
+
+// --- Open-end reveal ---
+// A column flagged `openEnd` (e.g. "Other") reveals a free-text field for the
+// row once selected: an extra row directly below the answered row on desktop,
+// inline beneath the choice within the same accordion item on mobile.
+
+const openEndColumns: ImageChoiceGridColumn[] = [
+  ...columns,
+  {
+    value: "other",
+    label: "Other",
+    src: "https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=300&h=300&fit=crop",
+    alt: "Assorted fruit basket",
+    openEnd: true,
+    openEndPlaceholder: "Tell us more…",
+  },
+];
+
+const WithOpenEndRender = (args: React.ComponentProps<typeof ImageChoiceGrid>) => {
+  const [value, setValue] = React.useState<Record<string, string>>({ store1: "other" });
+  const [openEndValues, setOpenEndValues] = React.useState<Record<string, string>>({});
+  return (
+    <ImageChoiceGrid
+      {...args}
+      value={value}
+      onValueChange={setValue}
+      openEndValues={openEndValues}
+      onOpenEndValuesChange={setOpenEndValues}
+    />
+  );
+};
+
+export const DesktopWithOpenEnd: Story = {
+  name: "Desktop / With open end",
+  render: WithOpenEndRender,
+  args: { rows, columns: openEndColumns, variant: "desktop" },
+};
+
+export const MobileWithOpenEnd: Story = {
+  name: "Mobile / With open end",
+  render: WithOpenEndRender,
+  args: { rows: [rows[0]], columns: openEndColumns, variant: "mobile" },
+  decorators: [
+    (Story) => (
+      <div data-survey-theme className="w-[390px] mx-auto p-4">
+        <Story />
+      </div>
+    ),
+  ],
+  parameters: { viewport: { defaultViewport: "iphone12" } },
 };
 

@@ -17,6 +17,9 @@ export interface ImageChoiceGridColumn {
   /** Image shown as the selectable choice for this column. */
   src: string;
   alt?: string;
+  /** When true, selecting this column reveals a free-text field for the row — an extra row below it on desktop, inline beneath the choice on mobile. */
+  openEnd?: boolean;
+  openEndPlaceholder?: string;
 }
 
 export interface ImageChoiceGridRow {
@@ -30,6 +33,10 @@ export interface ImageChoiceGridProps {
   value?: Record<string, string>; // rowId -> columnValue
   defaultValue?: Record<string, string>;
   onValueChange?: (value: Record<string, string>) => void;
+  /** rowId -> the row's open-end text, for columns flagged `openEnd` */
+  openEndValues?: Record<string, string>;
+  defaultOpenEndValues?: Record<string, string>;
+  onOpenEndValuesChange?: (value: Record<string, string>) => void;
   className?: string;
   /**
    * Force a specific variant regardless of width.
@@ -70,6 +77,9 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
       value: controlledValue,
       defaultValue,
       onValueChange,
+      openEndValues: controlledOpenEndValues,
+      defaultOpenEndValues,
+      onOpenEndValuesChange,
       className,
       variant = "auto",
     } = props;
@@ -98,6 +108,19 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
         setUncontrolledValue(nextValues);
       }
       onValueChange?.(nextValues);
+    };
+
+    const [uncontrolledOpenEnd, setUncontrolledOpenEnd] = React.useState<Record<string, string>>(
+      defaultOpenEndValues ?? {},
+    );
+    const openEndValues = controlledOpenEndValues ?? uncontrolledOpenEnd;
+
+    const handleOpenEndChange = (rowId: string, text: string) => {
+      const nextValues = { ...openEndValues, [rowId]: text };
+      if (!controlledOpenEndValues) {
+        setUncontrolledOpenEnd(nextValues);
+      }
+      onOpenEndValuesChange?.(nextValues);
     };
 
     return (
@@ -133,36 +156,62 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
               </tr>
             </thead>
             <tbody>
-              {rows.map((row) => (
-                <RadioGroupPrimitive.Root
-                  key={row.id}
-                  asChild
-                  value={values[row.id]}
-                  onValueChange={(val) => handleValueChange(row.id, val)}
-                >
-                  <tr
-                    className={cn(
-                      "group/row transition-colors hover:bg-survey-muted-background",
-                    )}
-                  >
-                    <th
-                      id={`label-${row.id}`}
-                      scope="row"
-                      className="px-2 py-2 text-left text-survey-foreground text-survey-body font-survey-regular align-middle"
+              {rows.map((row) => {
+                const openEndColumn = columns.find(
+                  (column) => column.openEnd && column.value === values[row.id],
+                );
+                return (
+                  <React.Fragment key={row.id}>
+                    <RadioGroupPrimitive.Root
+                      asChild
+                      value={values[row.id]}
+                      onValueChange={(val) => handleValueChange(row.id, val)}
                     >
-                      {row.label}
-                    </th>
-                    {columns.map((column) => (
-                      <ImageChoiceGridCell
-                        key={column.value}
-                        rowId={row.id}
-                        column={column}
-                        selected={values[row.id] === column.value}
-                      />
-                    ))}
-                  </tr>
-                </RadioGroupPrimitive.Root>
-              ))}
+                      <tr
+                        className={cn(
+                          "group/row transition-colors hover:bg-survey-muted-background",
+                        )}
+                      >
+                        <th
+                          id={`label-${row.id}`}
+                          scope="row"
+                          className="px-2 py-2 text-left text-survey-foreground text-survey-body font-survey-regular align-middle"
+                        >
+                          {row.label}
+                        </th>
+                        {columns.map((column) => (
+                          <ImageChoiceGridCell
+                            key={column.value}
+                            rowId={row.id}
+                            column={column}
+                            selected={values[row.id] === column.value}
+                          />
+                        ))}
+                      </tr>
+                    </RadioGroupPrimitive.Root>
+                    {openEndColumn && (
+                      <tr className="transition-colors">
+                        <td colSpan={columns.length + 1} className="px-2 pb-3 pt-0">
+                          <input
+                            type="text"
+                            aria-labelledby={`label-${row.id}`}
+                            value={openEndValues[row.id] ?? ""}
+                            onChange={(e) => handleOpenEndChange(row.id, e.target.value)}
+                            placeholder={openEndColumn.openEndPlaceholder ?? "Please specify…"}
+                            className={cn(
+                              "w-full bg-transparent border-0 border-b border-survey-border-interactive",
+                              "text-survey-foreground text-survey-body font-survey-regular",
+                              "placeholder:text-survey-muted-foreground",
+                              "focus:outline-none focus:border-survey-border-interactive",
+                              "py-1",
+                            )}
+                          />
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -196,10 +245,27 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
                     onValueChange={(val) => handleValueChange(row.id, val)}
                   >
                     {columns.map((column) => (
-                      <ImageChoiceGridMobileOption
-                        key={column.value}
-                        column={column}
-                      />
+                      <React.Fragment key={column.value}>
+                        <ImageChoiceGridMobileOption column={column} />
+                        {column.openEnd && values[row.id] === column.value && (
+                          <div className="px-4 pb-4 -mt-2">
+                            <input
+                              type="text"
+                              value={openEndValues[row.id] ?? ""}
+                              onChange={(e) => handleOpenEndChange(row.id, e.target.value)}
+                              onClick={(e) => e.stopPropagation()}
+                              placeholder={column.openEndPlaceholder ?? "Please specify…"}
+                              className={cn(
+                                "w-full bg-transparent border-0 border-b border-survey-border-interactive",
+                                "text-survey-foreground text-survey-body font-survey-regular",
+                                "placeholder:text-survey-muted-foreground",
+                                "focus:outline-none focus:border-survey-border-interactive",
+                                "py-1",
+                              )}
+                            />
+                          </div>
+                        )}
+                      </React.Fragment>
                     ))}
                   </RadioGroupPrimitive.Root>
                 </AccordionContent>
