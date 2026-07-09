@@ -14,7 +14,8 @@ const meta = {
       description: {
         component:
           "ImageChoiceGrid works like ChoiceGrid, but each column option is a selectable image instead of a radio button. Each row is a single-choice question: picking an image selects that column for the row (Radix RadioGroup keeps the single-select + keyboard semantics). A selected image is tinted with the brand primary at low opacity and outlined with the primary color at full opacity, matching the other image question types. Responsive: a table on wide containers, an accordion of image options on narrow ones.\n\n" +
-          "**Column and image sizing:** the `<colgroup>` splits the table width evenly across the row-label column and every choice column (`100 / (columns.length + 1)%` each), so all choice columns are always equal width regardless of how many there are. Each image itself renders at `width=\"100%\"` in Card's fill-width mode (no explicit `height`), so it fills that column's width and keeps its own natural aspect ratio — see the **MixedAspectRatios** story for a landscape/portrait example.",
+          "**Column and image sizing:** the `<colgroup>` splits the table width evenly across the row-label column and every choice column (`100 / (columns.length + 1)%` each), so all choice columns are always equal width regardless of how many there are. Each image itself renders at `width=\"100%\"` in Card's fill-width mode (no explicit `height`), so it fills that column's width and keeps its own natural aspect ratio — see the **MixedAspectRatios** story for a landscape/portrait example.\n\n" +
+          "**Attached open end:** flag a column `openEnd` (conventionally labeled \"Other\") to reveal an OpenEndInput for the row once selected — the same attached-open-end pattern as RadioGroup, Checkbox, ChoiceGrid, and HybridGrid. See the **With open end** stories here, and the **OpenEndInput** story for its own states.",
       },
     },
   },
@@ -158,6 +159,14 @@ const WithOpenEndRender = (args: React.ComponentProps<typeof ImageChoiceGrid>) =
 
 export const DesktopWithOpenEnd: Story = {
   name: "Desktop / With open end",
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "The revealed input sits in its own row directly below the answered row, but only spans the selected column's own width (aligned under \"Other\" here) rather than the full grid — empty cells before/after it keep the surrounding row structure intact.",
+      },
+    },
+  },
   render: WithOpenEndRender,
   args: { rows, columns: openEndColumns, variant: "desktop" },
 };

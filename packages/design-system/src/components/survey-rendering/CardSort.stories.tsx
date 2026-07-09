@@ -7,8 +7,13 @@ const meta = {
   component: CardSort,
   tags: ["autodocs"],
   decorators: [
+    // `w-screen` (not `w-full`) gives the wrapper a definite, viewport-tied
+    // width: Storybook's centered layout otherwise shrink-wraps `w-full` to
+    // CardSort's own content, which — especially for compact `imageOnly`
+    // cards — can stay under the 480px stacked/side-by-side breakpoint
+    // regardless of the actual browser width.
     (Story) => (
-      <div className="w-full max-w-4xl p-8">
+      <div className="w-screen max-w-4xl p-8">
         <Story />
       </div>
     ),
@@ -58,6 +63,73 @@ export const WithGroups: Story = {
       { id: "elderberry", label: "Elderberry", group: "Group 2" },
     ],
     sourceGroups: ["Group 1", "Group 2"],
+  },
+};
+
+const imageItems = [
+  {
+    id: "apple",
+    label: "Apple",
+    imageSrc: "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=300&h=300&fit=crop",
+  },
+  {
+    id: "pear",
+    label: "Pear",
+    imageSrc: "https://images.unsplash.com/photo-1615484477778-ca3b77940c25?w=300&h=300&fit=crop",
+  },
+  {
+    id: "lemon",
+    label: "Lemon",
+    imageSrc: "https://images.unsplash.com/photo-1582287086947-1fd0fdac5cc9?w=300&h=300&fit=crop",
+  },
+];
+
+export const ImageOnly: Story = {
+  name: "Image only",
+  args: {
+    items: imageItems,
+    cardVariant: "imageOnly",
+    cardShape: "square",
+  },
+};
+
+// Landscape, portrait, and square source photos, deliberately mismatched in
+// aspect ratio (and shape: "rectangle" here, so each card keeps its image's
+// own ratio instead of being cropped to a square). The source column and
+// both choice columns share the page width equally (each `flex-1`); every
+// card fills its column's width regardless of which column it's in — height
+// is what varies with the image's own ratio — so a card dropped into either
+// column (like "Portrait" here, prefilled into Choice 1) is already the
+// right width, and the column itself never resizes on drop.
+const mixedSizeItems = [
+  {
+    id: "landscape",
+    label: "Landscape",
+    imageSrc: "https://images.unsplash.com/photo-1518013431117-eb1465fa5752?w=300&h=200&fit=crop",
+  },
+  {
+    id: "portrait",
+    label: "Portrait",
+    imageSrc: "https://images.pexels.com/photos/7784610/pexels-photo-7784610.jpeg?w=300&h=450&fit=crop",
+  },
+  {
+    id: "apple",
+    label: "Apple",
+    imageSrc: "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=300&h=300&fit=crop",
+  },
+  {
+    id: "pear",
+    label: "Pear",
+    imageSrc: "https://images.unsplash.com/photo-1615484477778-ca3b77940c25?w=300&h=300&fit=crop",
+  },
+];
+
+export const ImageOnlyMixedSizes: Story = {
+  name: "Image only / Mixed sizes",
+  args: {
+    items: mixedSizeItems,
+    cardVariant: "imageOnly",
+    defaultValue: { portrait: "choice1" },
   },
 };
 

@@ -10,6 +10,13 @@ const meta = {
     viewport: {
       defaultViewport: 'responsive',
     },
+    docs: {
+      description: {
+        component:
+          'Matrix of rows against a shared set of columns, one radio per row (Radix RadioGroup keeps the single-select + keyboard semantics). Styled with survey design tokens (`border-survey-border-interactive`/`-selected`, `text-survey-foreground`) so it inherits the live survey theme. Responsive: a table on wide containers, an accordion of rows on narrow ones.\n\n' +
+          '**Attached open end:** flag a column `openEnd` (conventionally labeled "Other") to reveal an OpenEndInput for the row once selected — the same attached-open-end pattern as RadioGroup, Checkbox, ImageChoiceGrid, and HybridGrid. See the **With open end** stories here, and the **OpenEndInput** story for its own states.',
+      },
+    },
   },
   decorators: [
     (Story) => (
@@ -153,6 +160,14 @@ const WithOpenEndRender = (args: React.ComponentProps<typeof ChoiceGrid>) => {
 
 export const DesktopWithOpenEnd: Story = {
   name: 'Desktop / With open end',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The revealed input sits in its own row directly below the answered row, but only spans the selected column\'s own width (aligned under "Other" here) rather than the full grid — empty cells before/after it keep the surrounding row structure intact.',
+      },
+    },
+  },
   render: WithOpenEndRender,
   args: {
     rows: desktopRows,

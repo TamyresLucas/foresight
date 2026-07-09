@@ -10,6 +10,13 @@ const meta = {
     viewport: {
       defaultViewport: 'responsive',
     },
+    docs: {
+      description: {
+        component:
+          'Matrix of rows against columns that can mix any of eight question types per column (text, numeric, dropdown, radio, checkbox, slider, starrating, imageselector) — see the **All question types** stories. Styled with survey design tokens (`border-survey-border-interactive`/`-selected`, `text-survey-foreground`) so it inherits the live survey theme.\n\n' +
+          '**Attached open end:** flag a `radio`/`checkbox` choice `openEnd` (conventionally labeled "Other") to reveal an OpenEndInput for the row once selected. Desktop renders it directly, same as ChoiceGrid/ImageChoiceGrid; mobile reuses RadioGroupOption/CheckboxOption\'s own openEnd rendering, which renders the same OpenEndInput. See the **With open end** stories here, and the **OpenEndInput** story for its own states.',
+      },
+    },
   },
   decorators: [
     (Story) => (
@@ -191,6 +198,14 @@ const WithOpenEndRender = (args: React.ComponentProps<typeof HybridGrid>) => {
 
 export const DesktopWithOpenEnd: Story = {
   name: 'Desktop / With open end',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The revealed input sits in its own row directly below the answered row, but only spans the triggering column\'s own sub-columns (aligned under "Preferred contact" here) rather than the full grid — empty cells before/after it keep the surrounding row structure intact.',
+      },
+    },
+  },
   render: WithOpenEndRender,
   args: { rows, columns: openEndColumns, variant: 'desktop' },
 };

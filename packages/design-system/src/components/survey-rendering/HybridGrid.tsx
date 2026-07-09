@@ -17,6 +17,7 @@ import { RadioGroup, RadioGroupOption } from "./RadioGroup";
 import { SurveySlider, type SliderValue } from "./Slider";
 import { StarRating } from "./StarRating";
 import { ImageSelector, type ImageSelectorOption } from "./ImageSelector";
+import { OpenEndInput } from "./OpenEndInput";
 
 export interface HybridGridRow {
   id: string;
@@ -222,9 +223,16 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
 
     const hasSubColumn = columns.some(isSubColumn);
 
+    /** Table columns spanned by a single top-level column (sub-columns count once per choice). */
+    const columnSpan = (column: HybridGridColumn) =>
+      isSubColumn(column) ? column.choices.length : 1;
+
     /** Total column count spanned by the label + all columns (sub-columns count once per choice). */
-    const totalColumnSpan =
-      1 + columns.reduce((sum, column) => sum + (isSubColumn(column) ? column.choices.length : 1), 0);
+    const totalColumnSpan = 1 + columns.reduce((sum, column) => sum + columnSpan(column), 0);
+
+    /** Table columns spanned by the label plus every column before this one. */
+    const columnOffset = (column: HybridGridColumn) =>
+      1 + columns.slice(0, columns.indexOf(column)).reduce((sum, c) => sum + columnSpan(c), 0);
 
     /** Sub-columns (radio/checkbox) in this row with an `openEnd` choice currently selected. */
     const openEndColumnsForRow = (rowId: string) =>
@@ -320,29 +328,31 @@ const HybridGrid = React.forwardRef<HTMLDivElement, HybridGridProps>(
                         />
                       ))}
                     </tr>
-                    {openEndColumns.map((column) => (
-                      <tr
-                        key={`${row.id}-${column.id}-openend`}
-                        className={cn("border-b border-survey-border-muted transition-colors", zebra)}
-                      >
-                        <td colSpan={totalColumnSpan} className="px-2 pb-3 pt-0">
-                          <input
-                            type="text"
-                            aria-labelledby={`hg-label-${row.id}`}
-                            value={openEndValues[row.id]?.[column.id] ?? ""}
-                            onChange={(e) => setOpenEndCell(row.id, column.id, e.target.value)}
-                            placeholder="Please specify…"
-                            className={cn(
-                              "w-full bg-transparent border-0 border-b border-survey-border-interactive",
-                              "text-survey-foreground text-survey-body font-survey-regular",
-                              "placeholder:text-survey-muted-foreground",
-                              "focus:outline-none focus:border-survey-border-interactive",
-                              "py-1",
-                            )}
-                          />
-                        </td>
-                      </tr>
-                    ))}
+                    {openEndColumns.map((column) => {
+                      const offset = columnOffset(column);
+                      const span = columnSpan(column);
+                      return (
+                        <tr
+                          key={`${row.id}-${column.id}-openend`}
+                          className={cn("border-b border-survey-border-muted transition-colors", zebra)}
+                        >
+                          {/* Empty cells before/after the input keep it aligned under
+                              this column's own sub-columns instead of the full row. */}
+                          <td colSpan={offset} className="p-0" />
+                          <td colSpan={span} className="px-2 pb-3 pt-0">
+                            <OpenEndInput
+                              aria-labelledby={`hg-label-${row.id}`}
+                              value={openEndValues[row.id]?.[column.id] ?? ""}
+                              onChange={(e) => setOpenEndCell(row.id, column.id, e.target.value)}
+                              placeholder="Please specify…"
+                            />
+                          </td>
+                          {offset + span < totalColumnSpan && (
+                            <td colSpan={totalColumnSpan - offset - span} className="p-0" />
+                          )}
+                        </tr>
+                      );
+                    })}
                   </React.Fragment>
                 );
               })}

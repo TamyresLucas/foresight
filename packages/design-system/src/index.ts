@@ -60,6 +60,7 @@ export * from "./components/survey/BuildSidebar";
 // Survey rendering components
 export * from "./components/survey-rendering/TextAnswer";
 export * from "./components/survey-rendering/OpenEndAnswer";
+export * from "./components/survey-rendering/OpenEndInput";
 export * from "./components/survey-rendering/SurveyNavigation";
 export * from "./components/survey-rendering/DateAnswer";
 export * from "./components/survey-rendering/DropdownAnswer";

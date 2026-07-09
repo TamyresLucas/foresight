@@ -11,6 +11,9 @@ export interface CardSortItem {
   id: string;
   label: React.ReactNode;
   group?: string;
+  /** Image URL, used when `cardVariant="imageOnly"`. */
+  imageSrc?: string;
+  imageAlt?: string;
 }
 
 export type CardSortValue = Record<string, CardSortZone>;
@@ -24,6 +27,13 @@ export interface CardSortProps {
   onChange?: (next: CardSortValue) => void;
   cardShape?: "square" | "rectangle";
   cardSize?: "sm" | "md" | "lg";
+  /**
+   * `statement` (default) renders each item's `label` as text, matching
+   * Card's own `statement` variant. `imageOnly` renders just the item's
+   * `imageSrc` (Card's `image` variant), with `label` used only as the
+   * card's accessible name.
+   */
+  cardVariant?: "statement" | "imageOnly";
   className?: string;
 }
 
@@ -50,6 +60,7 @@ const CardSort = React.forwardRef<HTMLDivElement, CardSortProps>(
       onChange,
       cardShape = "rectangle",
       cardSize = "md",
+      cardVariant = "statement",
       className,
       ...props
     },
@@ -216,21 +227,44 @@ const CardSort = React.forwardRef<HTMLDivElement, CardSortProps>(
       </div>
     );
 
-    const renderCard = (it: CardSortItem) => (
-      <Card
-        key={it.id}
-        shape={cardShape}
-        size={cardSize}
-        draggable
-        dragged={draggedId === it.id}
-        onDragStart={handleDragStart(it.id)}
-        onDragEnd={handleDragEnd}
-        onKeyDown={handleCardKeyDown(it.id)}
-        className="w-full h-auto min-h-0 p-2 justify-start text-left cursor-grab active:cursor-grabbing"
-      >
-        {it.label}
-      </Card>
-    );
+    const isImageOnly = cardVariant === "imageOnly";
+
+    const renderCard = (it: CardSortItem) => {
+      const accessibleLabel = it.imageAlt ?? labelOf(items, it.id);
+      return (
+        <Card
+          key={it.id}
+          variant={isImageOnly ? "image" : "statement"}
+          shape={cardShape}
+          size={cardSize}
+          imageSrc={isImageOnly ? it.imageSrc : undefined}
+          imageAlt={isImageOnly ? accessibleLabel : undefined}
+          aria-label={isImageOnly ? accessibleLabel : undefined}
+          draggable
+          dragged={draggedId === it.id}
+          onDragStart={handleDragStart(it.id)}
+          onDragEnd={handleDragEnd}
+          onKeyDown={handleCardKeyDown(it.id)}
+          className={cn(
+            // `w-full` fills whichever column (source, choice1, choice2) the
+            // card is currently in; since every column shares the same
+            // equal-thirds `flex-1` width (see renderSourceColumn/
+            // renderChoiceZone), every card ends up the same width too — the
+            // card never needs to resize on drop, only the column does the
+            // sizing. `!min-w-0` overrides Card's own `image`-variant
+            // min-width floor, which would otherwise stop a narrow column
+            // from shrinking a wide/landscape image down to fit (same fix as
+            // ImageSelector). `!min-h-0` likewise drops the min-height floor,
+            // which would pad short/wide images out with blank space below
+            // instead of the card hugging their true rendered height.
+            "w-full cursor-grab active:cursor-grabbing",
+            isImageOnly ? "!min-w-0 !min-h-0" : "h-auto min-h-0 p-2 justify-start text-left",
+          )}
+        >
+          {!isImageOnly && it.label}
+        </Card>
+      );
+    };
 
     const renderChoiceZone = (zone: "choice1" | "choice2", label: string) => {
       const zoneItems = items.filter((it) => (current[it.id] ?? "source") === zone);
@@ -239,7 +273,12 @@ const CardSort = React.forwardRef<HTMLDivElement, CardSortProps>(
         <DropZone
           label={label}
           className={cn(
-            "flex-1",
+            // `min-w-0` lets the zone shrink to its equal `flex-1` share
+            // instead of growing to fit an oversized dropped image (flex
+            // items otherwise refuse to shrink below their content's natural
+            // size) — the zone's width is set once by the flex layout and
+            // stays put regardless of what's dropped into it.
+            "flex-1 min-w-0",
             isOver && "border-survey-border-selected",
           )}
           data-drag-over={isOver ? "true" : undefined}
@@ -327,7 +366,7 @@ const CardSort = React.forwardRef<HTMLDivElement, CardSortProps>(
       >
         {renderSourceColumn()}
         <div
-          className={cn("flex flex-col flex-1", !stacked && "contents")}
+          className={cn("flex flex-col flex-1 min-w-0", !stacked && "contents")}
           style={{ gap: "var(--survey-margin, 8px)" }}
         >
           {renderChoiceZone("choice1", choiceLabels[0])}

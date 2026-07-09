@@ -10,6 +10,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
+import { OpenEndInput } from "./OpenEndInput";
 
 export interface ImageChoiceGridColumn {
   value: string;
@@ -157,9 +158,11 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
             </thead>
             <tbody>
               {rows.map((row) => {
-                const openEndColumn = columns.find(
+                const openEndColumnIndex = columns.findIndex(
                   (column) => column.openEnd && column.value === values[row.id],
                 );
+                const openEndColumn =
+                  openEndColumnIndex >= 0 ? columns[openEndColumnIndex] : undefined;
                 return (
                   <React.Fragment key={row.id}>
                     <RadioGroupPrimitive.Root
@@ -191,22 +194,20 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
                     </RadioGroupPrimitive.Root>
                     {openEndColumn && (
                       <tr className="transition-colors">
-                        <td colSpan={columns.length + 1} className="px-2 pb-3 pt-0">
-                          <input
-                            type="text"
+                        {/* Empty cells before the input keep it aligned under the
+                            label column plus any data columns preceding this one. */}
+                        <td colSpan={openEndColumnIndex + 1} className="p-0" />
+                        <td className="px-2 pb-3 pt-0">
+                          <OpenEndInput
                             aria-labelledby={`label-${row.id}`}
                             value={openEndValues[row.id] ?? ""}
                             onChange={(e) => handleOpenEndChange(row.id, e.target.value)}
                             placeholder={openEndColumn.openEndPlaceholder ?? "Please specify…"}
-                            className={cn(
-                              "w-full bg-transparent border-0 border-b border-survey-border-interactive",
-                              "text-survey-foreground text-survey-body font-survey-regular",
-                              "placeholder:text-survey-muted-foreground",
-                              "focus:outline-none focus:border-survey-border-interactive",
-                              "py-1",
-                            )}
                           />
                         </td>
+                        {openEndColumnIndex < columns.length - 1 && (
+                          <td colSpan={columns.length - openEndColumnIndex - 1} className="p-0" />
+                        )}
                       </tr>
                     )}
                   </React.Fragment>
@@ -249,19 +250,11 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
                         <ImageChoiceGridMobileOption column={column} />
                         {column.openEnd && values[row.id] === column.value && (
                           <div className="px-4 pb-4 -mt-2">
-                            <input
-                              type="text"
+                            <OpenEndInput
                               value={openEndValues[row.id] ?? ""}
                               onChange={(e) => handleOpenEndChange(row.id, e.target.value)}
                               onClick={(e) => e.stopPropagation()}
                               placeholder={column.openEndPlaceholder ?? "Please specify…"}
-                              className={cn(
-                                "w-full bg-transparent border-0 border-b border-survey-border-interactive",
-                                "text-survey-foreground text-survey-body font-survey-regular",
-                                "placeholder:text-survey-muted-foreground",
-                                "focus:outline-none focus:border-survey-border-interactive",
-                                "py-1",
-                              )}
                             />
                           </div>
                         )}
