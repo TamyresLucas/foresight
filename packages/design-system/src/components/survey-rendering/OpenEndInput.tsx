@@ -20,7 +20,10 @@ export interface OpenEndInputProps
  * OpenEndAnswer's rounded box.
  */
 const OpenEndInput = React.forwardRef<HTMLInputElement, OpenEndInputProps>(
-  ({ className, selected, focused = false, onBlur, onMouseEnter, onMouseLeave, ...props }, ref) => {
+  (
+    { className, selected, focused = false, onBlur, onFocus, onMouseEnter, onMouseLeave, ...props },
+    ref,
+  ) => {
     const [internalSelected, setInternalSelected] = React.useState(false);
     const isSelected = selected ?? internalSelected;
 
@@ -30,8 +33,29 @@ const OpenEndInput = React.forwardRef<HTMLInputElement, OpenEndInputProps>(
     // whereas the browser's own `:hover` matching ignores synthetic events.
     const [isHovered, setIsHovered] = React.useState(false);
 
+    // Browsers show `:focus-visible` on text inputs even for pointer-triggered
+    // focus (unlike buttons), so it can't distinguish click from Tab here. A
+    // pointerdown always precedes a click's focus event, so it's used as a
+    // flag to suppress the ring for that focus and keep it for keyboard nav.
+    const wasPointerRef = React.useRef(false);
+    const [isKeyboardFocused, setIsKeyboardFocused] = React.useState(false);
+
+    const handlePointerDown = () => {
+      wasPointerRef.current = true;
+      setInternalSelected(true);
+    };
+
+    const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+      if (!wasPointerRef.current) {
+        setIsKeyboardFocused(true);
+      }
+      wasPointerRef.current = false;
+      onFocus?.(e);
+    };
+
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
       setInternalSelected(false);
+      setIsKeyboardFocused(false);
       onBlur?.(e);
     };
 
@@ -45,8 +69,10 @@ const OpenEndInput = React.forwardRef<HTMLInputElement, OpenEndInputProps>(
       onMouseLeave?.(e);
     };
 
+    const showFocusRing = focused || isKeyboardFocused;
+
     return (
-      <div className="w-full" onPointerDown={() => setInternalSelected(true)}>
+      <div className="w-full" onPointerDown={handlePointerDown}>
         <input
           type="text"
           ref={ref}
@@ -55,17 +81,18 @@ const OpenEndInput = React.forwardRef<HTMLInputElement, OpenEndInputProps>(
             "text-survey-foreground text-survey-body font-survey-regular",
             "placeholder:text-survey-muted-foreground",
             isHovered && "bg-survey-muted-background",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-survey-background",
+            "focus-visible:outline-none",
             isSelected
-              ? "border-b-2 border-survey-border-selected focus-visible:ring-survey-border-selected"
-              : "border-survey-border-interactive focus-visible:ring-survey-border-interactive",
-            focused &&
+              ? "border-b-2 border-survey-border-selected"
+              : "border-survey-border-interactive",
+            showFocusRing &&
               (isSelected
                 ? "ring-2 ring-offset-2 ring-offset-survey-background ring-survey-border-selected"
                 : "ring-2 ring-offset-2 ring-offset-survey-background ring-survey-border-interactive"),
             "py-1",
             className,
           )}
+          onFocus={handleFocus}
           onBlur={handleBlur}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
