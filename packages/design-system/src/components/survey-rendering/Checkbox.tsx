@@ -4,6 +4,7 @@ import * as React from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { Check } from "../ui/icons";
 import { cn } from "@/lib/utils";
+import { OpenEndInput } from "./OpenEndInput";
 
 export type CheckboxGroupProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -86,19 +87,11 @@ const CheckboxOption = React.forwardRef<HTMLDivElement, CheckboxOptionProps>(
         </label>
         {showOpenEnd && (
           <div className="px-4 pb-1">
-            <input
-              type="text"
+            <OpenEndInput
               value={openEndValue ?? ""}
               onChange={(e) => onOpenEndChange?.(e.target.value)}
               placeholder={openEndPlaceholder ?? "Please specify…"}
               onClick={(e) => e.stopPropagation()}
-              className={cn(
-                "w-full bg-transparent border-0 border-b border-survey-border-interactive",
-                "text-survey-foreground text-survey-body font-survey-regular",
-                "placeholder:text-survey-muted-foreground",
-                "focus:outline-none focus:border-survey-border-interactive",
-                "py-1 pb-1",
-              )}
             />
           </div>
         )}

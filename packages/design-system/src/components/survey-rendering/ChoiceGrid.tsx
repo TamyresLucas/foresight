@@ -9,6 +9,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
+import { OpenEndInput } from "./OpenEndInput";
 
 export interface ChoiceGridColumn {
   value: string;
@@ -128,9 +129,11 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
               </thead>
               <tbody>
                 {rows.map((row, i) => {
-                  const openEndColumn = columns.find(
+                  const openEndColumnIndex = columns.findIndex(
                     (column) => column.openEnd && column.value === values[row.id],
                   );
+                  const openEndColumn =
+                    openEndColumnIndex >= 0 ? columns[openEndColumnIndex] : undefined;
                   const zebra = i % 2 === 1 && "bg-[hsl(var(--survey-border-interactive)_/_0.06)]";
                   return (
                     <React.Fragment key={row.id}>
@@ -167,22 +170,20 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                       </RadioGroupPrimitive.Root>
                       {openEndColumn && (
                         <tr className={cn("border-b border-survey-border-muted transition-colors", zebra)}>
-                          <td colSpan={columns.length + 1} className="px-2 pb-3 pt-0">
-                            <input
-                              type="text"
+                          {/* Empty cells before the input keep it aligned under the
+                              label column plus any data columns preceding this one. */}
+                          <td colSpan={openEndColumnIndex + 1} className="p-0" />
+                          <td className="px-2 pb-3 pt-0">
+                            <OpenEndInput
                               aria-labelledby={`label-${row.id}`}
                               value={openEndValues[row.id] ?? ""}
                               onChange={(e) => handleOpenEndChange(row.id, e.target.value)}
                               placeholder={openEndColumn.openEndPlaceholder ?? "Please specify…"}
-                              className={cn(
-                                "w-full bg-transparent border-0 border-b border-survey-border-interactive",
-                                "text-survey-foreground text-survey-body font-survey-regular",
-                                "placeholder:text-survey-muted-foreground",
-                                "focus:outline-none focus:border-survey-border-interactive",
-                                "py-1",
-                              )}
                             />
                           </td>
+                          {openEndColumnIndex < columns.length - 1 && (
+                            <td colSpan={columns.length - openEndColumnIndex - 1} className="p-0" />
+                          )}
                         </tr>
                       )}
                     </React.Fragment>
@@ -223,19 +224,11 @@ const ChoiceGrid = React.forwardRef<HTMLDivElement, ChoiceGridProps>(
                           />
                           {column.openEnd && values[row.id] === column.value && (
                             <div className="px-4 pb-4 -mt-2">
-                              <input
-                                type="text"
+                              <OpenEndInput
                                 value={openEndValues[row.id] ?? ""}
                                 onChange={(e) => handleOpenEndChange(row.id, e.target.value)}
                                 onClick={(e) => e.stopPropagation()}
                                 placeholder={column.openEndPlaceholder ?? "Please specify…"}
-                                className={cn(
-                                  "w-full bg-transparent border-0 border-b border-survey-border-interactive",
-                                  "text-survey-foreground text-survey-body font-survey-regular",
-                                  "placeholder:text-survey-muted-foreground",
-                                  "focus:outline-none focus:border-survey-border-interactive",
-                                  "py-1",
-                                )}
                               />
                             </div>
                           )}

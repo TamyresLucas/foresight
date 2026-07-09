@@ -6,6 +6,15 @@ const meta = {
   title: 'Survey Rendering/RadioGroup',
   component: RadioGroup,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'Single-select list of RadioGroupOptions, styled with survey design tokens (`border-survey-border-interactive`/`-selected`, `text-survey-foreground`) so it inherits the live survey theme.\n\n' +
+          '**Attached open end:** flag an option `openEnd` (conventionally labeled "Other") to reveal an OpenEndInput directly beneath it once selected — the same attached-open-end pattern as Checkbox, ChoiceGrid, ImageChoiceGrid, and HybridGrid. See the **WithOpenEnd** story here, and the **OpenEndInput** story for its own states.',
+      },
+    },
+  },
   decorators: [
     (Story) => (
       <div className="w-full max-w-lg p-8">
@@ -63,6 +72,14 @@ export const FocusedAndSelected: Story = {
 };
 
 export const WithOpenEnd: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Selecting an option flagged `openEnd` reveals a text input inside its own card, below the label, without disturbing the other options\' layout.',
+      },
+    },
+  },
   render: (args) => {
     const [value, setValue] = React.useState('option-3');
     const [text, setText] = React.useState('');

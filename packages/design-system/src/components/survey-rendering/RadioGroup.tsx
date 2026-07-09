@@ -3,6 +3,7 @@
 import * as React from "react";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { cn } from "@/lib/utils";
+import { OpenEndInput } from "./OpenEndInput";
 
 export type RadioGroupProps = Omit<
   React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>,
@@ -89,19 +90,11 @@ const RadioGroupOption = React.forwardRef<
       </label>
       {showOpenEnd && (
         <div className="px-4 pb-1">
-          <input
-            type="text"
+          <OpenEndInput
             value={openEndValue ?? ""}
             onChange={(e) => onOpenEndChange?.(e.target.value)}
             placeholder={openEndPlaceholder ?? "Please specify…"}
             onClick={(e) => e.stopPropagation()}
-            className={cn(
-              "w-full bg-transparent border-0 border-b border-survey-border-interactive",
-              "text-survey-foreground text-survey-body font-survey-regular",
-              "placeholder:text-survey-muted-foreground",
-              "focus:outline-none focus:border-survey-border-interactive",
-              "py-1 pb-1",
-            )}
           />
         </div>
       )}

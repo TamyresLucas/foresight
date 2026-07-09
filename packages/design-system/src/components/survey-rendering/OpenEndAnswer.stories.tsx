@@ -21,7 +21,8 @@ const meta = {
     docs: {
       description: {
         component:
-          'OpenEndAnswer component for survey rendering. Displays a multi-line text input field (textarea) with support for focused and selected states. Compose with QuestionText (and optionally QuestionField) for the question label and error message.',
+          'The **Open End** question type: a standalone multi-line text answer (textarea), with focused and selected states. Compose with QuestionText (and optionally QuestionField) for the question label and error message.\n\n' +
+          '**Attached open end ("Other"):** the same free-text capture also appears *attached* to a choice in another question type — a `radio`/`checkbox` option, or a column in ChoiceGrid/ImageChoiceGrid/HybridGrid, flagged `openEnd` (conventionally labeled "Other"). Selecting that choice reveals an OpenEndInput — a single-line input rather than this component\'s textarea, but built from the same design tokens (`border-survey-border-interactive`/`border-survey-border-selected`, `text-survey-foreground`, `text-survey-body`, `font-survey-regular`, `placeholder:text-survey-muted-foreground`), so both variants inherit the live survey theme identically. See the **OpenEndInput** story for its own states.',
       },
     },
   },
