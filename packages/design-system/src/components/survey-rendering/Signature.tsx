@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Signature as SignatureIcon, X } from 'lucide-react';
+import { Signature as SignatureIcon, Undo2, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface SignatureProps
@@ -47,11 +47,16 @@ const Signature = React.forwardRef<HTMLDivElement, SignatureProps>(
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
     const drawing = React.useRef(false);
     const lastPoint = React.useRef<{ x: number; y: number } | null>(null);
+    // Snapshot of the canvas taken before each stroke starts, so undo can
+    // restore the pixels as they were prior to the most recent drawing.
+    const strokeHistory = React.useRef<ImageData[]>([]);
 
     const isControlled = value !== undefined;
     const [internalValue, setInternalValue] = React.useState<string | null>(null);
+    const [undoableStrokes, setUndoableStrokes] = React.useState(0);
     const currentValue = isControlled ? value : internalValue;
     const hasSignature = Boolean(currentValue);
+    const canUndo = undoableStrokes > 0;
 
     // Size the backing store to the device pixel ratio so strokes stay crisp,
     // then repaint any existing value after a resize.
@@ -99,6 +104,14 @@ const Signature = React.forwardRef<HTMLDivElement, SignatureProps>(
 
     const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
       e.currentTarget.setPointerCapture(e.pointerId);
+      const canvas = canvasRef.current;
+      const ctx = canvas?.getContext('2d');
+      if (canvas && ctx) {
+        strokeHistory.current.push(
+          ctx.getImageData(0, 0, canvas.width, canvas.height),
+        );
+        setUndoableStrokes(strokeHistory.current.length);
+      }
       drawing.current = true;
       lastPoint.current = getPoint(e);
     };
@@ -128,9 +141,29 @@ const Signature = React.forwardRef<HTMLDivElement, SignatureProps>(
       if (canvas && ctx) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
+      strokeHistory.current = [];
+      setUndoableStrokes(0);
       if (!isControlled) setInternalValue(null);
       onChange?.(null);
       onClear?.();
+    };
+
+    // Restores the canvas to its state just before the last stroke, removing
+    // only that stroke rather than the whole drawing.
+    const handleUndo = () => {
+      const snapshot = strokeHistory.current.pop();
+      const canvas = canvasRef.current;
+      const ctx = canvas?.getContext('2d');
+      if (!snapshot || !canvas || !ctx) return;
+      ctx.putImageData(snapshot, 0, 0);
+      setUndoableStrokes(strokeHistory.current.length);
+
+      if (strokeHistory.current.length === 0) {
+        if (!isControlled) setInternalValue(null);
+        onChange?.(null);
+      } else {
+        emit();
+      }
     };
 
     return (
@@ -147,22 +180,49 @@ const Signature = React.forwardRef<HTMLDivElement, SignatureProps>(
           )}
           style={{ borderRadius: 'var(--survey-radius)' }}
         >
-          {/* Clear control — mirrors FileUpload's remove button. */}
-          {hasSignature && (
-            <button
-              type="button"
-              aria-label="Clear signature"
-              onClick={handleClear}
-              className={cn(
-                'absolute right-2 top-2 z-10 inline-flex items-center justify-center rounded-full p-1',
-                'text-survey-foreground transition-colors',
-                'hover:bg-survey-muted-background focus-visible:outline-none',
-                'focus-visible:ring-2 focus-visible:ring-survey-border-selected',
-              )}
-            >
-              <X className="h-4 w-4" />
-            </button>
-          )}
+          {/* Toolbar — reserves its own row so the controls never sit on top of
+              the drawing surface. Fixed height keeps the canvas from shifting
+              as the undo/clear controls appear and disappear. */}
+          <div
+            className="relative z-10 flex items-center justify-between px-2"
+            style={{ minHeight: 40 }}
+          >
+            {/* Undo control — removes only the last stroke, shown once the user has drawn. */}
+            {canUndo ? (
+              <button
+                type="button"
+                aria-label="Undo last stroke"
+                onClick={handleUndo}
+                className={cn(
+                  'inline-flex items-center justify-center rounded-survey-sm p-1',
+                  'text-survey-foreground transition-colors',
+                  'hover:bg-survey-muted-background focus-visible:outline-none',
+                  'focus-visible:ring-2 focus-visible:ring-survey-border-selected',
+                )}
+              >
+                <Undo2 className="h-4 w-4" />
+              </button>
+            ) : (
+              <span />
+            )}
+
+            {/* Clear control — mirrors FileUpload's remove button. */}
+            {hasSignature && (
+              <button
+                type="button"
+                aria-label="Clear signature"
+                onClick={handleClear}
+                className={cn(
+                  'inline-flex items-center justify-center rounded-survey-sm p-1',
+                  'text-survey-foreground transition-colors',
+                  'hover:bg-survey-muted-background focus-visible:outline-none',
+                  'focus-visible:ring-2 focus-visible:ring-survey-border-selected',
+                )}
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
 
           <canvas
             ref={canvasRef}
