@@ -16,6 +16,8 @@ export interface FileUploadFile {
   progress?: number;
   /** Optional thumbnail/preview image URL shown on the left of the row. */
   previewUrl?: string;
+  /** Error message. When set, the row renders in an error state instead of progress/completed. */
+  error?: string;
 }
 
 export interface FileUploadProps
@@ -49,10 +51,11 @@ function formatSize(bytes: number): string {
   return `${(bytes / (KB * KB)).toFixed(1)}MB`;
 }
 
-function fileState(progress: number | undefined): 'empty' | 'uploading' | 'completed' {
-  const p = progress ?? 0;
-  if (p >= 100) return 'completed';
-  if (p > 0) return 'uploading';
+function fileState(file: FileUploadFile): 'empty' | 'uploading' | 'completed' | 'error' {
+  if (file.error) return 'error';
+  const progress = file.progress ?? 0;
+  if (progress >= 100) return 'completed';
+  if (progress > 0) return 'uploading';
   return 'empty';
 }
 
@@ -66,10 +69,11 @@ interface FileRowProps {
 
 const FileRow = ({ file, onRemove, showFileSize = true }: FileRowProps) => {
   const progress = file.progress ?? 0;
-  const state = fileState(progress);
-  const isImage = Boolean(file.previewUrl);
+  const state = fileState(file);
+  const isImage = Boolean(file.previewUrl) && state !== 'error';
 
-  const iconName = isImage ? 'image' : state === 'uploading' ? 'upload_file' : 'description';
+  const iconName =
+    state === 'error' ? 'error' : isImage ? 'image' : state === 'uploading' ? 'upload_file' : 'description';
 
   // Derive "XMB of YMB" for uploading state from progress + total size.
   const uploadedBytes = Math.round((progress / 100) * file.size);
@@ -83,14 +87,16 @@ const FileRow = ({ file, onRemove, showFileSize = true }: FileRowProps) => {
         'relative flex items-center gap-3 bg-transparent overflow-hidden',
         state === 'completed'
           ? 'border border-survey-border-interactive'
-          : 'border border-survey-border-muted',
+          : state === 'error'
+            ? 'border border-survey-destructive'
+            : 'border border-survey-border-muted',
         needsBar ? 'px-3 pt-3 pb-4' : 'px-3 py-3',
       )}
       style={{ borderRadius: 'var(--component-button-radius)' }}
     >
       {/* Icon */}
       <div className="shrink-0 flex h-10 w-10 items-center justify-center rounded-survey-sm bg-survey-muted-background">
-        {file.previewUrl ? (
+        {isImage ? (
           <img
             src={file.previewUrl}
             alt=""
@@ -101,7 +107,7 @@ const FileRow = ({ file, onRemove, showFileSize = true }: FileRowProps) => {
             name={iconName}
             fill={false}
             size={22}
-            className="text-survey-foreground"
+            className={state === 'error' ? 'text-survey-destructive' : 'text-survey-foreground'}
             aria-hidden="true"
           />
         )}
@@ -127,6 +133,17 @@ const FileRow = ({ file, onRemove, showFileSize = true }: FileRowProps) => {
               {Math.round(progress)}%
             </span>
           </span>
+        ) : state === 'error' ? (
+          <span className="flex items-center gap-1 text-survey-body font-survey-regular text-survey-destructive">
+            <Icon
+              name="error"
+              fill
+              size={16}
+              className="shrink-0"
+              aria-hidden="true"
+            />
+            {file.error}
+          </span>
         ) : (
           <span className="text-survey-body font-survey-regular text-survey-muted-foreground">
             {showFileSize && (
@@ -143,19 +160,23 @@ const FileRow = ({ file, onRemove, showFileSize = true }: FileRowProps) => {
           delete uses destructive color, cancel uses muted */}
       <button
         type="button"
-        aria-label={state === 'completed' ? `Remove ${file.name}` : `Cancel upload for ${file.name}`}
+        aria-label={
+          state === 'completed' || state === 'error'
+            ? `Remove ${file.name}`
+            : `Cancel upload for ${file.name}`
+        }
         onClick={() => onRemove(file.id)}
         className={cn(
           'shrink-0 inline-flex items-center justify-center rounded-survey-sm transition-colors',
           'hover:bg-survey-muted-background',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-survey-border-selected',
-          state === 'completed'
+          state === 'completed' || state === 'error'
             ? 'text-survey-destructive'
             : 'text-survey-muted-foreground',
         )}
         style={{ width: 28, height: 28 }}
       >
-        {state === 'completed'
+        {state === 'completed' || state === 'error'
           ? <Icon name="delete" fill={false} size={16} aria-hidden="true" />
           : <X className="h-3.5 w-3.5" />
         }
@@ -197,6 +218,8 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
     const inputRef = React.useRef<HTMLInputElement>(null);
     const [isDragging, setIsDragging] = React.useState(false);
     const [internalFiles, setInternalFiles] = React.useState<FileUploadFile[]>([]);
+    const [hasMaxFilesError, setHasMaxFilesError] = React.useState(false);
+    const [hasSizeError, setHasSizeError] = React.useState(false);
 
     const isControlled = files !== undefined;
     const renderedFiles = isControlled ? files : internalFiles;
@@ -205,10 +228,22 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
       if (!fileList || fileList.length === 0) return;
       const added = Array.from(fileList);
       onFilesAdded?.(added);
+
+      const remainingSlots =
+        maxFiles !== undefined ? Math.max(maxFiles - renderedFiles.length, 0) : added.length;
+      const rejectedCount = Math.max(added.length - remainingSlots, 0);
+
+      setHasMaxFilesError(rejectedCount > 0);
+
+      const accepted = added.slice(0, remainingSlots);
+      const oversized = accepted.filter((f) => f.size > maxFileSize);
+      const validFiles = accepted.filter((f) => f.size <= maxFileSize);
+      setHasSizeError(oversized.length > 0);
+
       if (!isControlled) {
         setInternalFiles((prev) => [
           ...prev,
-          ...added.map((f, i) => ({
+          ...validFiles.map((f, i) => ({
             id: `${f.name}-${f.size}-${Date.now()}-${i}`,
             name: f.name,
             size: f.size,
@@ -297,7 +332,15 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
           </Button>
 
           {maxFileSize !== undefined && (
-            <span className="text-survey-support font-survey-regular text-survey-muted-foreground">
+            <span
+              className={cn(
+                'flex items-center gap-1 text-survey-support font-survey-regular',
+                hasSizeError ? 'text-survey-destructive' : 'text-survey-muted-foreground',
+              )}
+            >
+              {hasSizeError && (
+                <Icon name="error" fill size={14} className="shrink-0" aria-hidden="true" />
+              )}
               {formatSize(maxFileSize)} maximum file size
             </span>
           )}
@@ -330,7 +373,15 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
         )}
 
         {renderedFiles.length > 0 && maxFiles !== undefined && (
-          <span className="text-survey-support font-survey-regular text-survey-muted-foreground">
+          <span
+            className={cn(
+              'flex items-center gap-1 text-survey-support font-survey-regular',
+              hasMaxFilesError ? 'text-survey-destructive' : 'text-survey-muted-foreground',
+            )}
+          >
+            {hasMaxFilesError && (
+              <Icon name="error" fill size={14} className="shrink-0" aria-hidden="true" />
+            )}
             {renderedFiles.length}/{maxFiles} files uploaded
           </span>
         )}
