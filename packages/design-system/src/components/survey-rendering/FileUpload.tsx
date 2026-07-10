@@ -35,6 +35,10 @@ export interface FileUploadProps
   multiple?: boolean;
   /** When false, hides the file size and shows only the percentage/Completed label in the same muted style. Defaults to true. */
   showFileSize?: boolean;
+  /** Max size per file in bytes, shown as a hint below the browse button. Defaults to 10MB. */
+  maxFileSize?: number;
+  /** Max number of files allowed. When set, shown as a count below the file list once at least one file has been added. */
+  maxFiles?: number;
 }
 
 const KB = 1024;
@@ -120,7 +124,7 @@ const FileRow = ({ file, onRemove, showFileSize = true }: FileRowProps) => {
               aria-hidden="true"
             />
             <span className={cn(showFileSize ? 'font-survey-semibold' : 'font-survey-regular', 'text-[hsl(var(--brand-secondary))]')}>
-              Completed
+              {Math.round(progress)}%
             </span>
           </span>
         ) : (
@@ -183,6 +187,8 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
       accept,
       multiple = true,
       showFileSize = true,
+      maxFileSize = 10 * 1024 * 1024,
+      maxFiles,
       className,
       ...props
     },
@@ -290,6 +296,12 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
             {buttonLabel}
           </Button>
 
+          {maxFileSize !== undefined && (
+            <span className="text-survey-support font-survey-regular text-survey-muted-foreground">
+              {formatSize(maxFileSize)} maximum file size
+            </span>
+          )}
+
           <input
             ref={inputRef}
             type="file"
@@ -315,6 +327,12 @@ const FileUpload = React.forwardRef<HTMLDivElement, FileUploadProps>(
               />
             ))}
           </div>
+        )}
+
+        {renderedFiles.length > 0 && maxFiles !== undefined && (
+          <span className="text-survey-support font-survey-regular text-survey-muted-foreground">
+            {renderedFiles.length}/{maxFiles} files uploaded
+          </span>
         )}
       </div>
     );

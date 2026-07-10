@@ -14,7 +14,7 @@ const Description = React.forwardRef<HTMLDivElement, DescriptionProps>(
   ({ title, description, className, ...props }, ref) => {
     return (
       <div ref={ref} className={cn('space-y-2 w-full', className)} {...props}>
-        <h1 className="text-[length:var(--brand-font-size-header)] font-[family-name:var(--brand-font-header)] font-[number:var(--brand-font-weight-header)] leading-tight text-foreground">
+        <h1 className="text-survey-heading font-[family-name:var(--brand-font-header)] font-[number:var(--brand-font-weight-header)] leading-tight text-foreground">
           {title}
         </h1>
         {description && (

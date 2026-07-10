@@ -288,7 +288,7 @@ const CardSort = React.forwardRef<HTMLDivElement, CardSortProps>(
         >
           {zoneItems.length === 0 && !showDropIndicator(zone) ? (
             <div style={{ padding: "4px" }}>
-              <span className="text-xs font-survey text-survey-foreground/60 text-left">
+              <span className="text-survey-support font-survey text-survey-foreground/60 text-left">
                 Drag cards here
               </span>
             </div>

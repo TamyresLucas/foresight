@@ -10,7 +10,9 @@ export default {
         survey: ["var(--survey-font-family)", "Outfit", "sans-serif"],
       },
       fontSize: {
+        "survey-heading": "var(--survey-font-size-heading)",
         "survey-body": "var(--survey-font-size-body)",
+        "survey-support": "var(--survey-font-size-support)",
       },
       fontWeight: {
         "survey-regular": "var(--survey-font-weight-regular)",

@@ -262,7 +262,7 @@ const DragAndDrop = React.forwardRef<HTMLDivElement, DragAndDropProps>(
       if (rankedItems.length === 0 && !showDropIndicator) {
         return (
           <div style={{ padding: "4px" }}>
-            <span className="text-xs font-survey text-survey-foreground/60 text-left">
+            <span className="text-survey-support font-survey text-survey-foreground/60 text-left">
               Drag cards here
             </span>
           </div>

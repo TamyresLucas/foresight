@@ -322,7 +322,9 @@
   --survey-day-radius: var(--survey-radius-md); /* overridden to 9999px by applyTheme when the "Round" preset is selected */
 
   --survey-font-family: "Open Sans", sans-serif;
+  --survey-font-size-heading: var(--brand-font-size-header, 24px);
   --survey-font-size-body: 16px;
+  --survey-font-size-support: 12px;
   --survey-font-weight-regular: 400;
   --survey-font-weight-semibold: 600;
 }
