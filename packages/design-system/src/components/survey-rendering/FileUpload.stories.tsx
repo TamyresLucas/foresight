@@ -43,3 +43,11 @@ export const NoFileSize: Story = {
   },
 };
 
+/** Max files count shown below the list once at least one file has been added. */
+export const WithMaxFiles: Story = {
+  args: {
+    files: allStates.slice(0, 2),
+    maxFiles: 3,
+  },
+};
+

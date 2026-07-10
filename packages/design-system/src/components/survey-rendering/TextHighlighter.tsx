@@ -686,7 +686,7 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
               {categoryError && (
                 <p
                   role="alert"
-                  className="flex items-center gap-1 pb-1 text-xs font-survey font-survey-regular text-survey-destructive w-full"
+                  className="flex items-center gap-1 pb-1 text-survey-support font-survey font-survey-regular text-survey-destructive w-full"
                 >
                   <AlertCircle className="flex-shrink-0 w-4 h-4" aria-hidden="true" />
                   Please select a category

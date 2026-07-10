@@ -21,7 +21,7 @@ const QuestionText = React.forwardRef<HTMLDivElement, QuestionTextProps>(
         style={{ gap: 'var(--survey-margin)', marginBottom: 'var(--survey-margin)' }}
       >
         {error && (
-          <p className="flex items-center gap-1 text-xs font-survey font-survey-regular text-survey-destructive w-full">
+          <p className="flex items-center gap-1 text-survey-support font-survey font-survey-regular text-survey-destructive w-full">
             <AlertCircle className="flex-shrink-0 w-4 h-4" aria-hidden="true" />
             {error}
           </p>
