@@ -1,6 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { FileUpload, type FileUploadFile } from './FileUpload';
 
+function dropFiles(
+  input: HTMLInputElement,
+  specs: { name: string; size: number; type?: string }[],
+) {
+  const dataTransfer = new DataTransfer();
+  for (const { name, size, type = 'application/octet-stream' } of specs) {
+    dataTransfer.items.add(new File([new Uint8Array(size)], name, { type }));
+  }
+  Object.defineProperty(input, 'files', { value: dataTransfer.files, configurable: true });
+  input.dispatchEvent(new Event('change', { bubbles: true }));
+}
+
 const meta = {
   title: 'Survey Rendering/FileUpload',
   component: FileUpload,
@@ -48,6 +60,47 @@ export const WithMaxFiles: Story = {
   args: {
     files: allStates.slice(0, 2),
     maxFiles: 3,
+  },
+};
+
+const errorFiles: FileUploadFile[] = [
+  { id: 'e1', name: 'Contract.pdf', size: 20 * 1024 * 1024, progress: 100 },
+  {
+    id: 'e2',
+    name: 'Timesheet.csv',
+    size: 2 * 1024 * 1024,
+    error: 'Upload failed. Please try again.',
+  },
+];
+
+/** Per-file error row for a failed upload (set by the parent via `files`), alongside a completed file. */
+export const WithErrors: Story = {
+  args: {
+    files: errorFiles,
+  },
+};
+
+/** Dropping more files than `maxFiles` allows accepts only the remaining slots and switches the count label to the error color, keeping the same "x/y files uploaded" text. */
+export const MaxFilesExceeded: Story = {
+  args: {
+    maxFiles: 2,
+  },
+  play: async ({ canvasElement }) => {
+    const input = canvasElement.querySelector('input[type="file"]') as HTMLInputElement;
+    dropFiles(input, [
+      { name: 'a.txt', size: 1024, type: 'text/plain' },
+      { name: 'b.txt', size: 1024, type: 'text/plain' },
+      { name: 'c.txt', size: 1024, type: 'text/plain' },
+    ]);
+  },
+};
+
+/** Dropping a file over `maxFileSize` doesn't add a row — the drop zone's size hint switches to the error color with an alert icon instead. */
+export const OversizedFile: Story = {
+  args: {},
+  play: async ({ canvasElement }) => {
+    const input = canvasElement.querySelector('input[type="file"]') as HTMLInputElement;
+    dropFiles(input, [{ name: 'huge.zip', size: 15 * 1024 * 1024, type: 'application/zip' }]);
   },
 };
 
