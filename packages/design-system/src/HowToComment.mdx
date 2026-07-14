@@ -1,0 +1,40 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="foresight/How to Comment" />
+
+<div className="text-foreground [&_p]:!text-foreground [&_a]:!text-primary" style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1.5rem' }}>
+
+<h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>How to leave feedback 💬</h1>
+
+<p style={{ fontSize: '1.25rem', marginBottom: '1.5rem' }}>
+  <strong>Comment directly on any page of this Storybook — no design tools required.</strong>
+</p>
+
+Feedback is powered by [Vercel Comments](https://vercel.com/docs/comments): a small toolbar that lets you pin
+comments to any element on the page, mention teammates, and resolve threads — like commenting in Figma, but on
+the live components.
+
+## Getting access
+
+1. Open the **share link** you received from the team (it always shows the latest version).
+2. Click the Vercel toolbar at the bottom of the screen and **sign in**. A free
+   [Vercel account](https://vercel.com/signup) is all you need — you won't be added to any team.
+3. If you're on the production site and don't see the toolbar, add `?feedback=1` to the URL
+   (for example `https://your-storybook-url/?feedback=1`). Use `?feedback=0` to hide it again.
+
+## Leaving a comment
+
+1. Navigate to the component or page you want to review using the sidebar.
+2. Click the **comment icon** in the toolbar (or press <code>c</code>), then click the element you want to
+   comment on. A screenshot and a link back to this exact page are attached automatically.
+3. Type your feedback. Use <code>@name</code> to notify a specific person.
+4. Reply in threads to discuss, and **resolve** a thread once it's addressed.
+
+## Tips
+
+- Comment on the story you're viewing — every comment links back to the exact page it was left on, so
+  reviewers can jump straight to the right component.
+- Prefer one thread per issue over one long thread; each can be resolved independently.
+- Screenshots are captured automatically, so describe the *what and why*, not the *where*.
+
+</div>
