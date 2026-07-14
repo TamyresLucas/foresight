@@ -28,7 +28,7 @@ import {
 } from "recharts";
 import { cn } from "@/lib/utils";
 
-// Hex colors matching tokens-static.css --chart-1 through --chart-8 (light mode).
+// Hex colors matching tokens-static.css --chart-1 through --chart-10 (light mode).
 // CSS variables (hsl(var(--chart-*))) do NOT resolve inside Recharts SVG — use hex.
 export const CHART_COLORS = [
   "#5a6eff", // chart-1 blueberry  (233 86% 64%)
@@ -38,6 +38,8 @@ export const CHART_COLORS = [
   "#ed4e94", // chart-6 watermelon (331 75% 58%)
   "#4833eb", // chart-7 blackberry (243 73% 51%)
   "#6c7c99", // chart-8 grey       (218 18% 51%)
+  "#bc65cc", // chart-9 orchid     (291 50% 60%)
+  "#0fa5fc", // chart-10 sky       (202 98% 52%)
 ] as const;
 
 // Colors for NPS-specific multi-series charts (not the score gradient — see NPS_SCALE_COLORS)
@@ -87,6 +89,8 @@ export const DEFAULT_CHART_COLORS = [
   "#ed4e94", // chart-6 watermelon
   "#FA7268", // chart-3 peach
   "#6c7c99", // chart-8 grey
+  "#bc65cc", // chart-9 orchid
+  "#0fa5fc", // chart-10 sky
 ] as const;
 
 // Debug colors - high contrast colors for testing visibility issues
@@ -123,6 +127,8 @@ export const CHART_COLORS_MUTED = [
   "#ed4e9466", // --chart-6-muted  watermelon
   "#4833eb66", // --chart-7-muted  blackberry
   "#6c7c9966", // --chart-8-muted  grey
+  "#bc65cc66", // --chart-9-muted  orchid
+  "#0fa5fc66", // --chart-10-muted sky
 ] as const;
 
 export const DEFAULT_CHART_COLORS_MUTED = [
@@ -132,6 +138,8 @@ export const DEFAULT_CHART_COLORS_MUTED = [
   "#ed4e9466", // --chart-6-muted  watermelon
   "#FA726866", // --chart-3-muted  peach
   "#6c7c9966", // --chart-8-muted  grey
+  "#bc65cc66", // --chart-9-muted  orchid
+  "#0fa5fc66", // --chart-10-muted sky
 ] as const;
 
 export const SEMANTIC_CHART_COLORS_MUTED = {
