@@ -104,6 +104,8 @@
   --chart-6: 331 75% 58%; /* watermelon */
   --chart-7: 243 73% 51%; /* blackberry */
   --chart-8: 218 18% 51%; /* grey */
+  --chart-9: 291 50% 60%; /* orchid #BC65CC */
+  --chart-10: 202 98% 52%; /* sky #0FA5FC */
 
   /* ─── Lightness scales — 5-step centered on main (±8% / ±16% per step) ──────
      Use getChartColorShades(baseHex, count) in JS for dynamic item counts.
@@ -159,6 +161,18 @@
   --chart-8-dark: 218 18% 43%;
   --chart-8-darker: 218 18% 35%;
 
+  /* chart-9 orchid  base L=60% */
+  --chart-9-lighter: 291 50% 76%;
+  --chart-9-light: 291 50% 68%;
+  --chart-9-dark: 291 50% 52%;
+  --chart-9-darker: 291 50% 44%;
+
+  /* chart-10 sky  base L=52% */
+  --chart-10-lighter: 202 98% 68%;
+  --chart-10-light: 202 98% 60%;
+  --chart-10-dark: 202 98% 44%;
+  --chart-10-darker: 202 98% 36%;
+
   /* Semantic chart tokens — lower contrast than UI semantics, optimized for data viz */
   --chart-positive: 165 100% 31%; /* #00A078 — success/positive */
   --chart-negative: 352 83% 64%; /* #EF576B — error/negative */
@@ -197,6 +211,8 @@
   --chart-6-muted: 331 75% 58% / 0.4; /* watermelon */
   --chart-7-muted: 243 73% 51% / 0.4; /* blackberry */
   --chart-8-muted: 218 18% 51% / 0.4; /* grey */
+  --chart-9-muted: 291 50% 60% / 0.4; /* orchid */
+  --chart-10-muted: 202 98% 52% / 0.4; /* sky */
 
   /* Semantic muted */
   --chart-positive-muted: 165 100% 31% / 0.4; /* #00A078 */
@@ -400,6 +416,8 @@
   --chart-6: 331 75% 58%; /* watermelon */
   --chart-7: 252 65% 53%; /* blackberry */
   --chart-8: 218 18% 51%; /* grey */
+  --chart-9: 291 50% 60%; /* orchid #BC65CC */
+  --chart-10: 202 98% 52%; /* sky #0FA5FC */
 
   /* Lightness scales (dark) — same ±8% / ±16% logic, clamped to [18%, 88%] */
   /* chart-1 blueberry dark  base L=86% — lighter steps clamp near 88% */
@@ -450,6 +468,18 @@
   --chart-8-dark: 218 18% 43%;
   --chart-8-darker: 218 18% 35%;
 
+  /* chart-9 orchid dark  base L=60% (same as light) */
+  --chart-9-lighter: 291 50% 76%;
+  --chart-9-light: 291 50% 68%;
+  --chart-9-dark: 291 50% 52%;
+  --chart-9-darker: 291 50% 44%;
+
+  /* chart-10 sky dark  base L=52% (same as light) */
+  --chart-10-lighter: 202 98% 68%;
+  --chart-10-light: 202 98% 60%;
+  --chart-10-dark: 202 98% 44%;
+  --chart-10-darker: 202 98% 36%;
+
   /* Semantic chart tokens (dark) */
   --chart-positive: 165 100% 31%; /* #00A078 */
   --chart-negative: 352 83% 64%; /* #EF576B */
@@ -483,6 +513,8 @@
   --chart-6-muted: 331 75% 58% / 0.4;
   --chart-7-muted: 252 65% 53% / 0.4;
   --chart-8-muted: 214 13% 53% / 0.4;
+  --chart-9-muted: 291 50% 60% / 0.4;
+  --chart-10-muted: 202 98% 52% / 0.4;
   --chart-positive-muted: 165 100% 31% / 0.4;
   --chart-negative-muted: 352 83% 64% / 0.4;
   --chart-sentiment-1-muted: 352 83% 64% / 0.4;
