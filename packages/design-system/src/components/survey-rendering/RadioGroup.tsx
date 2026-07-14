@@ -54,7 +54,9 @@ const RadioGroupOption = React.forwardRef<
         "rounded-survey-md border bg-survey-background",
         "transition-colors",
         "border-survey-border-muted",
-        "has-[[data-state=checked]]:border-2 has-[[data-state=checked]]:border-survey-border-selected",
+        // Checked reads as a 2px border but is painted as 1px border + 1px
+        // inset shadow, so the option keeps its default-state dimensions.
+        "has-[[data-state=checked]]:border-survey-border-selected has-[[data-state=checked]]:shadow-[inset_0_0_0_1px_hsl(var(--survey-border-selected))]",
         focused && "ring-2 ring-survey-border-interactive ring-offset-2 ring-offset-survey-background",
         focused && "[&:has([data-state=checked])]:ring-survey-border-selected",
         "has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-survey-border-interactive has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-survey-background",

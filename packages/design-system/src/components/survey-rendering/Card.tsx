@@ -11,7 +11,11 @@ const cardVariants = cva(
     "text-survey-foreground font-survey-regular",
     "transition-colors",
     "focus:outline-none focus-visible:outline-none",
-    "data-[state=selected]:border-2 data-[state=selected]:border-survey-border-selected",
+    // Selected reads as a 2px border but is painted as 1px border + 1px inset
+    // shadow, so the card keeps its default-state dimensions. (For image
+    // variants the shadow sits behind the full-bleed image; the selected
+    // overlay below repaints it on top.)
+    "data-[state=selected]:border-survey-border-selected data-[state=selected]:shadow-[inset_0_0_0_1px_hsl(var(--survey-border-selected))]",
   ),
   {
     variants: {
@@ -227,7 +231,13 @@ const Card = React.forwardRef<HTMLButtonElement, CardProps>(
           // `statement` hover: keep the regular background (no grey tint) and
           // border width (1px, unchanged) — only a drop shadow (the same
           // style used for Carousel's out-of-focus hover) signals hover.
+          // Selected cards need the drop shadow composed with the selected
+          // inset ring (both live in --tw-shadow, so separate classes would
+          // override each other unpredictably).
           hoverEffect && variant === "statement" && "hover:shadow-lg",
+          hoverEffect &&
+            variant === "statement" &&
+            "data-[state=selected]:hover:shadow-[inset_0_0_0_1px_hsl(var(--survey-border-selected)),0_10px_15px_-3px_rgb(0_0_0_/_0.1),0_4px_6px_-4px_rgb(0_0_0_/_0.1)]",
           focused &&
             cn(
               "ring-2 ring-offset-2 ring-offset-survey-background",
@@ -324,20 +334,35 @@ const Card = React.forwardRef<HTMLButtonElement, CardProps>(
             image's own colors. A plain `background-color`/`shadow-[inset]` on
             the button itself would be painted behind the image and invisible,
             hence this separate overlay element.
-            This div's box already sits inset by the outer border's 2px width
+            This div's box already sits inset by the outer border's 1px width
             (an absolutely-positioned child is placed within its parent's
             padding box, inside the border). Its corner radius is therefore
-            the outer `rounded-survey-md` radius minus that 2px, so the two
+            the outer `rounded-survey-md` radius minus that 1px, so the two
             borders read as concentric rings rather than the inner one
-            bulging past the outer curve. */}
+            bulging past the outer curve.
+            The shadow first extends the button's 1px selected border to the
+            2px selected look (painted here, on top of the image, since the
+            button's own inset shadow sits behind it), then draws the 2px
+            white ring inside it. */}
         {isImgVariant && selected && (
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 rounded-[calc(var(--survey-radius-md)-2px)] shadow-[inset_0_0_0_2px_white]"
+            className="pointer-events-none absolute inset-0 rounded-[calc(var(--survey-radius-md)-1px)] shadow-[inset_0_0_0_1px_hsl(var(--survey-border-selected)),inset_0_0_0_3px_white]"
             style={{
               backgroundColor:
                 'color-mix(in srgb, hsl(var(--survey-border-selected)) 25%, transparent)',
             }}
+          />
+        )}
+        {/* Selected: like the `image` overlay above, the 1px inset shadow that
+            extends the button's 1px border to the 2px selected look must be
+            repainted on top — the image and caption strip cover the button's
+            own inset shadow. No white ring/tint here: `imageStatement`'s
+            selected design has always been just the thicker border. */}
+        {isImgStmt && selected && (
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 rounded-[calc(var(--survey-radius-md)-1px)] shadow-[inset_0_0_0_1px_hsl(var(--survey-border-selected))]"
           />
         )}
         {isImgStmt && (

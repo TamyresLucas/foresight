@@ -90,7 +90,16 @@ const SurveyFilterTabs = React.forwardRef<HTMLDivElement, FilterTabsProps>(
                   : 'font-survey-regular text-survey-muted-foreground hover:text-survey-foreground',
               )}
             >
-              {tab.label}
+              {/* Both spans share one grid cell: the invisible semibold ghost
+                  reserves the widest (active) rendering of the label, so the
+                  tab — and the whole row — keeps the same width whichever tab
+                  is active. */}
+              <span className="grid">
+                <span aria-hidden="true" className="invisible col-start-1 row-start-1 font-survey-semibold">
+                  {tab.label}
+                </span>
+                <span className="col-start-1 row-start-1 text-center">{tab.label}</span>
+              </span>
             </button>
           );
         })}

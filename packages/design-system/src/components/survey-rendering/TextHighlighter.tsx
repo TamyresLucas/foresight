@@ -726,8 +726,10 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
                   onClick={handleHighlightToggle}
                   className={cn(
                     'text-survey-body rounded-[var(--component-button-radius)] font-survey-regular font-survey text-survey-foreground hover:bg-survey-muted-background',
+                    // Active reads as a 2px border but is painted as 1px border
+                    // + 1px inset shadow, so the button keeps its default width.
                     activeTool === 'highlight'
-                      ? 'border-2 border-survey-primary'
+                      ? 'border-survey-primary shadow-[inset_0_0_0_1px_hsl(var(--survey-primary))]'
                       : 'border-survey-border-interactive',
                   )}
                 >
@@ -744,8 +746,9 @@ const TextHighlighter = React.forwardRef<HTMLDivElement, TextHighlighterProps>(
                   onClick={() => selectTool('erase')}
                   className={cn(
                     'text-survey-body rounded-[var(--component-button-radius)] font-survey-regular font-survey text-survey-foreground hover:bg-survey-muted-background',
+                    // Same paint-only 2px treatment as the highlight button.
                     activeTool === 'erase'
-                      ? 'border-2 border-survey-primary'
+                      ? 'border-survey-primary shadow-[inset_0_0_0_1px_hsl(var(--survey-primary))]'
                       : 'border-survey-border-interactive',
                   )}
                 >

@@ -82,8 +82,11 @@ const OpenEndInput = React.forwardRef<HTMLInputElement, OpenEndInputProps>(
             "placeholder:text-survey-muted-foreground",
             isHovered && "bg-survey-muted-background",
             "focus-visible:outline-none",
+            // Selected reads as a 2px underline but is painted as the 1px
+            // border + a 1px inset shadow directly above it, so the input
+            // keeps its default-state height.
             isSelected
-              ? "border-b-2 border-survey-border-selected"
+              ? "border-survey-border-selected shadow-[inset_0_-1px_0_0_hsl(var(--survey-border-selected))]"
               : "border-survey-border-interactive",
             showFocusRing &&
               (isSelected

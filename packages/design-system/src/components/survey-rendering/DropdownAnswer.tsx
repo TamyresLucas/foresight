@@ -84,11 +84,6 @@ const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
           className={cn(
             'rounded-[calc(var(--radius)+2px)] transition-all bg-transparent',
             fullWidth ? 'w-full' : 'w-fit',
-            'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:p-[2px]',
-            'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-2',
-            'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-survey-border-interactive',
-            focused && 'p-[2px] border-2 border-survey-border-interactive',
-            focused && isSelected && 'border-survey-border-selected',
           )}
         >
           <SelectPrimitive.Root
@@ -107,9 +102,14 @@ const DropdownAnswer = React.forwardRef<HTMLButtonElement, DropdownAnswerProps>(
                 fullWidth ? 'w-full min-w-0' : 'w-fit min-w-[280px]',
                 'border-survey-border-interactive',
                 hoverEffect && 'hover:bg-survey-muted-background',
-                'group-data-[selected=true]/survey-input:border-survey-border-selected group-data-[selected=true]/survey-input:border-2',
-                'group-has-[:focus-visible]/survey-input:border',
-                focused && 'border',
+                'group-data-[selected=true]/survey-input:border-survey-border-selected group-data-[selected=true]/survey-input:shadow-[inset_0_0_0_1px_hsl(var(--survey-border-selected))]',
+                // Focus halo as a ring (box-shadow): paint-only, so the field keeps
+                // its default-state dimensions — a border/padding halo would grow it.
+                'group-has-[:focus-visible]/survey-input:border group-has-[:focus-visible]/survey-input:!shadow-none',
+                'group-has-[:focus-visible]/survey-input:ring-2 group-has-[:focus-visible]/survey-input:ring-offset-2 group-has-[:focus-visible]/survey-input:ring-offset-survey-background group-has-[:focus-visible]/survey-input:ring-survey-border-interactive',
+                'group-data-[selected=true]/survey-input:group-has-[:focus-visible]/survey-input:ring-survey-border-selected',
+                focused && 'border !shadow-none ring-2 ring-offset-2 ring-offset-survey-background ring-survey-border-interactive',
+                focused && isSelected && 'ring-survey-border-selected',
                 className,
               )}
               {...props}

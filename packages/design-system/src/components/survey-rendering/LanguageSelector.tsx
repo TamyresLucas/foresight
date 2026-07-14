@@ -94,13 +94,16 @@ const LanguageSelector = React.forwardRef<HTMLButtonElement, LanguageSelectorPro
               style={{ borderRadius: 'var(--component-button-radius)' }}
               className={cn(
                 "text-survey-foreground bg-transparent h-10 px-4 flex items-center gap-3 font-survey font-survey-regular text-survey-body w-fit justify-between hover:bg-transparent hover:text-survey-foreground transition-all",
-                // Focused state: 1px inner, 2px outer (handled by wrapper)
+                // Focused state: 1px inner, 2px outer (handled by wrapper).
+                // Selected-not-focused reads as a 2px border but is painted as
+                // 1px border + 1px inset shadow, so the trigger keeps its
+                // default-state width.
                 focused
                   ? (isSelectedAndFocused ? "border border-survey-border-selected" : "border border-survey-border-interactive")
-                  : (isSelectedAndNotFocused ? "border-2 border-survey-border-selected" : "border border-survey-border-interactive"),
+                  : (isSelectedAndNotFocused ? "border border-survey-border-selected shadow-[inset_0_0_0_1px_hsl(var(--survey-border-selected))]" : "border border-survey-border-interactive"),
                 // Auto-focus override
                 !focused && !selected && "group-has-[:focus-visible]/survey-lang:border",
-                !focused && selected && "group-has-[:focus-visible]/survey-lang:border",
+                !focused && selected && "group-has-[:focus-visible]/survey-lang:border group-has-[:focus-visible]/survey-lang:shadow-none",
                 disabled && "border border-survey-border-muted pointer-events-none !opacity-100 !text-survey-foreground",
                 isInteractive && hoverOverlayClass,
                 className

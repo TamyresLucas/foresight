@@ -182,20 +182,17 @@ const SearchInput = React.forwardRef<
       onPointerDown={() => setSelected(true)}
       data-selected={selected}
     >
-      <div
-        className={cn(
-          'rounded-[calc(var(--survey-radius-md)+2px)] w-full transition-all bg-transparent',
-          'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:p-[2px]',
-          'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-2',
-          'group-data-[selected=false]/survey-input:group-has-[:focus-visible]/survey-input:border-survey-border-interactive',
-        )}
-      >
+      <div className="rounded-[calc(var(--survey-radius-md)+2px)] w-full transition-all bg-transparent">
         <div
           className={cn(
             'flex w-full h-10 px-2 py-1.5 items-center gap-[10px] rounded-survey-md border bg-transparent transition-all',
             'border-survey-border-interactive',
-            'group-data-[selected=true]/survey-input:border-survey-border-selected group-data-[selected=true]/survey-input:border-2',
-            'group-has-[:focus-visible]/survey-input:border',
+            'group-data-[selected=true]/survey-input:border-survey-border-selected group-data-[selected=true]/survey-input:shadow-[inset_0_0_0_1px_hsl(var(--survey-border-selected))]',
+            // Focus halo as a ring (box-shadow): paint-only, so the field keeps
+            // its default-state dimensions — a border/padding halo would grow it.
+            'group-has-[:focus-visible]/survey-input:border group-has-[:focus-visible]/survey-input:!shadow-none',
+            'group-has-[:focus-visible]/survey-input:ring-2 group-has-[:focus-visible]/survey-input:ring-offset-2 group-has-[:focus-visible]/survey-input:ring-offset-survey-background group-has-[:focus-visible]/survey-input:ring-survey-border-interactive',
+            'group-data-[selected=true]/survey-input:group-has-[:focus-visible]/survey-input:ring-survey-border-selected',
           )}
         >
           <Search

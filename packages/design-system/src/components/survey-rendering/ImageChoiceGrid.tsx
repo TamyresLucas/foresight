@@ -247,7 +247,10 @@ const ImageChoiceGrid = React.forwardRef<HTMLDivElement, ImageChoiceGridProps>(
                   >
                     {columns.map((column) => (
                       <React.Fragment key={column.value}>
-                        <ImageChoiceGridMobileOption column={column} />
+                        <ImageChoiceGridMobileOption
+                          column={column}
+                          selected={values[row.id] === column.value}
+                        />
                         {column.openEnd && values[row.id] === column.value && (
                           <div className="px-4 pb-4 -mt-2">
                             <OpenEndInput
@@ -320,10 +323,12 @@ const ImageChoiceGridCell = ({
               "!min-w-0 !min-h-0",
               // Radix's `asChild` overwrites Card's own `data-state` (which
               // drives its `data-[state=selected]` border rule) with its own
-              // "checked"/"unchecked" value, so the border needs a matching
-              // override here. The white-ring + tint overlay is unaffected
-              // since it's driven by the `selected` prop directly, not CSS.
-              "data-[state=checked]:!border-2 data-[state=checked]:!border-survey-border-selected",
+              // "checked"/"unchecked" value, so the border color needs a
+              // matching override here (color only — the 2px selected look is
+              // completed by Card's overlay, driven by the `selected` prop,
+              // without changing the card's dimensions). The white-ring +
+              // tint overlay is likewise driven by the `selected` prop.
+              "data-[state=checked]:!border-survey-border-selected",
             )}
           />
         </RadioGroupPrimitive.Item>
@@ -334,8 +339,10 @@ const ImageChoiceGridCell = ({
 
 const ImageChoiceGridMobileOption = ({
   column,
+  selected,
 }: {
   column: ImageChoiceGridColumn;
+  selected: boolean;
 }) => {
   return (
     // The Radix item drives radio semantics (roving focus, arrow keys, checked
@@ -353,6 +360,7 @@ const ImageChoiceGridMobileOption = ({
           variant="imageStatement"
           imageSrc={column.src}
           imageAlt={column.alt ?? column.label}
+          selected={selected}
           aria-pressed={undefined}
           className={cn(
             // Card fills the available mobile width; omitting `height` keeps
@@ -362,9 +370,11 @@ const ImageChoiceGridMobileOption = ({
             "w-full [&_img]:max-h-[300px]",
             // Radix's `asChild` overwrites Card's own `data-state` (which
             // drives its `data-[state=selected]` border rule) with its own
-            // "checked"/"unchecked" value, so the border needs a matching
-            // override here — same reasoning as the desktop cell above.
-            "data-[state=checked]:!border-2 data-[state=checked]:!border-survey-border-selected",
+            // "checked"/"unchecked" value, so the border color needs a
+            // matching override here — same reasoning as the desktop cell
+            // above. The 2px selected look comes from Card's overlay (driven
+            // by the `selected` prop), keeping dimensions constant.
+            "data-[state=checked]:!border-survey-border-selected",
           )}
         >
           <span className="text-survey-foreground text-survey-body font-survey-regular">
