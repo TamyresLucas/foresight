@@ -78,3 +78,6 @@ load-secrets.sh
 packages/design-system/storybook-static
 .vercel
 .claude/worktrees/
+
+# Google Drive sync cache
+.tmp.driveupload/
